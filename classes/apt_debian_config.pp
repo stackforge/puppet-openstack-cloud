@@ -17,7 +17,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# APT configuration if we use Debian
+# APT configuration if we use Debian Wheezy
 
 class os_apt_config {
 
@@ -38,53 +38,25 @@ class os_apt_config {
 APT::Periodic::Update-Package-Lists 1;
 APT::Periodic::Download-Upgradeable-Packages 1;
 ";
-    }
-    
+}
 
-    apt::source { "openstack_grizzly":
-      location          => "[trusted=1] http://seattle.apt-proxy.gplhost.com/debian/",
-      release           => "grizzly",
-      include_src       => false,
-    }
+  apt::source {'cloud.pkgs.enovance.com':
+      location    => 'http://cloud.pkgs.enovance.com/wheezy-havana',
+      release     => 'havana',
+      include_src => false,
+      key_server  => "keyserver.ubuntu.com",
+      key         => "5D964F0B",
+  }
 
-    apt::source {'openstack_grizzly_backports':
-      location          => "[trusted=1] http://seattle.apt-proxy.gplhost.com/debian/",
-        release => 'grizzly-backports',
-        include_src => false,
-    }
-
-     apt::source { "mariadb":
-       location          => "http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5-galera/debian/",
-       release           => "wheezy",
-       include_src       => false,
-       key_server        => "keyserver.ubuntu.com",
-       key               => "1BB943DB",
-    }
-
-    apt::source { "debian_wheezy":
-      location          => "http://ftp.us.debian.org/debian/",
-      release           => "wheezy",
-      repos             => "main contrib non-free",
-      include_src       => false
-    }
-
-    apt::source { "debian_wheezy_security":
-      location          => "http://security.debian.org/",
-      release           => "wheezy/updates",
-      repos             => "main",
-      include_src       => false
-    }
-
-    apt::source { "debian_wheezy_backports":
-      location          => "http://ftp.us.debian.org/debian/",
-      release           => "wheezy-backports",
-      repos             => "main",
-      include_src       => false
-    }
-
+  apt::source {'enovance':
+      location    => 'http://***REMOVED***@repo.enovance.com/apt/',
+      release     => 'squeeze',
+      repos       => "main contrib non-free",
+      key         => "3A964515",
+      key_source  => "http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg",
+      include_src => true,
+  }
 
 # We don't include Ceph here, since APT is managed by Ceph Puppet module
 
 }
-
-

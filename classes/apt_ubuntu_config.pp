@@ -17,7 +17,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# APT configuration if we use Ubuntu
+# APT configuration if we use Ubuntu Precise
 
 class os_apt_config {
 
@@ -38,65 +38,24 @@ class os_apt_config {
 APT::Periodic::Update-Package-Lists 1;
 APT::Periodic::Download-Upgradeable-Packages 1;
 ";
-    }
+}
 
+  apt::source {'cloud.pkgs.enovance.com':
+      location    => 'http://cloud.pkgs.enovance.com/precise-havana',
+      release     => 'havana',
+      include_src => false,
+      key_server  => "keyserver.ubuntu.com",
+      key         => "5D964F0B",
+  }
 
-    apt::source { "ubuntu_precise":
-      location          => "http://us.archive.ubuntu.com/ubuntu",
-      release           => "precise",
-      repos             => "main universe multiverse",
-      include_src       => false
-    }
-
-    apt::source { "ubuntu_precise_update":
-      location          => "http://us.archive.ubuntu.com/ubuntu",
-      release           => "precise-updates",
-      repos             => "main universe multiverse",
-      include_src       => false
-    }
-
-    apt::source { "ubuntu_precise_security":
-      location          => "http://security.ubuntu.com/ubuntu",
-      release           => "precise-security",
-      repos             => "main universe multiverse",
-      include_src       => false
-    }
-
-    apt::source { "openstack_backports":
-      location          => "[trusted=1 arch=amd64] http://seattle.apt-proxy.gplhost.com/debian/",
-      release           => "precise-grizzly-backports",
-      include_src       => false,
-    }
-
-    apt::source { "misc":
-      location          => "[trusted=1 arch=amd64] http://archive.gplhost.com/debian/",
-      release           => "misc",
-      include_src       => false,
-    }
-
-# Specific to Midonet
-    apt::source { "test.midokura.com":
-      location          => "[trusted=1 arch=amd64] http://orange:TaMXwvovFZ2TBW@apt.midokura.com/midonet/v1.1/test",
-      release           => "precise",
-      repos             => "main non-free",
-      include_src       => false,
-    }
-
-# Specific to Midonet
-    apt::source { "test-grizzly.midokura.com":
-      location          => "[trusted=1 arch=amd64] http://orange:TaMXwvovFZ2TBW@apt.midokura.com/midonet/v1.0/test-grizzly",
-      release           => "precise",
-      repos             => "main non-free",
-      include_src       => false,
-    }
-
-     apt::source { "mariadb":
-       location          => "http://mirror.jmu.edu/pub/mariadb/repo/5.5/ubuntu/",
-       release           => "precise",
-       include_src       => false,
-       key_server        => "keyserver.ubuntu.com",
-       key               => "1BB943DB",
-    }
+  apt::source {'enovance':
+      location    => 'http://***REMOVED***@repo.enovance.com/apt/',
+      release     => 'squeeze',
+      repos       => "main contrib non-free",
+      key         => "3A964515",
+      key_source  => "http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg",
+      include_src => true,
+  }
 
 # We don't include Ceph here, since APT is managed by Ceph Puppet module
 
