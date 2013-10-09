@@ -34,4 +34,3 @@ class os_ceilometer{
 # Ceilometer Central Agent is defined in site.pp since it must be installed on only node (not able to scale-out)
 
 }
-
