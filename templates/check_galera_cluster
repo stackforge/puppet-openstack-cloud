@@ -1,0 +1,15 @@
+#!/bin/bash
+
+MYSQL_USERNAME="clustercheckuser"
+MYSQL_PASSWORD="clustercheckpassword!"
+ERR_FILE="/dev/null"
+AVAILABLE_WHEN_DONOR=0
+WSREP_STATUS=`mysql --user=${MYSQL_USERNAME} --password=${MYSQL_PASSWORD} -e "SHOW STATUS LIKE 'wsrep_local_state';" 2>${ERR_FILE} | awk '{if (NR!=1){print $2}}' 2>${ERR_FILE}`
+
+if [[ "${WSREP_STATUS}" == "4" ]] || [[ "${WSREP_STATUS}" == "2" && ${AVAILABLE_WHEN_DONOR} == 1 ]]; then
+	echo "OK - Percona XtraDB Cluster Node is synced."
+	exit 0
+else
+	echo "CRITICAL - Percona XtraDB Cluster Node is not synced."
+	exit 2
+fi
