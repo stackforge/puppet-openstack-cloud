@@ -18,9 +18,10 @@
 # under the License.
 
 
-# Used by Controller & Compute nodes
+# Used by Controller, Storage, Network and Compute nodes
 
 class ceilometer_common {
+
   class { 'ceilometer':
      metering_secret => $os_params::ceilometer_secret,
      rabbit_hosts    => $os_params::rabbit_hosts,

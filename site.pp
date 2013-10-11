@@ -64,11 +64,9 @@ node common {
 # Controller node
 node 'os-ci-test2.enovance.com' inherits common{
 
-# MySQL
-  class { 'mysql::server': 
-    config_hash => { 'bind_address'=> '0.0.0.0', 'root_password' => 'TRG33WDCAvmLqtUv5MwfGxD
-nxTyaciMAV4RFe044' }
-  }
+# Databases:
+    class {"mongodb_server":}
+    class {"mysql_server":}
 
 # Ceilometer
     class{'os_ceilometer':}
