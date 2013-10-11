@@ -69,7 +69,7 @@ node 'os-ci-test2.enovance.com' inherits common{
     class {"mysql_server":}
 
 # Ceilometer
-    class{'os_ceilometer':}
+    class{'os_ceilometer_server':}
     # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
     class {"ceilometer::agent::central":
        auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
@@ -77,7 +77,7 @@ node 'os-ci-test2.enovance.com' inherits common{
     }
 
 # Keystone
-    class {"os_role_keystone":
+    class {"os_keystone_server":
        local_ip => $ipaddress_eth1,
     }
 
@@ -96,6 +96,9 @@ node 'os-ci-test2.enovance.com' inherits common{
 
 # Swift Storage nodes
 node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com', 'os-ci-test5.enovance.com' inherits common{
+
+    class{'os_ceilometer_common':}
+
     class{ 'os_role_swift_storage':
         local_ip => $ipaddress_eth1,
         swift_zone    =>  $os_params::os_swift_zone[$::hostname],

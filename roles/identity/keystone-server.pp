@@ -17,7 +17,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-class os_role_keystone (
+class os_keystone_server (
   $local_ip = $ipaddress_eth1,
 ){
 
