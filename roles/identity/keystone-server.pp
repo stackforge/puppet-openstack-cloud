@@ -24,6 +24,9 @@ class os_role_keystone (
   $encoded_user = uriescape($os_params::keystone_db_user)
   $encoded_password = uriescape($os_params::keystone_db_password)
 
+# Create the DB
+  class { 'keystone::db::mysql': password => ${encoded_password}, user => ${encoded_user}}
+
 # Configure Keystone
   class { 'keystone':
     enabled        => true,
@@ -34,7 +37,6 @@ class os_role_keystone (
     debug          => false,
     sql_connection => "mysql://${encoded_user}:${encoded_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
-# ToDo (EmilienM): Update to PKI tokens
     token_format   => "UUID",
   }
 
@@ -63,7 +65,7 @@ class os_role_keystone (
     public_port      => $os_params::ks_keystone_public_port,
     admin_port       => $os_params::keystone_admin_port,
     internal_port    => $os_params::keystone_port,
-    region           => 'RegionOne',
+    region           => $os_params::region,
     public_protocol  => $os_params::ks_keystone_public_proto
   }
 
