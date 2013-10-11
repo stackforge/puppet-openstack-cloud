@@ -17,19 +17,32 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# Ceilometer nodes
+# Ceilometer server nodes
 
 class os_ceilometer{
-  class { 'mongodb':
-    enable_10gen => true,
-  }
 
+# Install MongoDB database
   class { 'ceilometer::db':
     database_connection => $os_params::ceilometer_database_connection,
     require             => Class['mongodb']
   }
 
+# Install Ceilometer-collector
   class { 'ceilometer::collector': }
+
+# Install Ceilometer-API
+  class os_ceilometer_api(
+    $local_ip = $ipaddress_eth1,
+  ){
+    if ! defined(Class['ceilometer_common']){
+      class { 'ceilometer_common': }
+    }
+
+    class { 'ceilometer::api':
+      keystone_password => $os_params::ks_ceilometer_password,
+      keystone_host     => $os_params::ks_keystone_admin_host,
+    }
+  }
 
 # Ceilometer Central Agent is defined in site.pp since it must be installed on only node (not able to scale-out)
 

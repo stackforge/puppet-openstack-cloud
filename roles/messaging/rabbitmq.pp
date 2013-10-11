@@ -31,20 +31,14 @@ class os_role_rabbitmq{
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq::server'],
   }
-  rabbitmq_user { ['nova','glance', 'quantum', 'cinder', 'ceilometer', 'heat', 'sensu']:
+  rabbitmq_user { ['ceilometer']:
     admin    => true,
     password => $os_params::rabbit_password,
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq::server']
   }
   rabbitmq_user_permissions {[
-    'nova@/',
-    'glance@/',
-    'quantum@/',
-    'cinder@/',
     'ceilometer@/',
-    'heat@/',
-    'sensu@/',
   ]:
     configure_permission => '.*',
     write_permission     => '.*',
