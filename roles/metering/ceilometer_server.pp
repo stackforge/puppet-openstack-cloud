@@ -19,7 +19,7 @@
 
 # Ceilometer server nodes
 
-class os_ceilometer{
+class os_ceilometer_server{
 
 # Install MongoDB database
   class { 'ceilometer::db':
