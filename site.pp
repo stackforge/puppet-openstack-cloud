@@ -35,16 +35,12 @@ node common {
   class{ "os_apt_config": }
 
 # NTP
-  if $hostname != "sm3-d" { # ntpserver
-    class{ "ntp": 
-    ntpservers => "sm3-d.${os_params::site_domain}"
-    }
-  }
+  class{ "ntp": ntpservers => "os-ci-admin.ring..${os_params::site_domain}" }
 
 # DNS
-  $datacenter = 'au0'
+  $datacenter = 'ci'
   class{ "resolver":
-    dcinfo      => { au0   => ['172.30.4.3'], },
+    dcinfo      => { ci   => ['10.68.0.2'], },
     domainname  => "${os_params::site_domain}",
     searchpath  => "${os_params::site_domain}.",
   }
@@ -68,42 +64,40 @@ node common {
 # Controller node
 node 'os-ci-test2.enovance.com' inherits common{
 
+# MySQL
+  class { 'mysql::server': 
+    config_hash => { 'bind_address'=> '0.0.0.0', 'root_password' => 'TRG33WDCAvmLqtUv5MwfGxD
+nxTyaciMAV4RFe044' }
+  }
+
 # Ceilometer
     class{'os_ceilometer':}
-
-# Since Ceilometer Agent Central and Metadata Agent are SPOF, we need to run once to avoid problems:
-    if $::fqdn == "os-ci-test2.enovance.com"  {
-	class {"ceilometer::agent::central":
-    	  auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
-    	  auth_password => $os_params::ks_ceilometer_password,
-	}
-  package { "quantum-metadata-agent":
-     ensure => latest,
-  }
-   }
+    # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
+    class {"ceilometer::agent::central":
+       auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
+       auth_password => $os_params::ks_ceilometer_password,
+    }
 
 # Keystone
     class {"os_role_keystone":
-	local_ip => $ipaddress_eth1,
+       local_ip => $ipaddress_eth1,
     }
 
 # Swift Proxy
     class{'os_role_swift_proxy':
       local_ip => $ipaddress_eth1,
     }
-    if $::fqdn == "sm4-c.os.osv.orange.internal"  {
-	class {"os_role_swift_ringbuilder":
-	    rsyncd_ipaddress => $ipaddress_eth1,
-	}
-	Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
+    class {"os_role_swift_ringbuilder":
+       rsyncd_ipaddress => $ipaddress_eth1,
     }
+    Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
 
 # RabbitMQ
   class{'os_role_rabbitmq': }
 }
 
 # Swift Storage nodes
-node 'sm1-b.os.osv.orange.internal', 'sm2-c.os.osv.orange.internal', 'sm3-c.os.osv.orange.internal' inherits common{
+node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com', 'os-ci-test5.enovance.com' inherits common{
     class{ 'os_role_swift_storage':
         local_ip => $ipaddress_eth1,
         swift_zone    =>  $os_params::os_swift_zone[$::hostname],
