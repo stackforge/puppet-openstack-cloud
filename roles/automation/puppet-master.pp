@@ -19,4 +19,21 @@
 
 class os_puppet_master{
 
+  # Install Puppet submodules
+  vcsrepo { '/etc/puppet/modules/':
+    ensure   => latest,
+    provider => git,
+    require  => [ Package["git"] ],
+    source   => "gitolite@git.labs.enovance.com:puppet.git",
+    revision => "openstack-${$os_params::os_release}/master",
+  }
+  ->
+  exec { '/usr/bin/git submodule init':
+    cwd => '/etc/puppet/modules',
+  }
+  ->
+  exec { '/usr/bin/git submodule update':
+    cwd => '/etc/puppet/modules',
+  }
+
 }

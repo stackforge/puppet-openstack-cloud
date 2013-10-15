@@ -41,8 +41,8 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 }
 
   apt::source {'cloud.pkgs.enovance.com':
-      location    => 'http://cloud.pkgs.enovance.com/precise-havana',
-      release     => 'havana',
+      location    => "http://cloud.pkgs.enovance.com/precise-${os_params::os_release}",
+      release     => $os_params::os_release,
       include_src => false,
       key_server  => "keyserver.ubuntu.com",
       key         => "5D964F0B",
