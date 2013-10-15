@@ -1,0 +1,6 @@
+#cloud-config
+puppet:
+ conf:
+   agent:
+     server: "os-ci-test2.enovance.com"
+     certname: "%i.%f"
