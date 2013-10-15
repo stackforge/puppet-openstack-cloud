@@ -22,9 +22,9 @@
 
 import "params.pp"
 import "classes/authorized_keys.pp"
+# import "classes/apt_debian_config.pp"
 import "classes/apt_ubuntu_config.pp"
 import "roles/*.pp"
-
 
 node common {
 
@@ -61,8 +61,11 @@ node common {
 }
 
 
-# Controller node
+# Cloud Controller node
 node 'os-ci-test2.enovance.com' inherits common{
+
+# Puppet Master
+    class{'os_puppet_master':}
 
 # Databases:
     class {"mongodb_server":}
