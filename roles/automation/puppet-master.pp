@@ -36,4 +36,13 @@ class os_puppet_master{
     cwd => '/etc/puppet/modules',
   }
 
+  # Install Puppet manifests
+  vcsrepo { '/etc/puppet/manifests/':
+    ensure   => latest,
+    provider => git,
+    require  => [ Package["git"] ],
+    source   => "git.labs.enovance.com:openstack-puppet-ci.git",
+    revision => "master",
+  }
+
 }
