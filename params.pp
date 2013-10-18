@@ -23,6 +23,7 @@ class os_params {
   $site_domain = "enovance.com"
   $os_release = "havana"
   $region = "enovance-ci"
+  $install_packages = True
 
   # Root hashed password (enovance by default)
   $root_password = "$1$2X/chMfy$CuJ4xPZY0WO2pRfIm5djn/"
@@ -32,8 +33,8 @@ class os_params {
   $keystone_db_user = "keystone"
   $keystone_db_password = "rooghah0phe1tieDeixoodo0quil8iox"
   $keystone_allowed_hosts = ["os-ci%", "10.68.0.%"]
-  # Extra roles, one for Midonet:
-  $keystone_roles_addons = ["SwiftOperator", "ResellerAdmin"chMfy]
+  # Extra roles:
+  $keystone_roles_addons = ["SwiftOperator", "ResellerAdmin"]
 
 
   $ceilometer_database_connection = 'mongodb://10.68.0.46/ceilometer'

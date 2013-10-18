@@ -22,9 +22,16 @@
 
 import "params.pp"
 import "classes/authorized_keys.pp"
-# import "classes/apt_debian_config.pp"
-import "classes/apt_ubuntu_config.pp"
 import "roles/*.pp"
+
+# Install packages or not
+if $os_params::install_packages {
+  case $operatingsystem {
+    debian: { import "classes/apt_debian_config.pp" }
+    ubuntu: { import "classes/apt_ubuntu_config.pp" }
+    default: { fail("Unrecognized operating system") }
+  }
+}
 
 node common {
 
@@ -32,7 +39,9 @@ node common {
   class{ "os_params": }
 
 # APT repositories
+if $os_params::install_packages {
   class{ "os_apt_config": }
+}
 
 # NTP
   class{ "ntp": ntpservers => "os-ci-admin.ring..${os_params::site_domain}" }
