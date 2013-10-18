@@ -21,11 +21,8 @@ class os_keystone_server (
   $local_ip = $ipaddress_eth1,
 ){
 
-  $encoded_user = uriescape($os_params::keystone_db_user)
-  $encoded_password = uriescape($os_params::keystone_db_password)
-
 # Create the DB
-  class { 'keystone::db::mysql': password => ${encoded_password}, user => ${encoded_user}}
+  class { 'keystone::db::mysql': password => ${os_params::keystone_db_password}, user => ${os_params::keystone_db_user}}
 
 # Configure Keystone
   class { 'keystone':
@@ -35,7 +32,7 @@ class os_keystone_server (
     compute_port   => "8774",
     verbose        => false,
     debug          => false,
-    sql_connection => "mysql://${encoded_user}:${encoded_password}@${os_params::keystone_db_host}/keystone",
+    sql_connection => "mysql://${os_params::keystone_db_user}:${os_params::keystone_db_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
     token_format   => "UUID",
   }
