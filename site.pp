@@ -22,7 +22,7 @@
 
 import "params.pp"
 import "classes/authorized_keys.pp"
-import "roles/*.pp"
+import "roles/*"
 
 # Install packages or not
 if $os_params::install_packages {
