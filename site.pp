@@ -22,12 +22,13 @@
 
 import "params.pp"
 import "classes/authorized_keys.pp"
-import "roles/automation/*.pp"
-import "roles/database/*.pp"
-import "roles/identity/*.pp"
-import "roles/messaging/*.pp"
-import "roles/metering/*.pp"
-import "roles/object-storage/*.pp"
+import "roles/**"
+#import "roles/automation/*.pp"
+#import "roles/database/*.pp"
+#import "roles/identity/*.pp"
+#import "roles/messaging/*.pp"
+#import "roles/metering/*.pp"
+#import "roles/object-storage/*.pp"
 
 # Install packages or not
 if $os_params::install_packages {
