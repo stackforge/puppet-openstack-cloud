@@ -30,12 +30,13 @@ class os_keystone_server (
     package_ensure => 'latest',
     admin_token    => $os_params::ks_admin_token,
     compute_port   => "8774",
-    verbose        => false,
-    debug          => false,
+    verbose        => true,
+    debug          => true,
     sql_connection => "mysql://${os_params::keystone_db_user}:${os_params::keystone_db_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
     token_format   => "UUID",
     token_driver   => "keystone.token.backends.memcache.Token",
+    use_syslog     => true,
   }
 
   keystone_config {
@@ -43,7 +44,6 @@ class os_keystone_server (
     "memcache/servers": value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
     "ec2/driver":       value => "keystone.contrib.ec2.backends.sql.Ec2";
     "DEFAULT/syslog_log_facility": value => 'LOG_LOCAL0';
-    "DEFAULT/use_syslog": value => 'yes';
   }
 
 
