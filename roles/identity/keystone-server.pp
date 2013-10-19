@@ -37,13 +37,13 @@ class os_keystone_server (
     token_format   => "UUID",
     token_driver   => "keystone.token.backends.memcache.Token",
     use_syslog     => true,
+    log_facility   => "LOG_LOCAL0",
   }
 
   keystone_config {
     "token/expiration": value => "86400";
     "memcache/servers": value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
     "ec2/driver":       value => "keystone.contrib.ec2.backends.sql.Ec2";
-    "DEFAULT/syslog_log_facility": value => 'LOG_LOCAL0';
   }
 
 
