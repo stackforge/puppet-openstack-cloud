@@ -35,10 +35,10 @@ class os_keystone_server (
     sql_connection => "mysql://${os_params::keystone_db_user}:${os_params::keystone_db_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
     token_format   => "UUID",
+    token_driver   => "keystone.token.backends.memcache.Token",
   }
 
   keystone_config {
-    "token/driver":     value => "keystone.token.backends.memcache.Token";
     "token/expiration": value => "86400";
     "memcache/servers": value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
     "ec2/driver":       value => "keystone.contrib.ec2.backends.sql.Ec2";
