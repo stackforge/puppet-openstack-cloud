@@ -87,10 +87,7 @@ node 'os-ci-test2.enovance.com' inherits common{
 # Ceilometer
     class{'os_ceilometer_server':}
     # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
-    class {"ceilometer::agent::central":
-       auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
-       auth_password => $os_params::ks_ceilometer_password,
-    }
+    class {"ceilometer::agent::central": }
 
 # Keystone
     class {"os_keystone_server":

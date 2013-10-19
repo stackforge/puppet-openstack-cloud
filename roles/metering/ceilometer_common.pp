@@ -36,4 +36,8 @@ class os_ceilometer_common {
     'DEFAULT/use_syslog':                        value => 'yes';
   }
 
+  class { 'ceilometer::agent::auth':
+       auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
+       auth_password => $os_params::ks_ceilometer_password,
+  }
 }
