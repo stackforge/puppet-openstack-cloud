@@ -16,12 +16,14 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # site.pp
-
+#
 
 import "params.pp"
 import "classes/authorized_keys.pp"
+
+# Import roles
 import "roles/automation/*.pp"
 import "roles/database/*.pp"
 import "roles/identity/*.pp"
@@ -30,7 +32,7 @@ import "roles/metering/*.pp"
 import "roles/object-storage/*.pp"
 
 # Install packages or not
-if $os_params::install_packages {
+if $os_params::install_packages == True {
   case $operatingsystem {
     debian: { import "classes/apt_debian_config.pp" }
     ubuntu: { import "classes/apt_ubuntu_config.pp" }
@@ -49,7 +51,7 @@ if $os_params::install_packages {
 }
 
 # NTP
-  class{ "ntp": ntpservers => "os-ci-admin.ring..${os_params::site_domain}" }
+  class{ "ntp": ntpservers => "os-ci-admin.ring.${os_params::site_domain}" }
 
 # DNS
   $datacenter = 'ci'
