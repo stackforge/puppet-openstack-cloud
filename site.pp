@@ -74,8 +74,16 @@ if $os_params::install_packages {
 }
 
 
-# Controller node
+# Puppet Master node
 node 'os-ci-test2.enovance.com' inherits common{
+
+## Automation
+    class{'os_puppet_master':}
+
+}
+
+# Controller node
+node 'os-ci-test3.enovance.com' inherits common{
 
 ## Automation
     class{'os_puppet_master':}
@@ -109,7 +117,7 @@ node 'os-ci-test2.enovance.com' inherits common{
 }
 
 # Storage nodes
-node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com', 'os-ci-test5.enovance.com' inherits common{
+node 'os-ci-test6.enovance.com', 'os-ci-test12.enovance.com', 'os-ci-test13.enovance.com' inherits common{
 
 ## Metering
     class{'os_ceilometer_common':}
