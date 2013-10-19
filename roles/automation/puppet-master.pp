@@ -18,6 +18,9 @@
 # Puppet Master nodes
 
 class os_puppet_master{
+$
+  # Ensure git is installed
+  class { 'git': }
 
   # Install Puppet submodules
   vcsrepo { '/etc/puppet/modules/':
