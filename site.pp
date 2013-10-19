@@ -50,9 +50,6 @@ if $os_params::install_packages {
   class{ "os_apt_config": }
 }
 
-# NTP
-  class{ "ntp": ntpservers => "os-ci-admin.ring.${os_params::site_domain}" }
-
 # DNS
   $datacenter = 'ci'
   class{ "resolver":
