@@ -35,7 +35,7 @@ import "roles/object-storage/*.pp"
 if $os_params::install_packages == True {
   case $operatingsystem {
     debian: { import "classes/apt_debian_config.pp" }
-    ubuntu: { import "classes/apt_ubuntu_config.pp" }
+#    ubuntu: { import "classes/apt_ubuntu_config.pp" }
     default: { fail("Unrecognized operating system") }
   }
 }
