@@ -74,27 +74,27 @@ if $os_params::install_packages {
 }
 
 
-# Cloud Controller node
+# Controller node
 node 'os-ci-test2.enovance.com' inherits common{
 
-# Puppet Master
+## Automation
     class{'os_puppet_master':}
 
-# Databases:
+## Databases:
     class {"mongodb_server":}
     class {"mysql_server":}
 
-# Ceilometer
+## Metering
     class{'os_ceilometer_server':}
     # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
     class {"ceilometer::agent::central": }
 
-# Keystone
+## Identity 
     class {"os_keystone_server":
        local_ip => $ipaddress_eth1,
     }
 
-# Swift Proxy
+## Object Storage
     class{'os_role_swift_proxy':
       local_ip => $ipaddress_eth1,
     }
@@ -103,15 +103,18 @@ node 'os-ci-test2.enovance.com' inherits common{
     }
     Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
 
-# RabbitMQ
-  class{'os_role_rabbitmq': }
+## Messaging
+    class{'os_role_rabbitmq': }
+
 }
 
-# Swift Storage nodes
+# Storage nodes
 node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com', 'os-ci-test5.enovance.com' inherits common{
 
+## Metering
     class{'os_ceilometer_common':}
 
+## Object Storage
     class{ 'os_role_swift_storage':
         local_ip => $ipaddress_eth1,
         swift_zone    =>  $os_params::os_swift_zone[$::hostname],
