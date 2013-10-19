@@ -26,7 +26,6 @@ class os_puppet_master{
   vcsrepo { '/etc/puppet/modules/':
     ensure   => latest,
     provider => git,
-    require  => [ Package["git"] ],
     source   => "gitolite@git.labs.enovance.com:puppet.git",
     revision => "openstack-${$os_params::os_release}/master",
   }
@@ -43,7 +42,6 @@ class os_puppet_master{
   vcsrepo { '/etc/puppet/manifests/':
     ensure   => latest,
     provider => git,
-    require  => [ Package["git"] ],
     source   => "git.labs.enovance.com:openstack-puppet-ci.git",
     revision => "master",
   }
