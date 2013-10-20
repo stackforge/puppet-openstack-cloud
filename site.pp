@@ -85,9 +85,6 @@ node 'os-ci-test2.enovance.com' inherits common{
 # Controller node
 node 'os-ci-test3.enovance.com' inherits common{
 
-## Automation
-    class{'os_puppet_master':}
-
 ## Databases:
     class {"mongodb_server":}
     class {"mysql_server":}
