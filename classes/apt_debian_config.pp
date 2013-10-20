@@ -22,7 +22,7 @@
 class os_apt_config {
 
     class{"apt":
-      always_apt_update    => true,
+      always_apt_update    => false,
       purge_sources_list   => true,
       purge_sources_list_d => true,
       purge_preferences_d  => true,
