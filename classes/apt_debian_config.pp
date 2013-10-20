@@ -63,7 +63,7 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 
   # eNovance Packages
   apt::source {'cloud.pkgs.enovance.com':
-      location    => "http://cloud.pkgs.enovance.com/wheezy-${os_params::os_release}",
+      location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/wheezy-${os_params::os_release}",
       release     => $os_params::os_release,
       include_src => false,
       key_server  => "keyserver.ubuntu.com",
