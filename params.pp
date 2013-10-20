@@ -32,7 +32,7 @@ class os_params {
   $keystone_db_host = "10.68.0.47"
   $keystone_db_user = "keystone"
   $keystone_db_password = "rooghah0phe1tieDeixoodo0quil8iox"
-  $keystone_allowed_hosts = ["os-ci%", "10.68.0.%"]
+  $keystone_allowed_hosts = ["os-ci-test%", "10.68.0.%"]
   # Extra roles:
   $keystone_roles_addons = ["SwiftOperator", "ResellerAdmin"]
 
