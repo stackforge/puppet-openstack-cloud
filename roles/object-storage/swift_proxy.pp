@@ -91,14 +91,6 @@ endpoint_type=internalURL",
     notify => Service['swift-proxy']
   }
 
-  @@haproxy::balancermember{"${::fqdn}-swift":
-      listening_service => 'swift_cluster',
-      server_names      => $::hostname,
-      ipaddresses       => $local_ip,
-      ports             => $os_params::swift_port,
-      options           => 'check inter 2000 rise 2 fall 5'
-  }
-
   Swift::Ringsync<<| |>> #~> Service["swift-proxy"]
 
 }
