@@ -43,7 +43,7 @@ APT::Periodic::Download-Upgradeable-Packages 1;
   # Official Debian repositories
   apt::source {'debian_main':
       location    => "http://ftp2.fr.debian.org/debian/",
-      release     =>i "wheezy" 
+      release     => "wheezy",
       repos       => "main contrib non-free",
       include_src => false,
   }
