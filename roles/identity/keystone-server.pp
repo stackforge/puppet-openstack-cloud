@@ -21,6 +21,11 @@ class os_keystone_server (
   $local_ip = $ipaddress_eth1,
 ){
 
+# python-memcache is not a dependency (yet)
+  package { 'python-memcache':
+    ensure => lastest
+  }
+
 # Create the DB
   class { 'keystone::db::mysql':
     password      => $os_params::keystone_db_password,
