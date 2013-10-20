@@ -41,22 +41,22 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 }
 
   # Official Debian repositories
-  apt::source {'debian main':
+  apt::source {'debian_main':
       location    => "http://ftp2.fr.debian.org/debian/",
-      release     => $os_params::os_release,
+      release     =>i "wheezy" 
       repos       => "main contrib non-free",
       include_src => false,
   }
 
-  apt::source {'debian backports':
+  apt::source {'debian_backports':
       location    => "http://ftp2.fr.debian.org/debian/",
-      release     => "${os_params::os_release}-backports",
+      release     => "wheezy-backports",
       include_src => false,
   }
 
-  apt::source {'debian security':
+  apt::source {'debian_security':
       location    => "http://security.debian.org/",
-      release     => "${os_params::os_release}/updates",
+      release     => "wheezy/updates",
       repos       => "main",
       include_src => false,
   }
