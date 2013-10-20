@@ -40,6 +40,28 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 ";
 }
 
+  # Official Debian repositories
+  apt::source {'debian main':
+      location    => "http://ftp2.fr.debian.org/debian/",
+      release     => $os_params::os_release,
+      repos       => "main contrib non-free",
+      include_src => false,
+  }
+
+  apt::source {'debian backports':
+      location    => "http://ftp2.fr.debian.org/debian/",
+      release     => "${os_params::os_release}-backports",
+      include_src => false,
+  }
+
+  apt::source {'debian security':
+      location    => "http://security.debian.org/",
+      release     => "${os_params::os_release}/updates",
+      repos       => "main",
+      include_src => false,
+  }
+
+  # eNovance Packages
   apt::source {'cloud.pkgs.enovance.com':
       location    => "http://cloud.pkgs.enovance.com/wheezy-${os_params::os_release}",
       release     => $os_params::os_release,
