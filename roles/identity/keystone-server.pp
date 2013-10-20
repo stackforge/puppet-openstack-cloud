@@ -23,7 +23,7 @@ class os_keystone_server (
 
 # python-memcache is not a dependency (yet)
   package { 'python-memcache':
-    ensure => lastest
+    ensure => latest
   }
 
 # Create the DB
