@@ -23,8 +23,8 @@ class os_keystone_server (
 
 # Create the DB
   class { 'keystone::db::mysql':
-    password      => $os_params::keystone_db_password
-    user          => $os_params::keystone_db_user
+    password      => $os_params::keystone_db_password,
+    user          => $os_params::keystone_db_user,
     dbname        => 'keystone',
     host          => $os_params::keystone_db_host,
     allowed_hosts => $os_params::keystone_allowed_hosts,
