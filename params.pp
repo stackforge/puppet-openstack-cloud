@@ -29,7 +29,7 @@ class os_params {
   $root_password = "$1$2X/chMfy$CuJ4xPZY0WO2pRfIm5djn/"
 
   # Databases
-  $keystone_db_host = "10.68.0.46"
+  $keystone_db_host = "10.68.0.47"
   $keystone_db_user = "keystone"
   $keystone_db_password = "rooghah0phe1tieDeixoodo0quil8iox"
   $keystone_allowed_hosts = ["os-ci%", "10.68.0.%"]
@@ -37,7 +37,7 @@ class os_params {
   $keystone_roles_addons = ["SwiftOperator", "ResellerAdmin"]
 
 
-  $ceilometer_database_connection = 'mongodb://10.68.0.46/ceilometer'
+  $ceilometer_database_connection = 'mongodb://10.68.0.47/ceilometer'
 
   # Keystone Users
   $ks_admin_token = "iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K"
@@ -48,7 +48,7 @@ class os_params {
   $ks_swift_password = "cwnu6Eeph4jahsh5wooch5Panahjaidie8"
   $ks_ceilometer_password = "eafhafbheafaefaejiiutiu7374aesf3aiNu"
 
-  $keystone_memchached = ["10.68.0.46:11211"]
+  $keystone_memchached = ["10.68.0.47:11211"]
 
   # API Ports
   $swift_port = "8080"
@@ -59,26 +59,26 @@ class os_params {
   # Keystone Endpoints
   $ks_keystone_public_proto = "http"
   $ks_keystone_public_port = "5000"
-  $ks_keystone_public_host = "os-ci-test2.enovance.com" # ipvs lb web 
-  $ks_keystone_internal_host = "os-ci-test2.enovance.com" # ipvs lb int # can be used for now
-  $ks_keystone_admin_host = "os-ci-test2.enovance.com" # ipvs lb int # can be used for now
+  $ks_keystone_public_host = "os-ci-test3.enovance.com" # ipvs lb web 
+  $ks_keystone_internal_host = "os-ci-test3.enovance.com" # ipvs lb int # can be used for now
+  $ks_keystone_admin_host = "os-ci-test3.enovance.com" # ipvs lb int # can be used for now
 
   $ks_swift_public_proto = "http"
   $ks_swift_public_port = "8080"
-  $ks_swift_public_host = "os-ci-test2.enovance.com"
-  $ks_swift_admin_host = "os-ci-test2.enovance.com"
-  $ks_swift_internal_host = "os-ci-test2.enovance.com"
+  $ks_swift_public_host = "os-ci-test3.enovance.com"
+  $ks_swift_admin_host = "os-ci-test3.enovance.com"
+  $ks_swift_internal_host = "os-ci-test3.enovance.com"
 
   $ks_ceilometer_public_proto = "http"
-  $ks_ceilometer_public_host = "os-ci-test2.enovance.com"
-  $ks_ceilometer_admin_host = "os-ci-test2.enovance.com"
-  $ks_ceilometer_internal_host = "os-ci-test2.enovance.com"
+  $ks_ceilometer_public_host = "os-ci-test3.enovance.com"
+  $ks_ceilometer_admin_host = "os-ci-test3.enovance.com"
+  $ks_ceilometer_internal_host = "os-ci-test3.enovance.com"
 
   # swift
-  $swift_cors_allow_origin = "http://os-ci-test2.enovance.com"
+  $swift_cors_allow_origin = "http://os-ci-test3.enovance.com"
   $swift_hash_suffix = "ni2aseiWi8ich3oo"
   $swift_rsync_max_connections = 5
-  $swift_memchached = ["10.68.0.46:11211"]
+  $swift_memchached = ["10.68.0.47:11211"]
   $statsd_host = "127.0.0.1"
   $statsd_port = "4125"
   $os_swift_zone = {
@@ -97,10 +97,10 @@ class os_params {
   $mongodb_location = ''
 
   # RabbitMQ
-  $rabbit_names = ['os-ci-test2']
-  $rabbit_hosts = ['10.68.0.46:5672']
+  $rabbit_names = ['os-ci-test3']
+  $rabbit_hosts = ['10.68.0.47:5672']
   $rabbit_password = "okaeTh3aiwiewohk"
   # Useful when we need a single Rabbit host (like Sensu needs)
-  $rabbit_main_host = 'os-ci-test2'
+  $rabbit_main_host = 'os-ci-test3'
 
 }
