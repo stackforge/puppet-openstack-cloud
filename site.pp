@@ -77,8 +77,8 @@ if $os_params::install_packages {
 # Puppet Master node
 node 'os-ci-test2.enovance.com' inherits common{
 
-## Automation
-    class{'os_puppet_master':}
+# Everything related to puppet is bootstraped by jenkins
+# and other stuffs are made by common class.
 
 }
 
