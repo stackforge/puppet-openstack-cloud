@@ -31,9 +31,6 @@ import "roles/messaging/*.pp"
 import "roles/metering/*.pp"
 import "roles/object-storage/*.pp"
 
-# temp(EmilienM): we don't have to use it if eDeploy roles are good.
-# I let it while being sure that they are good.
-# import "classes/apt_debian_config.pp"
 
 node common {
 
