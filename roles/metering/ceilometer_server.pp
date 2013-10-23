@@ -28,7 +28,7 @@ class os_ceilometer_server{
   }
 
 # Install Ceilometer-collector
-#  class { 'ceilometer::collector': }
+  class { 'ceilometer::collector': }
 
 # Install Ceilometer-API
   class os_ceilometer_api(
