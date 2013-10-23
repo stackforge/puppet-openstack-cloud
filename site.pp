@@ -24,6 +24,8 @@ import "params.pp"
 import "classes/authorized_keys.pp"
 
 # Import roles
+import "roles/common/*.pp"
+
 import "roles/automation/*.pp"
 import "roles/database/*.pp"
 import "roles/identity/*.pp"
@@ -45,60 +47,7 @@ node common {
 # Params
   class{ "os_params": }
 
-# motd
-  file
-  {
-    '/etc/motd':
-      ensure  => file,
-      mode    => 644,
-      content => "
-############################################################################
-#                           eNovance IT Operations                         #
-############################################################################
-#                                                                          #
-#                          *** ACCÈS RESTREINT ***                         #
-#  L'accès à ce système est réservé aux seules personnes autorisées.       #
-#  Toute tentative d'accès frauduleux ou tout agissement portant atteinte  #
-#  aux systèmes de traitement automatisé de données de Cloudwatt expose    #
-#  son auteur à des poursuites pénales au titre des articles 323-1 à 323-7 #
-#  du Code Pénal.                                                          #
-#                                                                          #
-#                         *** RESTRICTED ACCESS ***                        #
-#  Only the authorized users may access this system.                       #
-#  Any attempted unauthorized access or any action affecting the computer  #
-#  system of Cloudwatt is punishable under articles 323-1 to 323-7 of      #
-#  French criminal law.                                                    #
-#                                                                          #
-############################################################################
-This node is under the control of Puppet ${::puppetversion}
-";
-  }
-
-# APT repositories
-if $os_params::install_packages {
-  class{ "os_apt_config": }
-}
-
-# DNS
-  $datacenter = 'ci'
-  class{ "resolver":
-    dcinfo      => { ci   => ['10.68.0.2'], },
-    domainname  => "${os_params::site_domain}",
-    searchpath  => "${os_params::site_domain}.",
-  }
-
-# SSH Keys
-  package { "enovance-config-sshkeys-dev":
-      ensure => "installed"
-  }
-
-# Strong root password for all servers
-  user { 'root':
-    ensure           => 'present',
-    gid              => '0',
-    password         => $os_params::root_password,
-    uid              => '0',
-  }
+  class{ "os_common_system": }
 
 }
 
@@ -129,16 +78,16 @@ node 'os-ci-test3.enovance.com' inherits common{
     }
 
 ## Object Storage
-    class{'os_role_swift_proxy':
-      local_ip => $ipaddress_eth1,
-    }
-    class {"os_role_swift_ringbuilder":
-       rsyncd_ipaddress => $ipaddress_eth1,
-    }
-    Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
+#    class{'os_role_swift_proxy':
+#      local_ip => $ipaddress_eth1,
+#    }
+#    class {"os_role_swift_ringbuilder":
+#       rsyncd_ipaddress => $ipaddress_eth1,
+#    }
+#    Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
 
-## Messaging
-    class{'os_role_rabbitmq': }
+### Messaging
+#    class{'os_role_rabbitmq': }
 
 }
 
