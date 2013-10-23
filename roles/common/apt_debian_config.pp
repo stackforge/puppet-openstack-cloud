@@ -17,12 +17,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# APT configuration if we use Ubuntu Precise
+# APT configuration if we use Debian Wheezy
 
-class os_apt_config {
+class os_packages_config {
 
     class{"apt":
-      always_apt_update    => true,
+      always_apt_update    => false,
       purge_sources_list   => true,
       purge_sources_list_d => true,
       purge_preferences_d  => true,
@@ -40,8 +40,30 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 ";
 }
 
+  # Official Debian repositories
+  apt::source {'debian_main':
+      location    => "http://ftp2.fr.debian.org/debian/",
+      release     => "wheezy",
+      repos       => "main contrib non-free",
+      include_src => false,
+  }
+
+  apt::source {'debian_backports':
+      location    => "http://ftp2.fr.debian.org/debian/",
+      release     => "wheezy-backports",
+      include_src => false,
+  }
+
+  apt::source {'debian_security':
+      location    => "http://security.debian.org/",
+      release     => "wheezy/updates",
+      repos       => "main",
+      include_src => false,
+  }
+
+  # eNovance Packages
   apt::source {'cloud.pkgs.enovance.com':
-      location    => "http://cloud.pkgs.enovance.com/precise-${os_params::os_release}",
+      location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/wheezy-${os_params::os_release}",
       release     => $os_params::os_release,
       include_src => false,
       key_server  => "keyserver.ubuntu.com",
