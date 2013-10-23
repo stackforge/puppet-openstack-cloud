@@ -44,8 +44,8 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # APT repositories
   case $operatingsystem {
-    'Debian': { import "apt_debian_config.pp" }
-    'Ubuntu': { import "apt_ubuntu_config.pp" }
+    'Debian': { import "packages/apt_debian_config.pp" }
+    'Ubuntu': { import "packages/apt_ubuntu_config.pp" }
   }
   class{ "os_packages_config": }
 
