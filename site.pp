@@ -73,7 +73,7 @@ node 'os-ci-test3.enovance.com' inherits common{
        local_ip => $ipaddress_eth1,
     }
 
-## Object Storage
+# Object Storage
 #    class{'os_role_swift_proxy':
 #      local_ip => $ipaddress_eth1,
 #    }
@@ -82,8 +82,8 @@ node 'os-ci-test3.enovance.com' inherits common{
 #    }
 #    Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
 
-### Messaging
-#    class{'os_role_rabbitmq': }
+# Messaging
+    class{'os_role_rabbitmq': }
 
 }
 
