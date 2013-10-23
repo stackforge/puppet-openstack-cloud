@@ -50,9 +50,9 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # APT repositories
-if $os_params::install_packages {
-  class{ "os_apt_config": }
-}
+#if $os_params::install_packages {
+#  class{ "os_apt_config": }
+#}
 
 # DNS
   $datacenter = 'ci'
