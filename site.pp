@@ -21,7 +21,6 @@
 #
 
 import "params.pp"
-import "classes/authorized_keys.pp"
 
 # Import roles
 import "roles/common/*.pp" # mandatory

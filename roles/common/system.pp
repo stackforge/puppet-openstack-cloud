@@ -43,9 +43,11 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # APT repositories
-#if $os_params::install_packages {
-#  class{ "os_apt_config": }
-#}
+  case $operatingsystem {
+    'Debian': { import "apt_debian_config.pp" }
+    'Ubuntu': { import "apt_ubuntu_config.pp" }
+  }
+  class{ "os_packages_config": }
 
 # DNS
   $datacenter = 'ci'

@@ -1,4 +1,11 @@
 #cloud-config
+runcmd:
+  - groupadd cloud-users
+  - useradd -m -c "eNovance Jenkins User" -g cloud-users -s /bin/bash jenkins
+  - echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+  - mkdir -p /home/jenkins/.ssh
+  - echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlfCjJqwyI/xb5TU3ksbsvzFcEXeYNUnhhlve3JXAKebF/fJ4qarZ7yCVXrlakSiK1blF4QJTROlRLOAF+A0dRdyRuTCMFZCA4lVEjgHMgh8uwszta+d1PYIXGcTGKGLKDWQRHQNfN9l431NOxWEAE9ng5PRYX9bxl6FxRNdrM4So3+zF9rwLt6Ad+J8RuBAuhYKHTTQ5IdtM91d+/jGf12n1JHUy2XPcQKDpW7IbAjcX4qLx5of7WasM8Yt57+k5jxsfs0T9UsrXZ7jqaidv6PDNH550kIeaLF+hvEEgP1eC36ac52HUI7SVQu5/eYcR6zSEHbYRMm5xQvfDO5qJP techs@enovance.com >> /home/jenkins/.ssh/authorized_keys
+
 puppet:
  conf:
    agent:
