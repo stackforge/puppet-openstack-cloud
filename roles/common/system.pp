@@ -31,17 +31,10 @@ class os_common_system{
 #                           eNovance IT Operations                         #
 ############################################################################
 #                                                                          #
-#                          *** ACCÈS RESTREINT ***                         #
-#  L'accès à ce système est réservé aux seules personnes autorisées.       #
-#  Toute tentative d'accès frauduleux ou tout agissement portant atteinte  #
-#  aux systèmes de traitement automatisé de données de Cloudwatt expose    #
-#  son auteur à des poursuites pénales au titre des articles 323-1 à 323-7 #
-#  du Code Pénal.                                                          #
-#                                                                          #
 #                         *** RESTRICTED ACCESS ***                        #
 #  Only the authorized users may access this system.                       #
 #  Any attempted unauthorized access or any action affecting the computer  #
-#  system of Cloudwatt is punishable under articles 323-1 to 323-7 of      #
+#  system of eNovance is punishable under articles 323-1 to 323-7 of       #
 #  French criminal law.                                                    #
 #                                                                          #
 ############################################################################
