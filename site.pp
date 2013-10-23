@@ -74,9 +74,9 @@ node 'os-ci-test3.enovance.com' inherits common{
     }
 
 # Object Storage
-#    class{'os_role_swift_proxy':
-#      local_ip => $ipaddress_eth1,
-#    }
+    class{'os_role_swift_proxy':
+      local_ip => $ipaddress_eth1,
+    }
 #    class {"os_role_swift_ringbuilder":
 #       rsyncd_ipaddress => $ipaddress_eth1,
 #    }
