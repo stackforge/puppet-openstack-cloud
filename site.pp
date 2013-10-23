@@ -24,8 +24,7 @@ import "params.pp"
 import "classes/authorized_keys.pp"
 
 # Import roles
-import "roles/common/*.pp"
-
+import "roles/common/*.pp" # mandatory
 import "roles/automation/*.pp"
 import "roles/database/*.pp"
 import "roles/identity/*.pp"
@@ -33,20 +32,16 @@ import "roles/messaging/*.pp"
 import "roles/metering/*.pp"
 import "roles/object-storage/*.pp"
 
-# Install packages or not
-if $os_params::install_packages == True {
-  case $operatingsystem {
-    debian: { import "classes/apt_debian_config.pp" }
-#    ubuntu: { import "classes/apt_ubuntu_config.pp" }
-    default: { fail("Unrecognized operating system") }
-  }
-}
+# temp(EmilienM): we don't have to use it if eDeploy roles are good.
+# I let it while being sure that they are good.
+# import "classes/apt_debian_config.pp"
 
 node common {
 
 # Params
   class{ "os_params": }
 
+# Common system configuration
   class{ "os_common_system": }
 
 }
