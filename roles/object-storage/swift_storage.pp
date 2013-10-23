@@ -32,7 +32,7 @@ define set_io_scheduler(){
 
 
 class os_role_swift_storage (
-  $local_ip       = $ipaddress_eth1,
+  $local_ip       = $ipaddress_eth0,
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',

@@ -32,7 +32,7 @@ class os_ceilometer_server{
 
 # Install Ceilometer-API
   class os_ceilometer_api(
-    $local_ip = $ipaddress_eth1,
+    $local_ip = $ipaddress_eth0,
   ){
     if ! defined(Class['ceilometer_common']){
       class { 'ceilometer_common': }

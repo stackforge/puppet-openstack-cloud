@@ -20,7 +20,7 @@
 # Swift Proxy node
 
 class os_role_swift_proxy(
-    $local_ip = $ipaddress_eth1,
+    $local_ip = $ipaddress_eth0,
 ) inherits os_role_swift {
 
   class { 'memcached':
