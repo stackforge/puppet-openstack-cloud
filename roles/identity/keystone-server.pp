@@ -18,7 +18,7 @@
 # under the License.
 
 class os_keystone_server (
-  $local_ip = $ipaddress_eth1,
+  $local_ip = $ipaddress_eth0,
 ){
 
 # python-memcache is not a dependency (yet)

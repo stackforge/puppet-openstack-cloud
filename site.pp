@@ -70,15 +70,15 @@ node 'os-ci-test3.enovance.com' inherits common{
 
 ## Identity 
     class {"os_keystone_server":
-       local_ip => $ipaddress_eth1,
+       local_ip => $ipaddress_eth0,
     }
 
 # Object Storage
     class{'os_role_swift_proxy':
-      local_ip => $ipaddress_eth1,
+      local_ip => $ipaddress_eth0,
     }
     class {"os_role_swift_ringbuilder":
-       rsyncd_ipaddress => $ipaddress_eth1,
+       rsyncd_ipaddress => $ipaddress_eth0,
     }
     Class["os_role_swift_ringbuilder"] -> Class["os_role_swift_proxy"]
 
@@ -95,7 +95,7 @@ node 'os-ci-test6.enovance.com', 'os-ci-test12.enovance.com', 'os-ci-test13.enov
 
 ## Object Storage
     class{ 'os_role_swift_storage':
-        local_ip => $ipaddress_eth1,
+        local_ip => $ipaddress_eth0,
         swift_zone    =>  $os_params::os_swift_zone[$::hostname],
     }
 }

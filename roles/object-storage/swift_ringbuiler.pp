@@ -21,7 +21,7 @@
 
 
 class os_role_swift_ringbuilder(
-    $rsyncd_ipaddress = ipaddress_eth1,
+    $rsyncd_ipaddress = ipaddress_eth0,
     $replicas         = 3
 ) inherits os_role_swift {
 
