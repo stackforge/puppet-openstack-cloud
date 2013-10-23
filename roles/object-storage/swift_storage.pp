@@ -97,18 +97,18 @@ allow_versions = on
     swift::storage::loopback{$object_nodes: seek => 10024000 }
     swift::storage::loopback{['sdb', 'sdc']: seek => 10024000 }
   } else {
-    $object_nodes = flatten([ range('sda','sdc')])
+    $object_nodes = flatten([ range('sdc','sdd')])
     swift::storage::xfs { $object_nodes: }
-    swift::storage::xfs { ['sde', 'sdf']: }
-    set_io_scheduler{['sde', 'sdf']:}
+    swift::storage::xfs { 'sdb': }
+    set_io_scheduler{'sdb':}
     set_io_scheduler{$object_nodes:}
   }
 
-  @@ring_container_device { "${local_ip}:${container_port}/sde":
+  @@ring_container_device { "${local_ip}:${container_port}/sdb":
     zone        => $swift_zone,
     weight      => '100.0',
   }
-  @@ring_account_device { "${local_ip}:${account_port}/sdf":
+  @@ring_account_device { "${local_ip}:${account_port}/sdb":
     zone        => $swift_zone,
     weight      => '100.0',
   }
