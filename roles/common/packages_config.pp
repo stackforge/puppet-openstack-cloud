@@ -65,7 +65,7 @@ APT::Periodic::Download-Upgradeable-Packages 1;
       }
 
 # Common packages for Debian / Ubuntu
-      '/^(Debian|Ubuntu)$/' : {
+      /^(Debian|Ubuntu)$/: {
         # OpenStack / Ceph / Specific Backports
         apt::source {'cloud.pkgs.enovance.com':
           location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/${lsbdistcodename}-${os_params::os_release}",
