@@ -27,7 +27,7 @@ class os_packages_config {
     }
 
     # Ensure apt is configured before every package installation
-    Class["os_apt_config"] -> Package <| |> 
+    Class["os_packages_config"] -> Package <| |> 
 
     # configure apt periodic updates
     apt::conf { 'periodic':
