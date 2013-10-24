@@ -63,8 +63,10 @@ APT::Periodic::Download-Upgradeable-Packages 1;
           include_src => false,
         }
       }
+    }
 
 # Common packages for Debian / Ubuntu
+    case $operatingsystem {
       /^(Debian|Ubuntu)$/: {
         # OpenStack / Ceph / Specific Backports
         apt::source {'cloud.pkgs.enovance.com':
@@ -85,7 +87,6 @@ APT::Periodic::Download-Upgradeable-Packages 1;
           include_src => true,
         }
       }
-
     }
 
 # We don't include Ceph here, since APT is managed by Ceph Puppet module
