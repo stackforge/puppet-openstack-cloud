@@ -100,4 +100,16 @@ class os_keystone_server (
     auth_pass => $os_params::ks_swift_dispersion_password
   }
 
+
+# Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
+# In fact, when keystone finish to start but admin port isn't already usable, so wait a bit
+exec{"wait-keystone": command => "/bin/sleep 5" }
+Service["keystone"] -> Exec["wait-keystone"]
+Exec["wait-keystone"] -> Keystone_tenant <| |>
+Exec["wait-keystone"] -> Keystone_user <| |>
+Exec["wait-keystone"] -> Keystone_role  <| |>
+Exec["wait-keystone"] -> Keystone_service <| |>
+Exec["wait-keystone"] -> Keystone_user_role <| |>
+Exec["wait-keystone"] -> Keystone_endpoint <| |>
+
 }
