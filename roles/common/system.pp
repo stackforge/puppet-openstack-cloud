@@ -53,6 +53,11 @@ This node is under the control of Puppet ${::puppetversion}.
     searchpath  => "${os_params::site_domain}.",
   }
 
+# NTP
+  class { '::ntp':
+    servers => [ '0.fr.pool.ntp.org', '0.us.pool.ntp.org' ],
+  }
+
 # SSH Keys
   package { "enovance-config-sshkeys-dev":
       ensure => "installed"
