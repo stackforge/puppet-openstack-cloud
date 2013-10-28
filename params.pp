@@ -43,6 +43,7 @@ class os_params {
   $ks_admin_token = "iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K"
   $ks_admin_email = "dev@enovance.com"
   $ks_admin_password = "Xokoph5io2aenaoh0nuiquei9aineigo"
+  $ks_admin_tenant = "admin"
 
   $ks_swift_dispersion_password = "aipee1die1eeSohph9yae8eeluthaleu"
   $ks_swift_password = "cwnu6Eeph4jahsh5wooch5Panahjaidie8"

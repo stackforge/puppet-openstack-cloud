@@ -61,8 +61,9 @@ class os_keystone_server (
 
 # Keystone Endpoints + Users
   class { 'keystone::roles::admin': 
-    email => $os_params::ks_admin_email,
-    password => $os_params::ks_admin_password,
+    email        => $os_params::ks_admin_email,
+    password     => $os_params::ks_admin_password,
+    admin_tenant => $os_params::ks_admin_tenant,
   }
 
   keystone_role { $os_params::keystone_roles_addons: ensure => present }
