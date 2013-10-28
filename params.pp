@@ -82,9 +82,9 @@ class os_params {
   $statsd_host = "127.0.0.1"
   $statsd_port = "4125"
   $os_swift_zone = {
-     'os-ci-test3' => 1,
-     'os-ci-test4' => 2,
-     'os-ci-test6' => 3,
+     'os-ci-test8' => 1,
+     'os-ci-test9' => 2,
+     'os-ci-test12' => 3,
   }
 
   # MySQL
