@@ -84,7 +84,7 @@ node 'os-ci-test3.enovance.com' inherits common{
 }
 
 # Storage nodes
-node 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com', 'os-ci-test13.enovance.com' inherits common{
+node 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com', 'os-ci-test8.enovance.com' inherits common{
 
 ## Metering
     class{'os_ceilometer_common':}
