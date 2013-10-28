@@ -84,6 +84,7 @@ class os_keystone_server (
     port => $os_params::swift_port,
     public_address => $os_params::ks_swift_public_host,
     public_protocol => $os_params::ks_swift_public_proto,
+    region           => $os_params::region,
     public_port => $os_params::ks_swift_public_port
   }
 
@@ -93,6 +94,7 @@ class os_keystone_server (
     admin_address    => $os_params::ks_ceilometer_admin_host,
     internal_address => $os_params::ks_ceilometer_internal_host,
     public_protocol  => $os_params::ks_ceilometer_public_proto,
+    region           => $os_params::region,
     port             => $os_params::ceilometer_port,
   }
 
