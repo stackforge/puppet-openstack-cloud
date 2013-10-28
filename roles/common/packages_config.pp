@@ -63,6 +63,29 @@ APT::Periodic::Download-Upgradeable-Packages 1;
           include_src => false,
         }
       }
+
+      'Ubuntu': {
+         apt::source { "ubuntu_precise":
+           location          => "http://us.archive.ubuntu.com/ubuntu",
+           release           => "precise",
+           repos             => "main universe multiverse",
+           include_src       => false
+         }
+
+         apt::source { "ubuntu_precise_update":
+           location          => "http://us.archive.ubuntu.com/ubuntu",
+           release           => "precise-updates",
+           repos             => "main universe multiverse",
+           include_src       => false
+         }
+
+         apt::source { "ubuntu_precise_security":
+           location          => "http://security.ubuntu.com/ubuntu",
+           release           => "precise-security",
+           repos             => "main universe multiverse",
+           include_src       => false
+         }
+      }
     }
 
 # Common packages for Debian / Ubuntu
