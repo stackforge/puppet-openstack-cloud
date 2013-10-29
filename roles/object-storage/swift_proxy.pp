@@ -33,8 +33,8 @@ class os_role_swift_proxy(
     port => $os_params::swift_port,
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'ratelimit',
-      'swift3', 's3token', 'tempurl', 'formpost', 'authtoken',
-      'keystone', 'proxy-logging', 'proxy-server'],
+      'swift3', 's3token', 'tempurl', 'formpost', 'authtoken', 'ceilometer',
+      'keystone', 'proxy-logging', 'proxy-server', 'account_quotas', 'staticweb'],
     account_autocreate => true,
     log_level          => 'DEBUG',
     workers            => inline_template('<%= processorcount.to_i * 2 %>
@@ -53,6 +53,10 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::healthcheck': }
   class { 'swift::proxy::catch_errors': }
   class { 'swift::proxy::ratelimit': }
+  class { 'swift::proxy::ceilometer': }
+  class { 'swift::proxy::account_quotas': }
+  class { 'swift::proxy::container_quotas': }
+  class { 'swift::proxy::staticweb': }
 
   class { 'swift::proxy::keystone':
     operator_roles => ['admin', 'SwiftOperator', 'ResellerAdmin'],
@@ -81,14 +85,36 @@ cache = swift.cache')
 endpoint_type=internalURL",
     auth_pass => $os_params::ks_swift_dispersion_password
   }
-  
-  #Note(sileht): log file should exists to swift proxy to write to 
+
+  # Note(sileht): log file should exists to swift proxy to write to
   # the ceilometer directory
   file{"/var/log/ceilometer/swift-proxy-server.log":  
     ensure => present,
     owner  => 'swift',
     group  => 'swift',
     notify => Service['swift-proxy']
+  }
+
+  class swift::proxy::container_quotas() {
+    concat::fragment { 'swift_container_quotas':
+      target      => '/etc/swift/proxy-server.conf',
+      content => inline_template('
+[filter:container_quotas]
+use = egg:swift#container_quotas
+'),
+      order => '80',
+    }
+  }
+
+  class swift::proxy::account_quotas() {
+    concat::fragment { 'swift_account_quotas':
+      target      => '/etc/swift/proxy-server.conf',
+      content => inline_template('
+[filter:account_quotas]
+use = egg:swift#account_quotas
+'),
+      order => '80',
+    }
   }
 
   Swift::Ringsync<<| |>> #~> Service["swift-proxy"]
