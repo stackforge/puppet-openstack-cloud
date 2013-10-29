@@ -30,6 +30,12 @@ class os_ceilometer_server{
 # Install Ceilometer-collector
   class { 'ceilometer::collector': }
 
+# Install Ceilometer-evaluator
+  class { 'ceilometer::evalutator': }
+
+# Install Ceilometer-notifier
+  class { 'ceilometer::notifier': }
+
 # Install Ceilometer-API
   class os_ceilometer_api(
     $local_ip = $ipaddress_eth0,
