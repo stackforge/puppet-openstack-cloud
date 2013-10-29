@@ -88,6 +88,8 @@ allow_versions = on
   }
 
   swift::storage::filter::recon { 'object': }
+  swift::storage::filter::recon { 'container': }
+  swift::storage::filter::recon { 'account': }
   swift::storage::filter::healthcheck { 'object': }
   swift::storage::filter::healthcheck { 'container': }
   swift::storage::filter::healthcheck { 'account': }
