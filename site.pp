@@ -59,10 +59,10 @@ node 'os-ci-test3.enovance.com' inherits common{
     class {"mysql_server":}
 
 ## Metering
-#    class{'os_ceilometer_common':}
-#    class{'os_ceilometer_server':}
+    class{'os_ceilometer_common':}
+    class{'os_ceilometer_server':}
 #    # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
-#    class {"ceilometer::agent::central": }
+    class {"ceilometer::agent::central": }
 
 ## Identity 
     class {"os_keystone_server":
@@ -87,7 +87,7 @@ node 'os-ci-test3.enovance.com' inherits common{
 node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com' inherits common{
 
 ## Metering
-#    class{'os_ceilometer_common':}
+    class{'os_ceilometer_common':}
 
 ## Object Storage
     class{ 'os_role_swift_storage':
