@@ -31,10 +31,10 @@ class os_ceilometer_server{
   class { 'ceilometer::collector': }
 
 # Install Ceilometer-evaluator
-  class { 'ceilometer::alarm::evaluator': }
+#  class { 'ceilometer::alarm::evaluator': }
 
 # Install Ceilometer-notifier
-  class { 'ceilometer::alarm::notifier': }
+#  class { 'ceilometer::alarm::notifier': }
 
 # Install Ceilometer-API
   class os_ceilometer_api(
