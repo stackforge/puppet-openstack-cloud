@@ -23,6 +23,8 @@ class os_params {
   $site_domain = "enovance.com"
   $os_release = "havana"
   $region = "enovance-ci"
+  $storage = True
+  $compute = False
   $install_packages = False
 
   # Root hashed password (enovance by default)
