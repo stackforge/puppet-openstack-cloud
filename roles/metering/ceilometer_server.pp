@@ -31,7 +31,7 @@ class os_ceilometer_server{
   class { 'ceilometer::collector': }
 
 # Install Ceilometer-evaluator
-  class { 'ceilometer::evalutator': }
+  class { 'ceilometer::evaluator': }
 
 # Install Ceilometer-notifier
   class { 'ceilometer::notifier': }
