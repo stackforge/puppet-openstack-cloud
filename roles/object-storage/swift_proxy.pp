@@ -33,7 +33,7 @@ class os_role_swift_proxy(
     port => $os_params::swift_port,
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'ratelimit',
-      'swift3', 's3token', 'tempurl', 'formpost', 'authtoken', 'ceilometer',
+      'swift3', 's3token', 'tempurl', 'formpost', 'authtoken',
       'keystone', 'proxy-logging', 'proxy-server', 'staticweb'],
     account_autocreate => true,
     log_level          => 'DEBUG',
@@ -53,7 +53,6 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::healthcheck': }
   class { 'swift::proxy::catch_errors': }
   class { 'swift::proxy::ratelimit': }
-  class { 'swift::proxy::ceilometer': }
   class { 'swift::proxy::staticweb': }
 
   class { 'swift::proxy::keystone':
@@ -86,7 +85,7 @@ endpoint_type=internalURL",
 
   # Note(sileht): log file should exists to swift proxy to write to
   # the ceilometer directory
-  file{"/var/log/ceilometer/swift-proxy-server.log":  
+  file{"/var/log/ceilometer/swift-proxy-server.log":
     ensure => present,
     owner  => 'swift',
     group  => 'swift',
