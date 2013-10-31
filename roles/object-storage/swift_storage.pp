@@ -94,17 +94,11 @@ allow_versions = on
   swift::storage::filter::healthcheck { 'container': }
   swift::storage::filter::healthcheck { 'account': }
 
-  if $onloopdevices {
-    $object_nodes = flatten([ range('sdd','sdf')])
-    swift::storage::loopback{$object_nodes: seek => 10024000 }
-    swift::storage::loopback{['sdb', 'sdc']: seek => 10024000 }
-  } else {
-    $object_nodes = flatten([ range('sdc','sdd')])
-    swift::storage::xfs { $object_nodes: }
-    swift::storage::xfs { 'sdb': }
-    set_io_scheduler{'sdb':}
-    set_io_scheduler{$object_nodes:}
-  }
+  $object_nodes = flatten([ range('sdc','sdd')])
+  swift::storage::xfs { $object_nodes: }
+  swift::storage::xfs { 'sdb': }
+  set_io_scheduler{'sdb':}
+  set_io_scheduler{$object_nodes:}
 
   @@ring_container_device { "${local_ip}:${container_port}/sdb":
     zone        => $swift_zone,
