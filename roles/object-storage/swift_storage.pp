@@ -16,9 +16,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Swift Storage node
-
+#
 
 define set_io_scheduler(){
   # TODO: Add it on server boot
@@ -31,14 +31,14 @@ define set_io_scheduler(){
 }
 
 
-class os_role_swift_storage (
+class os_swift_storage (
   $local_ip       = $ipaddress_eth0,
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',
   $account_port   = '6002',
   $onloopdevices  = false,
-) inherits os_role_swift {
+) inherits os_swift_common {
 
   class { 'swift::storage':
     storage_local_net_ip => $local_ip,

@@ -16,12 +16,13 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Swift Proxy node
+#
 
-class os_role_swift_proxy(
+class os_swift_proxy(
     $local_ip = $ipaddress_eth0,
-) inherits os_role_swift {
+) inherits os_swift_common {
 
   class { 'memcached':
     listen_ip  => $local_ip,

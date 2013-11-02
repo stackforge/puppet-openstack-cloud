@@ -16,10 +16,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Swift nodes
+#
 
-class os_role_swift {
+class os_swift_common {
 
   class { 'ssh::server::install': }
 
