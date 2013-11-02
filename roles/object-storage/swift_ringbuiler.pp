@@ -16,14 +16,14 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Swift ring builder node
+#
 
-
-class os_role_swift_ringbuilder(
+class os_swift_ringbuilder(
     $rsyncd_ipaddress = ipaddress_eth0,
     $replicas         = 3
-) inherits os_role_swift {
+) inherits os_swift_common {
 
   Ring_object_device <<| |>>
   Ring_container_device <<| |>>
