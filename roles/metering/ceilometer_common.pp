@@ -23,21 +23,21 @@
 class os_ceilometer_common {
 
   class { 'ceilometer':
-     metering_secret => $os_params::ceilometer_secret,
-     rabbit_hosts    => $os_params::rabbit_hosts,
-     rabbit_password => $os_params::rabbit_password,
-     rabbit_userid   => 'ceilometer',
-     verbose         => false,
-     debug           => false,
+    metering_secret => $os_params::ceilometer_secret,
+    rabbit_hosts    => $os_params::rabbit_hosts,
+    rabbit_password => $os_params::rabbit_password,
+    rabbit_userid   => 'ceilometer',
+    verbose         => false,
+    debug           => false,
   }
 
-  ceilometer_config { 
+  ceilometer_config {
     'DEFAULT/syslog_log_facility':               value => 'LOG_LOCAL0';
     'DEFAULT/use_syslog':                        value => 'yes';
   }
 
   class { 'ceilometer::agent::auth':
-       auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
-       auth_password => $os_params::ks_ceilometer_password,
+    auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
+    auth_password => $os_params::ks_ceilometer_password,
   }
 }

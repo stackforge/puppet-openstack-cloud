@@ -22,23 +22,23 @@
 class authorized_keys ($keys, $account='root', $home = '') {
     # This line allows default homedir based on $account variable.
     # If $home is empty, the default is used.
-    $rhome = $account ? {'root' => "/root", default => $home}
+    $rhome = $account ? {'root' => '/root', default => $home}
     $homedir = $rhome ? {'' => "/home/${account}", default => $rhome}
     file { "${homedir}/.ssh":
-        ensure => directory,
-        owner => $ensure ? {'present' => $account, default => undef },
-        group => $ensure ? {'present' => $account, default => undef },
-        mode => 755,
+        ensure  => directory,
+        owner   => $ensure ? {'present' => $account, default => undef },
+        group   => $ensure ? {'present' => $account, default => undef },
+        mode    => '0755',
     }
     file { "${homedir}/.ssh/authorized_keys":
-        owner => $ensure ? {'present' => $account, default => undef },
-        group => $ensure ? {'present' => $account, default => undef },
-        mode => 644,
+        owner   => $ensure ? {'present' => $account, default => undef },
+        group   => $ensure ? {'present' => $account, default => undef },
+        mode    => '0644',
         require => File["${homedir}/.ssh"],
     }
 
     define addkey{
-        exec{"key-$name":
+        exec{"key-${name}":
             command => "/bin/echo '${name}' >> ${homedir}/.ssh/authorized_keys",
             unless  => "/bin/grep -xFq '${name}' ${homedir}/.ssh/authorized_keys",
             require => File["${homedir}/.ssh/authorized_keys"],

@@ -28,11 +28,11 @@ class os_swift_common {
     swift_hash_suffix => $os_params::swift_hash_suffix,
     package_ensure    => latest,
   }
-  class {"os_swift_system::tweaking": }
+  class {'os_swift_system::tweaking': }
 }
 
 class os_swift_system::tweaking {
-  file {"/etc/sysctl.d/swift-tuning.conf":
+  file {'/etc/sysctl.d/swift-tuning.conf':
     content => "
 # disable TIME_WAIT.. wait..
 net.ipv4.tcp_tw_recycle=1
@@ -54,34 +54,34 @@ net.ipv4.tcp_timestamps = 0
 net.ipv4.tcp_sack = 0
 
 ",
-    owner => "root",
-    group => "root",
+    owner   => 'root',
+    group   => 'root',
   }
 
-  exec{"update-etc-modules-with-ip_conntrack":
-    command => "/bin/echo ip_conntrack >> /etc/modules",
-    unless => "/bin/grep -qFx 'ip_conntrack' /etc/modules",
+  exec{'update-etc-modules-with-ip_conntrack':
+    command => '/bin/echo ip_conntrack >> /etc/modules',
+    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
   }
 
   # Load sysctl and module only the first time
-  exec{"load-ip_conntrack":
-    command => "/sbin/modprobe ip_conntrack",
-    unless  => "/bin/grep -qFx 'ip_conntrack' /etc/modules",
+  exec{'load-ip_conntrack':
+    command => '/sbin/modprobe ip_conntrack',
+    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
     require => File['/etc/sysctl.d/swift-tuning.conf']
   }
-  exec{"reload-sysctl-swift-tunning":
-    command => "/sbin/sysctl -p /etc/sysctl.d/swift-tuning.conf",
-    unless  => "/bin/grep -qFx 'ip_conntrack' /etc/modules",
+  exec{'reload-sysctl-swift-tunning':
+    command => '/sbin/sysctl -p /etc/sysctl.d/swift-tuning.conf',
+    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
     require => File['/etc/sysctl.d/swift-tuning.conf']
   }
 
-  file{"/var/log/swift":
+  file{'/var/log/swift':
     ensure => directory,
-    owner => swift,
-    group => swift,
+    owner  => swift,
+    group  => swift,
   }
 
-  file{"/etc/logrotate.d/swift":
+  file{'/etc/logrotate.d/swift':
     content => "
   /var/log/swift/proxy.log /var/log/swift/proxy.error.log /var/log/swift/account-server.log /var/log/swift/account-server.error.log /var/log/swift/container-server.log /var/log/swift/container-server.error.log /var/log/swift/object-server.log /var/log/swift/object-server.error.log
 {
@@ -96,5 +96,5 @@ net.ipv4.tcp_sack = 0
 }
 "
   }
- 
+
 }

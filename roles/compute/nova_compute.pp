@@ -29,41 +29,41 @@ class os_nova_compute(
     ensure => latest
   }
 
-  exec { "insert_module_nbd":
-    command => "/bin/echo 'nbd' > /etc/modules",
-    unless  => "/bin/grep 'nbd' /etc/modules",
+  exec { 'insert_module_nbd':
+    command => '/bin/echo "nbd" > /etc/modules',
+    unless  => '/bin/grep "nbd" /etc/modules',
   }
 
-  exec { "/sbin/modprobe nbd":
-    unless => "/bin/grep -q '^nbd ' '/proc/modules'"
+  exec { '/sbin/modprobe nbd':
+    unless => '/bin/grep -q "^nbd " "/proc/modules"'
   }
 
-  file{ "/var/lib/nova/.ssh":
+  file{ '/var/lib/nova/.ssh':
     ensure  => directory,
-    mode    => "0700",
-    owner   => "nova",
-    group   => "nova",
+    mode    => '0700',
+    owner   => 'nova',
+    group   => 'nova',
     require => Class['nova']
   } ->
-  file{ "/var/lib/nova/.ssh/id_rsa":
-    ensure => present,
-    mode   => "0600",
-    owner  => "nova",
-    group  => "nova",
-    content => $os_params::nova_ssh_private_key
-  } -> 
-  file{ "/var/lib/nova/.ssh/authorized_keys":
+  file{ '/var/lib/nova/.ssh/id_rsa':
     ensure  => present,
-    mode    => "0600",
-    owner  => "nova",
-    group  => "nova",
+    mode    => '0600',
+    owner   => 'nova',
+    group   => 'nova',
+    content => $os_params::nova_ssh_private_key
+  } ->
+  file{ '/var/lib/nova/.ssh/authorized_keys':
+    ensure  => present,
+    mode    => '0600',
+    owner   => 'nova',
+    group   => 'nova',
     content => $os_params::nova_ssh_public_key
   } ->
-  file{ "/var/lib/nova/.ssh/config":
+  file{ '/var/lib/nova/.ssh/config':
     ensure  => present,
-    mode    => "0600",
-    owner  => "nova",
-    group  => "nova",
+    mode    => '0600',
+    owner   => 'nova',
+    group   => 'nova',
     content => "
 Host *
     StrictHostKeyChecking no

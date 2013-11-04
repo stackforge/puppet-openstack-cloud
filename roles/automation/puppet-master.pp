@@ -26,8 +26,8 @@ class os_puppet_master{
   vcsrepo { '/etc/puppet/modules/':
     ensure   => latest,
     provider => git,
-    source   => "gitolite@git.labs.enovance.com:puppet.git",
-    revision => "openstack-${$os_params::os_release}/master",
+    source   => 'gitolite@git.labs.enovance.com:puppet.git',
+    revision => "openstack-${os_params::os_release}/master",
   }
   ->
   exec { '/usr/bin/git submodule init':
@@ -42,8 +42,8 @@ class os_puppet_master{
   vcsrepo { '/etc/puppet/manifests/':
     ensure   => latest,
     provider => git,
-    source   => "git.labs.enovance.com:openstack-puppet-ci.git",
-    revision => "master",
+    source   => 'git.labs.enovance.com:openstack-puppet-ci.git',
+    revision => 'master',
   }
 
 }
