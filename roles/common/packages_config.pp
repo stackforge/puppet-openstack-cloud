@@ -19,7 +19,7 @@
 
 class os_packages_config {
 
-    class{"apt":
+    class{'apt':
       always_apt_update    => false,
       purge_sources_list   => true,
       purge_sources_list_d => true,
@@ -27,12 +27,12 @@ class os_packages_config {
     }
 
     # Ensure apt is configured before every package installation
-    Class["os_packages_config"] -> Package <| |> 
+    Class['os_packages_config'] -> Package <| |>
 
     # configure apt periodic updates
     apt::conf { 'periodic':
-      priority        => '10',
-      content          => "
+      priority  => '10',
+      content   => "
 APT::Periodic::Update-Package-Lists 1;
 APT::Periodic::Download-Upgradeable-Packages 1;
 ";
@@ -40,75 +40,81 @@ APT::Periodic::Download-Upgradeable-Packages 1;
 
 
 # OS specific repositories
-    case $operatingsystem {
+    case $::operatingsystem {
       'Debian': {
         # Official Debian repositories
         apt::source {'debian_main':
-          location    => "http://ftp2.fr.debian.org/debian/",
-          release     => "wheezy",
-          repos       => "main contrib non-free",
+          location    => 'http://ftp2.fr.debian.org/debian/',
+          release     => 'wheezy',
+          repos       => 'main contrib non-free',
           include_src => false,
         }
 
         apt::source {'debian_backports':
-          location    => "http://ftp2.fr.debian.org/debian/",
-          release     => "wheezy-backports",
+          location    => 'http://ftp2.fr.debian.org/debian/',
+          release     => 'wheezy-backports',
           include_src => false,
         }
 
         apt::source {'debian_security':
-          location    => "http://security.debian.org/",
-          release     => "wheezy/updates",
-          repos       => "main",
+          location    => 'http://security.debian.org/',
+          release     => 'wheezy/updates',
+          repos       => 'main',
           include_src => false,
         }
       }
 
       'Ubuntu': {
-         apt::source { "ubuntu_precise":
-           location          => "http://us.archive.ubuntu.com/ubuntu",
-           release           => "precise",
-           repos             => "main universe multiverse",
-           include_src       => false
-         }
+        apt::source { 'ubuntu_precise':
+          location          => 'http://us.archive.ubuntu.com/ubuntu',
+          release           => 'precise',
+          repos             => 'main universe multiverse',
+          include_src       => false
+        }
 
-         apt::source { "ubuntu_precise_update":
-           location          => "http://us.archive.ubuntu.com/ubuntu",
-           release           => "precise-updates",
-           repos             => "main universe multiverse",
-           include_src       => false
-         }
+        apt::source { 'ubuntu_precise_update':
+          location          => 'http://us.archive.ubuntu.com/ubuntu',
+          release           => 'precise-updates',
+          repos             => 'main universe multiverse',
+          include_src       => false
+        }
 
-         apt::source { "ubuntu_precise_security":
-           location          => "http://security.ubuntu.com/ubuntu",
-           release           => "precise-security",
-           repos             => "main universe multiverse",
-           include_src       => false
-         }
+        apt::source { 'ubuntu_precise_security':
+          location          => 'http://security.ubuntu.com/ubuntu',
+          release           => 'precise-security',
+          repos             => 'main universe multiverse',
+          include_src       => false
+        }
+      }
+      default: {
+        fail("Operating system (${::operatingsystem}) not supported yet" )
       }
     }
 
 # Common packages for Debian / Ubuntu
-    case $operatingsystem {
+    case $::operatingsystem {
       /^(Debian|Ubuntu)$/: {
         # OpenStack / Ceph / Specific Backports
         apt::source {'cloud.pkgs.enovance.com':
-          location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/${lsbdistcodename}-${os_params::os_release}",
+          location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/${::lsbdistcodename}-${os_params::os_release}",
           release     => $os_params::os_release,
           include_src => false,
-          key_server  => "keyserver.ubuntu.com",
-          key         => "5D964F0B",
+          key_server  => 'keyserver.ubuntu.com',
+          key         => '5D964F0B',
         }
 
         # Specific to eNovance (SSH keys, etc)
         apt::source {'enovance':
           location    => 'http://***REMOVED***@repo.enovance.com/apt/',
           release     => 'squeeze',
-          repos       => "main contrib non-free",
-          key         => "3A964515",
-          key_source  => "http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg",
+          repos       => 'main contrib non-free',
+          key         => '3A964515',
+          key_source  => 'http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg',
           include_src => true,
         }
+      }
+      default: {
+        fail("Operating system (${::operatingsystem}) not supported yet" )
       }
     }
 

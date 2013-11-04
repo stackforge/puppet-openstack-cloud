@@ -20,8 +20,10 @@
 
 class mysql_server {
 
-  class { 'mysql::server': 
-    config_hash => { 'bind_address'=> '0.0.0.0', 'root_password' => 'TRG33WDCAvmLqtUv5MwfGxDnxTyaciMAV4RFe044' }
+  class { 'mysql::server':
+    config_hash => {
+      'bind_address'  => '0.0.0.0',
+      'root_password' => 'TRG33WDCAvmLqtUv5MwfGxDnxTyaciMAV4RFe044'
+    }
   }
-
 }

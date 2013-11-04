@@ -31,7 +31,7 @@ class os_swift_proxy(
 
   class { 'swift::proxy':
     proxy_local_net_ip => $local_ip,
-    port => $os_params::swift_port,
+    port               => $os_params::swift_port,
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'ratelimit',
       'swift3', 's3token', 'tempurl', 'formpost', 'authtoken',
@@ -71,7 +71,7 @@ log_statsd_default_sample_rate = 1
 cache = swift.cache')
   }
 
-  class { 'swift::proxy::swift3': 
+  class { 'swift::proxy::swift3':
     ensure => 'latest',
   }
   class { 'swift::proxy::s3token':
@@ -79,7 +79,7 @@ cache = swift.cache')
     auth_port     => $os_params::keystone_admin_port,
   }
 
-  class { 'swift::dispersion': 
+  class { 'swift::dispersion':
     auth_url  => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0
 endpoint_type=internalURL",
     auth_pass => $os_params::ks_swift_dispersion_password
@@ -87,7 +87,7 @@ endpoint_type=internalURL",
 
   # Note(sileht): log file should exists to swift proxy to write to
   # the ceilometer directory
-  file{"/var/log/ceilometer/swift-proxy-server.log":
+  file{'/var/log/ceilometer/swift-proxy-server.log':
     ensure => present,
     owner  => 'swift',
     group  => 'swift',

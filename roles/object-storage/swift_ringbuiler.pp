@@ -58,20 +58,20 @@ class os_swift_ringbuilder(
   Rsync::Server::Module {
     incoming_chmod  => 'u=rwX,go=rX',
     outgoing_chmod  => 'u=rwX,go=rX',
-  } 
+  }
 
-  rsync::server::module { "swift_server":
-    path => '/etc/swift',
-    lock_file => "/var/lock/swift_server.lock",
-    uid => 'swift',
-    gid => 'swift',
+  rsync::server::module { 'swift_server':
+    path            => '/etc/swift',
+    lock_file       => '/var/lock/swift_server.lock',
+    uid             => 'swift',
+    gid             => 'swift',
     max_connections => $os_params::swift_rsync_max_connections,
-    read_only => true,
+    read_only       => true,
   }
 
   # exports rsync gets that can be used to sync the ring files
   @@swift::ringsync { ['account', 'object', 'container']:
-     ring_server => $rsyncd_ipaddress,
+    ring_server => $rsyncd_ipaddress,
   }
 }
 

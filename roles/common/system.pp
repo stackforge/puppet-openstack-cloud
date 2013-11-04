@@ -25,7 +25,7 @@ class os_common_system{
   {
     '/etc/motd':
       ensure  => file,
-      mode    => 644,
+      mode    => '0644',
       content => "
 ############################################################################
 #                           eNovance IT Operations                         #
@@ -43,24 +43,24 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # APT repositories
-  class{ "os_packages_config": }
+  class{ 'os_packages_config': }
 
 # DNS
   $datacenter = 'ci'
-  class{ "resolver":
+  class{ 'resolver':
     dcinfo      => { ci   => ['10.68.0.2'], },
-    domainname  => "${os_params::site_domain}",
-    searchpath  => "${os_params::site_domain}.",
+    domainname  => $os_params::site_domain,
+    searchpath  => $os_params::site_domain,
   }
 
 # NTP
-  class { "ntp":
+  class { 'ntp':
     ntpservers => [ '0.fr.pool.ntp.org', '0.us.pool.ntp.org' ],
   }
 
 # SSH Keys
-  package { "enovance-config-sshkeys-dev":
-      ensure => "installed"
+  package { 'enovance-config-sshkeys-dev':
+      ensure => 'installed'
   }
 
 # Strong root password for all servers

@@ -35,22 +35,22 @@ class os_keystone_server (
     enabled        => true,
     package_ensure => 'latest',
     admin_token    => $os_params::ks_admin_token,
-    compute_port   => "8774",
+    compute_port   => '8774',
     verbose        => true,
     debug          => true,
     sql_connection => "mysql://${os_params::keystone_db_user}:${os_params::keystone_db_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
-    token_format   => "UUID",
+    token_format   => 'UUID',
     # ToDo (EmilienM): Fix memcached
     # token_driver   => "keystone.token.backends.memcache.Token",
     use_syslog     => true,
-    log_facility   => "LOG_LOCAL0",
+    log_facility   => 'LOG_LOCAL0',
   }
 
   keystone_config {
-    "token/expiration": value => "86400";
+    'token/expiration': value => '86400';
     "memcache/servers": value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
-    "ec2/driver":       value => "keystone.contrib.ec2.backends.sql.Ec2";
+    'ec2/driver':       value => 'keystone.contrib.ec2.backends.sql.Ec2';
   }
 
 
@@ -63,7 +63,7 @@ class os_keystone_server (
 
   keystone_role { $os_params::keystone_roles_addons: ensure => present }
 
-  class {"keystone::endpoint":
+  class {'keystone::endpoint':
     public_address   => $os_params::ks_keystone_public_host,
     admin_address    => $os_params::ks_keystone_admin_host,
     internal_address => $os_params::ks_keystone_internal_host,
@@ -74,14 +74,14 @@ class os_keystone_server (
     public_protocol  => $os_params::ks_keystone_public_proto
   }
 
-  class{"swift::keystone::auth":
-    password => $os_params::ks_swift_password,
-    address => $os_params::ks_swift_internal_host,
-    port => $os_params::swift_port,
-    public_address => $os_params::ks_swift_public_host,
-    public_protocol => $os_params::ks_swift_public_proto,
+  class{'swift::keystone::auth':
+    password         => $os_params::ks_swift_password,
+    address          => $os_params::ks_swift_internal_host,
+    port             => $os_params::swift_port,
+    public_address   => $os_params::ks_swift_public_host,
+    public_protocol  => $os_params::ks_swift_public_proto,
     region           => $os_params::region,
-    public_port => $os_params::ks_swift_public_port
+    public_port      => $os_params::ks_swift_public_port
   }
 
   class { 'ceilometer::keystone::auth':
@@ -101,13 +101,13 @@ class os_keystone_server (
 
 # Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
 # In fact, when keystone finish to start but admin port isn't already usable, so wait a bit
-exec{"wait-keystone": command => "/bin/sleep 5" }
-Service["keystone"] -> Exec["wait-keystone"]
-Exec["wait-keystone"] -> Keystone_tenant <| |>
-Exec["wait-keystone"] -> Keystone_user <| |>
-Exec["wait-keystone"] -> Keystone_role  <| |>
-Exec["wait-keystone"] -> Keystone_service <| |>
-Exec["wait-keystone"] -> Keystone_user_role <| |>
-Exec["wait-keystone"] -> Keystone_endpoint <| |>
+exec{'wait-keystone': command => '/bin/sleep 5' }
+Service['keystone'] -> Exec['wait-keystone']
+Exec['wait-keystone'] -> Keystone_tenant <| |>
+Exec['wait-keystone'] -> Keystone_user <| |>
+Exec['wait-keystone'] -> Keystone_role  <| |>
+Exec['wait-keystone'] -> Keystone_service <| |>
+Exec['wait-keystone'] -> Keystone_user_role <| |>
+Exec['wait-keystone'] -> Keystone_endpoint <| |>
 
 }
