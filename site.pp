@@ -95,3 +95,8 @@ node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enova
         swift_zone    =>  $os_params::os_swift_zone[$::hostname],
     }
 }
+
+# Compute nodes
+node 'os-ci-test13.enovance.com' inherits common {
+
+}
