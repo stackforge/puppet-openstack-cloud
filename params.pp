@@ -104,6 +104,9 @@ class os_params {
   $keepalived_smtp = "mxi1.${site_domain}"
   $haproxy_auth   = 'root:enovance'
 
+  # Dashboard
+  $horizon_port = '443'
+
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'
 
