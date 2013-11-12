@@ -102,7 +102,7 @@ password = ${os_params::mysql_debian_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 ",
-    mode => "0600",
+    mode    => '0600',
   }
 
   exec{'add-mysqlchk-in-etc-services':
@@ -113,12 +113,12 @@ basedir  = /usr
 
   file{'/etc/xinetd.d/mysqlchk':
     content => template('mysqlchk'),
-    mode    => 0755,
+    mode    => '0755',
     notify  => Service['xinetd'],
   }
   file{'/usr/bin/clustercheck':
     content => template('clustercheck'),
-    mode    => 0755,
+    mode    => '0755',
   }
 
   @@haproxy::balancermember{$::fqdn:
