@@ -41,7 +41,7 @@ class os_role_loadbalancer(
   class { 'haproxy': }
   class { 'keepalived':
     notification_email_to => [ $os_params::keepalived_email ],
-    smtp_server           => os_params::keepalived_smtp,
+    smtp_server           => $os_params::keepalived_smtp,
   }
 
 
@@ -57,6 +57,10 @@ monitor fail if keystone_dead
 <%- if @galera -%>
 acl galera_dead nbsrv(galera_cluster) lt 1
 monitor fail if galera_dead
+<%- end -%>
+<%- if @neutron_server -%>
+acl neutron_server_dead nbsrv(neutron_server_cluster) lt 1
+monitor fail if neutron_server_dead
 <%- end -%>
 <%- if @compute_api -%>
 acl compute_api_dead nbsrv(compute_api_cluster) lt 1
