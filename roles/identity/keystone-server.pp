@@ -74,7 +74,7 @@ class os_keystone_server (
     public_protocol  => $os_params::ks_keystone_public_proto
   }
 
-  class{'swift::keystone::auth':
+  class {'swift::keystone::auth':
     password         => $os_params::ks_swift_password,
     address          => $os_params::ks_swift_internal_host,
     port             => $os_params::swift_port,
@@ -84,7 +84,7 @@ class os_keystone_server (
     public_port      => $os_params::ks_swift_public_port
   }
 
-  class { 'ceilometer::keystone::auth':
+  class {'ceilometer::keystone::auth':
     password         => $os_params::ks_ceilometer_password,
     public_address   => $os_params::ks_ceilometer_public_host,
     admin_address    => $os_params::ks_ceilometer_admin_host,
