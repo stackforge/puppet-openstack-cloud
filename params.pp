@@ -91,7 +91,7 @@ class os_params {
   }
 
   # MySQL
-  $mysql_password = 'Poveiquiec1woht1'
+  $mysql_password = 'TRG33WDCAvmLqtUv5MwfGxDnxTyaciMAV4RFe044'
 
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'
