@@ -50,6 +50,8 @@ class os_params {
   $ks_swift_dispersion_password = 'aipee1die1eeSohph9yae8eeluthaleu'
   $ks_swift_password = 'cwnu6Eeph4jahsh5wooch5Panahjaidie8'
   $ks_ceilometer_password = 'eafhafbheafaefaejiiutiu7374aesf3aiNu'
+  $ks_glance_password = 'N!M)w+Fi>Ha^_$UIU&^lwI7Sj]4k@P@;B<bD"^[]'
+  $ks_cinder_password = '@d07[L<6sB>]6Tu*qOd;bGuBb5(3[f{PgH&h5QFFX}])'
 
   $keystone_memchached = ['10.68.0.47:11211']
 
@@ -58,6 +60,7 @@ class os_params {
   $keystone_port = '5000'
   $keystone_admin_port = '35357'
   $ceilometer_port = '8777'
+  $glance_port = '9292'
 
   # Keystone Endpoints
   $ks_keystone_public_proto = 'http'
@@ -76,6 +79,16 @@ class os_params {
   $ks_ceilometer_public_host = 'os-ci-test3.enovance.com'
   $ks_ceilometer_admin_host = 'os-ci-test3.enovance.com'
   $ks_ceilometer_internal_host = 'os-ci-test3.enovance.com'
+
+  $ks_cinder_public_proto = 'http'
+  $ks_cinder_public_host = 'os-ci-test3.enovance.com'
+  $ks_cinder_admin_host = 'os-ci-test3.enovance.com'
+  $ks_cinder_internal_host = 'os-ci-test3.enovance.com'
+
+  $ks_glance_public_proto = 'http'
+  $ks_glance_public_host = 'os-ci-test3.enovance.com'
+  $ks_glance_admin_host = 'os-ci-test3.enovance.com'
+  $ks_glance_internal_host = 'os-ci-test3.enovance.com'
 
   # swift
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'
@@ -106,6 +119,19 @@ class os_params {
 
   # Dashboard
   $horizon_port = '443'
+
+  # Glance
+  $glance_host = '10.68.0.47'
+  $glance_db_host = '10.68.0.47'
+  $glance_db_user = 'glance'
+  $glance_db_password = '7f$x^FnoS^*sA^pD@>5Me3ql84aenmTEL5@E^yb'
+  $glance_allowed_hosts = ['os-ci-test%', '10.192.0.%']
+
+  # Cinder
+  $cinder_db_host = '10.68.0.47'
+  $cinder_db_user = 'cinder'
+  $cinder_db_password = 'Nw]lSjCnnQnwjS-AI27|Fp|7DC1.w6T|z~Oa6dS'
+  $cinder_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'
