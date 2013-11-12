@@ -62,7 +62,15 @@ APT::Periodic::Download-Upgradeable-Packages 1;
           repos       => 'main',
           include_src => false,
         }
-      }
+
+        apt::source {'mariadb':
+          location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/debian',
+          release     => 'wheezy',
+          include_src => false,
+          key_server  => 'keyserver.ubuntu.com',
+          key         => '1BB943DB',
+        }
+      } # Debian
 
       'Ubuntu': {
         apt::source { 'ubuntu_precise':
@@ -85,7 +93,15 @@ APT::Periodic::Download-Upgradeable-Packages 1;
           repos             => 'main universe multiverse',
           include_src       => false
         }
-      }
+
+        apt::source {'mariadb':
+          location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/ubuntu',
+          release     => 'precise',
+          include_src => false,
+          key_server  => 'keyserver.ubuntu.com',
+          key         => '1BB943DB',
+        }
+      } # Ubuntu
       default: {
         fail("Operating system (${::operatingsystem}) not supported yet" )
       }
