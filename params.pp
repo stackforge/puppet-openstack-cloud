@@ -52,6 +52,7 @@ class os_params {
   $ks_ceilometer_password = 'eafhafbheafaefaejiiutiu7374aesf3aiNu'
   $ks_glance_password = 'N!M)w+Fi>Ha^_$UIU&^lwI7Sj]4k@P@;B<bD"^[]'
   $ks_cinder_password = '@d07[L<6sB>]6Tu*qOd;bGuBb5(3[f{PgH&h5QFFX}])'
+  $ks_heat_password = '/A[<Si8+p|wy]lvc|#{eitDO9jXwLa&71&:<U>m7'
 
   $keystone_memchached = ['10.68.0.47:11211']
 
@@ -94,6 +95,11 @@ class os_params {
   $ks_nova_public_host = 'os-ci-test3.enovance.com'
   $ks_nova_admin_host = 'os-ci-test3.enovance.com'
   $ks_nova_internal_host = 'os-ci-test3.enovance.com'
+
+  $ks_heat_public_proto = 'http'
+  $ks_heat_public_host = 'os-ci-test3.enovance.com'
+  $ks_heat_admin_host = 'os-ci-test3.enovance.com'
+  $ks_heat_internal_host = 'os-ci-test3.enovance.com'
 
   # swift
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'
