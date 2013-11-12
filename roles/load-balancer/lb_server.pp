@@ -22,27 +22,28 @@
 
 class os_role_loadbalancer(
   $keepalived_localhost_ip = $ipaddress_eth0,
-  $keepalived_interface = "eth0",
+  $keepalived_interface = 'eth0',
   $keepalived_ipvs = [],
   $swift = false,
   $keystone = false,
   $keystone_admin = false,
   $compute_api = false,
   $galera = false,
-  $quantum_server = false,
+  $neutron_server = false,
   $ceilometer_api = false,
   $horizon = false,
   $midonet = false,
   $monitoring = false,
   $graph = false,
+  $local_ip = $ipaddress_eth0,
 ){
 
   class { 'haproxy': }
-  class { 'keepalived': 
+  class { 'keepalived':
     notification_email_to => [ $os_params::keepalived_email ],
-    smtp_server => os_params::keepalived_smtp,
+    smtp_server           => os_params::keepalived_smtp,
   }
-    
+
 
   $monitors_data = inline_template('
 <%- if @swift -%>
@@ -65,10 +66,6 @@ monitor fail if compute_api_dead
 acl ceilometer_api_dead nbsrv(ceilometer_api_cluster) lt 1
 monitor fail if ceilometer_api_dead
 <%- end -%>
-<%- if @quantum_server -%>
-acl quantum_server_dead nbsrv(quantum_server_cluster) lt 1
-monitor fail if quantum_server_dead
-<%- end -%>
 <%- if @horizon -%>
 acl horizon_dead nbsrv(horizon_cluster) lt 1
 monitor fail if horizon_dead
@@ -88,7 +85,7 @@ monitor fail if midonet_dead
 <%- end -%>
 ')
 
-  file{"/etc/logrotate.d/haproxy":
+  file{'/etc/logrotate.d/haproxy':
     content => "
   /var/log/haproxy.log
 {
@@ -103,58 +100,58 @@ monitor fail if midonet_dead
 }
 "
   }
- 
+
 
   haproxy::listen { 'monitor':
-    ipaddress => "0.0.0.0",
-    ports => "9300",
-    options => { 
-      "mode" => "http",
-      "monitor-uri" =>  "/status",
-      "stats" => [ "enable", "uri     /admin", "realm   Haproxy\ Statistics", "auth    $os_params::haproxy_auth", "refresh 5s" ],
-      "" => $monitors_data
+    ipaddress => '0.0.0.0',
+    ports     => '9300',
+    options   => {
+      'mode'        => 'http',
+      'monitor-uri' => '/status',
+      'stats'       => ['enable','uri     /admin','realm   Haproxy\ Statistics',"auth    ${os_params::haproxy_auth}", 'refresh 5s' ],
+      ''            => $monitors_data,
     }
   }
 
-  define os_haproxy_listen_http($ports, $httpchk = "httpchk"){
+  define os_haproxy_listen_http($ports, $httpchk = 'httpchk'){
     haproxy::listen { $name:
-      ipaddress => "0.0.0.0",
+      ipaddress => '0.0.0.0',
       ports     => $ports,
       options   => {
-        'mode' => 'http',
-        'balance' => 'roundrobin',
-        'option' => ["tcpka", "tcplog", $httpchk], 
-        'http-check' => 'expect ! rstatus ^5',
+        'mode'        => 'http',
+        'balance'     => 'roundrobin',
+        'option'      => ['tcpka', 'tcplog', $httpchk],
+        'http-check'  => 'expect ! rstatus ^5',
       }
     }
   }
 
   define os_compute_haproxy_listen_http{
-    if $name == "6082" { # spice doesn't support OPTIONS
-      $httpchk = "httpchk GET /"
+    if $name == '6082' { # spice doesn't support OPTIONS
+      $httpchk = 'httpchk GET /'
     } else {
-      $httpchk = "httpchk"
+      $httpchk = 'httpchk'
     }
-    os_haproxy_listen_http{"compute_api_cluster_$name": 
+    os_haproxy_listen_http{"compute_api_cluster_${name}":
       httpchk => $httpchk,
       ports   => $name
     }
   }
 
-  keepalived::vrrp_script { "haproxy":
+  keepalived::vrrp_script { 'haproxy':
     name_is_process => true
   }
 
   keepalived::instance { '1':
     interface         => $keepalived_interface,
-    virtual_ips       => split(join(flatten([$keepalived_ipvs, [""]]), " dev $keepalived_interface,"), ","),
+    virtual_ips       => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
     state             => 'MASTER',
-    track_script      => [ "haproxy" ],
+    track_script      => ['haproxy'],
     priority          => 50,
   }
 
   if $swift {
-    os_haproxy_listen_http{'swift_cluster': ports => $os_params::swift_port, httpchk => "httpchk /healthcheck"  }
+    os_haproxy_listen_http{ 'swift_cluster': ports => $os_params::swift_port, httpchk => 'httpchk /healthcheck'  }
   }
   if $keystone {
     os_haproxy_listen_http { 'keystone_cluster': ports => $os_params::keystone_port }
@@ -163,34 +160,34 @@ monitor fail if midonet_dead
   if $compute_api {
     os_compute_haproxy_listen_http{$os_params::compute_api_ports: }
   }
-  if $quantum_server {
-    os_haproxy_listen_http{'quantum_server_cluster': ports => $os_params::quantum_port } 
+  if $neutron_server {
+    os_haproxy_listen_http{'neutron_server_cluster': ports => $os_params::neutron_port }
   }
   if $ceilometer_api {
-    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ceilometer_port } 
+    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ceilometer_port }
   }
   if $horizon {
-    os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port } 
+    os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port }
   }
   if $monitoring {
-    os_haproxy_listen_http{'monitoring_cluster': ports => $os_params::monitoring_port_listen } 
+    os_haproxy_listen_http{'monitoring_cluster': ports => $os_params::monitoring_port_listen }
   }
   if $graph {
-    os_haproxy_listen_http{'graph_cluster': ports => $os_params::numeter_webapp_port } 
+    os_haproxy_listen_http{'graph_cluster': ports => $os_params::numeter_webapp_port }
   }
-# Specific to Midonet:
+  # Specific to Midonet:
   if $midonet {
-    os_haproxy_listen_http{'midonet_cluster': ports => $os_params::midonet_port_listen } 
+    os_haproxy_listen_http{'midonet_cluster': ports => $os_params::midonet_port_listen }
   }
 
   if $galera {
     haproxy::listen { 'galera_cluster':
-      ipaddress          => "0.0.0.0",
+      ipaddress          => '0.0.0.0',
       ports              => 3306,
       options            => {
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
-        'option'         => ["tcpka", "tcplog", "httpchk"],  # httpchk mandatory expect 200 on port 9000
+        'option'         => ['tcpka', 'tcplog', 'httpchk'],  # httpchk mandatory expect 200 on port 9000
         'timeout client' => '400s',
         'timeout server' => '400s',
       }
@@ -198,12 +195,12 @@ monitor fail if midonet_dead
   }
 
 # Specific to Midonet
-  @@haproxy::balancermember{"${fqdn}-midonet":
-    listening_service => "midonet_cluster",
+  @@haproxy::balancermember{"${::fqdn}-midonet":
+    listening_service => 'midonet_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $os_params::midonet_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
