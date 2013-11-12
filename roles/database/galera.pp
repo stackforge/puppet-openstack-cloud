@@ -187,19 +187,19 @@ innodb_locks_unsafe_for_binlog=1
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 wsrep_cluster_name="os_galera_cluster"
 <%- if hostname != galera_master -%>
-wsrep_cluster_address="gcomm://<%= galera_nextserver[hostname] %>"
+wsrep_cluster_address="gcomm://<%= @galera_nextserver[hostname] %>"
 <%- else -%>
 wsrep_cluster_address="gcomm://"
 <%- end -%>
-wsrep_sst_auth=root:<%= scope.lookupvar("os_params::mysql_password") %>
+wsrep_sst_auth=root:<%= @os_params::mysql_password %>
 wsrep_certify_nonPK=1
 wsrep_convert_LOCK_to_trx=0
 wsrep_auto_increment_control=1
 wsrep_drupal_282555_workaround=0
 wsrep_causal_reads=0
 wsrep_sst_method=rsync
-wsrep_node_address="<%= local_ip %>"
-wsrep_node_incoming_address="<%= local_ip %>"
+wsrep_node_address="<%= @local_ip %>"
+wsrep_node_incoming_address="<%= @local_ip %>"
 
 # this value here are used by /usr/bin/innobackupex
 # and wsrep_sst_xtrabackup take only one configuration file and use the last one
