@@ -52,7 +52,7 @@ node 'os-ci-test2.enovance.com' inherits common{
 }
 
 # Controller node
-node 'os-ci-test3.enovance.com' inherits common{
+node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com' inherits common{
 
 ## Databases:
     class {'mongodb_server':}
@@ -98,14 +98,14 @@ node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enova
 }
 
 # Load balancer node
-node 'os-ci-test8.enovance.com' inherits common {
+node 'os-ci-test10.enovance.com' inherits common {
 
 ## Haproxy
 
 }
 
 # Compute nodes
-node 'os-ci-test13.enovance.com' inherits common {
+node 'os-ci-test13.enovance.com', 'os-ci-test11.enovance.com' inherits common {
 
 ## Compute
   class { 'os_nova_compute':
