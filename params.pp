@@ -92,6 +92,12 @@ class os_params {
 
   # MySQL
   $mysql_password = 'TRG33WDCAvmLqtUv5MwfGxDnxTyaciMAV4RFe044'
+  $mysql_debian_sys_maint = 'rFY"8:5OU]#.6+1%m3sCRl}syI08M{R]}19+rJ)K'
+  $galera_master = 'os-ci-test3'
+  $galera_nextserver = {
+    'osèci-test3' => '', # 10.68.0.47
+    'os-ci-test4' => '10.68.0.48',
+  }
 
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'
