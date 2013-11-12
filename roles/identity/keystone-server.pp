@@ -123,6 +123,14 @@ class os_keystone_server (
     public_protocol  => $os_params::ks_glance_public_proto,
   }
 
+  class { 'heat::keystone::auth':
+    password         => $os_params::ks_heat_password,
+    public_address   => $os_params::ks_heat_public_host,
+    admin_address    => $os_params::ks_heat_admin_host,
+    internal_address => $os_params::ks_heat_internal_host,
+    public_protocol  => $os_params::ks_heat_public_proto,
+  }
+
 # Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
 # In fact, when keystone finish to start but admin port isn't already usable, so wait a bit
 exec{'wait-keystone': command => '/bin/sleep 5' }
