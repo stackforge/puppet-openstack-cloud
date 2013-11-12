@@ -56,7 +56,9 @@ node 'os-ci-test3.enovance.com', 'os-ci-test4.enovance.com' inherits common{
 
 ## Databases:
     class {'mongodb_server':}
-    class {'mysql_server':}
+    class {'os_role_galera':
+      local_ip => $ipaddress_eth0,
+    }
 
 ## Metering
     class {'os_ceilometer_common':}
