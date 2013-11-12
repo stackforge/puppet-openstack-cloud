@@ -100,6 +100,9 @@ class os_params {
   }
 
   # LoadBalancer
+  $keepalived_email = "dev@${site_domain}"
+  $keepalived_smtp = "mxi1.${site_domain}"
+  $haproxy_auth   = 'root:enovance'
 
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'
