@@ -94,10 +94,34 @@ class os_keystone_server (
     port             => $os_params::ceilometer_port,
   }
 
-  class{ 'swift::keystone::dispersion':
+  class {'swift::keystone::dispersion':
     auth_pass => $os_params::ks_swift_dispersion_password
   }
 
+  class { 'nova::keystone::auth':
+    password         => $os_params::ks_nova_password,
+    public_address   => $os_params::ks_nova_public_host,
+    admin_address    => $os_params::ks_nova_admin_host,
+    internal_address => $os_params::ks_nova_internal_host,
+    public_protocol  => $os_params::ks_nova_public_proto,
+    cinder           => true,
+  }
+
+  class { 'cinder::keystone::auth':
+    password         => $os_params::ks_cinder_password,
+    public_address   => $os_params::ks_cinder_public_host,
+    admin_address    => $os_params::ks_cinder_admin_host,
+    internal_address => $os_params::ks_cinder_internal_host,
+    public_protocol  => $os_params::ks_cinder_public_proto,
+  }
+
+  class { 'glance::keystone::auth':
+    password         => $os_params::ks_glance_password,
+    public_address   => $os_params::ks_glance_public_host,
+    admin_address    => $os_params::ks_glance_admin_host,
+    internal_address => $os_params::ks_glance_internal_host,
+    public_protocol  => $os_params::ks_glance_public_proto,
+  }
 
 # Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
 # In fact, when keystone finish to start but admin port isn't already usable, so wait a bit

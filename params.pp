@@ -90,6 +90,11 @@ class os_params {
   $ks_glance_admin_host = 'os-ci-test3.enovance.com'
   $ks_glance_internal_host = 'os-ci-test3.enovance.com'
 
+  $ks_nova_public_proto = 'http'
+  $ks_nova_public_host = 'os-ci-test3.enovance.com'
+  $ks_nova_admin_host = 'os-ci-test3.enovance.com'
+  $ks_nova_internal_host = 'os-ci-test3.enovance.com'
+
   # swift
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'
   $swift_hash_suffix = 'ni2aseiWi8ich3oo'
