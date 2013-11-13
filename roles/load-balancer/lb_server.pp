@@ -32,7 +32,6 @@ class os_role_loadbalancer(
   $neutron_server = false,
   $ceilometer_api = false,
   $horizon = false,
-  $midonet = false,
   $monitoring = false,
   $graph = false,
   $local_ip = $ipaddress_eth0,
@@ -81,11 +80,6 @@ monitor fail if monitoring_dead
 <%- if @graph -%>
 acl graph_dead nbsrv(graph_cluster) lt 1
 monitor fail if graph_dead
-<%- end -%>
-# Specific to Midonet:
-<%- if @midonet -%>
-acl midonet_dead nbsrv(midonet_cluster) lt 1
-monitor fail if midonet_dead
 <%- end -%>
 ')
 
@@ -179,10 +173,6 @@ monitor fail if midonet_dead
   if $graph {
     os_haproxy_listen_http{'graph_cluster': ports => $os_params::numeter_webapp_port }
   }
-  # Specific to Midonet:
-  if $midonet {
-    os_haproxy_listen_http{'midonet_cluster': ports => $os_params::midonet_port_listen }
-  }
 
   if $galera {
     haproxy::listen { 'galera_cluster':
@@ -196,15 +186,6 @@ monitor fail if midonet_dead
         'timeout server' => '400s',
       }
     }
-  }
-
-# Specific to Midonet
-  @@haproxy::balancermember{"${::fqdn}-midonet":
-    listening_service => 'midonet_cluster',
-    server_names      => $::hostname,
-    ipaddresses       => $local_ip,
-    ports             => $os_params::midonet_port,
-    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
