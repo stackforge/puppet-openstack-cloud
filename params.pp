@@ -33,27 +33,38 @@ class os_params {
   # Databases
   $keystone_db_host = '10.68.0.47'
   $keystone_db_user = 'keystone'
-  $keystone_db_password = 'rooghah0phe1tieDeixoodo0quil8iox'
+  $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
   $keystone_allowed_hosts = ['os-ci-test%', '10.68.0.%']
-  # Extra roles:
-  $keystone_roles_addons = ['SwiftOperator', 'ResellerAdmin']
 
+  $heat_db_host = '10.68.0.47'
+  $heat_db_user = 'heat'
+  $heat_db_password = 'rooghah0phe1tieDeixoodo0quil8iox'
+
+  $glance_host = '10.68.0.47'
+  $glance_db_host = '10.68.0.47'
+  $glance_db_user = 'glance'
+  $glance_db_password = '7f$x^FnoS^*sA^pD@>5Me3ql84aenmTEL5@E^yb'
+  $glance_allowed_hosts = ['os-ci-test%', '10.192.0.%']
+
+  $cinder_db_host = '10.68.0.47'
+  $cinder_db_user = 'cinder'
+  $cinder_db_password = 'Nw]lSjCnnQnwjS-AI27|Fp|7DC1.w6T|z~Oa6dS'
+  $cinder_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
   $ceilometer_database_connection = 'mongodb://10.68.0.47/ceilometer'
 
-  # Keystone Users
+  # Keystone params
+  $keystone_roles_addons = ['SwiftOperator', 'ResellerAdmin']
   $ks_admin_token = 'iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K'
   $ks_admin_email = 'dev@enovance.com'
   $ks_admin_password = 'Xokoph5io2aenaoh0nuiquei9aineigo'
   $ks_admin_tenant = 'admin'
-
   $ks_swift_dispersion_password = 'aipee1die1eeSohph9yae8eeluthaleu'
   $ks_swift_password = 'cwnu6Eeph4jahsh5wooch5Panahjaidie8'
   $ks_ceilometer_password = 'eafhafbheafaefaejiiutiu7374aesf3aiNu'
-  $ks_glance_password = 'N!M)w+Fi>Ha^_$UIU&^lwI7Sj]4k@P@;B<bD"^[]'
-  $ks_cinder_password = '@d07[L<6sB>]6Tu*qOd;bGuBb5(3[f{PgH&h5QFFX}])'
-  $ks_heat_password = '/A[<Si8+p|wy]lvc|#{eitDO9jXwLa&71&:<U>m7'
-
+  $ks_glance_password = 'WUBDUbox7gDz3GP6EAYWGos9VBPh82'
+  $ks_cinder_password = '768JIxDvnrBbwGaRRn5mHjrzz9jNJi'
+  $ks_heat_password = 'EIMMvWvDPEvI08ggT2azYMhGdsNXe6'
   $keystone_memchached = ['10.68.0.47:11211']
 
   # API Ports
@@ -62,13 +73,14 @@ class os_params {
   $keystone_admin_port = '35357'
   $ceilometer_port = '8777'
   $glance_port = '9292'
+  $heat_port = '8004'
 
   # Keystone Endpoints
   $ks_keystone_public_proto = 'http'
   $ks_keystone_public_port = '5000'
-  $ks_keystone_public_host = 'os-ci-test3.enovance.com' # ipvs lb web
-  $ks_keystone_internal_host = 'os-ci-test3.enovance.com' # ipvs lb int # can be used for now
-  $ks_keystone_admin_host = 'os-ci-test3.enovance.com' # ipvs lb int # can be used for now
+  $ks_keystone_public_host = 'os-ci-test3.enovance.com'
+  $ks_keystone_internal_host = 'os-ci-test3.enovance.com'
+  $ks_keystone_admin_host = 'os-ci-test3.enovance.com'
 
   $ks_swift_public_proto = 'http'
   $ks_swift_public_port = '8080'
@@ -97,11 +109,12 @@ class os_params {
   $ks_nova_internal_host = 'os-ci-test3.enovance.com'
 
   $ks_heat_public_proto = 'http'
+  $ks_swift_public_port = '8004'
   $ks_heat_public_host = 'os-ci-test3.enovance.com'
   $ks_heat_admin_host = 'os-ci-test3.enovance.com'
   $ks_heat_internal_host = 'os-ci-test3.enovance.com'
 
-  # swift
+  # Swift
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'
   $swift_hash_suffix = 'ni2aseiWi8ich3oo'
   $swift_rsync_max_connections = 5
@@ -130,19 +143,6 @@ class os_params {
 
   # Dashboard
   $horizon_port = '443'
-
-  # Glance
-  $glance_host = '10.68.0.47'
-  $glance_db_host = '10.68.0.47'
-  $glance_db_user = 'glance'
-  $glance_db_password = '7f$x^FnoS^*sA^pD@>5Me3ql84aenmTEL5@E^yb'
-  $glance_allowed_hosts = ['os-ci-test%', '10.192.0.%']
-
-  # Cinder
-  $cinder_db_host = '10.68.0.47'
-  $cinder_db_user = 'cinder'
-  $cinder_db_password = 'Nw]lSjCnnQnwjS-AI27|Fp|7DC1.w6T|z~Oa6dS'
-  $cinder_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
   # Ceilometer
   $ceilometer_secret = 'aefiojanjbo778efa'

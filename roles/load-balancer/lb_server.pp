@@ -24,16 +24,15 @@ class os_role_loadbalancer(
   $keepalived_localhost_ip = $ipaddress_eth0,
   $keepalived_interface = 'eth0',
   $keepalived_ipvs = [],
-  $swift = false,
-  $keystone = false,
-  $keystone_admin = false,
+  $swift_api = false,
+  $keystone_api = false,
+  $keystone_api_admin = false,
   $compute_api = false,
   $galera = false,
-  $neutron_server = false,
+  $neutron_api = false,
   $ceilometer_api = false,
   $horizon = false,
-  $monitoring = false,
-  $graph = false,
+  $heat_api = false,
   $local_ip = $ipaddress_eth0,
 ){
 
@@ -45,21 +44,21 @@ class os_role_loadbalancer(
 
 
   $monitors_data = inline_template('
-<%- if @swift -%>
-acl swift_dead nbsrv(swift_cluster) lt 1
-monitor fail if swift_dead
+<%- if @swift_api -%>
+acl swift_api_dead nbsrv(swift_api_cluster) lt 1
+monitor fail if swift_api_dead
 <%- end -%>
-<%- if @keystone -%>
-acl keystone_dead nbsrv(keystone_cluster) lt 1
+<%- if @keystone_api -%>
+acl keystone_api_dead nbsrv(keystone_api_cluster) lt 1
 monitor fail if keystone_dead
 <% end -%>
 <%- if @galera -%>
 acl galera_dead nbsrv(galera_cluster) lt 1
 monitor fail if galera_dead
 <%- end -%>
-<%- if @neutron_server -%>
-acl neutron_server_dead nbsrv(neutron_server_cluster) lt 1
-monitor fail if neutron_server_dead
+<%- if @neutron_api -%>
+acl neutron_api_dead nbsrv(neutron_api_cluster) lt 1
+monitor fail if neutron_api_dead
 <%- end -%>
 <%- if @compute_api -%>
 acl compute_api_dead nbsrv(compute_api_cluster) lt 1
@@ -69,17 +68,13 @@ monitor fail if compute_api_dead
 acl ceilometer_api_dead nbsrv(ceilometer_api_cluster) lt 1
 monitor fail if ceilometer_api_dead
 <%- end -%>
+<%- if @heat_api -%>
+acl heat_api_dead nbsrv(heat_api_cluster) lt 1
+monitor fail if heat_api_dead
+<%- end -%>
 <%- if @horizon -%>
 acl horizon_dead nbsrv(horizon_cluster) lt 1
 monitor fail if horizon_dead
-<%- end -%>
-<%- if @monitoring -%>
-acl monitoring_dead nbsrv(monitoring_cluster) lt 1
-monitor fail if monitoring_dead
-<%- end -%>
-<%- if @graph -%>
-acl graph_dead nbsrv(graph_cluster) lt 1
-monitor fail if graph_dead
 <%- end -%>
 ')
 
@@ -149,17 +144,17 @@ monitor fail if graph_dead
   }
 
   if $swift {
-    os_haproxy_listen_http{ 'swift_cluster': ports => $os_params::swift_port, httpchk => 'httpchk /healthcheck'  }
+    os_haproxy_listen_http{ 'swift_api_cluster': ports => $os_params::swift_port, httpchk => 'httpchk /healthcheck'  }
   }
   if $keystone {
-    os_haproxy_listen_http { 'keystone_cluster': ports => $os_params::keystone_port }
-    os_haproxy_listen_http { 'keystone_admin_cluster': ports => $os_params::keystone_admin_port }
+    os_haproxy_listen_http { 'keystone_api_cluster': ports => $os_params::keystone_port }
+    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $os_params::keystone_admin_port }
   }
   if $compute_api {
     os_compute_haproxy_listen_http{$os_params::compute_api_ports: }
   }
   if $neutron_server {
-    os_haproxy_listen_http{'neutron_server_cluster': ports => $os_params::neutron_port }
+    os_haproxy_listen_http{'neutron_api_cluster': ports => $os_params::neutron_port }
   }
   if $ceilometer_api {
     os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ceilometer_port }
@@ -167,11 +162,8 @@ monitor fail if graph_dead
   if $horizon {
     os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port }
   }
-  if $monitoring {
-    os_haproxy_listen_http{'monitoring_cluster': ports => $os_params::monitoring_port_listen }
-  }
-  if $graph {
-    os_haproxy_listen_http{'graph_cluster': ports => $os_params::numeter_webapp_port }
+  if $heat_api {
+    os_haproxy_listen_http{'heat_api_cluster': ports => $os_params::heat_port }
   }
 
   if $galera {
