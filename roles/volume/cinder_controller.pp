@@ -35,22 +35,24 @@ class os_role_cinder_controller {
   }
 
   class { 'cinder::scheduler': }
+
   class { 'cinder::api':
     keystone_password      => $os_params::ks_cinder_password,
     keystone_auth_host     => $os_params::ks_keystone_internal_host,
   }
 
-  class { 'cinder::volume':}
+  class { 'cinder::volume'::'rbd':
+    rbd_pool           => $os_params::cinder_rbd_pool,
+    glance_api_version => $os_params::glance_api_version,
+    rbd_user           => $os_params::cinder_rbd_user,
+    rbd_secret_uuid    => $os_params::cinder_rbd_secret_uuid
+  }
+
   cinder_config{
-    'DEFAULT/rbd_pool':             value => 'volumes';
-    'DEFAULT/volume_driver':        value => 'cinder.volume.driver.RBDDriver';
-    'DEFAULT/rbd_user':             value => 'volumes';
-    'DEFAULT/rbd_secret_uuid':      value => '95c98032-ad65-5db8-f5d3-5bd09cd563ef';
     'DEFAULT/glance_host':          value => "${os_params::glance_host}:9292";
-    'DEFAULT/glance_api_version':   value => '2';
     'DEFAULT/syslog_log_facility':  value => 'LOG_LOCAL0';
     'DEFAULT/use_syslog':           value => 'yes';
     'DEFAULT/idle_timeout':         value => '60';
   }
 
-} # Class:: os_role_cinder_controller
+} 
