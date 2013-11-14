@@ -74,6 +74,9 @@ class os_params {
   $ceilometer_port = '8777'
   $glance_port = '9292'
   $heat_port = '8004'
+  $neutron_port = '9696'
+  $cinder_port = '8776'
+  $nova_port = '8774'
 
   # Keystone Endpoints
   $ks_keystone_public_proto = 'http'
