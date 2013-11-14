@@ -43,12 +43,12 @@ class os_params {
   $glance_host = '10.68.0.47'
   $glance_db_host = '10.68.0.47'
   $glance_db_user = 'glance'
-  $glance_db_password = '7f$x^FnoS^*sA^pD@>5Me3ql84aenmTEL5@E^yb'
+  $glance_db_password = 'uYgNjBzjMjv2fD0yD3LqiQQPKEKuXA'
   $glance_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
   $cinder_db_host = '10.68.0.47'
   $cinder_db_user = 'cinder'
-  $cinder_db_password = 'Nw]lSjCnnQnwjS-AI27|Fp|7DC1.w6T|z~Oa6dS'
+  $cinder_db_password = 'BwgPjjqdbxiKvKm5JMaVrCaT8ePBwP'
   $cinder_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
   $ceilometer_database_connection = 'mongodb://10.68.0.47/ceilometer'
@@ -129,7 +129,7 @@ class os_params {
 
   # MySQL
   $mysql_password = 'TRG33WDCAvmLqtUv5MwfGxDnxTyaciMAV4RFe044'
-  $mysql_debian_sys_maint = 'rFY"8:5OU]#.6+1%m3sCRl}syI08M{R]}19+rJ)K'
+  $mysql_debian_sys_maint = 'HFCeEKGG6DBQEaYUEDjGITcbzRWDmv'
   $galera_master = 'os-ci-test3'
   $galera_nextserver = {
     'os-ci-test3' => '', # 10.68.0.47
