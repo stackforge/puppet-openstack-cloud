@@ -27,9 +27,10 @@ class os_role_loadbalancer(
   $swift_api = false,
   $keystone_api = false,
   $keystone_api_admin = false,
-  $compute_api = false,
+  $nova_api = false,
   $galera = false,
   $neutron_api = false,
+  $cinder_api = false,
   $ceilometer_api = false,
   $horizon = false,
   $heat_api = false,
@@ -60,9 +61,13 @@ monitor fail if galera_dead
 acl neutron_api_dead nbsrv(neutron_api_cluster) lt 1
 monitor fail if neutron_api_dead
 <%- end -%>
-<%- if @compute_api -%>
-acl compute_api_dead nbsrv(compute_api_cluster) lt 1
-monitor fail if compute_api_dead
+<%- if @cinder_api -%>
+acl cinder_api_dead nbsrv(cinder_api_cluster) lt 1
+monitor fail if cinder_api_dead
+<%- end -%>
+<%- if @nova_api -%>
+acl nova_api_dead nbsrv(nova_api_cluster) lt 1
+monitor fail if nova_api_dead
 <%- end -%>
 <%- if @ceilometer_api -%>
 acl ceilometer_api_dead nbsrv(ceilometer_api_cluster) lt 1
@@ -125,7 +130,7 @@ monitor fail if horizon_dead
     } else {
       $httpchk = 'httpchk'
     }
-    os_haproxy_listen_http{"compute_api_cluster_${name}":
+    os_haproxy_listen_http{"nova_api_cluster_${name}":
       httpchk => $httpchk,
       ports   => $name
     }
@@ -150,11 +155,14 @@ monitor fail if horizon_dead
     os_haproxy_listen_http { 'keystone_api_cluster': ports => $os_params::keystone_port }
     os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $os_params::keystone_admin_port }
   }
-  if $compute_api {
-    os_compute_haproxy_listen_http{$os_params::compute_api_ports: }
+  if $nova_api {
+    os_nova_haproxy_listen_http{$os_params::nova_api_ports: }
   }
-  if $neutron_server {
+  if $neutron_api {
     os_haproxy_listen_http{'neutron_api_cluster': ports => $os_params::neutron_port }
+  }
+  if $cinder_api {
+    os_haproxy_listen_http{'cinder_api_cluster': ports => $os_params::cinder_port }
   }
   if $ceilometer_api {
     os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ceilometer_port }
