@@ -112,7 +112,7 @@ class os_params {
   $ks_nova_internal_host = 'os-ci-test3.enovance.com'
 
   $ks_heat_public_proto = 'http'
-  $ks_swift_public_port = '8004'
+  $ks_heat_public_port = '8004'
   $ks_heat_public_host = 'os-ci-test3.enovance.com'
   $ks_heat_admin_host = 'os-ci-test3.enovance.com'
   $ks_heat_internal_host = 'os-ci-test3.enovance.com'
