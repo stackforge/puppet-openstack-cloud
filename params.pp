@@ -161,9 +161,9 @@ class os_params {
   $rabbit_main_host = 'os-ci-test3'
 
   # Ceph
-  cinder_rbd_pool = 'cinder_volumes'
-  glance_api_version = '2'
-  cinder_rbd_user = 'cinder_rbd'
-  cinder_rbd_secret_uuid = '95c98032-ad65-5db8-f5d3-5bd09cd563ef'
-  
+  $cinder_rbd_pool = 'cinder_volumes'
+  $glance_api_version = '2'
+  $cinder_rbd_user = 'cinder_rbd'
+  $cinder_rbd_secret_uuid = '95c98032-ad65-5db8-f5d3-5bd09cd563ef'
+
 }
