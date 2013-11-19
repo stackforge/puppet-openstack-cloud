@@ -25,6 +25,7 @@ import 'params.pp'
 # Import roles
 import 'roles/common/*.pp' # mandatory
 import 'roles/automation/*.pp'
+import 'roles/compute/*.pp'
 import 'roles/database/*.pp'
 import 'roles/identity/*.pp'
 import 'roles/messaging/*.pp'
