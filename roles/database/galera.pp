@@ -21,7 +21,7 @@
 # MySQL Galera Node
 #
 
-class os_role_galera (
+class os_galera (
     $local_ip = $ipaddress,
     $service_provider = sysv,
 ) {
