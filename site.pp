@@ -56,9 +56,6 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 
 ## Databases:
     class {'mongodb_server':}
-    class {'os_role_galera':
-      local_ip => $ipaddress_eth0,
-    }
 
 ## Metering
     class {'os_ceilometer_common':}
@@ -72,13 +69,13 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     }
 
 # Object Storage
-    class {'os_role_swift_proxy':
+    class {'os_swift_proxy':
       local_ip => $ipaddress_eth0,
     }
-    class {'os_role_swift_ringbuilder':
+    class {'os_swift_ringbuilder':
       rsyncd_ipaddress => $ipaddress_eth0,
     }
-    Class['os_role_swift_ringbuilder'] -> Class['os_role_swift_proxy']
+    Class['os_swift_ringbuilder'] -> Class['os_swift_proxy']
 
 # Messaging
     class {'os_role_rabbitmq': }
@@ -93,7 +90,7 @@ node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enova
     class {'os_ceilometer_common':}
 
 ## Object Storage
-    class { 'os_role_swift_storage':
+    class { 'os_swift_storage':
         local_ip    => $ipaddress_eth0,
         swift_zone  =>  $os_params::os_swift_zone[$::hostname],
     }

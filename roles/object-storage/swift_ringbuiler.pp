@@ -29,7 +29,7 @@ class os_swift_ringbuilder(
   Ring_container_device <<| |>>
   Ring_account_device <<| |>>
 
-  Class['swift'] -> Class['os_role_swift_ringbuilder']
+  Class['swift'] -> Class['os_swift_ringbuilder']
 
   swift::ringbuilder::create{ ['account', 'container']:
     part_power     => 9,
