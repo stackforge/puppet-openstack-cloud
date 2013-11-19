@@ -19,7 +19,7 @@
 
 # RabbitMQ node
 
-class os_role_rabbitmq{
+class os_rabbitmq{
   class { 'rabbitmq::server':
     delete_guest_user        => true,
     config_cluster           => true,

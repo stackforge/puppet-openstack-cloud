@@ -56,6 +56,9 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 
 ## Databases:
     class {'mongodb_server':}
+    class {'os_galera':
+      local_ip => $ipaddress_eth0,
+    }
 
 ## Metering
     class {'os_ceilometer_common':}
@@ -78,7 +81,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     Class['os_swift_ringbuilder'] -> Class['os_swift_proxy']
 
 # Messaging
-    class {'os_role_rabbitmq': }
+    class {'os_rabbitmq': }
 
 
 }
