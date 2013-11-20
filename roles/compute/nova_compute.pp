@@ -25,6 +25,8 @@ class os_nova_compute(
   $libvirt_type      = 'kvm',
 ) {
 
+  include 'os_nova_common'
+
   package{ ['qemu-kvm-spice']:
     ensure => latest
   }
@@ -70,11 +72,10 @@ Host *
 "
   }
 
-  class { '::nova::compute':
-    enabled                          => true,
-    vnc_enabled                      => false,
+  class { 'nova::compute':
+    enabled     => true,
+    vnc_enabled => false,
   }
-
 
   class { 'nova::compute::libvirt':
     libvirt_type      => $libvirt_type,
