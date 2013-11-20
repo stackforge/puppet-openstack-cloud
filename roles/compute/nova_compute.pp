@@ -27,10 +27,6 @@ class os_nova_compute(
 
   include 'os_nova_common'
 
-  package{ ['qemu-kvm-spice']:
-    ensure => latest
-  }
-
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',
     unless  => '/bin/grep "nbd" /etc/modules',
