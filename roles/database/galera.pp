@@ -30,7 +30,6 @@ class os_galera (
     class{'xinetd': }
   }
 
-
   class { 'mysql::server':
     config_hash       => {
       'bind_address'  => $local_ip,
@@ -38,6 +37,44 @@ class os_galera (
     }
   }
 
+  class { 'keystone::db::mysql':
+    password      => $os_params::keystone_db_password,
+    user          => $os_params::keystone_db_user,
+    dbname        => 'keystone',
+    host          => $os_params::keystone_db_host,
+    allowed_hosts => $os_params::keystone_allowed_hosts,
+  }
+
+  class { 'heat::db::mysql':
+    password      => $os_params::heat_db_password,
+    user          => $os_params::heat_db_user,
+    dbname        => 'heat',
+    host          => $os_params::heat_db_host,
+  }
+
+  class { 'glance::db::mysql':
+    password      => $os_params::glance_db_password,
+    user          => $os_params::glance_db_user,
+    dbname        => 'glance',
+    host          => $os_params::glance_db_host,
+    allowed_hosts => $os_params::glance_allowed_hosts,
+  }
+
+  class { 'cinder::db::mysql':
+    password      => $os_params::cinder_db_password,
+    user          => $os_params::cinder_db_user,
+    dbname        => 'cinder',
+    host          => $os_params::cinder_db_host,
+    allowed_hosts => $os_params::cinder_allowed_hosts,
+  }
+
+  class { 'nova::db::mysql':
+    password      => $os_params::nova_db_password,
+    user          => $os_params::nova_db_user,
+    dbname        => 'nova',
+    host          => $os_params::nova_db_host,
+    allowed_hosts => $os_params::nova_allowed_hosts,
+  }
 
   package{'libdbd-mysql-perl':}
 }
