@@ -51,6 +51,11 @@ class os_params {
   $cinder_db_password = 'BwgPjjqdbxiKvKm5JMaVrCaT8ePBwP'
   $cinder_allowed_hosts = ['os-ci-test%', '10.192.0.%']
 
+  $nova_db_host = '10.68.0.47'
+  $nova_db_user = 'nova'
+  $nova_db_password = 'Ae3tooch8shohNai9ooqueik9gaevo'
+  $nova_allowed_hosts = ['os-ci-test%', '10.192.0.%']
+
   $ceilometer_database_connection = 'mongodb://10.68.0.47/ceilometer'
 
   # Keystone params
