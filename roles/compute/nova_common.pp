@@ -44,7 +44,6 @@ class os_nova_common {
   nova_config {
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
     'DEFAULT/syslog_log_facility':              value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':                       value => 'yes';
   }
 
 } # Class:: os_nova_common
