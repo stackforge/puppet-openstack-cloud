@@ -40,13 +40,13 @@ class os_keystone_server (
 
   keystone_config {
     'token/expiration': value => '86400';
-    "memcache/servers": value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
+    'memcache/servers': value => inline_template("<%= scope.lookupvar('os_params::keystone_memchached').join(',') %>");
     'ec2/driver':       value => 'keystone.contrib.ec2.backends.sql.Ec2';
   }
 
 
 # Keystone Endpoints + Users
-  class { 'keystone::roles::admin': 
+  class { 'keystone::roles::admin':
     email        => $os_params::ks_admin_email,
     password     => $os_params::ks_admin_password,
     admin_tenant => $os_params::ks_admin_tenant,
