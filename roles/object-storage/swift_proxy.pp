@@ -35,7 +35,7 @@ class os_swift_proxy(
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'ratelimit',
       'swift3', 's3token', 'tempurl', 'formpost', 'authtoken',
-      'keystone', 'proxy-logging', 'proxy-server', 'ceilometer', 'staticweb'],
+      'keystone', 'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
     workers            => inline_template('<%= processorcount.to_i * 2 %>
@@ -54,8 +54,6 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::healthcheck': }
   class { 'swift::proxy::catch_errors': }
   class { 'swift::proxy::ratelimit': }
-  class { 'swift::proxy::staticweb': }
-  class { 'swift::proxy::ceilometer': }
 
   class { 'swift::proxy::keystone':
     operator_roles => ['admin', 'SwiftOperator', 'ResellerAdmin'],
