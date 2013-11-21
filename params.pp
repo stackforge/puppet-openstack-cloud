@@ -67,6 +67,7 @@ class os_params {
   $ks_swift_dispersion_password = 'aipee1die1eeSohph9yae8eeluthaleu'
   $ks_swift_password = 'cwnu6Eeph4jahsh5wooch5Panahjaidie8'
   $ks_ceilometer_password = 'eafhafbheafaefaejiiutiu7374aesf3aiNu'
+  $ks_nova_password = 'WeiveKed1Ahmel7ohfieya6daiquIe'
   $ks_glance_password = 'WUBDUbox7gDz3GP6EAYWGos9VBPh82'
   $ks_cinder_password = '768JIxDvnrBbwGaRRn5mHjrzz9jNJi'
   $ks_heat_password = 'EIMMvWvDPEvI08ggT2azYMhGdsNXe6'
