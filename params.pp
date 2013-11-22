@@ -21,6 +21,8 @@
 
 class os_params {
   $site_domain = 'enovance.com'
+  #$dns_ips = ['10.68.0.2']
+  $dns_ips = ['80.67.169.40','80.67.169.12']
   $os_release = 'havana'
   $region = 'enovance-ci'
   $storage = True
