@@ -41,7 +41,7 @@ class os_role_cinder_controller {
     keystone_auth_host     => $os_params::ks_keystone_internal_host,
   }
 
-  class { 'cinder::volume'::'rbd':
+  class { 'cinder::volume::rbd':
     rbd_pool           => $os_params::cinder_rbd_pool,
     glance_api_version => $os_params::glance_api_version,
     rbd_user           => $os_params::cinder_rbd_user,
@@ -55,4 +55,4 @@ class os_role_cinder_controller {
     'DEFAULT/idle_timeout':         value => '60';
   }
 
-} 
+}
