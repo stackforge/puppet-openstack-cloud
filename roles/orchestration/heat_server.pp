@@ -20,30 +20,30 @@
 #
 class os_role_heat {
   class { 'heat':
-    $keystone_host     => $os_params::ks_heat_public_host,
-    $keystone_port     => $os_params::ks_heat_public_port,
-    $keystone_protocol => $os_params::ks_heat_public_proto,
-    $keystone_password => $os_params::ks_heat_password,
+    keystone_host     => $os_params::ks_heat_public_host,
+    keystone_port     => $os_params::ks_heat_public_port,
+    keystone_protocol => $os_params::ks_heat_public_proto,
+    keystone_password => $os_params::ks_heat_password,
   }
 
   class { 'heat::api': }
 
   class { 'heat':
     keystone_host     => $os_params::ks_keystone_public_host,
-    keystone_password => '$os_params::ks_heat_password,
-    auth_uri          => "${$os_params::ks_keystone_public_proto}://${$os_params::ks_keystone_public_host}:35357/v2.0",
+    keystone_password => $os_params::ks_heat_password,
+    auth_uri          => "${os_params::ks_keystone_public_proto}://${os_params::ks_keystone_public_host}:35357/v2.0",
     rabbit_hosts      => $os_params::rabbit_hosts,
-    rabbit_password   => $os_params::rabbit_password
+    rabbit_password   => $os_params::rabbit_password,
   }
 
-  class {"heat::db":
+  class { 'heat::db':
     sql_connection => "mysql://${os_params::heat_db_user}:${os_params::heat_db_password}@${os_params::heat_db_host}/heat",
   }
 
   class { 'heat::engine':
-    heat_metadata_server_url      => "${$os_params::ks_heat_public_proto}://{$os_params::ks_keystone_public_host}:8000",
-    heat_waitcondition_server_url => "${$os_params::ks_heat_public_proto}://{$os_params::ks_keystone_public_host}:8000/v1/waitcondition",
-    heat_watch_server_url         => "${$os_params::ks_heat_public_proto}://{$os_params::ks_keystone_public_host}:8003',
+    heat_metadata_server_url      => "${os_params::ks_heat_public_proto}://${os_params::ks_keystone_public_host}:8000",
+    heat_waitcondition_server_url => "${os_params::ks_heat_public_proto}://${os_params::ks_keystone_public_host}:8000/v1/waitcondition",
+    heat_watch_server_url         => "${os_params::ks_heat_public_proto}://${os_params::ks_keystone_public_host}:8003",
   }
 
 }
