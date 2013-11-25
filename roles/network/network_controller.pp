@@ -1,7 +1,9 @@
 #
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
-# Author: Emilien Macchi <emilien.macchi@enovance.com>
+# Authors: Mehdi Abaakouk <mehdi.abaakouk@enovance.com>
+#          Emilien Macchi <emilien.macchi@enovance.com>
+#          Francois Charlier <francois.charlier@enovance.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -15,14 +17,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Neutron LBaaS node
+# Network Controller node (API + Scheduler)
 #
 
-class os_neutron_lbaas(
+class os_network_controller(
 ) {
-
-  class { 'neutron::agents::lbaas':
-    debug => false,
-  }
 
 }

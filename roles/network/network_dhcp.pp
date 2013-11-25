@@ -15,13 +15,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Neutron VPNaaS node
+# Network DHCP node
 #
 
-class os_neutron_vpn(
+class os_network_dhcp(
 ) {
 
-  class { 'neutron::agents::vpnaas':
+  class { 'neutron::agents::dhcp':
     debug => false,
   }
 

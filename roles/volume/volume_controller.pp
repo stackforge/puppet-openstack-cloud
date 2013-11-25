@@ -18,32 +18,36 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Nova Common (controller/compute)
-#
-class os_nova_common {
-  if !defined(Resource['nova_config']) {
-    resources { 'nova_config':
-      purge => true;
-    }
-  }
+# Volume controller
 
-  $encoded_user = uriescape($os_params::nova_db_user)
-  $encoded_password = uriescape($os_params::nova_db_password)
+class os_volume_controller {
+  $encoded_user = uriescape($os_params::cinder_db_user)
+  $encoded_password = uriescape($os_params::cinder_db_password)
 
-  class { 'nova':
-    database_connection => "mysql://${encoded_user}:${encoded_password}@${os_params::nova_db_host}/nova?charset=utf8",
-    rabbit_userid       => 'nova',
+
+  class { 'cinder::base':
+    verbose             => false,
+    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${os_params::cinder_db_host}/cinder?charset=utf8",
+    rabbit_userid       => 'cinder',
     rabbit_hosts        => $os_params::rabbit_hosts,
     rabbit_password     => $os_params::rabbit_password,
-    image_service       => 'nova.image.glance.GlanceImageService',
-    glance_api_servers  => "http://${os_params::ks_glance_internal_host}:${os_params::glance_port}",
-    verbose             => false,
-    debug               => false,
+    rabbit_virtual_host => '/',
   }
 
-  nova_config {
-    'DEFAULT/resume_guests_state_on_host_boot': value => true;
-    'DEFAULT/syslog_log_facility':              value => 'LOG_LOCAL0';
+  class { 'cinder::scheduler': }
+
+  class { 'cinder::api':
+    keystone_password      => $os_params::ks_cinder_password,
+    keystone_auth_host     => $os_params::ks_keystone_internal_host,
   }
 
-} # Class:: os_nova_common
+  class { 'cinder::ceilometer': }
+
+  cinder_config{
+    'DEFAULT/glance_host':          value => "${os_params::glance_host}:9292";
+    'DEFAULT/syslog_log_facility':  value => 'LOG_LOCAL0';
+    'DEFAULT/use_syslog':           value => 'yes';
+    'DEFAULT/idle_timeout':         value => '60';
+  }
+
+}

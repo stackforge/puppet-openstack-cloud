@@ -1,9 +1,7 @@
 #
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
-# Authors: Mehdi Abaakouk <mehdi.abaakouk@enovance.com>
-#          Emilien Macchi <emilien.macchi@enovance.com>
-#          Francois Charlier <francois.charlier@enovance.com>
+# Author: Emilien Macchi <emilien.macchi@enovance.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -17,10 +15,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Nutron Compute node (Agent)
+# Network VPNaaS node
 #
 
-class os_neutron_compute(
+class os_network_vpn(
 ) {
+
+  class { 'neutron::agents::vpnaas':
+    debug => false,
+  }
 
 }
