@@ -47,6 +47,8 @@ class os_role_cinder_controller {
     rbd_user           => $os_params::cinder_rbd_user,
     rbd_secret_uuid    => $os_params::cinder_rbd_secret_uuid
   }
+  
+  class { 'cinder::ceilometer': }
 
   cinder_config{
     'DEFAULT/glance_host':          value => "${os_params::glance_host}:9292";
