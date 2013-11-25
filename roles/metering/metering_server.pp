@@ -17,9 +17,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# Ceilometer server nodes
+# Metering server nodes
 
-class os_ceilometer_server{
+class os_metering_server{
 
 # Install MongoDB database
   class { 'ceilometer::db':

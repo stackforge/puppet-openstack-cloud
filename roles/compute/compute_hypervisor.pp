@@ -17,10 +17,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Nova Compute node
+# Hypervisor Compute node
 #
 
-class os_nova_compute(
+class os_compute_hypervisor(
   $local_ip          = $ipaddress_eth1,
   $libvirt_type      = 'kvm',
 ) {

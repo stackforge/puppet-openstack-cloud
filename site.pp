@@ -62,13 +62,13 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     }
 
 ## Metering
-    class {'os_ceilometer_common':}
-    class {'os_ceilometer_server':}
+    class {'os_metering_common':}
+    class {'os_metering_server':}
     # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
     class {'ceilometer::agent::central': }
 
 ## Identity
-    class {'os_keystone_server':
+    class {'os_identity_controller':
       local_ip => $ipaddress_eth0,
     }
 
@@ -91,7 +91,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com' inherits common{
 
 ## Metering
-    class {'os_ceilometer_common':}
+    class {'os_metering_common':}
 
 ## Object Storage
     class { 'os_swift_storage':

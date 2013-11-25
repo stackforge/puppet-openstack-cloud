@@ -15,10 +15,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Nova controller node
+# Compute controller node
 #
 
-class os_nova_controller(
+class os_computr_controller(
   $local_ip = $ipaddress_eth1,
 ){
 

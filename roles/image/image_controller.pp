@@ -18,12 +18,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Glance controller
+# Image controller
+#
+# Class:: os_image_controller
+#
 
-# Class:: os_role_glance
-#
-#
-class os_role_glance {
+class os_image_controller {
   $encoded_glance_user = uriescape($os_params::glance_db_user)
   $encoded_glance_password = uriescape($os_params::glance_db_password)
 

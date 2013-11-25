@@ -16,9 +16,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Heat server
+# Orchestration controller node
 #
-class os_role_heat {
+class os_orchestration_controller {
   class { 'heat':
     keystone_host     => $os_params::ks_heat_public_host,
     keystone_port     => $os_params::ks_heat_public_port,
