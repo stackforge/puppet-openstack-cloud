@@ -26,7 +26,6 @@ class os_swift_common {
 
   class { 'swift':
     swift_hash_suffix => $os_params::swift_hash_suffix,
-    package_ensure    => latest,
   }
   class {'os_swift_system::tweaking': }
 }

@@ -35,7 +35,6 @@ class os_computr_controller(
     $enabled        = true,
     $host           = '0.0.0.0',
     $port           = '6082',
-    $ensure_package = 'present'
   ) {
     nova_config {
       'DEFAULT/spicehtml5proxy_host': value => $host;
@@ -45,7 +44,6 @@ class os_computr_controller(
       enabled        => $true,
       package_name   => 'nova-consoleproxy',
       service_name   => 'nova-spicehtml5proxy',
-      ensure_package => $ensure_package,
     }
   }
 

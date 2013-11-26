@@ -76,5 +76,4 @@ class os_galera (
     allowed_hosts => $os_params::nova_allowed_hosts,
   }
 
-  package{'libdbd-mysql-perl':}
 }
