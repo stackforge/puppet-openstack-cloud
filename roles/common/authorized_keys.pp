@@ -16,8 +16,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # SSH authorized_keys
+#
 
 class authorized_keys ($keys, $account='root', $home = '') {
     # This line allows default homedir based on $account variable.
