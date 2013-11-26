@@ -18,122 +18,126 @@
 # APT configuration
 
 class os_packages_config {
-
-    class{'apt':
-      always_apt_update    => false,
-      purge_sources_list   => true,
-      purge_sources_list_d => true,
-      purge_preferences_d  => true,
-    }
-
-    # Ensure apt is configured before every package installation
-    Class['os_packages_config'] -> Package <| |>
-
-    # configure apt periodic updates
-    apt::conf { 'periodic':
-      priority  => '10',
-      content   => "
-APT::Periodic::Update-Package-Lists 1;
-APT::Periodic::Download-Upgradeable-Packages 1;
-";
-}
-
-
-# OS specific repositories
-    case $::operatingsystem {
-      'Debian': {
-        # Official Debian repositories
-        apt::source {'debian_main':
-          location    => 'http://ftp2.fr.debian.org/debian/',
-          release     => 'wheezy',
-          repos       => 'main contrib non-free',
-          include_src => false,
-        }
-
-        apt::source {'debian_backports':
-          location    => 'http://ftp2.fr.debian.org/debian/',
-          release     => 'wheezy-backports',
-          include_src => false,
-        }
-
-        apt::source {'debian_security':
-          location    => 'http://security.debian.org/',
-          release     => 'wheezy/updates',
-          repos       => 'main',
-          include_src => false,
-        }
-
-        apt::source {'mariadb':
-          location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/debian',
-          release     => 'wheezy',
-          include_src => false,
-          key_server  => 'keyserver.ubuntu.com',
-          key         => '1BB943DB',
-        }
-      } # Debian
-
-      'Ubuntu': {
-        apt::source { 'ubuntu_precise':
-          location          => 'http://us.archive.ubuntu.com/ubuntu',
-          release           => 'precise',
-          repos             => 'main universe multiverse',
-          include_src       => false
-        }
-
-        apt::source { 'ubuntu_precise_update':
-          location          => 'http://us.archive.ubuntu.com/ubuntu',
-          release           => 'precise-updates',
-          repos             => 'main universe multiverse',
-          include_src       => false
-        }
-
-        apt::source { 'ubuntu_precise_security':
-          location          => 'http://security.ubuntu.com/ubuntu',
-          release           => 'precise-security',
-          repos             => 'main universe multiverse',
-          include_src       => false
-        }
-
-        apt::source {'mariadb':
-          location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/ubuntu',
-          release     => 'precise',
-          include_src => false,
-          key_server  => 'keyserver.ubuntu.com',
-          key         => '1BB943DB',
-        }
-      } # Ubuntu
-      default: {
-        fail("Operating system (${::operatingsystem}) not supported yet" )
+  case $::osfamily {
+    'Debian': {
+      class{'apt':
+        always_apt_update    => false,
+        purge_sources_list   => true,
+        purge_sources_list_d => true,
+        purge_preferences_d  => true,
       }
-    }
 
-# Common packages for Debian / Ubuntu
-    case $::operatingsystem {
-      /^(Debian|Ubuntu)$/: {
-        # OpenStack / Ceph / Specific Backports
-        apt::source {'cloud.pkgs.enovance.com':
-          location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/${::lsbdistcodename}-${os_params::os_release}",
-          release     => $os_params::os_release,
-          include_src => false,
-          key_server  => 'keyserver.ubuntu.com',
-          key         => '5D964F0B',
-        }
+      # Ensure apt is configured before every package installation
+      Class['os_packages_config'] -> Package <| |>
 
-        # Specific to eNovance (SSH keys, etc)
-        apt::source {'enovance':
-          location    => 'http://***REMOVED***@repo.enovance.com/apt/',
-          release     => 'squeeze',
-          repos       => 'main contrib non-free',
-          key         => '3A964515',
-          key_source  => 'http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg',
-          include_src => true,
+      # configure apt periodic updates
+      apt::conf { 'periodic':
+        priority  => '10',
+        content   => "APT::Periodic::Update-Package-Lists 1;\nAPT::Periodic::Download-Upgradeable-Packages 1;\n";
+      }
+
+
+      # OS specific repositories
+      case $::operatingsystem {
+        'Debian': {
+          # Official Debian repositories
+          apt::source {'debian_main':
+            location    => 'http://ftp2.fr.debian.org/debian/',
+            release     => 'wheezy',
+            repos       => 'main contrib non-free',
+            include_src => false,
+          }
+
+          apt::source {'debian_backports':
+            location    => 'http://ftp2.fr.debian.org/debian/',
+            release     => 'wheezy-backports',
+            include_src => false,
+          }
+
+          apt::source {'debian_security':
+            location    => 'http://security.debian.org/',
+            release     => 'wheezy/updates',
+            repos       => 'main',
+            include_src => false,
+          }
+
+          apt::source {'mariadb':
+            location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/debian',
+            release     => 'wheezy',
+            include_src => false,
+            key_server  => 'keyserver.ubuntu.com',
+            key         => '1BB943DB',
+          }
+        } # Debian
+
+        'Ubuntu': {
+          apt::source { 'ubuntu_precise':
+            location          => 'http://us.archive.ubuntu.com/ubuntu',
+            release           => 'precise',
+            repos             => 'main universe multiverse',
+            include_src       => false
+          }
+
+          apt::source { 'ubuntu_precise_update':
+            location          => 'http://us.archive.ubuntu.com/ubuntu',
+            release           => 'precise-updates',
+            repos             => 'main universe multiverse',
+            include_src       => false
+          }
+
+          apt::source { 'ubuntu_precise_security':
+            location          => 'http://security.ubuntu.com/ubuntu',
+            release           => 'precise-security',
+            repos             => 'main universe multiverse',
+            include_src       => false
+          }
+
+          apt::source {'mariadb':
+            location    => 'http://ftp.igh.cnrs.fr/pub/mariadb/repo/5.5/ubuntu',
+            release     => 'precise',
+            include_src => false,
+            key_server  => 'keyserver.ubuntu.com',
+            key         => '1BB943DB',
+          }
+        } # Ubuntu
+        default: {
+          fail("Operating system (${::operatingsystem}) not supported yet" )
         }
       }
-      default: {
-        fail("Operating system (${::operatingsystem}) not supported yet" )
+
+      # Common packages for Debian / Ubuntu
+      case $::operatingsystem {
+        /^(Debian|Ubuntu)$/: {
+          # OpenStack / Ceph / Specific Backports
+          apt::source {'cloud.pkgs.enovance.com':
+            location    => "[trusted=1 arch=amd64] http://cloud.pkgs.enovance.com/${::lsbdistcodename}-${os_params::os_release}",
+            release     => $os_params::os_release,
+            include_src => false,
+            key_server  => 'keyserver.ubuntu.com',
+            key         => '5D964F0B',
+          }
+
+          # Specific to eNovance (SSH keys, etc)
+          apt::source {'enovance':
+            location    => 'http://***REMOVED***@repo.enovance.com/apt/',
+            release     => 'squeeze',
+            repos       => 'main contrib non-free',
+            key         => '3A964515',
+            key_source  => 'http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg',
+            include_src => true,
+          }
+        }
+        default: {
+          fail("Operating system (${::operatingsystem}) not supported yet" )
+        }
       }
+    } # os family Debian
+    'RedHat': {
+      notice("${::osfamily} (${::operatingsystem})")
     }
-
-# We don't include Ceph here, since APT is managed by Ceph Puppet module
-
+    default: {
+      err "${::osfamily} not supported yet"
+    }
+  } # Case $::osfamily
+  # We don't include Ceph here, since APT is managed by Ceph Puppet module
 }
