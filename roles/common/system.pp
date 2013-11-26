@@ -43,7 +43,7 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # APT repositories
-  class{ 'os_packages_config': }
+#  class{ 'os_packages_config': }
 
 # DNS
   $datacenter = 'ci'
@@ -59,9 +59,9 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # SSH Keys
-  package { 'enovance-config-sshkeys-dev':
-      ensure => 'installed'
-  }
+#  package { 'enovance-config-sshkeys-dev':
+#      ensure => 'installed'
+#  }
 
 # Strong root password for all servers
   user { 'root':
