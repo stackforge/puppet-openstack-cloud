@@ -18,9 +18,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Compute Common (controller/compute)
+# Compute Common (controller/hypervisor)
 #
-#
+
 class os_compute_common {
   if !defined(Resource['nova_config']) {
     resources { 'nova_config':
@@ -36,7 +36,6 @@ class os_compute_common {
     rabbit_userid       => 'nova',
     rabbit_hosts        => $os_params::rabbit_hosts,
     rabbit_password     => $os_params::rabbit_password,
-    image_service       => 'nova.image.glance.GlanceImageService',
     glance_api_servers  => "http://${os_params::ks_glance_internal_host}:${os_params::glance_port}",
     verbose             => false,
     debug               => false,
