@@ -24,7 +24,6 @@ class os_identity_controller (
 # Configure Keystone
   class { 'keystone':
     enabled        => true,
-    package_ensure => 'latest',
     admin_token    => $os_params::ks_admin_token,
     compute_port   => '8774',
     verbose        => true,
