@@ -34,7 +34,7 @@ class os_swift_proxy(
     port               => $os_params::swift_port,
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
-      'swift3', 's3token', 'container-quotas', 'account-quotas', 'tempurl',
+      'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
       'formpost', 'staticweb', 'ceilometer', 'authtoken', 'keystone',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
