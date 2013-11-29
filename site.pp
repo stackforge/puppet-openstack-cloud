@@ -104,7 +104,7 @@ node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enova
 node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com' inherits common {
 
 ## Compute
-  class { 'os_nova_compute':
+  class { 'os_compute_hypervisor':
     local_ip => $ipaddress_eth0,
   }
 
