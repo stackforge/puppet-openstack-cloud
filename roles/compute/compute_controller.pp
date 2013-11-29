@@ -18,7 +18,7 @@
 # Compute controller node
 #
 
-class os_computr_controller(
+class os_compute_controller(
   $local_ip = $ipaddress_eth1,
 ){
 
