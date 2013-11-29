@@ -25,7 +25,7 @@ class os_compute_hypervisor(
   $libvirt_type      = 'kvm',
 ) {
 
-  include 'os_nova_common'
+  include 'os_compute_common'
 
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',
