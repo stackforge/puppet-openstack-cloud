@@ -16,11 +16,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
-
+#
 # Used by Controller, Storage, Network and Compute nodes
+#
 
-class os_metering_common {
+class os_telemetry_common {
 
   class { 'ceilometer':
     metering_secret => $os_params::ceilometer_secret,

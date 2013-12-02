@@ -29,7 +29,7 @@ import 'roles/compute/*.pp'
 import 'roles/database/*.pp'
 import 'roles/identity/*.pp'
 import 'roles/messaging/*.pp'
-import 'roles/metering/*.pp'
+import 'roles/telemetry/*.pp'
 import 'roles/object-storage/*.pp'
 
 
@@ -64,9 +64,9 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 ## Networking
     class {'os_network_controller': }
 
-## Metering
-    class {'os_metering_common':}
-    class {'os_metering_server':}
+## Telemetry
+    class {'os_telemetry_common':}
+    class {'os_telemetry_server':}
     # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
     class {'ceilometer::agent::central': }
 
@@ -110,8 +110,8 @@ node 'XXX', 'XXX' inherits common {
 # Storage nodes
 node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com' inherits common{
 
-## Metering
-    class {'os_metering_common':}
+## Telemetry
+    class {'os_telemetry_common':}
 
 ## Object Storage
     class { 'os_swift_storage':
