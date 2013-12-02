@@ -19,16 +19,20 @@
 #
 
 class os_network_l3(
+  $external_int = $os_params::external_int,
+  $verbose      = $os_params::verbose,
+  $debug        = $os_params::debug,
 ) {
 
   class { 'neutron::agents::l3':
-    debug                        => false,
+    verbose                      => $verbose,
+    debug                        => $debug,
     handle_internal_only_routers => false,
   } ->
   vs_bridge{'br-ex':
     external_ids => 'bridge-id=br-ex',
   } ->
-  vs_port{$neutron_interface:
+  vs_port{$external_int:
     ensure => present,
     bridge => 'br-ex'
   }

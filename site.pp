@@ -61,6 +61,9 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
       local_ip => $ipaddress_eth0,
     }
 
+## Networking
+    class {'os_network_controller': }
+
 ## Metering
     class {'os_metering_common':}
     class {'os_metering_server':}
@@ -84,6 +87,23 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 # Messaging
     class {'os_rabbitmq': }
 
+# Networking
+    class {'os_network_common': }
+    class {'os_network_controller': }
+}
+
+#
+# == Network nodes
+# L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
+# We need at least two nodes for DHCP High availability
+node 'XXX', 'XXX' inherits common {
+
+    class {'os_network_common': }
+    class {'os_network_dhcp': }
+    class {'os_network_metadata': }
+    class {'os_network_lb': }
+    class {'os_network_l3': }
+    class {'os_network_vpn':}
 
 }
 

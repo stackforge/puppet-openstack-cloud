@@ -19,10 +19,13 @@
 #
 
 class os_network_vpn(
+   $verbose               = $os_params::verbose,
+   $debug                 = $os_params::debug
 ) {
 
   class { 'neutron::agents::vpnaas':
-    debug => false,
+    verbose => $verbose,
+    debug   => $debug,
   }
 
 }

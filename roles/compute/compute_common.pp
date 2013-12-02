@@ -21,24 +21,32 @@
 # Compute Common (controller/hypervisor)
 #
 
-class os_compute_common {
+class os_compute_common(
+  $nova_db_host            = $os_params::nova_db_host,
+  $rabbit_hosts            = $os_params::rabbit_hosts,
+  $rabbit_password         = $os_params::rabbit_password,
+  $ks_glance_internal_host = $os_params::ks_glance_internal_host,
+  $glance_port             = $os_params::glance_port,
+  $verbose                 = $os_params::verbose,
+  $debug                   = $os_params::debug
+) {
+
   if !defined(Resource['nova_config']) {
     resources { 'nova_config':
       purge => true;
-    }
   }
 
   $encoded_user = uriescape($os_params::nova_db_user)
   $encoded_password = uriescape($os_params::nova_db_password)
 
   class { 'nova':
-    database_connection => "mysql://${encoded_user}:${encoded_password}@${os_params::nova_db_host}/nova?charset=utf8",
+    database_connection => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
     rabbit_userid       => 'nova',
-    rabbit_hosts        => $os_params::rabbit_hosts,
-    rabbit_password     => $os_params::rabbit_password,
-    glance_api_servers  => "http://${os_params::ks_glance_internal_host}:${os_params::glance_port}",
-    verbose             => false,
-    debug               => false,
+    rabbit_hosts        => $rabbit_hosts,
+    rabbit_password     => $rabbit_password,
+    glance_api_servers  => "http://${ks_glance_internal_host}:${glance_port}",
+    verbose             => $os_params::verbose,
+    debug               => $os_params::debug
   }
 
   nova_config {
