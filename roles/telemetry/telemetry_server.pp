@@ -16,10 +16,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Metering server nodes
+#
 
-class os_metering_server{
+class os_telemtry_server{
 
 # Install MongoDB database
   class { 'ceilometer::db':
