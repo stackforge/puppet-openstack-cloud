@@ -51,7 +51,7 @@ class os_identity_controller (
     admin_tenant => $os_params::ks_admin_tenant,
   }
 
-  keystone_role { $os_params::keystone_roles_addons: ensure => present }
+  keystone_role { $os_params::identity_roles_addons: ensure => present }
 
   class {'keystone::endpoint':
     public_address   => $os_params::ks_keystone_public_host,
