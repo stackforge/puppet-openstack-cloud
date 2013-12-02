@@ -90,8 +90,11 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 # Networking
     class {'os_network_common': }
     class {'os_network_controller': }
-}
 
+# Orchestration
+    class {'os_orchestration_controller': }
+
+}
 #
 # == Network nodes
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
