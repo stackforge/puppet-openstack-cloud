@@ -97,6 +97,14 @@ class os_identity_controller (
     cinder           => true,
   }
 
+  class { 'neutron::keystone::auth':
+    password         => $os_params::ks_neutron_password,
+    public_address   => $os_params::ks_neutron_public_host,
+    admin_address    => $os_params::ks_neutron_admin_host,
+    internal_address => $os_params::ks_neutron_internal_host,
+    public_protocol  => $os_params::ks_neutron_public_proto,
+  }
+
   class { 'cinder::keystone::auth':
     password         => $os_params::ks_cinder_password,
     public_address   => $os_params::ks_cinder_public_host,
