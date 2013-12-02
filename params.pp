@@ -37,15 +37,9 @@ class os_params {
   # ToDo(EmilienM): Disable root user in all nodes and use sudo
   $root_password = '$1$2X/chMfy$CuJ4xPZY0WO2pRfIm5djn/'
 
-  # Databases
-  $keystone_db_host = '10.68.0.47'
-  $keystone_db_user = 'keystone'
-  $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
-  $keystone_allowed_hosts = ['os-ci-test%', '10.68.0.%']
 
-
-  # Keystone
-  $keystone_roles_addons = ['SwiftOperator', 'ResellerAdmin']
+  # OpenStack Identity
+  $identity_roles_addons = ['SwiftOperator', 'ResellerAdmin']
   $ks_admin_token = 'iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K'
   $ks_admin_email = 'dev@enovance.com'
   $ks_admin_password = 'Xokoph5io2aenaoh0nuiquei9aineigo'
@@ -58,7 +52,10 @@ class os_params {
   $ks_keystone_public_host = 'os-ci-test3.enovance.com'
   $ks_keystone_internal_host = 'os-ci-test3.enovance.com'
   $ks_keystone_admin_host = 'os-ci-test3.enovance.com'
-
+  $keystone_db_host = '10.68.0.47'
+  $keystone_db_user = 'keystone'
+  $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
+  $keystone_allowed_hosts = ['os-ci-test%', '10.68.0.%']
 
   # Swift
   $ks_swift_public_proto = 'http'
