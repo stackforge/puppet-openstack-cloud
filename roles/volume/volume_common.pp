@@ -15,33 +15,47 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Volume controller
+# Volume Common
+#
 
-class os_volume_common {
-  $encoded_user = uriescape($os_params::cinder_db_user)
-  $encoded_password = uriescape($os_params::cinder_db_password)
+class os_volume_common(
+  $cinder_db_host             = $os_params::cinder_db_host,
+  $cinder_db_user             = $os_params::cinder_db_user,
+  $cinder_db_password         = $os_params::cinder_db_password,
+  $rabbit_hosts               = $os_params::rabbit_hosts,
+  $rabbit_password            = $os_params::rabbit_password,
+  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
+  $ks_cinder_password         = $os_params::ks_cinder_password,
+  $ks_glance_internal_host    = $os_params::ks_glance_internal_host,
+  $verbose                    = $os_params::verbose,
+  $debug                      = $os_params::debug,
+
+) {
+  $encoded_user = uriescape($cinder_db_user)
+  $encoded_password = uriescape($cinder_db_password)
 
 
-  class { 'cinder::base':
-    verbose             => false,
-    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${os_params::cinder_db_host}/cinder?charset=utf8",
+  class { 'cinder':
+    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
     rabbit_userid       => 'cinder',
-    rabbit_hosts        => $os_params::rabbit_hosts,
-    rabbit_password     => $os_params::rabbit_password,
+    rabbit_hosts        => $rabbit_hosts,
+    rabbit_password     => $rabbit_password,
     rabbit_virtual_host => '/',
+    verbose             => $verbose,
+    debug               => $debug,
   }
 
   class { 'cinder::scheduler': }
 
   class { 'cinder::api':
-    keystone_password      => $os_params::ks_cinder_password,
-    keystone_auth_host     => $os_params::ks_keystone_internal_host,
+    keystone_password      => $ks_cinder_password,
+    keystone_auth_host     => $ks_keystone_internal_host,
   }
 
   class { 'cinder::ceilometer': }
 
   cinder_config{
-    'DEFAULT/glance_host':          value => "${os_params::glance_host}:9292";
+    'DEFAULT/glance_host':          value => "${ks_glance_internal_host}:9292";
     'DEFAULT/syslog_log_facility':  value => 'LOG_LOCAL0';
     'DEFAULT/use_syslog':           value => 'yes';
     'DEFAULT/idle_timeout':         value => '60';

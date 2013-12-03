@@ -19,10 +19,12 @@
 #
 
 class os_volume_storage {
+
   class { 'cinder::volume::rbd':
     rbd_pool           => $os_params::cinder_rbd_pool,
     glance_api_version => $os_params::glance_api_version,
     rbd_user           => $os_params::cinder_rbd_user,
     rbd_secret_uuid    => $os_params::cinder_rbd_secret_uuid
   }
+
 }
