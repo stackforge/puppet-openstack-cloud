@@ -21,10 +21,14 @@
 #
 
 class os_telemetry_common(
-  $ceilometer_secret = $os_params::ceilometer_secret,
-  $rabbit_hosts      = $os_params::rabbit_hosts,
-  $rabbit_password   = $os_params::rabbit_password,
-  $ks_keystone_internal_host
+  $ceilometer_secret          = $os_params::ceilometer_secret,
+  $rabbit_hosts               = $os_params::rabbit_hosts,
+  $rabbit_password            = $os_params::rabbit_password,
+  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
+  $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
+  $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
+  $verbose                    = $os_params::verbose,
+  $debug                      = $os_params::debug,
 ){
 
   class { 'ceilometer':
@@ -42,7 +46,8 @@ class os_telemetry_common(
   }
 
   class { 'ceilometer::agent::auth':
-    auth_url      => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0",
+    auth_url      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
     auth_password => $os_params::ks_ceilometer_password,
   }
+
 }

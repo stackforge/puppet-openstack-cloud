@@ -153,7 +153,7 @@ monitor fail if horizon_dead
   }
   if $keystone {
     os_haproxy_listen_http { 'keystone_api_cluster': ports => $os_params::keystone_port }
-    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $os_params::keystone_admin_port }
+    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $os_params::ks_keystone_admin_port }
   }
   if $nova_api {
     os_nova_haproxy_listen_http{$os_params::nova_api_ports: }

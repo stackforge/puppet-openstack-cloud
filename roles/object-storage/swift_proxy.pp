@@ -69,7 +69,7 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::authtoken':
     admin_password      => $os_params::ks_swift_password,
     auth_host           => $os_params::ks_keystone_admin_host,
-    auth_port           => $os_params::keystone_admin_port,
+    auth_port           => $os_params::ks_keystone_admin_port,
     delay_auth_decision => inline_template('1
 cache = swift.cache')
   }
@@ -78,7 +78,7 @@ cache = swift.cache')
   }
   class { 'swift::proxy::s3token':
     auth_host     => $os_params::ks_keystone_admin_host,
-    auth_port     => $os_params::keystone_admin_port,
+    auth_port     => $os_params::ks_keystone_admin_port,
   }
 
   class { 'swift::dispersion':

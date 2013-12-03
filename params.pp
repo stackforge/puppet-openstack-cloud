@@ -40,7 +40,6 @@ class os_params {
 
   # OpenStack Identity
   $identity_roles_addons = ['SwiftOperator', 'ResellerAdmin']
-  $keystone_admin_port = '35357'
   $keystone_allowed_hosts = ['os-ci-test%', '10.68.0.%']
   $keystone_db_host = '10.68.0.47'
   $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
@@ -51,8 +50,12 @@ class os_params {
   $ks_admin_password = 'Xokoph5io2aenaoh0nuiquei9aineigo'
   $ks_admin_tenant = 'admin'
   $ks_admin_token = 'iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K'
-  $ks_keystone_admin_host = 'os-ci-test3.enovance.com'
   $ks_keystone_internal_host = 'os-ci-test3.enovance.com'
+  $ks_keystone_internal_port = '5000'
+  $ks_keystone_internal_proto = 'http'
+  $ks_keystone_admin_host = 'os-ci-test3.enovance.com'
+  $ks_keystone_admin_port = '35357'
+  $ks_keystone_admin_proto = 'http'
   $ks_keystone_public_host = 'os-ci-test3.enovance.com'
   $ks_keystone_public_port = '5000'
   $ks_keystone_public_proto = 'http'
