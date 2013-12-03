@@ -83,9 +83,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     }
 
 # Object Storage
-    class {'os_swift_proxy':
-      local_ip => $ipaddress_eth0,
-    }
+    class {'os_swift_proxy': }
     class {'os_swift_ringbuilder':
       rsyncd_ipaddress => $ipaddress_eth0,
     }
