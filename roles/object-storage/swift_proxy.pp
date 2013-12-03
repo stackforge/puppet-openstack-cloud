@@ -21,7 +21,16 @@
 #
 
 class os_swift_proxy(
-    $local_ip = $ipaddress_eth0,
+  $ks_keystone_admin_host = $os_params::ks_keystone_admin_host,
+  $ks_keystone_admin_port = $os_params::ks_keystone_admin_port,
+  $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
+  $ks_keystone_internal_port = $os_params::ks_keystone_internal_port,
+  $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
+  $ks_swift_internal_port = $os_params::ks_swift_internal_port,
+  $ks_swift_password = $os_params::ks_swift_password,
+  $statsd_host = $os_params::statsd_host,
+  $statsd_port = $os_params::statsd_port,
+  $swift_memchached = $os_params::swift_memchached
 ) inherits os_swift_common {
 
   class { 'memcached':
@@ -30,8 +39,8 @@ class os_swift_proxy(
   }
 
   class { 'swift::proxy':
-    proxy_local_net_ip => $local_ip,
-    port               => $os_params::swift_port,
+    proxy_local_net_ip => $ipaddress_eth0,
+    port               => $ks_swift_internal_port,
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
       'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
@@ -40,16 +49,16 @@ class os_swift_proxy(
     account_autocreate => true,
     log_level          => 'DEBUG',
     workers            => inline_template('<%= processorcount.to_i * 2 %>
-cors_allow_origin = <%= scope.lookupvar("os_params::swift_cors_allow_origin") %>
-log_statsd_host = <%= scope.lookupvar("os_params::statsd_host") %>
-log_statsd_port = <%= scope.lookupvar("os_params::statsd_port") %>
+cors_allow_origin = <%= scope.lookupvar("swift_cors_allow_origin") %>
+log_statsd_host = <%= scope.lookupvar("statsd_host") %>
+log_statsd_port = <%= scope.lookupvar("statsd_port") %>
 log_statsd_default_sample_rate = 1
 '),
   }
 
   class{'swift::proxy::cache':
     memcache_servers => inline_template(
-      '<%= scope.lookupvar("os_params::swift_memchached").join(",") %>'),
+      '<%= scope.lookupvar("swift_memchached").join(",") %>'),
   }
   class { 'swift::proxy::proxy-logging': }
   class { 'swift::proxy::healthcheck': }
@@ -67,9 +76,9 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::tempurl': }
   class { 'swift::proxy::formpost': }
   class { 'swift::proxy::authtoken':
-    admin_password      => $os_params::ks_swift_password,
-    auth_host           => $os_params::ks_keystone_admin_host,
-    auth_port           => $os_params::ks_keystone_admin_port,
+    admin_password      => $ks_swift_password,
+    auth_host           => $ks_keystone_admin_host,
+    auth_port           => $ks_keystone_admin_port,
     delay_auth_decision => inline_template('1
 cache = swift.cache')
   }
@@ -77,14 +86,14 @@ cache = swift.cache')
     ensure => 'latest',
   }
   class { 'swift::proxy::s3token':
-    auth_host     => $os_params::ks_keystone_admin_host,
-    auth_port     => $os_params::ks_keystone_admin_port,
+    auth_host     => $ks_keystone_admin_host,
+    auth_port     => $ks_keystone_admin_port,
   }
 
   class { 'swift::dispersion':
-    auth_url  => "http://${os_params::ks_keystone_internal_host}:${os_params::keystone_port}/v2.0
+    auth_url  => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0
 endpoint_type=internalURL",
-    auth_pass => $os_params::ks_swift_dispersion_password
+    auth_pass => $ks_swift_dispersion_password
   }
 
   # Note(sileht): log file should exists to swift proxy to write to

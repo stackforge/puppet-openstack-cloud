@@ -21,8 +21,9 @@
 #
 
 class os_swift_ringbuilder(
-    $rsyncd_ipaddress = ipaddress_eth0,
-    $replicas         = 3
+    $rsyncd_ipaddress            = ipaddress_eth0,
+    $replicas                    = $os_params::replicas,
+    $swift_rsync_max_connections = $os_params::swift_rsync_max_connections,
 ) inherits os_swift_common {
 
   Ring_object_device <<| |>>
@@ -65,7 +66,7 @@ class os_swift_ringbuilder(
     lock_file       => '/var/lock/swift_server.lock',
     uid             => 'swift',
     gid             => 'swift',
-    max_connections => $os_params::swift_rsync_max_connections,
+    max_connections => $swift_rsync_max_connections,
     read_only       => true,
   }
 
