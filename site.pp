@@ -37,7 +37,7 @@ import 'roles/network/*.pp'
 import 'roles/object-storage/*.pp'
 import 'roles/orchestration/*.pp'
 import 'roles/telemetry/*.pp'
-import 'roles/volumes/*.pp'
+import 'roles/volume/*.pp'
 
 node common {
 
