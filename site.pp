@@ -99,7 +99,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 # == Network nodes
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
-node 'XXX', 'XXX' inherits common {
+node 'os-ci-test42.enovance.com', 'os-ci-test43.enovance.com' inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
