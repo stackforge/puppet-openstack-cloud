@@ -16,11 +16,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # HAproxy nodes
+#
 
-
-class os_role_loadbalancer(
+class os_lb_server(
   $keepalived_localhost_ip = $ipaddress_eth0,
   $keepalived_interface = 'eth0',
   $keepalived_ipvs = [],
@@ -35,14 +35,16 @@ class os_role_loadbalancer(
   $horizon = false,
   $heat_api = false,
   $local_ip = $ipaddress_eth0,
+  $keepalived_smtp = os_params::keepalived_smtp,
+  $keepalived_email = os_params::keepalived_email,
 ){
 
   class { 'haproxy': }
-  class { 'keepalived':
-    notification_email_to => [ $os_params::keepalived_email ],
-    smtp_server           => $os_params::keepalived_smtp,
-  }
 
+  class { 'keepalived':
+    notification_email_to => $keepalived_email,
+    smtp_server           => $keepalived_smtp,
+  }
 
   $monitors_data = inline_template('
 <%- if @swift_api -%>
