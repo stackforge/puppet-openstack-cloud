@@ -21,16 +21,19 @@
 #
 
 class os_telemetry_common(
-  
+  $ceilometer_secret = $os_params::ceilometer_secret,
+  $rabbit_hosts      = $os_params::rabbit_hosts,
+  $rabbit_password   = $os_params::rabbit_password,
+  $ks_keystone_internal_host
 ){
 
   class { 'ceilometer':
-    metering_secret => $os_params::ceilometer_secret,
-    rabbit_hosts    => $os_params::rabbit_hosts,
-    rabbit_password => $os_params::rabbit_password,
+    metering_secret => $ceilometer_secret,
+    rabbit_hosts    => $rabbit_hosts,
+    rabbit_password => $rabbit_password,
     rabbit_userid   => 'ceilometer',
-    verbose         => false,
-    debug           => false,
+    verbose         => $verbose,
+    debug           => $debug,
   }
 
   ceilometer_config {
