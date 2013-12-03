@@ -81,7 +81,7 @@ class os_identity_controller (
     internal_address => $os_params::ks_ceilometer_internal_host,
     public_protocol  => $os_params::ks_ceilometer_public_proto,
     region           => $os_params::region,
-    port             => $os_params::ceilometer_port,
+    port             => $os_params::ks_internal_ceilometer_port,
   }
 
   class {'swift::keystone::dispersion':

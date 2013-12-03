@@ -162,16 +162,16 @@ monitor fail if horizon_dead
     os_haproxy_listen_http{'neutron_api_cluster': ports => $os_params::neutron_port }
   }
   if $cinder_api {
-    os_haproxy_listen_http{'cinder_api_cluster': ports => $os_params::cinder_port }
+    os_haproxy_listen_http{'cinder_api_cluster': ports => $os_params::ks_internal_cinder_port }
   }
   if $ceilometer_api {
-    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ceilometer_port }
+    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ks_internal_ceilometer_port }
   }
   if $horizon {
     os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port }
   }
   if $heat_api {
-    os_haproxy_listen_http{'heat_api_cluster': ports => $os_params::heat_port }
+    os_haproxy_listen_http{'heat_api_cluster': ports => $os_params::ks_internal_heat_port }
   }
 
   if $galera {
