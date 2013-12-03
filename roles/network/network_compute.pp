@@ -27,7 +27,7 @@ class os_network_compute(
   $local_ip         = $os_params::tunnel_int
 ) {
 
-  class { 'nova::network::neutron': 
+  class { 'nova::network::neutron':
       neutron_admin_password => $neutron_password,
       neutron_admin_auth_url => "${neutron_protocol}://${neutron_endpoint}:35357/v2.0",
       neutron_url            => "${neutron_protocol}://${neutron_endpoint}:9696"

@@ -25,7 +25,7 @@ class os_network_common(
   $verbose             = $os_params::verbose,
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,
-  $rabbit_hosts        = $os_params::rabbit_password,
+  $rabbit_password     = $os_params::rabbit_password,
 ) {
 
   $encoded_user = uriescape($neutron_db_user)

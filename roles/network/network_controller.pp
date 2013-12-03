@@ -21,11 +21,11 @@
 #
 
 class os_network_controller(
-   $ks_neutron_password    = os_params::ks_neutron_password,
-   $ks_keystone_admin_host = os_params::ks_keystone_admin_host
-   $ks_keystone_public_port = os_params::ks_keystone_public_port,
-   $verbose                = $os_params::verbose,
-   $debug                  = $os_params::debug
+  $ks_neutron_password     = os_params::ks_neutron_password,
+  $ks_keystone_admin_host  = os_params::ks_keystone_admin_host,
+  $ks_keystone_public_port = os_params::ks_keystone_public_port,
+  $verbose                 = $os_params::verbose,
+  $debug                   = $os_params::debug
 ) {
 
   class { 'neutron::server':
