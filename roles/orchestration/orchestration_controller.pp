@@ -26,6 +26,7 @@ class os_orchestration_controller(
   $ks_keystone_public_proto = $os_params::ks_keystone_public_proto,
   $ks_heat_public_proto     = $os_params::ks_heat_public_proto,
   $ks_heat_password         = $os_params::ks_heat_password,
+  $heat_db_user             = $os_params::heat_db_user,
   $heat_db_host             = $os_params::heat_db_host,
   $heat_db_password         = $os_params::heat_db_password,
   $rabbit_hosts             = $os_params::rabbit_hosts,
