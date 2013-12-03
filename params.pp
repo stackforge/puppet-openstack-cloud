@@ -61,7 +61,7 @@ class os_params {
   $ks_keystone_public_proto = 'http'
 
   # Swift
-  $ks_glance_internal_proto = 'http'
+  $ks_swift_internal_proto = 'http'
   $ks_swift_admin_host = 'os-ci-test3.enovance.com'
   $ks_swift_admin_port = '8080'
   $ks_swift_admin_proto = 'http'
