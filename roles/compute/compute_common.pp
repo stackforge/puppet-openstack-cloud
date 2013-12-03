@@ -34,6 +34,7 @@ class os_compute_common(
   if !defined(Resource['nova_config']) {
     resources { 'nova_config':
       purge => true;
+    }
   }
 
   $encoded_user = uriescape($os_params::nova_db_user)
