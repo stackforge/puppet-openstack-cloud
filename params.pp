@@ -61,13 +61,18 @@ class os_params {
   $ks_keystone_public_proto = 'http'
 
   # Swift
+  $ks_glance_internal_proto = 'http'
   $ks_swift_admin_host = 'os-ci-test3.enovance.com'
+  $ks_swift_admin_port = '8080'
+  $ks_swift_admin_proto = 'http'
   $ks_swift_dispersion_password = 'aipee1die1eeSohph9yae8eeluthaleu'
   $ks_swift_internal_host = 'os-ci-test3.enovance.com'
+  $ks_swift_internal_port = '8080'
   $ks_swift_password = 'cwnu6Eeph4jahsh5wooch5Panahjaidie8'
   $ks_swift_public_host = 'os-ci-test3.enovance.com'
   $ks_swift_public_port = '8080'
   $ks_swift_public_proto = 'http'
+  $replicas = '3'
   $statsd_host = '127.0.0.1'
   $statsd_port = '4125'
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'

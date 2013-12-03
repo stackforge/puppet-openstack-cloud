@@ -20,12 +20,16 @@
 # Swift nodes
 #
 
-class os_swift_common {
+class os_swift_common(
+  $swift_hash_suffix = $os_params::swift_hash_suffix
+) {
 
   class { 'ssh::server::install': }
 
   class { 'swift':
-    swift_hash_suffix => $os_params::swift_hash_suffix,
+    swift_hash_suffix => $swift_hash_suffix,
   }
+
   class {'os_swift_system::tweaking': }
+
 }
