@@ -92,7 +92,10 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     Class['os_swift_ringbuilder'] -> Class['os_swift_proxy']
 
 # Messaging
-    class {'os_messaing_server': }
+    class {'os_messaging_server': }
+
+# Cache
+    class {'os_cache_server': }
 
 # Networking
     class {'os_network_common': }

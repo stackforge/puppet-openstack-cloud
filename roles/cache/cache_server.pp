@@ -18,39 +18,11 @@
 # Memcached node
 #
 
-class os_cache_server(
-  $rabbit_names    = $os_params::rabbit_names,
-  $rabbit_password = $os_params::rabbit_password
-){
-  class { 'rabbitmq::server':
-    delete_guest_user        => true,
-    config_cluster           => true,
-    cluster_disk_nodes       => $rabbit_names,
-    wipe_db_on_cookie_change => true,
-  }
+class os_cache_server{
 
-  rabbitmq_vhost { '/':
-    provider => 'rabbitmqctl',
-    require  => Class['rabbitmq::server'],
-  }
-  rabbitmq_user { ['nova', 'glance', 'neutron', 'cinder', 'ceilometer', 'heat']:
-    admin    => true,
-    password => $rabbit_password,
-    provider => 'rabbitmqctl',
-    require  => Class['rabbitmq::server']
-  }
-  rabbitmq_user_permissions {[
-    'nova@/',
-    'glance@/',
-    'neutron@/',
-    'cinder@/',
-    'ceilometer@/',
-    'heat@/',
-  ]:
-    configure_permission => '.*',
-    write_permission     => '.*',
-    read_permission      => '.*',
-    provider             => 'rabbitmqctl',
+  class { 'memcached':
+    listen_ip  => $ipaddress_eth0,
+    max_memory => '60%',
   }
 
 }
