@@ -24,6 +24,7 @@ import 'params.pp'
 
 # Import roles
 import 'roles/automation/*.pp'
+import 'roles/cache/*.pp'
 import 'roles/common/*.pp' # mandatory
 import 'roles/compute/*.pp'
 import 'roles/dashboard/*.pp'
@@ -91,7 +92,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
     Class['os_swift_ringbuilder'] -> Class['os_swift_proxy']
 
 # Messaging
-    class {'os_rabbitmq': }
+    class {'os_messaing_server': }
 
 # Networking
     class {'os_network_common': }
