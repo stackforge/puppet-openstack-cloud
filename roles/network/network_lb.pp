@@ -19,8 +19,8 @@
 #
 
 class os_network_lbaas(
-   $verbose               = $os_params::verbose,
-   $debug                 = $os_params::debug
+  $verbose               = $os_params::verbose,
+  $debug                 = $os_params::debug
 ) {
 
   class { 'neutron::agents::lbaas':
