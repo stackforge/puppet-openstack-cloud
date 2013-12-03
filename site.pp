@@ -52,7 +52,7 @@ node common {
 
 
 # Puppet Master node
-node 'os-ci-test2.enovance.com' inherits common{
+node 'os-ci-test4.enovance.com' inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
 # and other stuffs are made by common class.
@@ -60,7 +60,7 @@ node 'os-ci-test2.enovance.com' inherits common{
 }
 
 # Controller node
-node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enovance.com' inherits common {
+node 'os-ci-test13.enovance.com' inherits common {
 
 ## Databases:
     class {'os_nosql_node':}
@@ -102,7 +102,7 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
 # == Network nodes
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
-node 'os-ci-test42.enovance.com', 'os-ci-test43.enovance.com' inherits common {
+node 'os-ci-test8.enovance.com', 'os-ci-test12.enovance.com' inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
@@ -114,7 +114,7 @@ node 'os-ci-test42.enovance.com', 'os-ci-test43.enovance.com' inherits common {
 }
 
 # Storage nodes
-node 'os-ci-test8.enovance.com', 'os-ci-test9.enovance.com', 'os-ci-test12.enovance.com' inherits common{
+node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.enovance.com' inherits common{
 
 ## Telemetry
     class {'os_telemetry_common':}
