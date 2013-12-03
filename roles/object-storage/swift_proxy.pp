@@ -33,11 +33,6 @@ class os_swift_proxy(
   $swift_memchached = $os_params::swift_memchached
 ) inherits os_swift_common {
 
-  class { 'memcached':
-    listen_ip  => $local_ip,
-    max_memory => '60%',
-  }
-
   class { 'swift::proxy':
     proxy_local_net_ip => $ipaddress_eth0,
     port               => $ks_swift_internal_port,
