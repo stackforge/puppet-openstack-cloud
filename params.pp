@@ -117,9 +117,14 @@ class os_params {
   # Neutron
   $external_int = 'eth1'
   $ks_neutron_admin_host = 'os-ci-test3.enovance.com'
+  $ks_neutron_admin_port = '9696'
+  $ks_neutron_admin_proto = 'http'
   $ks_neutron_internal_host = 'os-ci-test3.enovance.com'
+  $ks_neutron_internal_port = '9696'
+  $ks_neutron_internal_proto = 'http'
   $ks_neutron_password = 'AJJTg2fSWrE4X4L1rhKJI74njLpFB0'
   $ks_neutron_public_host = 'os-ci-test3.enovance.com'
+  $ks_neutron_public_port = '9696'
   $ks_neutron_public_proto = 'http'
   $neutron_allowed_hosts = ['os-ci-test%', '10.60.0.%']
   $neutron_db_host = '10.68.0.47'
