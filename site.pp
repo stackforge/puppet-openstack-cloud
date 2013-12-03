@@ -68,9 +68,6 @@ node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enova
       local_ip => $ipaddress_eth0,
     }
 
-## Networking
-    class {'os_network_controller': }
-
 ## Telemetry
     class {'os_telemetry_common':}
     class {'os_telemetry_server':}
