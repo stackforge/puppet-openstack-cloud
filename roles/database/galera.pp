@@ -76,4 +76,12 @@ class os_galera (
     allowed_hosts => $os_params::nova_allowed_hosts,
   }
 
+  class { 'neutron::db::mysql':
+    password      => $os_params::neutron_db_password,
+    user          => $os_params::neutron_db_user,
+    dbname        => 'neutron',
+    host          => $os_params::neutron_db_host,
+    allowed_hosts => $os_params::neutron_allowed_hosts,
+  }
+
 }
