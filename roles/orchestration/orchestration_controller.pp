@@ -23,7 +23,7 @@ class os_orchestration_controller(
   $ks_keystone_public_host  = $os_params::ks_keystone_public_host,
   $ks_heat_public_host      = $os_params::ks_heat_public_host,
   $ks_keystone_public_port  = $os_params::ks_keystone_public_port,
-  $ks_keystone_admin_port   = $os_params::ks_keystone_admin_port,
+  $ks_keystone_public_port   = $os_params::ks_keystone_public_port,
   $ks_keystone_public_proto = $os_params::ks_keystone_public_proto,
   $ks_heat_public_proto     = $os_params::ks_heat_public_proto,
   $ks_heat_password         = $os_params::ks_heat_password,
@@ -39,7 +39,7 @@ class os_orchestration_controller(
     keystone_port     => $ks_keystone_public_port,
     keystone_protocol => $ks_keystone_public_proto,
     keystone_password => $ks_heat_password,
-    auth_uri          => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_admin_port}/v2.0",
+    auth_uri          => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}/v2.0",
     rabbit_hosts      => $os_params::rabbit_hosts,
     rabbit_password   => $os_params::rabbit_password,
   }

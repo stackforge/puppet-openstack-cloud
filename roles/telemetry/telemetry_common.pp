@@ -20,7 +20,9 @@
 # Used by Controller, Storage, Network and Compute nodes
 #
 
-class os_telemetry_common {
+class os_telemetry_common(
+  
+){
 
   class { 'ceilometer':
     metering_secret => $os_params::ceilometer_secret,
