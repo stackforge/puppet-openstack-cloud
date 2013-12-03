@@ -23,15 +23,21 @@
 import 'params.pp'
 
 # Import roles
-import 'roles/common/*.pp' # mandatory
 import 'roles/automation/*.pp'
+import 'roles/common/*.pp' # mandatory
 import 'roles/compute/*.pp'
+import 'roles/dashboard/*.pp'
 import 'roles/database/*.pp'
 import 'roles/identity/*.pp'
+import 'roles/image/*.pp'
+import 'roles/load-balancer/*.pp'
 import 'roles/messaging/*.pp'
-import 'roles/telemetry/*.pp'
+import 'roles/monitoring/*.pp'
+import 'roles/network/*.pp'
 import 'roles/object-storage/*.pp'
-
+import 'roles/orchestration/*.pp'
+import 'roles/telemetry/*.pp'
+import 'roles/volumes/*.pp'
 
 node common {
 
