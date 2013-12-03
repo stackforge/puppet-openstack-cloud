@@ -143,7 +143,7 @@ class os_params {
   $glance_port = '9292'
   $ks_ceilometer_admin_host = 'os-ci-test3.enovance.com'
   $ks_ceilometer_admin_port = '9292'
-  $ks_ceilometer_admin_proto = 'http
+  $ks_ceilometer_admin_proto = 'http'
   $ks_ceilometer_internal_host = 'os-ci-test3.enovance.com'
   $ks_ceilometer_internal_port = '9292'
   $ks_ceilometer_internal_proto = 'http'
