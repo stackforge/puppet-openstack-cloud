@@ -33,7 +33,7 @@ class os_network_common(
 
   class { 'neutron':
     allow_overlapping_ips   => true,
-    verbose                 => ,
+    verbose                 => $verbose,
     debug                   => $debug,
     rabbit_user             => 'neutron',
     rabbit_hosts            => $rabbit_hosts,

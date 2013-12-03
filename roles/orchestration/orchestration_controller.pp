@@ -23,12 +23,15 @@ class os_orchestration_controller(
   $ks_keystone_public_host  = $os_params::ks_keystone_public_host,
   $ks_heat_public_host      = $os_params::ks_heat_public_host,
   $ks_keystone_public_port  = $os_params::ks_keystone_public_port,
-  $ks_keystone_public_port   = $os_params::ks_keystone_public_port,
   $ks_keystone_public_proto = $os_params::ks_keystone_public_proto,
   $ks_heat_public_proto     = $os_params::ks_heat_public_proto,
   $ks_heat_password         = $os_params::ks_heat_password,
   $heat_db_host             = $os_params::heat_db_host,
-  $heat_db_password         = $os_params::heat_db_password
+  $heat_db_password         = $os_params::heat_db_password,
+  $rabbit_hosts             = $os_params::rabbit_hosts,
+  $rabbit_password          = $os_params::rabbit_password,
+  $verbose                  = $os_params::verbose,
+  $debug                    = $os_params::debug,
 ) {
 
   $encoded_user = uriescape($heat_db_user)
@@ -40,8 +43,11 @@ class os_orchestration_controller(
     keystone_protocol => $ks_keystone_public_proto,
     keystone_password => $ks_heat_password,
     auth_uri          => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}/v2.0",
-    rabbit_hosts      => $os_params::rabbit_hosts,
-    rabbit_password   => $os_params::rabbit_password,
+    rabbit_hosts      => $rabbit_hosts,
+    rabbit_password   => $rabbit_password,
+    rabbit_userid     => 'heat',
+    verbose           => $verbose,
+    debug             => $debug,
   }
 
   class { 'heat::api': }
