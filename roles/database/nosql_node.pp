@@ -18,7 +18,7 @@
 # MongoDB Server Node
 #
 
-class mongodb_server {
+class os_nosql_node {
 
   class { 'mongodb': }
 
