@@ -72,14 +72,14 @@ class os_packages_config {
 
         'Ubuntu': {
           apt::source { 'ubuntu_precise':
-            location          => 'http://us.archive.ubuntu.com/ubuntu',
+            location          => 'http://fr.archive.ubuntu.com/ubuntu',
             release           => 'precise',
             repos             => 'main universe multiverse',
             include_src       => false
           }
 
           apt::source { 'ubuntu_precise_update':
-            location          => 'http://us.archive.ubuntu.com/ubuntu',
+            location          => 'http://fr.archive.ubuntu.com/ubuntu',
             release           => 'precise-updates',
             repos             => 'main universe multiverse',
             include_src       => false
