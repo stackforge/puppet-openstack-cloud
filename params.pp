@@ -79,7 +79,7 @@ class os_params {
   $swift_hash_suffix = 'ni2aseiWi8ich3oo'
   $swift_memchached = ['10.68.0.47:11211']
   $swift_port = '8080'
-  $swift_rsync_max_connections = 5
+  $swift_rsync_max_connections = '5'
   $os_swift_zone = {
     'os-ci-test8' => 1,
     'os-ci-test9' => 2,
