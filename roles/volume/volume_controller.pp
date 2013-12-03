@@ -20,34 +20,16 @@
 #
 # Volume controller
 
-class os_volume_controller {
-  $encoded_user = uriescape($os_params::cinder_db_user)
-  $encoded_password = uriescape($os_params::cinder_db_password)
-
-
-  class { 'cinder::base':
-    verbose             => false,
-    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${os_params::cinder_db_host}/cinder?charset=utf8",
-    rabbit_userid       => 'cinder',
-    rabbit_hosts        => $os_params::rabbit_hosts,
-    rabbit_password     => $os_params::rabbit_password,
-    rabbit_virtual_host => '/',
-  }
+class os_volume_controller(
+  $ks_cinder_password        = $os_params::ks_cinder_password,
+  $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
+) {
 
   class { 'cinder::scheduler': }
 
   class { 'cinder::api':
     keystone_password      => $os_params::ks_cinder_password,
     keystone_auth_host     => $os_params::ks_keystone_internal_host,
-  }
-
-  class { 'cinder::ceilometer': }
-
-  cinder_config{
-    'DEFAULT/glance_host':          value => "${os_params::glance_host}:9292";
-    'DEFAULT/syslog_log_facility':  value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':           value => 'yes';
-    'DEFAULT/idle_timeout':         value => '60';
   }
 
 }
