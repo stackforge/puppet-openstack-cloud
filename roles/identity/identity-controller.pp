@@ -58,7 +58,7 @@ class os_identity_controller (
     admin_address    => $os_params::ks_keystone_admin_host,
     internal_address => $os_params::ks_keystone_internal_host,
     public_port      => $os_params::ks_keystone_public_port,
-    admin_port       => $os_params::keystone_admin_port,
+    admin_port       => $os_params::ks_keystone_admin_port,
     internal_port    => $os_params::keystone_port,
     region           => $os_params::region,
     public_protocol  => $os_params::ks_keystone_public_proto

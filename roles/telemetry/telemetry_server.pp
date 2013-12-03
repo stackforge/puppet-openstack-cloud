@@ -20,11 +20,16 @@
 # Metering server nodes
 #
 
-class os_telemtry_server{
+class os_telemetry_server(
+  $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
+  $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
+  $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
+  $ceilometer_database_connection = $os_params::ceilometer_database_connection,
+){
 
 # Install MongoDB database
   class { 'ceilometer::db':
-    database_connection => $os_params::ceilometer_database_connection,
+    database_connection => $ceilometer_database_connection,
     require             => Class['mongodb']
   }
 
@@ -38,17 +43,10 @@ class os_telemtry_server{
   class { 'ceilometer::alarm::notifier': }
 
 # Install Ceilometer-API
-  class os_ceilometer_api(
-    $local_ip = $ipaddress_eth0,
-  ){
-    if ! defined(Class['ceilometer_common']){
-      class { 'ceilometer_common': }
-    }
-
-    class { 'ceilometer::api':
-      keystone_password => $os_params::ks_ceilometer_password,
-      keystone_host     => $os_params::ks_keystone_admin_host,
-    }
+  class { 'ceilometer::api':
+    keystone_password => $ks_ceilometer_password,
+    keystone_host     => $ks_keystone_internal_host,
+    keystone_protocol => $ks_keystone_internal_proto,
   }
 
 # Ceilometer Central Agent is defined in site.pp since it must be installed on only node (not able to scale-out)
