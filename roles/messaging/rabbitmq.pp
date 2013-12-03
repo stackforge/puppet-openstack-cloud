@@ -16,14 +16,18 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # RabbitMQ node
+#
 
-class os_rabbitmq{
+class os_rabbitmq(
+  $rabbit_names    = $os_params::rabbit_names,
+  $rabbit_password = $os_params::rabbit_password
+){
   class { 'rabbitmq::server':
     delete_guest_user        => true,
     config_cluster           => true,
-    cluster_disk_nodes       => $os_params::rabbit_names,
+    cluster_disk_nodes       => $rabbit_names,
     wipe_db_on_cookie_change => true,
   }
 
@@ -31,20 +35,19 @@ class os_rabbitmq{
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq::server'],
   }
-  rabbitmq_user { ['nova','glance', 'quantum', 'cinder', 'ceilometer', 'heat', 'sensu']:
+  rabbitmq_user { ['nova', 'glance', 'neutron', 'cinder', 'ceilometer', 'heat']:
     admin    => true,
-    password => $os_params::rabbit_password,
+    password => $rabbit_password,
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq::server']
   }
   rabbitmq_user_permissions {[
     'nova@/',
     'glance@/',
-    'quantum@/',
+    'neutron@/',
     'cinder@/',
     'ceilometer@/',
     'heat@/',
-    'sensu@/',
   ]:
     configure_permission => '.*',
     write_permission     => '.*',
