@@ -63,10 +63,8 @@ node 'os-ci-test2.enovance.com' inherits common{
 node 'os-ci-test3.enovance.com', 'os-ci-test13.enovance.com', 'os-ci-test4.enovance.com' inherits common {
 
 ## Databases:
-    class {'mongodb_server':}
-    class {'os_galera':
-      local_ip => $ipaddress_eth0,
-    }
+    class {'os_nosql_node':}
+    class {'os_sql_node':}
 
 ## Telemetry
     class {'os_telemetry_common':}
