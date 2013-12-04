@@ -102,7 +102,7 @@ node 'os-ci-test13.enovance.com' inherits common {
 # == Network nodes
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
-node 'os-ci-test8.enovance.com', 'os-ci-test12.enovance.com' inherits common {
+node 'os-ci-test8.enovance.com', 'os-ci-test8.enovance.com' inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
