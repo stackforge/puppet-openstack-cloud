@@ -21,22 +21,32 @@
 #
 
 class os_lb_server(
-  $keepalived_localhost_ip = $ipaddress_eth0,
-  $keepalived_interface = 'eth0',
+  $ceilometer_api            = false,
+  $cinder_api                = false,
+  $galera                    = false,
+  $glance_api                = false,
+  $haproxy_auth              = $os_params::haproxy_auth,
+  $heat_api                  = false,
+  $horizon                   = false,
+  $keepalived_email          = $os_params::keepalived_email,
+  $keepalived_interface      = 'eth0',
   $keepalived_ipvs = [],
-  $swift_api = false,
-  $keystone_api = false,
-  $keystone_api_admin = false,
-  $nova_api = false,
-  $galera = false,
-  $neutron_api = false,
-  $cinder_api = false,
-  $ceilometer_api = false,
-  $horizon = false,
-  $heat_api = false,
-  $local_ip = $ipaddress_eth0,
-  $keepalived_smtp = os_params::keepalived_smtp,
-  $keepalived_email = os_params::keepalived_email,
+  $keepalived_localhost_ip   = $ipaddress_eth0,
+  $keepalived_smtp           = $os_params::keepalived_smtp,
+  $keystone_api_admin        = false,
+  $keystone_api              = false,
+  $ks_cinder_ceilometer_port = $os_params::ks_ceilometer_public_port,
+  $ks_cinder_public_port     = $os_params::ks_cinder_public_port,
+  $ks_glance_public_port     = $os_params::ks_glance_public_port,
+  $ks_heat_public_port       = $os_params::ks_heat_public_port,
+  $ks_keystone_admin_port    = $os_params::ks_keystone_admin_port,
+  $ks_keystone_public_port   = $os_params::ks_keystone_public_port,
+  $ks_neutron_public_port    = $os_params::ks_neutron_public_port,
+  $ks_swift_public_port      = $os_params::ks_swift_public_port,
+  $local_ip                  = $ipaddress_eth0,
+  $neutron_api               = false,
+  $nova_api                  = false,
+  $swift_api                 = false,
 ){
 
   class { 'haproxy': }
@@ -71,6 +81,10 @@ monitor fail if cinder_api_dead
 acl nova_api_dead nbsrv(nova_api_cluster) lt 1
 monitor fail if nova_api_dead
 <%- end -%>
+<%- if @glance_api -%>
+acl nova_api_dead nbsrv(glance_api_cluster) lt 1
+monitor fail if nova_api_dead
+<%- end -%>
 <%- if @ceilometer_api -%>
 acl ceilometer_api_dead nbsrv(ceilometer_api_cluster) lt 1
 monitor fail if ceilometer_api_dead
@@ -101,14 +115,13 @@ monitor fail if horizon_dead
 "
   }
 
-
   haproxy::listen { 'monitor':
     ipaddress => '0.0.0.0',
     ports     => '9300',
     options   => {
       'mode'        => 'http',
       'monitor-uri' => '/status',
-      'stats'       => ['enable','uri     /admin','realm   Haproxy\ Statistics',"auth    ${os_params::haproxy_auth}", 'refresh 5s' ],
+      'stats'       => ['enable','uri     /admin','realm   Haproxy\ Statistics',"auth    ${haproxy_auth}", 'refresh 5s' ],
       ''            => $monitors_data,
     }
   }
@@ -151,29 +164,32 @@ monitor fail if horizon_dead
   }
 
   if $swift {
-    os_haproxy_listen_http{ 'swift_api_cluster': ports => $os_params::swift_port, httpchk => 'httpchk /healthcheck'  }
+    os_haproxy_listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
   }
   if $keystone {
-    os_haproxy_listen_http { 'keystone_api_cluster': ports => $os_params::keystone_port }
-    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $os_params::ks_keystone_admin_port }
+    os_haproxy_listen_http { 'keystone_api_cluster': ports => $ks_keystone_public_port }
+    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
   }
   if $nova_api {
-    os_nova_haproxy_listen_http{$os_params::nova_api_ports: }
+    os_nova_haproxy_listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
+  }
+  if $glance_api {
+    os_nova_haproxy_listen_http{ 'glance_api_cluster': ports => $ks_glance_public_port }
   }
   if $neutron_api {
-    os_haproxy_listen_http{'neutron_api_cluster': ports => $os_params::neutron_port }
+    os_haproxy_listen_http{'neutron_api_cluster': ports => $ks_neutron_public_port }
   }
   if $cinder_api {
-    os_haproxy_listen_http{'cinder_api_cluster': ports => $os_params::ks_internal_cinder_port }
+    os_haproxy_listen_http{'cinder_api_cluster': ports => $ks_cinder_public_port }
   }
   if $ceilometer_api {
-    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $os_params::ks_internal_ceilometer_port }
+    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
   }
   if $horizon {
     os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port }
   }
   if $heat_api {
-    os_haproxy_listen_http{'heat_api_cluster': ports => $os_params::ks_internal_heat_port }
+    os_haproxy_listen_http{'heat_api_cluster': ports => $ks_heat_public_port }
   }
 
   if $galera {
