@@ -101,7 +101,7 @@ class os_params {
   $haproxy_auth   = 'root:enovance'
 
   # Horizon
-  $horizon_port = '443'
+  $horizon_port = '80'
 
   # MongoDB
   $mongodb_location = ''
@@ -144,6 +144,15 @@ class os_params {
   $nova_db_password = 'Ae3tooch8shohNai9ooqueik9gaevo'
   $nova_db_user = 'nova'
   $nova_port = '8774'
+  $ks_nova_admin_host = 'os-ci-test3.enovance.com'
+  $ks_nova_admin_port = '8774'
+  $ks_nova_admin_proto = 'http'
+  $ks_nova_internal_host = 'os-ci-test3.enovance.com'
+  $ks_nova_internal_port = '8774'
+  $ks_nova_internal_proto = 'http'
+  $ks_nova_public_host = 'os-ci-test3.enovance.com'
+  $ks_nova_public_port = '8774'
+  $ks_nova_public_proto = 'http'
 
   # Glance
   $glance_allowed_hosts = ['os-ci-test%', '10.60.0.%']
