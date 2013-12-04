@@ -102,6 +102,7 @@ node 'os-ci-test13.enovance.com' inherits common {
 # == Network nodes
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
+#FIXME 8 is down
 node 'os-ci-test8.enovance.com' inherits common {
 
     class {'os_network_common': }
@@ -127,7 +128,8 @@ node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.eno
 }
 
 # Compute nodes
-node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com' inherits common {
+#FIXME 7 is down
+node 'os-ci-test7.enovance.com' inherits common {
 
 ## Compute
   class { 'os_compute_hypervisor':
