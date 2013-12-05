@@ -134,11 +134,7 @@ class os_params {
   $tunnel_int   = 'eth0'
 
   # Nova
-  $ks_nova_admin_host = 'os-ci-test3.enovance.com'
-  $ks_nova_internal_host = 'os-ci-test3.enovance.com'
   $ks_nova_password = 'WeiveKed1Ahmel7ohfieya6daiquIe'
-  $ks_nova_public_host = 'os-ci-test3.enovance.com'
-  $ks_nova_public_proto = 'http'
   $nova_allowed_hosts = ['os-ci-test%', '10.60.0.%']
   $nova_db_host = '10.68.0.47'
   $nova_db_password = 'Ae3tooch8shohNai9ooqueik9gaevo'
