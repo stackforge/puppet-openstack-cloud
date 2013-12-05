@@ -60,11 +60,11 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # SSH Keys
   #FIXME
-  if $::osfamily == 'Debian' {
-    package { 'enovance-config-sshkeys-dev':
-        ensure => 'installed'
-    }
-  }
+  #if $::osfamily == 'Debian' {
+  #  package { 'enovance-config-sshkeys-dev':
+  #      ensure => 'installed'
+  #  }
+  #}
 
 # Strong root password for all servers
   user { 'root':
