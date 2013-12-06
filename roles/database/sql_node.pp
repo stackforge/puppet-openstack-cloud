@@ -31,10 +31,18 @@ class os_sql_node (
     $keystone_db_user          = $os_params::keystone_db_host,
     $keystone_db_password      = $os_params::keystone_db_password,
     $keystone_db_allowed_hosts = $os_params::keystone_db_allowed_hosts,
+    $cinder_db_host            = $os_params::cinder_db_user,
+    $cinder_db_user            = $os_params::cinder_db_host,
+    $cinder_db_password        = $os_params::cinder_db_password,
+    $cinder_db_allowed_hosts   = $os_params::cinder_db_allowed_hosts,
     $glance_db_host            = $os_params::glance_db_user,
     $glance_db_user            = $os_params::glance_db_host,
     $glance_db_password        = $os_params::glance_db_password,
     $glance_db_allowed_hosts   = $os_params::glance_db_allowed_hosts,
+    $heat_db_host              = $os_params::heat_db_user,
+    $heat_db_user              = $os_params::heat_db_host,
+    $heat_db_password          = $os_params::heat_db_password,
+    $heat_db_allowed_hosts     = $os_params::heat_db_allowed_hosts,
     $nova_db_host              = $os_params::nova_db_user,
     $nova_db_user              = $os_params::nova_db_host,
     $nova_db_password          = $os_params::nova_db_password,
@@ -44,7 +52,6 @@ class os_sql_node (
     $neutron_db_password       = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
     $mysql_debian_sys_maint    = $os_params::mysql_debian_sys_maint,
-    $mysql_debian_sys_maint    = $os_params::mysql_debian_sys_maint,
     $mysql_password            = $os_params::mysql_password
 ) {
 
@@ -53,13 +60,13 @@ class os_sql_node (
   }
 
   class { 'mysql::server':
-    config_hash  => {
+    config_hash       => {
       bind_address  => $local_ip,
       root_password => $mysql_password,
     },
-    service_provider => "debian",
-    require          => Apt::Source['mariadb'],
-    notify           => Service['xinetd'],
+    service_provider  => 'debian',
+    require           => Apt::Source['mariadb'],
+    notify            => Service['xinetd'],
   }
 
   if $::hostname == $galera_master {
@@ -116,17 +123,17 @@ class os_sql_node (
       ensure  => 'present',
       charset => 'utf8',
       require => File['/root/.my.cnf']
-    } 
+    }
     database_user { 'clustercheckuser@localhost':
       ensure        => 'present',
       # can not change password in clustercheck script
       password_hash => mysql_password('clustercheckpassword!'),
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
-    } 
+    }
     database_grant { 'clustercheckuser@localhost/monitoring':
       privileges => ['all']
-    } 
+    }
     database_user { 'debian-sys-maint@localhost':
       ensure        => 'present',
       password_hash =>
@@ -149,11 +156,11 @@ socket   = /var/run/mysqld/mysqld.sock
 [mysql_upgrade]
 host     = localhost
 user     = debian-sys-maint
-password = ${omysql_debian_sys_maint}
+password = ${mysql_debian_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 ",
-    mode => "0600",
+    mode    => '0600',
   }
 
   exec{'add-mysqlchk-in-etc-services':
@@ -164,12 +171,12 @@ basedir  = /usr
 
   file{'/etc/xinetd.d/mysqlchk':
     content => template('mysqlchk'),
-    mode    => 0755,
+    mode    => '0755',
     notify  => Service['xinetd'],
   }
   file{'/usr/bin/clustercheck':
     content => template('clustercheck'),
-    mode    => 0755,
+    mode    => '0755',
   }
 
   @@haproxy::balancermember{$::fqdn:
