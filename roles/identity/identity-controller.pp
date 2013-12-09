@@ -30,7 +30,7 @@ class os_identity_controller (
     debug          => true,
     sql_connection => "mysql://${os_params::keystone_db_user}:${os_params::keystone_db_password}@${os_params::keystone_db_host}/keystone",
     idle_timeout   => 60,
-    token_format   => 'UUID',
+    token_provider => 'keystone.token.providers.uuid.Provider',
     # ToDo (EmilienM): Fix memcached
     # token_driver   => "keystone.token.backends.memcache.Token",
     use_syslog     => true,
