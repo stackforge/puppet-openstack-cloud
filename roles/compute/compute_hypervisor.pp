@@ -69,8 +69,10 @@ Host *
   }
 
   class { 'nova::compute':
-    enabled     => true,
-    vnc_enabled => false,
+    enabled         => true,
+    vnc_enabled     => false,
+    virtio_nic      => true,
+    neutron_enabled => true
   }
 
   class { 'nova::compute::libvirt':
@@ -87,12 +89,14 @@ Host *
     refreshonly => true
   }
 
-  class { '::nova::compute::spice':
+  class { 'nova::compute::spice':
     agent_enabled              => true,
     server_listen              => '0.0.0.0',
     server_proxyclient_address => $local_ip,
     proxy_protocol             => $os_params::ks_nova_public_proto,
     proxy_host                 => $os_params::ks_nova_public_host,
   }
+
+  class { 'nova::compute::neutron': }
 
 }
