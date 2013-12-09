@@ -37,8 +37,10 @@ class os_swift_proxy(
     proxy_local_net_ip => $ipaddress_eth0,
     port               => $ks_swift_internal_port,
     pipeline           => [
-      'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
-      'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
+      #'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
+      'catch_errors', 'healthcheck', 'cache', 'ratelimit',
+      #'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
+      'swift3', 's3token', 'tempurl',
       'formpost', 'staticweb', 'ceilometer', 'authtoken', 'keystone',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
@@ -59,9 +61,9 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::healthcheck': }
   class { 'swift::proxy::catch_errors': }
   class { 'swift::proxy::ratelimit': }
-  class { 'swift::proxy::account_quotas': }
-  class { 'swift::proxy::container_quotas': }
-  class { 'swift::proxy::bulk': }
+  #class { 'swift::proxy::account_quotas': }
+  #class { 'swift::proxy::container_quotas': }
+  #class { 'swift::proxy::bulk': }
   class { 'swift::proxy::staticweb': }
   class { 'swift::proxy::ceilometer': }
   class { 'swift::proxy::keystone':
