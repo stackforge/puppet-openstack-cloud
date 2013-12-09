@@ -170,12 +170,12 @@ basedir  = /usr
   }
 
   file{'/etc/xinetd.d/mysqlchk':
-    content => template('mysqlchk'),
+    content => template('tools/mysqlchk'),
     mode    => '0755',
     notify  => Service['xinetd'],
   }
   file{'/usr/bin/clustercheck':
-    content => template('clustercheck'),
+    content => template('tools/clustercheck'),
     mode    => '0755',
   }
 
