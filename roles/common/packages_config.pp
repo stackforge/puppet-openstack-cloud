@@ -117,15 +117,15 @@ class os_packages_config {
             key         => '5D964F0B',
           }
 
-          # Specific to eNovance (SSH keys, etc)
-          apt::source {'enovance':
-            location    => 'http://***REMOVED***@repo.enovance.com/apt/',
-            release     => 'squeeze',
-            repos       => 'main contrib non-free',
-            key         => '3A964515',
-            key_source  => 'http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg',
-            include_src => true,
-          }
+          # # Specific to eNovance (SSH keys, etc)
+          # apt::source {'enovance':
+          #   location    => 'http://***REMOVED***@repo.enovance.com/apt/',
+          #   release     => 'squeeze',
+          #   repos       => 'main contrib non-free',
+          #   key         => '3A964515',
+          #   key_source  => 'http://***REMOVED***@repo.enovance.com/apt/key/enovance.gpg',
+          #   include_src => true,
+          # }
         }
         default: {
           fail("Operating system (${::operatingsystem}) not supported yet" )
