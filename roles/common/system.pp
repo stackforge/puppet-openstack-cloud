@@ -55,7 +55,7 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # NTP
   class { 'ntp':
-    ntpservers => [ '0.fr.pool.ntp.org', '0.us.pool.ntp.org' ],
+    servers => [ '0.fr.pool.ntp.org', '0.us.pool.ntp.org' ],
   }
 
 # SSH Keys
