@@ -23,36 +23,38 @@
 # Class:: os_image_controller
 #
 
-class os_image_controller {
-  $encoded_glance_user = uriescape($os_params::glance_db_user)
-  $encoded_glance_password = uriescape($os_params::glance_db_password)
+class os_image_controller(
+  $glance_db_user              = $os_params::glance_db_user,
+  $glance_db_password          = $os_params::glance_db_password,
+  $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
+  $ks_keystone_glance_password = $os_params::ks_glance_password,
+  $rabbit_password             = $os_params::rabbit_password,
+  $rabbit_host                 = $os_params::rabbit_password[0]
+) {
+  $encoded_glance_user     = uriescape($glance_db_user)
+  $encoded_glance_password = uriescape($glance_db_password)
 
   class { ['glance::api', 'glance::registry']:
     sql_connection            => "mysql://${encoded_glance_user}:${encoded_glance_password}@${os_params::glance_db_host}/glance",
     verbose                   => false,
     debug                     => false,
-    auth_host                 => $os_params::ks_keystone_internal_host,
-    keystone_password         => $os_params::ks_glance_password,
+    auth_host                 => $ks_keystone_internal_host,
+    keystone_password         => $ks_glance_password,
     keystone_tenant           => 'services',
     keystone_user             => 'glance',
-  }
-
-  glance_api_config{
-    'DEFAULT/syslog_log_facility':               value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':                        value => 'yes';
-    'DEFAULT/idle_timeout':                      value => '60';
-  }
-
-  glance_registry_config{
-    'DEFAULT/syslog_log_facility':               value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':                        value => 'yes';
-    'DEFAULT/idle_timeout':                      value => '60';
+    log_facility              => 'LOG_LOCAL0',
+    use_syslog                => true
   }
 
   class { 'glance::notify::rabbitmq':
-    rabbit_password => $os_params::rabbit_password,
+    rabbit_password => $rabbit_password,
     rabbit_userid   => 'glance',
-    rabbit_host     => $os_params::rabbit_hosts[0],
+    rabbit_host     => $rabbit_host,
   }
 
-} # Class:: os_role_glance
+  class { 'glance::backend::swift':
+    swift_store_user         => 'services:glance',
+    swift_store_key          => $ks_keystone_glance_password,
+    swift_store_auth_address => $ks_keystone_internal_host_
+
+}
