@@ -52,7 +52,7 @@ class os_swift_storage (
   Swift::Storage::Server {
     #devices                => $devices,
     storage_local_net_ip => $local_ip,
-    workers                => inline_template('<%= processorcount.to_i / 2 %>'),
+    workers                => inline_template('<%= @processorcount.to_i / 2 %>'),
     replicator_concurrency => 2,
     updater_concurrency    => 1,
     reaper_concurrency     => 1,
@@ -72,7 +72,7 @@ class os_swift_storage (
   swift::storage::server { $container_port:
     type             => 'container',
     config_file_path => 'container-server.conf',
-    workers          => inline_template("<%= processorcount.to_i / 2 %>
+    workers          => inline_template("<%= @processorcount.to_i / 2 %>
 db_preallocation = on
 allow_versions = on
 "), # great hack :(

@@ -45,7 +45,7 @@ class os_swift_proxy(
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
-    workers            => inline_template('<%= processorcount.to_i * 2 %>
+    workers            => inline_template('<%= @processorcount.to_i * 2 %>
 cors_allow_origin = <%= scope.lookupvar("swift_cors_allow_origin") %>
 log_statsd_host = <%= scope.lookupvar("statsd_host") %>
 log_statsd_port = <%= scope.lookupvar("statsd_port") %>
