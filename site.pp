@@ -20,11 +20,7 @@
 # site.pp
 #
 
-if $::lxc_container == true {
-  import 'params-ci.pp'
-} else {
-  import 'params.pp'
-}
+import 'params.pp'
 
 # Import roles
 import 'roles/automation/*.pp'

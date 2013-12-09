@@ -22,10 +22,16 @@
 
 class os_params {
 
+  if $::lxc_container {
+    $ip_range = '192.168'
+  } else {
+    $ip_range = '10.68'
+  }
+
   # General parameters
   $compute = False
   $debug = False
-  $dns_ips = ['10.68.0.2']
+  $dns_ips = ["${ip_range}.0.2"]
   $install_packages = False
   $os_release = 'havana'
   $region = 'enovance-ci'
@@ -37,14 +43,13 @@ class os_params {
   # ToDo(EmilienM): Disable root user in all nodes and use sudo
   $root_password = '$1$2X/chMfy$CuJ4xPZY0WO2pRfIm5djn/'
 
-
   # OpenStack Identity
   $identity_roles_addons = ['SwiftOperator', 'ResellerAdmin']
-  $keystone_allowed_hosts = ['os-ci-test%', '10.68.0.%']
-  $keystone_db_host = '10.68.0.47'
+  $keystone_allowed_hosts = ['os-ci-test%', "${ip_range}.0.%"]
+  $keystone_db_host = "${ip_range}.0.47"
   $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
   $keystone_db_user = 'keystone'
-  $keystone_memchached = ['10.68.0.47:11211']
+  $keystone_memchached = ["${ip_range}.0.47:11211"]
   $keystone_port = '5000'
   $ks_admin_email = 'dev@enovance.com'
   $ks_admin_password = 'Xokoph5io2aenaoh0nuiquei9aineigo'
@@ -77,7 +82,7 @@ class os_params {
   $statsd_port = '4125'
   $swift_cors_allow_origin = 'http://os-ci-test3.enovance.com'
   $swift_hash_suffix = 'ni2aseiWi8ich3oo'
-  $swift_memchached = ['10.68.0.47:11211']
+  $swift_memchached = ["${ip_range}.0.47:11211"]
   $swift_port = '8080'
   $swift_rsync_max_connections = '5'
   $os_swift_zone = {
@@ -92,7 +97,7 @@ class os_params {
   $galera_master = 'os-ci-test3'
   $galera_nextserver = {
     'os-ci-test3' => '', # 10.68.0.47
-    'os-ci-test4' => '10.68.0.48',
+    'os-ci-test4' => "${ip_range}.0.48",
   }
 
   # LoadBalancer
@@ -108,7 +113,7 @@ class os_params {
 
   # RabbitMQ
   $rabbit_names = ['os-ci-test3']
-  $rabbit_hosts = ['10.68.0.47:5672']
+  $rabbit_hosts = ["${ip_range}.0.47:5672"]
   $rabbit_password = 'okaeTh3aiwiewohk'
   # Useful when we need a single Rabbit host (like Sensu needs)
   $rabbit_main_host = 'os-ci-test3'
@@ -127,7 +132,7 @@ class os_params {
   $ks_neutron_public_port = '9696'
   $ks_neutron_public_proto = 'http'
   $neutron_allowed_hosts = ['os-ci-test%', '10.60.0.%']
-  $neutron_db_host = '10.68.0.47'
+  $neutron_db_host = "${ip_range}.0.47"
   $neutron_db_password = 'JCywR7Kt52Hi2hJTtpTb6LCGfo243x'
   $neutron_db_user = 'neutron'
   $neutron_port = '9696'
@@ -136,7 +141,7 @@ class os_params {
   # Nova
   $ks_nova_password = 'WeiveKed1Ahmel7ohfieya6daiquIe'
   $nova_allowed_hosts = ['os-ci-test%', '10.60.0.%']
-  $nova_db_host = '10.68.0.47'
+  $nova_db_host = "${ip_range}.0.47"
   $nova_db_password = 'Ae3tooch8shohNai9ooqueik9gaevo'
   $nova_db_user = 'nova'
   $nova_port = '8774'
@@ -152,7 +157,7 @@ class os_params {
 
   # Glance
   $glance_allowed_hosts = ['os-ci-test%', '10.60.0.%']
-  $glance_db_host = '10.68.0.47'
+  $glance_db_host = "${ip_range}.0.47"
   $glance_db_password = 'uYgNjBzjMjv2fD0yD3LqiQQPKEKuXA'
   $glance_db_user = 'glance'
   $glance_port = '9292'
@@ -168,7 +173,7 @@ class os_params {
   $ks_glance_password = 'WUBDUbox7gDz3GP6EAYWGos9VBPh82'
 
   # Ceilometer
-  $ceilometer_database_connection = 'mongodb://10.68.0.47/ceilometer'
+  $ceilometer_database_connection = "mongodb://${ip_range}.0.47/ceilometer"
   $ceilometer_secret = 'S45ILumu44rxn5u7spnbJws9XiWomc'
   $ks_ceilometer_admin_host = 'os-ci-test3.enovance.com'
   $ks_ceilometer_admin_port = '8776'
@@ -183,7 +188,7 @@ class os_params {
 
   # Cinder
   $cinder_allowed_hosts = ['os-ci-test%', '10.60.0.%']
-  $cinder_db_host = '10.68.0.47'
+  $cinder_db_host = "${ip_range}.0.47"
   $cinder_db_password = 'BwgPjjqdbxiKvKm5JMaVrCaT8ePBwP'
   $cinder_db_user = 'cinder'
   $cinder_rbd_pool = 'cinder_volumes'
@@ -202,7 +207,7 @@ class os_params {
   $ks_cinder_public_proto = 'http'
 
   # Heat
-  $heat_db_host = '10.68.0.47'
+  $heat_db_host = "${ip_range}.0.47"
   $heat_db_password = 'rooghah0phe1tieDeixoodo0quil8iox'
   $heat_db_user = 'heat'
   $ks_heat_admin_host = 'os-ci-test3.enovance.com'
