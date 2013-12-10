@@ -20,12 +20,10 @@
 
 class os_network_l3(
   $external_int = $os_params::external_int,
-  $verbose      = $os_params::verbose,
   $debug        = $os_params::debug,
 ) {
 
   class { 'neutron::agents::l3':
-    verbose                      => $verbose,
     debug                        => $debug,
     handle_internal_only_routers => false,
   } ->
