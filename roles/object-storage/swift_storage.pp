@@ -25,7 +25,7 @@ define set_io_scheduler(){
   exec{"/bin/echo deadline > /sys/block/${name}/queue/scheduler":
     onlyif => [
       "/usr/bin/test '-e /sys/block/${name}/queue/scheduler'",
-      "/bin/grep -v '\[deadline\]' /sys/block/${name}/queue/scheduler"
+      "/bin/grep -v -F '[deadline]' /sys/block/${name}/queue/scheduler"
     ],
   }
 }
