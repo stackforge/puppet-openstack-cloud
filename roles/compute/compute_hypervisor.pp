@@ -97,4 +97,6 @@ Host *
     proxy_host                 => $os_params::ks_nova_public_host,
   }
 
+  class { 'nova::compute::neutron': }
+
 }
