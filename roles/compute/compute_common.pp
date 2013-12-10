@@ -46,7 +46,6 @@ class os_compute_common(
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,
     glance_api_servers  => "http://${ks_glance_internal_host}:${glance_port}",
-    syslog_log_facility => 'LOG_LOCAL0',
     verbose             => $os_params::verbose,
     debug               => $os_params::debug
   }
