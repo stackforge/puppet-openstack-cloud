@@ -56,5 +56,5 @@ class os_image_controller(
     swift_store_user         => 'services:glance',
     swift_store_key          => $ks_keystone_glance_password,
     swift_store_auth_address => $ks_keystone_internal_host_
-
+  }
 }
