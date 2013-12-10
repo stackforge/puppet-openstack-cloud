@@ -19,12 +19,10 @@
 #
 
 class os_network_dhcp(
-  $verbose = $os_params::verbose,
   $debug   = $os_params::debug
 ) {
 
   class { 'neutron::agents::dhcp':
-    verbose => $verbose,
     debug   => $debug
   }
 
