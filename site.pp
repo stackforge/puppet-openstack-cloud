@@ -108,7 +108,7 @@ node 'os-ci-test8.enovance.com' inherits common {
     class {'os_network_common': }
     class {'os_network_dhcp': }
     class {'os_network_metadata': }
-    class {'os_network_lb': }
+    class {'os_network_lbaas': }
     class {'os_network_l3': }
     class {'os_network_vpn':}
 
