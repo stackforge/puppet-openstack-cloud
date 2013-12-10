@@ -71,7 +71,8 @@ Host *
   class { 'nova::compute':
     enabled         => true,
     vnc_enabled     => false,
-    virtio_nic      => true,
+    # Bug #1259545 currently WIP
+    virtio_nic      => false,
     neutron_enabled => true
   }
 
