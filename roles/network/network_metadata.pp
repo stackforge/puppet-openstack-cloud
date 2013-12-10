@@ -19,7 +19,6 @@
 #
 
 class os_network_metadata(
-  $verbose                              = $os_params::verbose,
   $debug                                = $os_params::debug,
   $ks_neutron_password                  = $os_params::ks_neutron_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
