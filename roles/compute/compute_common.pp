@@ -23,6 +23,8 @@
 
 class os_compute_common(
   $nova_db_host            = $os_params::nova_db_host,
+  $nova_db_user            = $os_params::nova_db_user,
+  $nova_db_password        = $os_params::nova_db_password,
   $rabbit_hosts            = $os_params::rabbit_hosts,
   $rabbit_password         = $os_params::rabbit_password,
   $ks_glance_internal_host = $os_params::ks_glance_internal_host,
@@ -37,8 +39,8 @@ class os_compute_common(
     }
   }
 
-  $encoded_user = uriescape($os_params::nova_db_user)
-  $encoded_password = uriescape($os_params::nova_db_password)
+  $encoded_user     = uriescape($nova_db_user)
+  $encoded_password = uriescape($nova_db_password)
 
   class { 'nova':
     database_connection => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
@@ -46,8 +48,8 @@ class os_compute_common(
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,
     glance_api_servers  => "http://${ks_glance_internal_host}:${glance_port}",
-    verbose             => $os_params::verbose,
-    debug               => $os_params::debug
+    verbose             => $verbose,
+    debug               => $debug
   }
 
   nova_config {

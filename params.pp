@@ -86,8 +86,8 @@ class os_params {
   $swift_port = '8080'
   $swift_rsync_max_connections = '5'
   $os_swift_zone = {
-    'os-ci-test8' => 1,
-    'os-ci-test9' => 2,
+    'os-ci-test8'  => 1,
+    'os-ci-test9'  => 2,
     'os-ci-test12' => 3,
   }
 

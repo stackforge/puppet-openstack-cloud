@@ -38,7 +38,7 @@ class os_orchestration_controller(
   $debug                      = $os_params::debug,
 ) {
 
-  $encoded_user = uriescape($heat_db_user)
+  $encoded_user     = uriescape($heat_db_user)
   $encoded_password = uriescape($heat_db_password)
 
   class { 'heat':
