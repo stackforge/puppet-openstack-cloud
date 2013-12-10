@@ -282,7 +282,7 @@ innodb_log_files_in_group       = 2
     command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile* ; /etc/init.d/mysql start || { true ; sleep 60 ; }"',
     require     => [
       File['/root/.my.cnf'],
-      Service['mysql'],
+      Service['mysqld'],
     ],
     refreshonly => true,
   }
