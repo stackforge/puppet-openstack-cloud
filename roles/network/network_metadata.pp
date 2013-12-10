@@ -31,7 +31,6 @@ class os_network_metadata(
 
   class { 'neutron::agents::metadata':
     shared_secret => $neutron_metadata_proxy_shared_secret,
-    verbose       => $verbose,
     debug         => $debug,
     metadata_ip   => $ks_nova_internal_host,
     auth_url      => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
