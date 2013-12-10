@@ -51,7 +51,7 @@ node common {
 }
 
 
-# Puppet Master node
+# Puppet Master node
 node 'os-ci-test4.enovance.com' inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
@@ -59,7 +59,7 @@ node 'os-ci-test4.enovance.com' inherits common{
 
 }
 
-# Controller node
+# Controller node
 node 'os-ci-test13.enovance.com' inherits common {
 
 ## Databases:
