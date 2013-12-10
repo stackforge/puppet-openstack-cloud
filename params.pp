@@ -153,6 +153,7 @@ class os_params {
   $ks_nova_public_host = 'os-ci-test3.enovance.com'
   $ks_nova_public_port = '8774'
   $ks_nova_public_proto = 'http'
+  $neutron_metadata_proxy_shared_secret = 'k9i0t428P1AMxQ5X6a841psMJ'
 
   # Glance
   $glance_allowed_hosts = ['os-ci-test%', '10.60.0.%']

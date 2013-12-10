@@ -19,7 +19,9 @@
 #
 
 class os_compute_controller(
-  $local_ip = $ipaddress_eth1,
+  $ks_keystone_internal_host            = $os_params::ks_keystone_internal_host,
+  $ks_nova_password                     = $os_params::ks_nova_password,
+  $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
 ){
 
   class { [
@@ -27,31 +29,16 @@ class os_compute_controller(
     'nova::cert',
     'nova::consoleauth',
     'nova::conductor',
+    'nova::spicehtml5proxy',
   ]:
     enabled => true,
   }
 
-  class spicehtml5proxy(
-    $enabled        = true,
-    $host           = '0.0.0.0',
-    $port           = '6082',
-  ) {
-    nova_config {
-      'DEFAULT/spicehtml5proxy_host': value => $host;
-      'DEFAULT/spicehtml5proxy_port': value => $port;
-    }
-    nova::generic_service { 'spicehtml5proxy':
-      enabled        => $true,
-      package_name   => 'nova-consoleproxy',
-      service_name   => 'nova-spicehtml5proxy',
-    }
-  }
-
   class { 'nova::api':
     enabled                              => true,
-    auth_host                            => $os_params::ks_keystone_internal_host,
-    admin_password                       => $os_params::ks_nova_password,
-    quantum_metadata_proxy_shared_secret => $os_params::quantum_metadata_proxy_shared_secret,
+    auth_host                            => $ks_keystone_internal_host,
+    admin_password                       => $ks_nova_password,
+    neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
   }
 
 }
