@@ -22,8 +22,6 @@ class os_network_vpn(
   $debug                 = $os_params::debug
 ) {
 
-  class { 'neutron::agents::vpnaas':
-    debug   => $debug,
-  }
+  class { 'neutron::agents::vpnaas': }
 
 }
