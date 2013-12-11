@@ -118,7 +118,7 @@ class os_identity_controller (
     internal_port    => $ks_keystone_internal_port,
     public_address   => $ks_keystone_public_host,
     public_port      => $ks_keystone_public_port,
-    public_protocol  => $ks_keystone_public_proto
+    public_protocol  => $ks_keystone_public_proto,
     region           => $region,
   }
 
