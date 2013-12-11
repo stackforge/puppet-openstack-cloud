@@ -63,4 +63,12 @@ class os_orchestration_controller(
     heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"
   }
 
+  @@haproxy::balancermember{"${fqdn}-heat_api":
+    listening_service => "heat_api_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => $ks_keystone_internal_port,
+    options           => "check inter 2000 rise 2 fall 5"
+  }
+
 }

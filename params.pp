@@ -154,8 +154,11 @@ class os_params {
   $ks_nova_internal_proto = 'http'
   $ks_nova_public_host = 'os-ci-test3.enovance.com'
   $ks_nova_public_port = '8774'
+  $ks_ec2_public_port = '8773'
+  $ks_metadata_public_port = '8775'
   $ks_nova_public_proto = 'http'
   $neutron_metadata_proxy_shared_secret = 'k9i0t428P1AMxQ5X6a841psMJ'
+  $spice_port = '6082'
 
   # Glance
   $glance_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
@@ -178,14 +181,14 @@ class os_params {
   $ceilometer_database_connection = "mongodb://${ip_range}.47/ceilometer"
   $ceilometer_secret = 'S45ILumu44rxn5u7spnbJws9XiWomc'
   $ks_ceilometer_admin_host = 'os-ci-test3.enovance.com'
-  $ks_ceilometer_admin_port = '8776'
+  $ks_ceilometer_admin_port = '8777'
   $ks_ceilometer_admin_proto = 'http'
   $ks_ceilometer_internal_host = 'os-ci-test3.enovance.com'
-  $ks_ceilometer_internal_port = '8776'
+  $ks_ceilometer_internal_port = '8777'
   $ks_ceilometer_internal_proto = 'http'
   $ks_ceilometer_password = 'eafhafbheafaefaejiiutiu7374aesf3aiNu'
   $ks_ceilometer_public_host = 'os-ci-test3.enovance.com'
-  $ks_ceilometer_public_port = '8776'
+  $ks_ceilometer_public_port = '8777'
   $ks_ceilometer_public_proto = 'http'
 
   # Cinder

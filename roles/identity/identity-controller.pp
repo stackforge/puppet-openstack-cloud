@@ -197,6 +197,22 @@ class os_identity_controller (
     public_protocol  => $ks_heat_public_proto,
   }
 
+  @@haproxy::balancermember{"${fqdn}-keystone_api":
+    listening_service => "keystone_api_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => $ks_keystone_internal_port,
+    options           => "check inter 2000 rise 2 fall 5"
+  }
+
+  @@haproxy::balancermember{"${fqdn}-keystone_api_admin":
+    listening_service => "keystone_api_admin_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => ks_keystone_admin_port,
+    options           => "check inter 2000 rise 2 fall 5"
+  }
+
 # Todo(EmilienM): check if we still actually need this workaround. If not, we have to delete this section:
 #
 # Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
