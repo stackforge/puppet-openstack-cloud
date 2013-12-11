@@ -85,7 +85,7 @@ class os_identity_controller (
     enabled          => false,
     admin_token      => $ks_admin_token,
     compute_port     => '8774',
-    debug            => $debug
+    debug            => $debug,
     idle_timeout     => 60,
     log_facility     => 'LOG_LOCAL0',
     memcache_servers => $keystone_memcached,
