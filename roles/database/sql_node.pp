@@ -163,7 +163,7 @@ basedir  = /usr
     mode    => '0600',
   }
 
-  class { 'monitor::mysql::cluster': }
+  class { 'monitor::galera::httpsrv': }
 
   @@haproxy::balancermember{$::fqdn:
     listening_service => 'galera_cluster',
