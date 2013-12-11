@@ -107,6 +107,7 @@ class os_params {
 
   # Horizon
   $horizon_port = '80'
+  $secret_key   = 'fcDLLrpFMMxn1iBK8WiiqrY9yeGDvA'
 
   # MongoDB
   $mongodb_location = ''
