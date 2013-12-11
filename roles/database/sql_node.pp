@@ -163,21 +163,7 @@ basedir  = /usr
     mode    => '0600',
   }
 
-  exec{'add-mysqlchk-in-etc-services':
-    command => '/bin/echo mysqlchk 9200/tcp >> /etc/services',
-    unless  => '/bin/grep -qFx "mysqlchk 9200/tcp" /etc/services',
-    notify  => Service['xinetd'],
-  }
-
-  file{'/etc/xinetd.d/mysqlchk':
-    content => template('tools/mysqlchk'),
-    mode    => '0755',
-    notify  => Service['xinetd'],
-  }
-  file{'/usr/bin/clustercheck':
-    content => template('tools/clustercheck'),
-    mode    => '0755',
-  }
+  class { 'monitor::mysql::cluster': }
 
   @@haproxy::balancermember{$::fqdn:
     listening_service => 'galera_cluster',
