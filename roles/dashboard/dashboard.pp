@@ -20,6 +20,16 @@
 #
 # Horizon dashboard
 
-class os_dashboard {
+class os_dashboard(
+  $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
+  $secret_key                = $os_params::secret_key,
+
+) {
+
+  class {'horizon':
+     secret_key          => $secret_key,
+     keystone_host       => ks_keystone_internal_host,
+     can_set_mount_point => 'False',
+  }
 
 }
