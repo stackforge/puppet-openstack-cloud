@@ -137,7 +137,7 @@ class os_identity_controller (
     password         => $ks_swift_password,
     port             => $ks_swift_internal_port,
     public_address   => $ks_swift_public_host,
-    public_port      => $ks_swift_public_port
+    public_port      => $ks_swift_public_port,
     public_protocol  => $ks_swift_public_proto,
     region           => $region,
   }
