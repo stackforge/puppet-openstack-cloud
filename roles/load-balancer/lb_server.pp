@@ -199,7 +199,7 @@ monitor fail if horizon_dead
       options            => {
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
-        'option'         => ['tcpka', 'tcplog', 'httpchk'],  # httpchk mandatory expect 200 on port 9000
+        'option'         => ['tcpka', 'tcplog', 'httpchk'], # httpchk mandatory expect 200 on port 9000
         'timeout client' => '400s',
         'timeout server' => '400s',
       }
