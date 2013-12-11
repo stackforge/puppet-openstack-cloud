@@ -19,8 +19,10 @@
 # under the License.
 #
 # Volume controller
+#
 
 class os_volume_controller(
+  $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
 ) {
@@ -30,6 +32,14 @@ class os_volume_controller(
   class { 'cinder::api':
     keystone_password      => $os_params::ks_cinder_password,
     keystone_auth_host     => $os_params::ks_keystone_internal_host,
+  }
+
+  @@haproxy::balancermember{"${fqdn}-cinder_api":
+    listening_service => "cinder_api_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => $ks_cinder_internal_port,
+    options           => "check inter 2000 rise 2 fall 5"
   }
 
 }

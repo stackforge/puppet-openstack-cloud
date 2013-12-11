@@ -27,6 +27,7 @@ class os_image_controller(
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,
   $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
+  $ks_glance_internal_port     = $os_params::ks_glance_internal_port,
   $ks_keystone_glance_password = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_password[0]
@@ -57,4 +58,13 @@ class os_image_controller(
     swift_store_key          => $ks_keystone_glance_password,
     swift_store_auth_address => $ks_keystone_internal_host_
   }
+
+  @@haproxy::balancermember{"${fqdn}-glance_api":
+    listening_service => "glance_api_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => $ks_glance_internal_port,
+    options           => "check inter 2000 rise 2 fall 5"
+  }
+
 }

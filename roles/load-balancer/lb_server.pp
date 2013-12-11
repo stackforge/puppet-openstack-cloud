@@ -21,20 +21,24 @@
 #
 
 class os_lb_server(
-  $ceilometer_api            = false,
-  $cinder_api                = false,
-  $galera                    = false,
-  $glance_api                = false,
+  $ceilometer_api            = true,
+  $cinder_api                = true,
+  $glance_api                = true,
+  $neutron_api               = true,
+  $nova_api                  = true,
+  $ec2_api                   = true,
+  $metadata_api              = true,
+  $spice_api                 = true,
+  $swift_api                 = true,
+  $keystone_api_admin        = true,
+  $keystone_api              = true,
+  $horizon                   = true,
   $haproxy_auth              = $os_params::haproxy_auth,
-  $heat_api                  = false,
-  $horizon                   = false,
   $keepalived_email          = $os_params::keepalived_email,
   $keepalived_interface      = 'eth0',
-  $keepalived_ipvs = [],
+  $keepalived_ipvs           = [],
   $keepalived_localhost_ip   = $ipaddress_eth0,
   $keepalived_smtp           = $os_params::keepalived_smtp,
-  $keystone_api_admin        = false,
-  $keystone_api              = false,
   $ks_cinder_ceilometer_port = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port     = $os_params::ks_cinder_public_port,
   $ks_glance_public_port     = $os_params::ks_glance_public_port,
@@ -43,10 +47,8 @@ class os_lb_server(
   $ks_keystone_public_port   = $os_params::ks_keystone_public_port,
   $ks_neutron_public_port    = $os_params::ks_neutron_public_port,
   $ks_swift_public_port      = $os_params::ks_swift_public_port,
-  $local_ip                  = $ipaddress_eth0,
-  $neutron_api               = false,
-  $nova_api                  = false,
-  $swift_api                 = false,
+  $horizon_port              = $os_params::horizon_port,
+  $spice_port                = $os_params::spice_port,
 ){
 
   class { 'haproxy': }
@@ -54,6 +56,18 @@ class os_lb_server(
   class { 'keepalived':
     notification_email_to => $keepalived_email,
     smtp_server           => $keepalived_smtp,
+  }
+
+  keepalived::vrrp_script { 'haproxy':
+    name_is_process => true
+  }
+
+  keepalived::instance { '1':
+    interface         => $keepalived_interface,
+    virtual_ips       => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
+    state             => 'MASTER',
+    track_script      => ['haproxy'],
+    priority          => 50,
   }
 
   $monitors_data = inline_template('
@@ -80,6 +94,18 @@ monitor fail if cinder_api_dead
 <%- if @nova_api -%>
 acl nova_api_dead nbsrv(nova_api_cluster) lt 1
 monitor fail if nova_api_dead
+<%- end -%>
+<%- if @nova_ec2 -%>
+acl nova_ec2_dead nbsrv(nova_ec2_cluster) lt 1
+monitor fail if nova_ec2_dead
+<%- end -%>
+<%- if @nova_metadata -%>
+acl nova_metadata_dead nbsrv(nova_metadata_cluster) lt 1
+monitor fail if nova_metadata_dead
+<%- end -%>
+<%- if @spice -%>
+acl spice_dead nbsrv(spice_cluster) lt 1
+monitor fail if spice_dead
 <%- end -%>
 <%- if @glance_api -%>
 acl nova_api_dead nbsrv(glance_api_cluster) lt 1
@@ -126,7 +152,12 @@ monitor fail if horizon_dead
     }
   }
 
-  define os_haproxy_listen_http($ports, $httpchk = 'httpchk'){
+  define os_haproxy_listen_http( $ports ) {
+    if $name == '6082' { # spice doesn't support OPTIONS
+      $httpchk = 'httpchk GET /'
+    } else {
+      $httpchk = 'httpchk'
+    }
     haproxy::listen { $name:
       ipaddress => '0.0.0.0',
       ports     => $ports,
@@ -139,70 +170,53 @@ monitor fail if horizon_dead
     }
   }
 
-  define os_compute_haproxy_listen_http{
-    if $name == '6082' { # spice doesn't support OPTIONS
-      $httpchk = 'httpchk GET /'
-    } else {
-      $httpchk = 'httpchk'
-    }
-    os_haproxy_listen_http{"nova_api_cluster_${name}":
-      httpchk => $httpchk,
-      ports   => $name
-    }
-  }
-
-  keepalived::vrrp_script { 'haproxy':
-    name_is_process => true
-  }
-
-  keepalived::instance { '1':
-    interface         => $keepalived_interface,
-    virtual_ips       => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
-    state             => 'MASTER',
-    track_script      => ['haproxy'],
-    priority          => 50,
-  }
-
-  if $swift {
-    os_haproxy_listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
-  }
   if $keystone {
     os_haproxy_listen_http { 'keystone_api_cluster': ports => $ks_keystone_public_port }
     os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
   }
+  if $swift_api {
+    os_haproxy_listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
+  }
   if $nova_api {
-    os_nova_haproxy_listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
+    os_haproxy_listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
+  }
+  if $ec2_api {
+    os_haproxy_listen_http{ 'ec2_api_cluster': ports => $ks_ec2_public_port }
+  }
+  if $metadata_api {
+    os_haproxy_listen_http{ 'metadata_api_cluster': ports => $ks_metadata_public_port }
+  }
+  if $spice {
+    os_haproxy_listen_http{ 'spice_cluster': ports => $spice_port }
   }
   if $glance_api {
-    os_nova_haproxy_listen_http{ 'glance_api_cluster': ports => $ks_glance_public_port }
+    os_haproxy_listen_http{ 'spice_cluster': ports => $ks_glance_public_port }
   }
   if $neutron_api {
-    os_haproxy_listen_http{'neutron_api_cluster': ports => $ks_neutron_public_port }
+    os_haproxy_listen_http{ 'neutron_api_cluster': ports => $ks_neutron_public_port }
   }
   if $cinder_api {
-    os_haproxy_listen_http{'cinder_api_cluster': ports => $ks_cinder_public_port }
+    os_haproxy_listen_http{ 'cinder_api_cluster': ports => $ks_cinder_public_port }
   }
   if $ceilometer_api {
-    os_haproxy_listen_http{'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
-  }
-  if $horizon {
-    os_haproxy_listen_http{'horizon_cluster': ports => $os_params::horizon_port }
+    os_haproxy_listen_http{ 'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
   }
   if $heat_api {
-    os_haproxy_listen_http{'heat_api_cluster': ports => $ks_heat_public_port }
+    os_haproxy_listen_http{ 'heat_api_cluster': ports => $ks_heat_public_port }
+  }
+  if $horizon {
+    os_haproxy_listen_http{ 'horizon_cluster': ports => $horizon_port }
   }
 
-  if $galera {
-    haproxy::listen { 'galera_cluster':
-      ipaddress          => '0.0.0.0',
-      ports              => 3306,
-      options            => {
-        'mode'           => 'tcp',
-        'balance'        => 'roundrobin',
-        'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
-        'timeout client' => '400s',
-        'timeout server' => '400s',
-      }
+  haproxy::listen { 'galera_cluster':
+    ipaddress          => '0.0.0.0',
+    ports              => 3306,
+    options            => {
+      'mode'           => 'tcp',
+      'balance'        => 'roundrobin',
+      'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
+      'timeout client' => '400s',
+      'timeout server' => '400s',
     }
   }
 

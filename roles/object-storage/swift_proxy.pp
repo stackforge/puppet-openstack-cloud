@@ -104,4 +104,12 @@ endpoint_type=internalURL",
 
   Swift::Ringsync<<| |>> #~> Service["swift-proxy"]
 
+  @@haproxy::balancermember{"${::fqdn}-swift_api":
+      listening_service => 'swift_api_cluster',
+      server_names      => $::hostname,
+      ipaddresses       => $local_ip,
+      ports             => $ks_swift_internal_port,
+      options           => 'check inter 2000 rise 2 fall 5'
+  }
+
 }

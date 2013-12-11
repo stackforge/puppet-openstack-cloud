@@ -23,6 +23,7 @@
 class os_telemetry_server(
   $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
+  $ks_ceilometer_internal_port      = $os_params::ks_keystone_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $ceilometer_database_connection = $os_params::ceilometer_database_connection,
 ){
@@ -47,6 +48,14 @@ class os_telemetry_server(
     keystone_password => $ks_ceilometer_password,
     keystone_host     => $ks_keystone_internal_host,
     keystone_protocol => $ks_keystone_internal_proto,
+  }
+
+  @@haproxy::balancermember{"${fqdn}-ceilometer_api":
+    listening_service => "ceilometer_api_cluster",
+    server_names      => $::hostname,
+    ipaddresses       => $local_ip,
+    ports             => $ks_ceilometer_internal_port,
+    options           => "check inter 2000 rise 2 fall 5"
   }
 
 # Ceilometer Central Agent is defined in site.pp since it must be installed on only node (not able to scale-out)
