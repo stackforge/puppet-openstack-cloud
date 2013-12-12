@@ -1,10 +1,6 @@
 #
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
-# Authors: Mehdi Abaakouk <mehdi.abaakouk@enovance.com>
-#          Emilien Macchi <emilien.macchi@enovance.com>
-#          Francois Charlier <francois.charlier@enovance.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -16,6 +12,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+#
+# Identity controller
+#
 
 class os_identity_controller (
   $identity_roles_addons        = $os_params::identity_roles_addons,
