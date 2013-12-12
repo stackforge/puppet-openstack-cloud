@@ -50,9 +50,7 @@ class os_sql_node (
     $mysql_password            = $os_params::mysql_password
 ) {
 
-  if ! defined(Class['xinetd']) {
-    class{'xinetd': }
-  }
+  include 'xinetd'
 
   class { 'mysql::server':
     config_hash       => {
