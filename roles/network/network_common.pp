@@ -41,7 +41,7 @@ class os_network_common(
   }
 
   class { 'neutron::plugins::ovs':
-    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    connection      => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     tenant_network_type => 'gre',
     network_vlan_ranges => false
   }
