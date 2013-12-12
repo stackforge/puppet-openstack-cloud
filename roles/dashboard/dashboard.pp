@@ -1,11 +1,6 @@
 #
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
-# Authors: Mehdi Abaakouk <mehdi.abaakouk@enovance.com>
-#          Emilien Macchi <emilien.macchi@enovance.com>
-#          Francois Charlier <francois.charlier@enovance.com>
-#          Sebastien Badia <sebastien.badia@enovance.com>
-#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -19,6 +14,7 @@
 # under the License.
 #
 # Horizon dashboard
+#
 
 class os_dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,

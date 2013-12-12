@@ -1,8 +1,3 @@
-Run OpenStack in eNovance CI using puppet manifests.
-
+Part of eNovance Private Cloud v1.0
 
 Support: dev@enovance.com
-
-#TODO/#FIXME
-- factorize memcached
-- use puppet-horizon ?
