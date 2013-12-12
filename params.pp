@@ -105,9 +105,6 @@ class os_params {
   $horizon_port = '80'
   $secret_key   = 'fcDLLrpFMMxn1iBK8WiiqrY9yeGDvA'
 
-  # MongoDB
-  $mongodb_location = ''
-
   # RabbitMQ
   $rabbit_names = ['os-ci-test3']
   $rabbit_hosts = ["${ip_range}.47:5672"]
