@@ -41,22 +41,15 @@ class os_volume_common(
     rabbit_virtual_host => '/',
     verbose             => $verbose,
     debug               => $debug,
-  }
-
-  class { 'cinder::scheduler': }
-
-  class { 'cinder::api':
-    keystone_password      => $ks_cinder_password,
-    keystone_auth_host     => $ks_keystone_internal_host,
+    log_facility        => 'LOG_LOCAL0',
+    use_syslog          => true
   }
 
   class { 'cinder::ceilometer': }
 
-  cinder_config{
-    'DEFAULT/glance_host':          value => "${ks_glance_internal_host}:9292";
-    'DEFAULT/syslog_log_facility':  value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':           value => 'yes';
-    'DEFAULT/idle_timeout':         value => '60';
+  class { 'cinder::glance':
+    glance_api_servers     => $ks_glance_internal_host,
+    glance_request_timeout => '10'
   }
 
 }
