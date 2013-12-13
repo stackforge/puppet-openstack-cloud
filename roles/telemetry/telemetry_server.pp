@@ -46,6 +46,11 @@ class os_telemetry_server(
     keystone_protocol => $ks_keystone_internal_proto,
   }
 
+# Configure TTL for samples
+  class { 'ceilometer::expirer':
+    time_to_live => '2592000'
+  }
+
   @@haproxy::balancermember{"${fqdn}-ceilometer_api":
     listening_service => "ceilometer_api_cluster",
     server_names      => $::hostname,
