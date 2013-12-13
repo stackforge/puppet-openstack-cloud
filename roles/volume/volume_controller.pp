@@ -20,13 +20,22 @@ class os_volume_controller(
   $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
+  $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
+  $ks_swift_internal_host    = $os_params::ks_swift_internal_host
+  $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
 ) {
 
   class { 'cinder::scheduler': }
 
   class { 'cinder::api':
-    keystone_password      => $os_params::ks_cinder_password,
-    keystone_auth_host     => $os_params::ks_keystone_internal_host,
+    keystone_password      => $ks_cinder_password,
+    keystone_auth_host     => $ks_keystone_internal_host,
+  }
+
+  class { 'cinder::backup': }
+
+  class { 'cinder::backup::swift':
+    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH_'
   }
 
   @@haproxy::balancermember{"${fqdn}-cinder_api":
