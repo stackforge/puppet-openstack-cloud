@@ -13,10 +13,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Orchestration controller node
+# Orchestration common node
 #
 
-class os_orchestration_controller(
+class os_orchestration_common(
   $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
   $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
@@ -50,22 +50,6 @@ class os_orchestration_controller(
     rabbit_userid     => 'heat',
     verbose           => $verbose,
     debug             => $debug,
-  }
-
-  class { 'heat::api': }
-
-  class { 'heat::engine':
-    heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",
-    heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:8000/v1/waitcondition",
-    heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"
-  }
-
-  @@haproxy::balancermember{"${fqdn}-heat_api":
-    listening_service => "heat_api_cluster",
-    server_names      => $::hostname,
-    ipaddresses       => $local_ip,
-    ports             => $ks_keystone_internal_port,
-    options           => "check inter 2000 rise 2 fall 5"
   }
 
 }

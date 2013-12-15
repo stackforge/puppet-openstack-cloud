@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# site.pp
+# Basic Architecture
 #
 
 import 'params.pp'
@@ -33,7 +33,6 @@ import 'roles/monitoring/*.pp'
 import 'roles/network/*.pp'
 import 'roles/object-storage/*.pp'
 import 'roles/orchestration/*.pp'
-import 'roles/spof/*.pp'
 import 'roles/telemetry/*.pp'
 import 'roles/volume/*.pp'
 
@@ -49,7 +48,7 @@ node common {
 
 
 # Puppet Master node
-node 'os-ci-test4.enovance.com' inherits common{
+node '1-deployment-node' inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
 # and other stuffs are made by common class.
@@ -57,7 +56,10 @@ node 'os-ci-test4.enovance.com' inherits common{
 }
 
 # Controller node
-node 'os-ci-test13.enovance.com' inherits common {
+node '3-controller-nodes' inherits common {
+
+## SPOF services:
+    class {'spof_node':}
 
 ## Databases:
     class {'os_nosql_node':}
@@ -66,8 +68,6 @@ node 'os-ci-test13.enovance.com' inherits common {
 ## Telemetry
     class {'os_telemetry_common':}
     class {'os_telemetry_server':}
-    # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
-    class {'ceilometer::agent::central': }
 
 ## Identity
     class {'os_identity_controller':
@@ -92,19 +92,16 @@ node 'os-ci-test13.enovance.com' inherits common {
     class {'os_network_controller': }
 
 # Orchestration
-    class {'os_orchestration_controller': }
+    class {'os_orchestration_common': }
+    class {'os_orchestration_api': }
 
 }
-#
+
 # == Network nodes
-# L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
-# We need at least two nodes for DHCP High availability
-#FIXME 8 is down
-node 'os-ci-test8.enovance.com' inherits common {
+node '2-network-nodes' inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
-    class {'os_network_metadata': }
     class {'os_network_lbaas': }
     class {'os_network_l3': }
     class {'os_network_vpn':}
@@ -112,7 +109,7 @@ node 'os-ci-test8.enovance.com' inherits common {
 }
 
 # Storage nodes
-node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.enovance.com' inherits common{
+node '3-object-storage-nodes' inherits common{
 
 ## Telemetry
     class {'os_telemetry_common':}
@@ -122,13 +119,14 @@ node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.eno
         local_ip    => $ipaddress_eth0,
         swift_zone  =>  $os_params::os_swift_zone[$::hostname],
     }
+
 }
 
 # Compute nodes
-#FIXME 7 is down
-node 'os-ci-test7.enovance.com' inherits common {
+node 'compute-node' inherits common {
 
-## Compute
+  class { 'os_network_compute': }
+
   class { 'os_compute_hypervisor':
     local_ip => $ipaddress_eth0,
   }
