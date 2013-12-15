@@ -35,6 +35,7 @@ class os_params {
   $site_domain = 'enovance.com'
   $storage = True
   $verbose = False
+  $spof_nodes_are_separate = False
 
   # Root hashed password
   # ToDo(EmilienM): Disable root user in all nodes and use sudo
@@ -211,13 +212,19 @@ class os_params {
   $heat_db_user = 'heat'
   $ks_heat_admin_host = 'os-ci-test3.enovance.com'
   $ks_heat_admin_port = '8004'
+  $ks_heat_cfn_admin_port = '8000'
+  $ks_heat_cloudwatch_admin_port = '8003'
   $ks_heat_admin_proto = 'http'
   $ks_heat_internal_host = 'os-ci-test3.enovance.com'
   $ks_heat_internal_port = '8004'
+  $ks_heat_cfn_internal_port = '8000'
+  $ks_heat_cloudwatch_internal_port = '8003'
   $ks_heat_internal_proto = 'http'
   $ks_heat_password = 'EIMMvWvDPEvI08ggT2azYMhGdsNXe6'
   $ks_heat_public_host = 'os-ci-test3.enovance.com'
   $ks_heat_public_port = '8004'
+  $ks_heat_cfn_public_port = '8000'
+  $ks_heat_cloudwatch_public_port = '8003'
   $ks_heat_public_proto = 'http'
 
 }

@@ -13,10 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Network Metadata node
+# Network Metadata node (need to be run once)
+# Could be managed by spof_node manifest
 #
 
 class os_network_metadata(
+  $enabled                              = true,
   $debug                                = $os_params::debug,
   $ks_neutron_password                  = $os_params::ks_neutron_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
@@ -27,6 +29,7 @@ class os_network_metadata(
 ) {
 
   class { 'neutron::agents::metadata':
+    enabled       => $enabled,
     shared_secret => $neutron_metadata_proxy_shared_secret,
     debug         => $debug,
     metadata_ip   => $ks_nova_internal_host,

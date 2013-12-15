@@ -196,6 +196,15 @@ class os_identity_controller (
     public_protocol  => $ks_heat_public_proto,
   }
 
+  class { 'heat::keystone::auth_cfn':
+    admin_address    => $ks_heat_admin_host,
+    internal_address => $ks_heat_internal_host,
+    password         => $ks_heat_password,
+    public_address   => $ks_heat_public_host,
+    public_protocol  => $ks_heat_public_proto,
+  }
+
+
   @@haproxy::balancermember{"${fqdn}-keystone_api":
     listening_service => "keystone_api_cluster",
     server_names      => $::hostname,

@@ -17,34 +17,39 @@
 #
 
 class os_lb_server(
-  $ceilometer_api            = true,
-  $cinder_api                = true,
-  $glance_api                = true,
-  $neutron_api               = true,
-  $nova_api                  = true,
-  $ec2_api                   = true,
-  $metadata_api              = true,
-  $spice_api                 = true,
-  $swift_api                 = true,
-  $keystone_api_admin        = true,
-  $keystone_api              = true,
-  $horizon                   = true,
-  $haproxy_auth              = $os_params::haproxy_auth,
-  $keepalived_email          = $os_params::keepalived_email,
-  $keepalived_interface      = 'eth0',
-  $keepalived_ipvs           = [],
-  $keepalived_localhost_ip   = $ipaddress_eth0,
-  $keepalived_smtp           = $os_params::keepalived_smtp,
-  $ks_cinder_ceilometer_port = $os_params::ks_ceilometer_public_port,
-  $ks_cinder_public_port     = $os_params::ks_cinder_public_port,
-  $ks_glance_public_port     = $os_params::ks_glance_public_port,
-  $ks_heat_public_port       = $os_params::ks_heat_public_port,
-  $ks_keystone_admin_port    = $os_params::ks_keystone_admin_port,
-  $ks_keystone_public_port   = $os_params::ks_keystone_public_port,
-  $ks_neutron_public_port    = $os_params::ks_neutron_public_port,
-  $ks_swift_public_port      = $os_params::ks_swift_public_port,
-  $horizon_port              = $os_params::horizon_port,
-  $spice_port                = $os_params::spice_port,
+  $ceilometer_api                 = true,
+  $cinder_api                     = true,
+  $glance_api                     = true,
+  $neutron_api                    = true,
+  $heat_api                       = true,
+  $heat_cfn_api                   = true,
+  $heat_cloudwatch_api            = true,
+  $nova_api                       = true,
+  $ec2_api                        = true,
+  $metadata_api                   = true,
+  $spice_api                      = true,
+  $swift_api                      = true,
+  $keystone_api_admin             = true,
+  $keystone_api                   = true,
+  $horizon                        = true,
+  $haproxy_auth                   = $os_params::haproxy_auth,
+  $keepalived_email               = $os_params::keepalived_email,
+  $keepalived_interface           = 'eth0',
+  $keepalived_ipvs                = [],
+  $keepalived_localhost_ip        = $ipaddress_eth0,
+  $keepalived_smtp                = $os_params::keepalived_smtp,
+  $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
+  $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
+  $ks_glance_public_port          = $os_params::ks_glance_public_port,
+  $ks_heat_public_port            = $os_params::ks_heat_public_port,
+  $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
+  $ks_heat_cloudwatch_public_port = $os_params::ks_heat_cloudwatch_public_port,
+  $ks_keystone_admin_port         = $os_params::ks_keystone_admin_port,
+  $ks_keystone_public_port        = $os_params::ks_keystone_public_port,
+  $ks_neutron_public_port         = $os_params::ks_neutron_public_port,
+  $ks_swift_public_port           = $os_params::ks_swift_public_port,
+  $horizon_port                   = $os_params::horizon_port,
+  $spice_port                     = $os_params::spice_port,
 ){
 
   class { 'haproxy': }
@@ -114,6 +119,14 @@ monitor fail if ceilometer_api_dead
 <%- if @heat_api -%>
 acl heat_api_dead nbsrv(heat_api_cluster) lt 1
 monitor fail if heat_api_dead
+<%- end -%>
+<%- if @heat_cfn_api -%>
+acl heat_api_cfn_dead nbsrv(heat_api_cfn_cluster) lt 1
+monitor fail if heat_api_cfn_dead
+<%- end -%>
+<%- if @heat_cloudwatch_api -%>
+acl heat_api_cloudwatch_dead nbsrv(heat_api_cloudwatch_cluster) lt 1
+monitor fail if heat_api_cloudwatch_dead
 <%- end -%>
 <%- if @horizon -%>
 acl horizon_dead nbsrv(horizon_cluster) lt 1
@@ -199,6 +212,12 @@ monitor fail if horizon_dead
   }
   if $heat_api {
     os_haproxy_listen_http{ 'heat_api_cluster': ports => $ks_heat_public_port }
+  }
+  if $heat_cfn_api {
+    os_haproxy_listen_http{ 'heat_api_cfn_cluster': ports => $ks_heat_cfn_public_port }
+  }
+  if $heat_cloudwatch_api {
+    os_haproxy_listen_http{ 'heat_api_cloudwatch_cluster': ports => $ks_heat_cloudwatch_public_port }
   }
   if $horizon {
     os_haproxy_listen_http{ 'horizon_cluster': ports => $horizon_port }

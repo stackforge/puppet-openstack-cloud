@@ -13,13 +13,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Metering server nodes
+# Telemetry server nodes
 #
 
 class os_telemetry_server(
   $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
-  $ks_ceilometer_internal_port      = $os_params::ks_keystone_internal_port,
+  $ks_ceilometer_internal_port    = $os_params::ks_keystone_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $ceilometer_database_connection = $os_params::ceilometer_database_connection,
 ){
@@ -58,7 +58,5 @@ class os_telemetry_server(
     ports             => $ks_ceilometer_internal_port,
     options           => "check inter 2000 rise 2 fall 5"
   }
-
-# Ceilometer Central Agent is defined in site.pp since it must be installed on only node (not able to scale-out)
 
 }
