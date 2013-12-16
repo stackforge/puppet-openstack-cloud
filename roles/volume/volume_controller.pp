@@ -21,8 +21,8 @@ class os_volume_controller(
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
-  $ks_swift_internal_host    = $os_params::ks_swift_internal_host
-  $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
+  $ks_swift_internal_host    = $os_params::ks_swift_internal_host,
+  $ks_swift_internal_port    = $os_params::ks_swift_internal_port
 ) {
 
   class { 'cinder::scheduler': }
