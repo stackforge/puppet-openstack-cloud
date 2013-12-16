@@ -48,7 +48,7 @@ node common {
 }
 
 
-# Puppet Master node
+# Puppet Master node (x1)
 node 'os-ci-test4.enovance.com' inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
@@ -56,7 +56,7 @@ node 'os-ci-test4.enovance.com' inherits common{
 
 }
 
-# Controller node
+# Controller nodes (x3)
 node 'os-ci-test13.enovance.com' inherits common {
 
 ## Databases:
@@ -101,7 +101,7 @@ node 'os-ci-test13.enovance.com' inherits common {
 
 }
 #
-# == Network nodes
+# == Network nodes (x2)
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
 #FIXME 8 is down
@@ -116,7 +116,7 @@ node 'os-ci-test8.enovance.com' inherits common {
 
 }
 
-# Storage nodes
+# Storage nodes (x3)
 node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.enovance.com' inherits common{
 
 ## Telemetry
@@ -129,7 +129,7 @@ node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.eno
     }
 }
 
-# Compute nodes
+# Compute nodes (x1)
 #FIXME 7 is down
 node 'os-ci-test7.enovance.com' inherits common {
 
