@@ -17,16 +17,23 @@
 #
 
 class os_network_controller(
-  $ks_neutron_password     = os_params::ks_neutron_password,
-  $ks_keystone_admin_host  = os_params::ks_keystone_admin_host,
-  $ks_keystone_public_port = os_params::ks_keystone_public_port,
+  $neutron_db_host         = $os_params::neutron_db_host,
+  $neutron_db_user         = $os_params::neutron_db_user,
+  $neutron_db_password     = $os_params::neutron_db_password,
+  $ks_neutron_password     = $os_params::ks_neutron_password,
+  $ks_keystone_admin_host  = $os_params::ks_keystone_admin_host,
+  $ks_keystone_public_port = $os_params::ks_keystone_public_port,
   $local_ip                = $ipaddress_eth0,
 ) {
+
+  $encoded_user = uriescape($neutron_db_user)
+  $encoded_password = uriescape($neutron_db_password)
 
   class { 'neutron::server':
     auth_password => $os_params::ks_neutron_password,
     auth_host     => $os_params::ks_keystone_admin_host,
-    auth_port     => $os_params::ks_keystone_public_port
+    auth_port     => $os_params::ks_keystone_public_port,
+    connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":
