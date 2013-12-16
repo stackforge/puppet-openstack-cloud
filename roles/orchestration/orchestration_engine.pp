@@ -18,14 +18,14 @@
 #
 
 class os_orchestration_engine(
-  $enable                     = true,
+  $enabled                    = true,
   $ks_heat_public_host        = $os_params::ks_heat_public_host,
   $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
   $ks_heat_password           = $os_params::ks_heat_password,
 ) {
 
   class { 'heat::engine':
-    enabled                       => $enable,
+    enabled                       => $enabled,
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",
     heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:8000/v1/waitcondition",
     heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"
