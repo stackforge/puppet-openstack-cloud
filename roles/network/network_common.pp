@@ -44,16 +44,15 @@ class os_network_common(
   # While https://review.openstack.org/#/c/55578 got merged:
   class { 'neutron::plugins::ovs':
     sql_connection        => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    tenant_network_type   => 'vxlan',
+    tenant_network_type   => 'gre',
     network_vlan_ranges   => false
   }
 
   class { 'neutron::plugins::ml2':
-    type_drivers          => ['vxlan'],
-    tenant_network_types  => ['vxlan'],
-    vxlan_group           => '239.1.1.1',
+    type_drivers          => ['gre'],
+    tenant_network_types  => ['gre'],
     mechanism_drivers     => ['openvswitch'],
-    vni_ranges            => ['0:10000000']
+    $tunnel_id_ranges     => ['1:10000'],
   }
 
   class { 'neutron::agents::ovs':
