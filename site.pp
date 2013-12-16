@@ -49,7 +49,7 @@ node common {
 
 
 # Puppet Master node (x1)
-node 'os-ci-test4.enovance.com' inherits common{
+node 'os-ci-test4' inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
 # and other stuffs are made by common class.
@@ -57,7 +57,7 @@ node 'os-ci-test4.enovance.com' inherits common{
 }
 
 # Controller nodes (x3)
-node 'os-ci-test13.enovance.com' inherits common {
+node 'os-ci-test13' inherits common {
 
 ## Databases:
     class {'os_nosql_node':}
@@ -105,7 +105,7 @@ node 'os-ci-test13.enovance.com' inherits common {
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
 #FIXME 8 is down
-node 'os-ci-test8.enovance.com' inherits common {
+node 'os-ci-test8' inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
@@ -117,7 +117,7 @@ node 'os-ci-test8.enovance.com' inherits common {
 }
 
 # Storage nodes (x3)
-node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.enovance.com' inherits common{
+node 'os-ci-test10', 'os-ci-test11', 'os-ci-test12' inherits common{
 
 ## Telemetry
     class {'os_telemetry_common':}
@@ -131,7 +131,7 @@ node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.eno
 
 # Compute nodes (x1)
 #FIXME 7 is down
-node 'os-ci-test7.enovance.com' inherits common {
+node 'os-ci-test7' inherits common {
 
 ## Networking
   class { 'os_network_common': }
