@@ -23,7 +23,8 @@ class os_image_controller(
   $ks_glance_internal_port     = $os_params::ks_glance_internal_port,
   $ks_keystone_glance_password = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
-  $rabbit_host                 = $os_params::rabbit_password[0]
+  $rabbit_host                 = $os_params::rabbit_password[0],
+  $local_ip                    = $ipaddress_eth0,
 ) {
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)
@@ -33,7 +34,7 @@ class os_image_controller(
     verbose                   => false,
     debug                     => false,
     auth_host                 => $ks_keystone_internal_host,
-    keystone_password         => $ks_glance_password,
+    keystone_password         => $ks_keystone_glance_password,
     keystone_tenant           => 'services',
     keystone_user             => 'glance',
     log_facility              => 'LOG_LOCAL0',
@@ -49,15 +50,15 @@ class os_image_controller(
   class { 'glance::backend::swift':
     swift_store_user         => 'services:glance',
     swift_store_key          => $ks_keystone_glance_password,
-    swift_store_auth_address => $ks_keystone_internal_host_
+    swift_store_auth_address => $ks_keystone_internal_host,
   }
 
-  @@haproxy::balancermember{"${fqdn}-glance_api":
-    listening_service => "glance_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-glance_api":
+    listening_service => 'glance_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_glance_internal_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
