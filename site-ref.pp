@@ -125,6 +125,7 @@ node '3-object-storage-nodes' inherits common{
 # Compute nodes
 node 'compute-node' inherits common {
 
+  class { 'os_network_common': }
   class { 'os_network_compute': }
 
   class { 'os_compute_hypervisor':
