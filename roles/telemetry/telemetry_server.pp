@@ -22,6 +22,7 @@ class os_telemetry_server(
   $ks_ceilometer_internal_port    = $os_params::ks_keystone_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $ceilometer_database_connection = $os_params::ceilometer_database_connection,
+  $local_ip                       = $ipaddress_eth0,
 ){
 
 # Install MongoDB database
@@ -55,14 +56,15 @@ class os_telemetry_server(
     minute       => '0',
     hour         => '0',
   }
+  #FIXME $RANDOM ?
   Cron <| title == 'ceilometer-expirer' |> { command => "sleep $(($RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
 
-  @@haproxy::balancermember{"${fqdn}-ceilometer_api":
-    listening_service => "ceilometer_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-ceilometer_api":
+    listening_service => 'ceilometer_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_ceilometer_internal_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
