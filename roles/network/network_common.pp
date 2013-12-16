@@ -17,18 +17,12 @@
 #
 
 class os_network_common(
-  $neutron_db_host     = $os_params::neutron_db_host,
-  $neutron_db_user     = $os_params::neutron_db_user,
-  $neutron_db_password = $os_params::neutron_db_password,
   $verbose             = $os_params::verbose,
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,
   $rabbit_password     = $os_params::rabbit_password,
   $local_ip            = $os_params::tunnel_int
 ) {
-
-  $encoded_user = uriescape($neutron_db_user)
-  $encoded_password = uriescape($neutron_db_password)
 
   class { 'neutron':
     allow_overlapping_ips   => true,
@@ -38,12 +32,10 @@ class os_network_common(
     rabbit_hosts            => $rabbit_hosts,
     rabbit_password         => $rabbit_password,
     rabbit_virtual_host     => '/',
-    dhcp_agents_per_network => 2
+    dhcp_agents_per_network => '2',
   }
 
-  # While https://review.openstack.org/#/c/55578 got merged:
   class { 'neutron::plugins::ovs':
-    sql_connection        => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     tenant_network_type   => 'gre',
     network_vlan_ranges   => false
   }
