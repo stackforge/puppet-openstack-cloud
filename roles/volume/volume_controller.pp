@@ -35,7 +35,7 @@ class os_volume_controller(
   class { 'cinder::backup': }
 
   class { 'cinder::backup::swift':
-    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH_'
+    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH_"
   }
 
   @@haproxy::balancermember{"${fqdn}-cinder_api":
