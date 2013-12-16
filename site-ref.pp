@@ -33,6 +33,7 @@ import 'roles/monitoring/*.pp'
 import 'roles/network/*.pp'
 import 'roles/object-storage/*.pp'
 import 'roles/orchestration/*.pp'
+import 'roles/spof/*.pp'
 import 'roles/telemetry/*.pp'
 import 'roles/volume/*.pp'
 
