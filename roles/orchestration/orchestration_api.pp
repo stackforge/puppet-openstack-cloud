@@ -25,9 +25,9 @@ class os_orchestration_api(
 
   class { 'heat::api': }
 
-  class { 'heat::api-cfn': }
+  class { 'heat::api_cfn': }
 
-  class { 'heat::api-cloudwatch': }
+  class { 'heat::api_cloudwatch': }
 
   @@haproxy::balancermember{"${::fqdn}-heat_api":
     listening_service => 'heat_api_cluster',
