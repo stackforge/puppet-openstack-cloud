@@ -20,6 +20,7 @@ class os_orchestration_api(
   $ks_heat_public_port             = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port         = $os_params::ks_heat_cfn_public_port,
   $ks_heat_cloudwatch_public_port  = $os_params::ks_heat_cloudwatch_public_port,
+  $local_ip                        = $ipaddress_eth0,
 ) {
 
   class { 'heat::api': }
@@ -28,28 +29,28 @@ class os_orchestration_api(
 
   class { 'heat::api-cloudwatch': }
 
-  @@haproxy::balancermember{"${fqdn}-heat_api":
-    listening_service => "heat_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-heat_api":
+    listening_service => 'heat_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_heat_public_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
-  @@haproxy::balancermember{"${fqdn}-heat_cfn_api":
-    listening_service => "heat_cfn_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-heat_cfn_api":
+    listening_service => 'heat_cfn_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
-    ports             => $ks_heat__cfn_public_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    ports             => $ks_heat_cfn_public_port,
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
-  @@haproxy::balancermember{"${fqdn}-heat_cloudwatch_api":
-    listening_service => "heat_cloudwatch_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-heat_cloudwatch_api":
+    listening_service => 'heat_cloudwatch_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_heat_cloudwatch_public_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
