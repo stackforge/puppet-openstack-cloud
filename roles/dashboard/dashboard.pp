@@ -21,6 +21,7 @@ class os_dashboard(
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
   $local_ip                  = $ipaddress_eth0,
+  $listen_ssl                = false,
 ) {
 
   class {'horizon':
