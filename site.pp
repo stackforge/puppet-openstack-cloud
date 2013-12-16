@@ -63,11 +63,15 @@ node 'os-ci-test13.enovance.com' inherits common {
     class {'os_nosql_node':}
     class {'os_sql_node':}
 
+## Dashboard:
+    class {'os_dashboard':}
+
 ## Telemetry
     class {'os_telemetry_common':}
     class {'os_telemetry_server':}
-    # Enforce using Ceilometer Agent central on one node (should be fixed in Icehouse):
-    class {'ceilometer::agent::central': }
+
+## SPOF services
+    class {'os_spof_node':}
 
 ## Identity
     class {'os_identity_controller':
@@ -92,7 +96,8 @@ node 'os-ci-test13.enovance.com' inherits common {
     class {'os_network_controller': }
 
 # Orchestration
-    class {'os_orchestration_controller': }
+    class {'os_orchestration_common': }
+    class {'os_orchestration_api': }
 
 }
 #
@@ -127,6 +132,10 @@ node 'os-ci-test10.enovance.com', 'os-ci-test11.enovance.com', 'os-ci-test12.eno
 # Compute nodes
 #FIXME 7 is down
 node 'os-ci-test7.enovance.com' inherits common {
+
+## Networking
+  class { 'os_network_common': }
+  class { 'os_network_compute': }
 
 ## Compute
   class { 'os_compute_hypervisor':
