@@ -18,8 +18,15 @@
 
 class os_spof_node(
   $debug                          = $os_params::debug,
-  $spof_nodes_are_separate        = $os_params::spof_nodes_are_separate,
+  $spof_nodes_are_separated       = $os_params::spof_nodes_are_separate,
 ) {
+
+  vcsrepo { '/usr/lib/ocf/resource.d/openstack/':
+    ensure   => latest,
+    provider => git,
+    source   => 'github.com:madkiss/openstack-resource-agents.git',
+    revision => 'master',
+  }
 
   # Corosync & Pacemaker
   class { 'corosync':
@@ -42,9 +49,16 @@ class os_spof_node(
   }
 
   # Resources managed by Corosync as Active / Passive
+  vcsrepo { '/usr/lib/ocf/resource.d/openstack/':
+    ensure   => latest,
+    provider => git,
+    source   => 'github.com:madkiss/openstack-resource-agents.git',
+    revision => 'master',
+  }
+
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-    source  => '/scripts/ceilometer-agent-central_resource-agent',
+    source  => '/usr/lib/ocf/resource.d/openstack/ceilometer-agent-central',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -61,7 +75,7 @@ class os_spof_node(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
-    source  => '/scripts/neutron-metadata-agent_resource-agent',
+    source  => '/usr/lib/ocf/resource.d/openstack/neutron-metadata-agent',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -78,7 +92,7 @@ class os_spof_node(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-    source  => '/scripts/heat-engine_resource-agent',
+    source  => '/usr/lib/ocf/resource.d/openstack/heat-engine',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -95,7 +109,7 @@ class os_spof_node(
 
   # If SPOF nodes are separated from controller nodes,
   # we should import common OpenStack classes:
-  if $spof_nodes_are_separate {
+  if $spof_nodes_are_separated {
     class { 'os_network_common': }
     class { 'os_orchestration_common': }
     class { 'os_telemetry_common': }
