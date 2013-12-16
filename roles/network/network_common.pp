@@ -52,7 +52,7 @@ class os_network_common(
     type_drivers          => ['gre'],
     tenant_network_types  => ['gre'],
     mechanism_drivers     => ['openvswitch'],
-    $tunnel_id_ranges     => ['1:10000'],
+    tunnel_id_ranges      => ['1:10000'],
   }
 
   class { 'neutron::agents::ovs':
