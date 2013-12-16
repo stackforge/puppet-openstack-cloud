@@ -24,6 +24,7 @@ class os_network_common(
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,
   $rabbit_password     = $os_params::rabbit_password,
+  $local_ip            = $os_params::tunnel_int
 ) {
 
   $encoded_user = uriescape($neutron_db_user)
@@ -40,10 +41,24 @@ class os_network_common(
     dhcp_agents_per_network => 2
   }
 
+  # While https://review.openstack.org/#/c/55578 got merged:
   class { 'neutron::plugins::ovs':
     connection      => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    tenant_network_type => 'gre',
+    tenant_network_type => 'vxlan',
     network_vlan_ranges => false
+  }
+
+  class { 'neutron::plugins::ml2':
+    type_drivers          => ['vxlan'],
+    tenant_network_types  => ['vxlan'],
+    vxlan_group           => '239.1.1.1',
+    mechanism_drivers     => ['openvswitch'],
+    vni_ranges            => ['0:10000000']
+  }
+    
+  class { 'neutron::agents::ovs':
+    enable_tunneling => true,
+    local_ip         => $local_ip
   }
 
 }
