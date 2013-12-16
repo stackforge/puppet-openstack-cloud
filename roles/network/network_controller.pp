@@ -20,6 +20,7 @@ class os_network_controller(
   $ks_neutron_password     = os_params::ks_neutron_password,
   $ks_keystone_admin_host  = os_params::ks_keystone_admin_host,
   $ks_keystone_public_port = os_params::ks_keystone_public_port,
+  $local_ip                = $ipaddress_eth0,
 ) {
 
   class { 'neutron::server':
@@ -28,12 +29,12 @@ class os_network_controller(
     auth_port     => $os_params::ks_keystone_public_port
   }
 
-  @@haproxy::balancermember{"${fqdn}-neutron_api":
-    listening_service => "neutron_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-neutron_api":
+    listening_service => 'neutron_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => '9696',
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
