@@ -22,7 +22,7 @@ class os_telemetry_central_agent(
 ){
 
   class { 'ceilometer::agent::central':
-    enabled => $enabled,
+    enabled => $enable,
   }
 
 }
