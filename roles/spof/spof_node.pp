@@ -38,12 +38,12 @@ class os_spof_node(
 
   cs_property {
     'no-quorum-policy':         value => 'ignore';
-    'stonith-enabled':          value => 'false';
+    'stonith-enabled':          value => false;
     'pe-warn-series-max':       value => 1000;
     'pe-input-series-max':      value => 1000;
     'cluster-recheck-interval': value => '5min';
   }
-  
+
   corosync::service { 'pacemaker':
     version => '0',
   }
@@ -68,8 +68,15 @@ class os_spof_node(
     primitive_type  => 'ceilometer-agent-central',
     provided_by     => 'heartbeat',
     operations      => {
-      'monitor' => { interval => '10s', 'timeout' => '30s' },
-      'start'   => { interval => '0', 'timeout' => '30s', 'on-fail' => 'restart' }
+      'monitor' => {
+        interval => '10s',
+        timeout  => '30s'
+      },
+      'start'   => {
+        interval => '0',
+        timeout  => '30s',
+        on-fail  => 'restart'
+      }
     }
   }
 
@@ -85,8 +92,15 @@ class os_spof_node(
     primitive_type  => 'neutron-metadata-agent',
     provided_by     => 'heartbeat',
     operations      => {
-      'monitor' => { interval => '10s', 'timeout' => '30s' },
-      'start'   => { interval => '0', 'timeout' => '30s', 'on-fail' => 'restart' }
+      'monitor' => {
+        interval  => '10s',
+        timeout   => '30s'
+      },
+      'start'   => {
+        interval  => '0',
+        timeout   => '30s',
+        on-fail   => 'restart'
+      }
     }
   }
 
@@ -102,8 +116,15 @@ class os_spof_node(
     primitive_type  => 'heat-engine',
     provided_by     => 'heartbeat',
     operations      => {
-      'monitor' => { interval => '10s', 'timeout' => '30s' },
-      'start'   => { interval => '0', 'timeout' => '30s', 'on-fail' => 'restart' }
+      'monitor' => {
+        interval => '10s',
+        timeout  => '30s'
+      },
+      'start'   => {
+        interval => '0',
+        timeout  => '30s',
+        on-fail  => 'restart'
+      }
     }
   }
 
