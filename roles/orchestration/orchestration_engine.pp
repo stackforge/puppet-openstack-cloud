@@ -25,7 +25,7 @@ class os_orchestration_engine(
 ) {
 
   class { 'heat::engine':
-    enabled                       => $enabled,
+    enabled                       => $enable,
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",
     heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:8000/v1/waitcondition",
     heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"
