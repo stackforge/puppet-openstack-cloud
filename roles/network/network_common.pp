@@ -43,7 +43,7 @@ class os_network_common(
 
   # While https://review.openstack.org/#/c/55578 got merged:
   class { 'neutron::plugins::ovs':
-    connection            => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    sql_connection        => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     tenant_network_type   => 'vxlan',
     network_vlan_ranges   => false
   }
