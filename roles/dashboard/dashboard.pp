@@ -20,20 +20,21 @@ class os_dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
+  $local_ip                  = $ipaddress_eth0,
 ) {
 
   class {'horizon':
-     secret_key          => $secret_key,
-     keystone_host       => ks_keystone_internal_host,
-     can_set_mount_point => 'False',
+    secret_key          => $secret_key,
+    keystone_host       => $ks_keystone_internal_host,
+    can_set_mount_point => 'False',
   }
 
-  @@haproxy::balancermember{"${fqdn}-horizon":
-    listening_service => "horizon_cluster",
+  @@haproxy::balancermember{"${::fqdn}-horizon":
+    listening_service => 'horizon_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $horizon_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
