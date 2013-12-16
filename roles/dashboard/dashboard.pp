@@ -13,7 +13,33 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Horizon dashboard
+# == Class: os_dashboard
+#
+# Installs the OpenStack Dashboard (Horizon)
+#
+# === Parameters:
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal address for endpoint.
+#   Default value in params
+#
+# [*secret_key*]
+#   (optional) Secret key. This is used by Django to provide cryptographic
+#   signing, and should be set to a unique, unpredictable value.
+#   Default value in params
+#
+# [*horizon_port*]
+#   (optional) Port used to connect to OpenStack Dashboard
+#   Default value in params
+#
+# [*local_ip*]
+#   (optional) Local interface used to listen on the Horizon Dashboard
+#   Defaults to $ipaddress_eth0
+#
+# [*listen_ssl*]
+#   (optional) Enable SSL on OpenStack Dashboard vhost
+#   It requires SSL files (keys and certificates)
+#   Defaults false
 #
 
 class os_dashboard(
