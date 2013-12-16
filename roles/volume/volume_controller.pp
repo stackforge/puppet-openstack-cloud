@@ -22,7 +22,8 @@ class os_volume_controller(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
   $ks_swift_internal_host    = $os_params::ks_swift_internal_host,
-  $ks_swift_internal_port    = $os_params::ks_swift_internal_port
+  $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
+  $local_ip                  = $ipaddress_eth0,
 ) {
 
   class { 'cinder::scheduler': }
@@ -35,15 +36,15 @@ class os_volume_controller(
   class { 'cinder::backup': }
 
   class { 'cinder::backup::swift':
-    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH_"
+    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH"
   }
 
-  @@haproxy::balancermember{"${fqdn}-cinder_api":
-    listening_service => "cinder_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-cinder_api":
+    listening_service => 'cinder_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_cinder_internal_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 }
