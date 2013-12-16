@@ -21,13 +21,6 @@ class os_spof_node(
   $spof_nodes_are_separated       = $os_params::spof_nodes_are_separate,
 ) {
 
-  vcsrepo { '/usr/lib/ocf/resource.d/openstack/':
-    ensure   => latest,
-    provider => git,
-    source   => 'github.com:madkiss/openstack-resource-agents.git',
-    revision => 'master',
-  }
-
   # Corosync & Pacemaker
   class { 'corosync':
     enable_secauth    => false,
