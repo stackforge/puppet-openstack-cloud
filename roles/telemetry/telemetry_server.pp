@@ -47,9 +47,15 @@ class os_telemetry_server(
   }
 
 # Configure TTL for samples
+# Purge datas older than one month
+# Run the script once a day but with a random time to avoid
+# issues with MongoDB access
   class { 'ceilometer::expirer':
-    time_to_live => '2592000'
+    time_to_live => '2592000',
+    minute       => '0',
+    hour         => '0',
   }
+  Cron <| title == 'ceilometer-expirer' |> { command => "sleep $(($RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
 
   @@haproxy::balancermember{"${fqdn}-ceilometer_api":
     listening_service => "ceilometer_api_cluster",
