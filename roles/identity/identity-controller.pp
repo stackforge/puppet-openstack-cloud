@@ -30,7 +30,8 @@ class os_identity_controller (
   $ks_ceilometer_internal_host  = $os_params::ks_ceilometer_internal_host,
   $ks_ceilometer_password       = $os_params::ks_ceilometer_password,
   $ks_ceilometer_public_host    = $os_params::ks_ceilometer_public_host,
-  $ks_ceilometer_public_port    = $os_params::ks_ceilometer_public_host,
+  $ks_ceilometer_public_port    = $os_params::ks_ceilometer_public_port,
+  $ks_ceilometer_public_proto   = $os_params::ks_ceilometer_public_proto,
   $ks_cinder_admin_host         = $os_params::ks_cinder_admin_host,
   $ks_cinder_internal_host      = $os_params::ks_cinder_internal_host,
   $ks_cinder_password           = $os_params::ks_cinder_password,
@@ -59,7 +60,7 @@ class os_identity_controller (
   $ks_neutron_password          = $os_params::ks_neutron_password,
   $ks_neutron_public_host       = $os_params::ks_neutron_public_host,
   $ks_neutron_public_proto      = $os_params::ks_neutron_public_proto,
-  $ks_nova_admin_host          = $os_params::ks_nova_admin_host,
+  $ks_nova_admin_host           = $os_params::ks_nova_admin_host,
   $ks_nova_internal_host        = $os_params::ks_nova_internal_host,
   $ks_nova_password             = $os_params::ks_nova_password,
   $ks_nova_public_host          = $os_params::ks_nova_public_host,
@@ -71,6 +72,7 @@ class os_identity_controller (
   $ks_swift_public_host         = $os_params::ks_swift_public_host,
   $ks_swift_public_port         = $os_params::ks_swift_public_port,
   $ks_swift_public_proto        = $os_params::ks_swift_public_proto,
+  $local_ip                     = $ipaddress_eth0,
   $region                       = $os_params::region,
   $verbose                      = $os_params::verbose,
   $debug                        = $os_params::debug
@@ -89,7 +91,7 @@ class os_identity_controller (
     log_facility     => 'LOG_LOCAL0',
     memcache_servers => $keystone_memcached,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
-    token_driver     => "keystone.token.backends.memcache.Token",
+    token_driver     => 'keystone.token.backends.memcache.Token',
     token_format     => 'UUID',
     use_syslog       => true,
     verbose          => $verbose,
@@ -205,20 +207,20 @@ class os_identity_controller (
   }
 
 
-  @@haproxy::balancermember{"${fqdn}-keystone_api":
-    listening_service => "keystone_api_cluster",
+  @@haproxy::balancermember{"${::fqdn}-keystone_api":
+    listening_service => 'keystone_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
     ports             => $ks_keystone_internal_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
-  @@haproxy::balancermember{"${fqdn}-keystone_api_admin":
-    listening_service => "keystone_api_admin_cluster",
+  @@haproxy::balancermember{"${::fqdn}-keystone_api_admin":
+    listening_service => 'keystone_api_admin_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
-    ports             => ks_keystone_admin_port,
-    options           => "check inter 2000 rise 2 fall 5"
+    ports             => $ks_keystone_admin_port,
+    options           => 'check inter 2000 rise 2 fall 5'
   }
 
 # Todo(EmilienM): check if we still actually need this workaround. If not, we have to delete this section:
