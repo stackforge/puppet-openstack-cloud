@@ -18,7 +18,7 @@
 
 class os_spof_node(
   $debug                          = $os_params::debug,
-  $spof_nodes_are_separated       = $os_params::spof_nodes_are_separate,
+  $spof_nodes_are_separated       = $os_params::spof_nodes_are_separated,
 ) {
 
   # Corosync & Pacemaker
