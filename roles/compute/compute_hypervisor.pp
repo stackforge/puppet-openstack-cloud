@@ -75,7 +75,7 @@ Host *
   class { 'nova::compute::libvirt':
     libvirt_type      => $libvirt_type,
     vncserver_listen  => '0.0.0.0',
-    migration_support => false,
+    migration_support => true,
   }
 
   exec{'/etc/init.d/open-iscsi start':
