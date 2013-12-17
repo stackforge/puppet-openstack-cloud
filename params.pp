@@ -27,15 +27,15 @@ class os_params {
   }
 
   # General parameters
-  $compute                  = False
-  $debug                    = False
-  $install_packages         = False
+  $compute                  = false
+  $debug                    = false
+  $install_packages         = false
   $os_release               = 'havana'
   $region                   = 'enovance-ci'
   $site_domain              = 'enovance.com'
-  $storage                  = True
-  $verbose                  = False
-  $spof_nodes_are_separated = False
+  $storage                  = true
+  $verbose                  = false
+  $spof_nodes_are_separated = false
 
   # Root hashed password
   # ToDo(EmilienM): Disable root user in all nodes and use sudo
