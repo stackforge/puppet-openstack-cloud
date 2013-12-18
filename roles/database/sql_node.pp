@@ -156,7 +156,8 @@ basedir  = /usr
     mode    => '0600',
   }
 
-  class { 'monitor::galera::httpsrv': }
+  # Disabled because monitor depends on checkmulti which is broken
+  #  class { 'monitor::galera::httpsrv': }
 
   @@haproxy::balancermember{$::fqdn:
     listening_service => 'galera_cluster',
