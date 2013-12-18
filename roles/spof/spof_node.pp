@@ -45,7 +45,7 @@ class os_spof_node(
   vcsrepo { '/usr/lib/ocf/resource.d/openstack/':
     ensure   => latest,
     provider => git,
-    source   => 'github.com:madkiss/openstack-resource-agents.git',
+    source   => 'https://github.com/madkiss/openstack-resource-agents',
     revision => 'master',
   }
 
