@@ -23,7 +23,7 @@ class os_messaging_server(
   class { 'rabbitmq::server':
     delete_guest_user        => true,
     config_cluster           => false, # true > Broken on RHEL/CentOS
-    cluster_disk_nodes       => $rabbit_names,
+    cluster_nodes            => $rabbit_names,
     wipe_db_on_cookie_change => true,
   }
 
