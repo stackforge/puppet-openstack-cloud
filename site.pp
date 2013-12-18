@@ -57,7 +57,7 @@ node 'os-ci-test4' inherits common{
 }
 
 # Controller nodes (x3)
-node 'os-ci-test13' inherits common {
+node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11' inherits common {
 
 ## Databases:
     class {'os_nosql_node':}
@@ -104,7 +104,6 @@ node 'os-ci-test13' inherits common {
 # == Network nodes (x2)
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
-#FIXME 8 is down
 node 'os-ci-test8' inherits common {
 
     class {'os_network_common': }
@@ -117,21 +116,20 @@ node 'os-ci-test8' inherits common {
 }
 
 # Storage nodes (x3)
-node 'os-ci-test10', 'os-ci-test11', 'os-ci-test12' inherits common{
-
-## Telemetry
-    class {'os_telemetry_common':}
-
-## Object Storage
-    class { 'os_swift_storage':
-        local_ip    => $ipaddress_eth0,
-        swift_zone  =>  $os_params::os_swift_zone[$::hostname],
-    }
-}
+#node 'os-ci-test10', 'os-ci-test11', 'os-ci-test12' inherits common{
+#
+### Telemetry
+#    class {'os_telemetry_common':}
+#
+### Object Storage
+#    class { 'os_swift_storage':
+#        local_ip    => $ipaddress_eth0,
+#        swift_zone  =>  $os_params::os_swift_zone[$::hostname],
+#    }
+#}
 
 # Compute nodes (x1)
-#FIXME 7 is down
-node 'os-ci-test7' inherits common {
+node 'os-ci-test10' inherits common {
 
 ## Networking
   class { 'os_network_common': }
