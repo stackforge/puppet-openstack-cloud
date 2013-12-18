@@ -49,7 +49,7 @@ node common {
 
 
 # Puppet Master node (x1)
-node 'os-ci-test4' inherits common{
+node 'os-ci-test4', /pmaster\d+.enovance.com/ inherits common{
 
 # Everything related to puppet is bootstraped by jenkins
 # and other stuffs are made by common class.
@@ -57,7 +57,7 @@ node 'os-ci-test4' inherits common{
 }
 
 # Controller nodes (x3)
-node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11' inherits common {
+node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inherits common {
 
 ## Databases:
     class {'os_nosql_node':}
@@ -104,7 +104,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11' inherits common {
 # == Network nodes (x2)
 # L2 integration providing several services: DHCP, L3 Agent, Metadata service, LBaaS, and VPNaaS
 # We need at least two nodes for DHCP High availability
-node 'os-ci-test8' inherits common {
+node 'os-ci-test8', /net\d+.enovance.com/ inherits common {
 
     class {'os_network_common': }
     class {'os_network_dhcp': }
@@ -116,20 +116,20 @@ node 'os-ci-test8' inherits common {
 }
 
 # Storage nodes (x3)
-#node 'os-ci-test10', 'os-ci-test11', 'os-ci-test12' inherits common{
-#
-### Telemetry
-#    class {'os_telemetry_common':}
-#
-### Object Storage
-#    class { 'os_swift_storage':
-#        local_ip    => $ipaddress_eth0,
-#        swift_zone  =>  $os_params::os_swift_zone[$::hostname],
-#    }
-#}
+node /storage\d+.enocloud.com/ inherits common{
+
+## Telemetry
+    class {'os_telemetry_common':}
+
+## Object Storage
+    class { 'os_swift_storage':
+        local_ip    => $ipaddress_eth0,
+        swift_zone  =>  $os_params::os_swift_zone[$::hostname],
+    }
+}
 
 # Compute nodes (x1)
-node 'os-ci-test10' inherits common {
+node 'os-ci-test10', /compute\d+.enovance.com/ inherits common {
 
 ## Networking
   class { 'os_network_common': }
