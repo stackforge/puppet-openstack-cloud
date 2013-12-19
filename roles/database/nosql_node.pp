@@ -18,6 +18,8 @@
 
 class os_nosql_node {
 
-  class { 'mongodb': }
+  class { 'mongodb':
+    packagename => "mongodb-10gen"
+  }
 
 }
