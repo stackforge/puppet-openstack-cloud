@@ -34,6 +34,7 @@ class os_network_controller(
     auth_host     => $os_params::ks_keystone_admin_host,
     auth_port     => $os_params::ks_keystone_public_port,
     connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    api_workers   => $::processorcount
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":
