@@ -52,11 +52,99 @@ class os_sql_node (
 
   include 'xinetd'
 
+
+  if $::hostname == $galera_master {
+    $wsrep_cluster_address = "gcomm://$galera_nextserver[hostname]"
+  } else {
+    $wsrep_cluster_address = "gcomm://"
+  }
+
+
+$override_options = { 'mysqld' =>
+  ### dim : general ###
+  {
+    'max_connections'         => '1000',
+    'connect_timeout' => '5',
+    'wait_timeout' => '600',
+    'max_allowed_packet' => '64M',
+    'thread_cache_size' => '128',
+    'sort_buffer_size' => '4M',
+    'bulk_insert_buffer_size' => '16M',
+    'tmp_table_size' => '128M',
+    'max_heap_table_size' => '128M',
+    'query_cache_limit' => '1M',
+    'query_cache_size' => '16M',
+
+    ### dim : myisam ###
+    'myisam_recover' => 'BACKUP',
+    'key_buffer_size' => '16M',
+    'open-files-limit' => '65535',
+    'table_open_cache' => '500',
+    'table_definition_cache' => '500',
+    'myisam_sort_buffer_size' => '512M',
+    'concurrent_insert' => '2',
+    'read_buffer_size' => '2M',
+    'read_rnd_buffer_size' => '1M',
+
+    ### dim : log ###
+    'slow_query_log' => '1',
+    'slow_query_log_file' => '/var/log/mysql/slow.log',
+    'log_error' => '/var/log/mysql/error.log',
+    'long_query_time' => '1',
+    'log_slow_verbosity' => 'query_plan',
+
+    ### dim : innodb conf  ###
+    'innodb_buffer_pool_size' => '64M',
+    'innodb_flush_log_at_trx_commit' => '1',
+    'innodb_lock_wait_timeout' => '50',
+    'innodb_thread_concurrency' => '48',
+    'innodb_file_per_table' => '1',
+    'innodb_open_files' => '65535',
+    'innodb_io_capacity' => '1000',
+    'innodb_file_format' => 'Barracuda',
+    'innodb_file_format_max' => 'Barracuda',
+    'innodb_max_dirty_pages_pct' => '50',
+
+    # sileht: mandatory for galera
+    'binlog_format' => 'ROW',
+    'innodb_autoinc_lock_mode' => '2',
+    'innodb_locks_unsafe_for_binlog' => '1',
+    # sileht: galera stuff TODO: change login/password
+    'wsrep_provider' => '/usr/lib/galera/libgalera_smm.so',
+    'wsrep_cluster_name' => '"os_galera_cluster"',
+    'wsrep_certify_nonPK' => '1',
+    'wsrep_convert_LOCK_to_trx' => '0',
+    'wsrep_auto_increment_control' => '1',
+    'wsrep_drupal_282555_workaround' => '0',
+    'wsrep_causal_reads' => '0',
+    'wsrep_sst_method' => 'rsync',
+    'wsrep_sst_auth' => "root:$mysql_password",
+    'wsrep_cluster_address' => $wsrep_cluster_address,
+    'wsrep_node_address' => $local_ip,
+    'wsrep_node_incoming_address' => $local_ip,
+
+    # this value here are used by /usr/bin/innobackupex
+    # and wsrep_sst_xtrabackup take only one configuration file and use the last one
+    # (/etc/mysql/my.cnf is not used)
+    'datadir' => '/var/lib/mysql',
+    'tmpdir' => '/tmp',
+    'innodb_flush_method' => 'O_DIRECT',
+    'innodb_log_buffer_size' => '32M',
+    'innodb_log_file_size' => '256M',
+    'innodb_log_files_in_group' => '2',
+  }
+}
+
+
+
   class { 'mysql::server':
-    config_hash       => {
-      bind_address  => $local_ip,
+    #    config_hash       => {
+    #  bind_address  => $local_ip,
       root_password => $mysql_password,
-    },
+      #},
+    override_options  => $override_options,
+    manage_config_file=> 1,
+    package_name      => 'mariadb-server',
     service_provider  => 'debian',
     require           => Apt::Source['mariadb'],
     notify            => Service['xinetd'],
@@ -169,93 +257,6 @@ basedir  = /usr
   }
 
 
-  mysql::server::config{'basic_config':
-    notify_service => false,
-    notify         => Exec['clean-mysql-binlog'],
-    settings       => inline_template('
-[mysqld]
-### dim : general ###
-max_connections         = 1000
-connect_timeout         = 5
-wait_timeout            = 600
-max_allowed_packet      = 64M
-thread_cache_size       = 128
-sort_buffer_size        = 4M
-bulk_insert_buffer_size = 16M
-tmp_table_size          = 128M
-max_heap_table_size     = 128M
-query_cache_limit  = 1M
-query_cache_size   = 16M
-
-### dim : myisam ###
-myisam_recover          = BACKUP
-key_buffer_size         = 16M
-open-files-limit        = 65535
-table_open_cache        = 500
-table_definition_cache  = 500
-myisam_sort_buffer_size = 512M
-concurrent_insert       = 2
-read_buffer_size        = 2M
-read_rnd_buffer_size    = 1M
-
-### dim : log ###
-slow_query_log      = 1
-slow_query_log_file = /var/log/mysql/slow.log
-log_error           = /var/log/mysql/error.log
-long_query_time     = 1
-log_slow_verbosity  = query_plan
-
-### dim : innodb conf  ###
-innodb_buffer_pool_size         = 64M
-innodb_flush_log_at_trx_commit  = 1
-innodb_lock_wait_timeout        = 50
-innodb_thread_concurrency       = 48
-innodb_file_per_table           = 1
-innodb_open_files               = 65535
-innodb_io_capacity              = 1000
-innodb_file_format              = Barracuda
-innodb_file_format_max          = Barracuda
-innodb_max_dirty_pages_pct      = 50
-
-# sileht: mandatory for galera
-binlog_format=ROW
-innodb_autoinc_lock_mode=2
-innodb_locks_unsafe_for_binlog=1
-# sileht: galera stuff TODO: change login/password
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
-wsrep_cluster_name="os_galera_cluster"
-<%- if hostname != galera_master -%>
-wsrep_cluster_address="gcomm://<%= galera_nextserver[hostname] %>"
-<%- else -%>
-wsrep_cluster_address="gcomm://"
-<%- end -%>
-wsrep_sst_auth=root:<%= scope.lookupvar("$mysql_password") %>
-wsrep_certify_nonPK=1
-wsrep_convert_LOCK_to_trx=0
-wsrep_auto_increment_control=1
-wsrep_drupal_282555_workaround=0
-wsrep_causal_reads=0
-wsrep_sst_method=rsync
-wsrep_node_address="<%= local_ip %>"
-wsrep_node_incoming_address="<%= local_ip %>"
-
-# this value here are used by /usr/bin/innobackupex
-# and wsrep_sst_xtrabackup take only one configuration file and use the last one
-# (/etc/mysql/my.cnf is not used)
-datadir = /var/lib/mysql
-tmpdir = /tmp
-innodb_flush_method             = O_DIRECT
-innodb_log_buffer_size          = 32M
-innodb_log_file_size            = 256M
-innodb_log_files_in_group       = 2
-#innodb_data_file_path
-#innodb_data_home_dir
-#innodb_fast_checksum
-#innodb_log_block_size
-#innodb_log_group_home_dir
-#innodb_page_size
-'),
-  }
 
   exec{'clean-mysql-binlog':
     # first sync take a long time
