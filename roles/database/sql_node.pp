@@ -54,9 +54,9 @@ class os_sql_node (
 
 
   if $::hostname == $galera_master {
-    $wsrep_cluster_address = "gcomm://$galera_nextserver[hostname]"
+    $wsrep_cluster_address = "gcomm://${galera_nextserver[hostname]}"
   } else {
-    $wsrep_cluster_address = "gcomm://"
+    $wsrep_cluster_address = 'gcomm://'
   }
 
 
@@ -118,7 +118,7 @@ $override_options = { 'mysqld' =>
     'wsrep_drupal_282555_workaround' => '0',
     'wsrep_causal_reads' => '0',
     'wsrep_sst_method' => 'rsync',
-    'wsrep_sst_auth' => "root:$mysql_password",
+    'wsrep_sst_auth' => "root:${mysql_password}",
     'wsrep_cluster_address' => $wsrep_cluster_address,
     'wsrep_node_address' => $local_ip,
     'wsrep_node_incoming_address' => $local_ip,
@@ -140,14 +140,14 @@ $override_options = { 'mysqld' =>
   class { 'mysql::server':
     #    config_hash       => {
     #  bind_address  => $local_ip,
-      root_password => $mysql_password,
+    root_password       => $mysql_password,
       #},
-    override_options  => $override_options,
-    manage_config_file=> 1,
-    package_name      => 'mariadb-server',
-    service_provider  => 'debian',
-    require           => Apt::Source['mariadb'],
-    notify            => Service['xinetd'],
+    override_options    => $override_options,
+    manage_config_file  => 1,
+    package_name        => 'mariadb-server',
+    service_provider    => 'debian',
+    require             => Apt::Source['mariadb'],
+    notify              => Service['xinetd'],
   }
 
   if $::hostname == $galera_master {
