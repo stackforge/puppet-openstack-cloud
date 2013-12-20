@@ -40,13 +40,6 @@ class os_network_common(
     network_vlan_ranges   => false
   }
 
-  class { 'neutron::plugins::ml2':
-    type_drivers          => ['gre'],
-    tenant_network_types  => ['gre'],
-    mechanism_drivers     => ['openvswitch'],
-    tunnel_id_ranges      => ['1:10000'],
-  }
-
   class { 'neutron::agents::ovs':
     enable_tunneling => true,
     local_ip         => $local_ip
