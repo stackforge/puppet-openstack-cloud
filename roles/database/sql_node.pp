@@ -144,7 +144,7 @@ $override_options = { 'mysqld' =>
       #},
     override_options    => $override_options,
     manage_config_file  => 1,
-    package_name        => 'mariadb-server',
+    package_name        => 'mariadb-galera-server',
     service_provider    => 'debian',
     require             => Apt::Source['mariadb'],
     notify              => Service['xinetd'],
