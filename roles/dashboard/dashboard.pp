@@ -64,6 +64,10 @@ class os_dashboard(
     secret_key          => $secret_key,
     keystone_host       => $ks_keystone_internal_host,
     can_set_mount_point => 'False',
+    # fqdn can can be ambiguous since we use reverse DNS here,
+    # e.g: 127.0.0.1 instead of a public IP address.
+    # We forge $local_ip to avoid this situatioe
+    fqdn                => $local_ip
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
