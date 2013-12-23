@@ -50,6 +50,16 @@ class os_dashboard(
   $listen_ssl                = false,
 ) {
 
+
+  # Hackish: Should probably be fixed on the packaging side
+  if $::osfamily == 'Debian' {
+    file { '/var/log/horizon/horizon.log':
+       ensure => present,
+       owner  => 'www-data',
+       group  => 'root'
+    }
+  }
+
   class {'horizon':
     secret_key          => $secret_key,
     keystone_host       => $ks_keystone_internal_host,
