@@ -174,7 +174,8 @@ basedir  = /usr
 
 
   mysql::server::config{'basic_config':
-    notify_service => true,
+    notify_service => false,
+    notify         => Exec['clean-mysql-binlog'],
     settings       => inline_template('
 [mysqld]
 ### dim : general ###
@@ -228,7 +229,7 @@ innodb_locks_unsafe_for_binlog=1
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 wsrep_cluster_name="os_galera_cluster"
 <%- if hostname != galera_master -%>
-wsrep_cluster_address="gcomm://<%= galera_nextserver[hostname] %>"
+wsrep_cluster_address="gcomm://<%= @galera_nextserver[@galera_master] %>"
 <%- else -%>
 wsrep_cluster_address="gcomm://"
 <%- end -%>
@@ -239,8 +240,8 @@ wsrep_auto_increment_control=1
 wsrep_drupal_282555_workaround=0
 wsrep_causal_reads=0
 wsrep_sst_method=rsync
-wsrep_node_address="<%= local_ip %>"
-wsrep_node_incoming_address="<%= local_ip %>"
+wsrep_node_address="<%= @local_ip %>"
+wsrep_node_incoming_address="<%= @local_ip %>"
 
 # this value here are used by /usr/bin/innobackupex
 # and wsrep_sst_xtrabackup take only one configuration file and use the last one
@@ -258,6 +259,16 @@ innodb_log_files_in_group       = 2
 #innodb_log_group_home_dir
 #innodb_page_size
 '),
+  }
+
+  exec{'clean-mysql-binlog':
+    # first sync take a long time
+    command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile* ; /etc/init.d/mysql start || { true ; sleep 60 ; }"',
+    require     => [
+      File['/root/.my.cnf'],
+      Service['mysqld'],
+    ],
+    refreshonly => true,
   }
 
 }

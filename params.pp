@@ -93,7 +93,7 @@ class os_params {
   $mysql_debian_sys_maint = 'HFCeEKGG6DBQEaYUEDjGITcbzRWDmv'
   $galera_master = 'os-ci-test13'
   $galera_nextserver = {
-    'os-ci-test13' => '',
+    'os-ci-test13' => "${ip_range}.57",
     'os-ci-test12' => "${ip_range}.56",
     'os-ci-test11' => "${ip_range}.55"
   }
