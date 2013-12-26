@@ -106,7 +106,7 @@ class os_sql_node (
     }
 
     class { 'heat::db::mysql':
-      dbname        => 'neutron',
+      dbname        => 'heat',
       user          => $heat_db_user,
       password      => $heat_db_password,
       host          => $heat_db_host,
