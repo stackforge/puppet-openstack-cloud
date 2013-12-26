@@ -43,7 +43,7 @@ class os_params {
 
   # OpenStack Identity
   $identity_roles_addons = ['SwiftOperator', 'ResellerAdmin']
-  $keystone_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
+  $keystone_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $keystone_db_host = "${ip_range}.57"
   $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
   $keystone_db_user = 'keystone'
@@ -127,7 +127,7 @@ class os_params {
   $ks_neutron_public_host = 'os-ci-test3.enovance.com'
   $ks_neutron_public_port = '9696'
   $ks_neutron_public_proto = 'http'
-  $neutron_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
+  $neutron_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $neutron_db_host = "${ip_range}.57"
   $neutron_db_password = 'JCywR7Kt52Hi2hJTtpTb6LCGfo243x'
   $neutron_db_user = 'neutron'
@@ -136,7 +136,7 @@ class os_params {
 
   # Nova
   $ks_nova_password = 'WeiveKed1Ahmel7ohfieya6daiquIe'
-  $nova_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
+  $nova_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $nova_db_host = "${ip_range}.57"
   $nova_db_password = 'Ae3tooch8shohNai9ooqueik9gaevo'
   $nova_db_user = 'nova'
@@ -156,7 +156,7 @@ class os_params {
   $spice_port = '6082'
 
   # Glance
-  $glance_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
+  $glance_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $glance_db_host = "${ip_range}.57"
   $glance_db_password = 'uYgNjBzjMjv2fD0yD3LqiQQPKEKuXA'
   $glance_db_user = 'glance'
@@ -187,7 +187,7 @@ class os_params {
   $ks_ceilometer_public_proto = 'http'
 
   # Cinder
-  $cinder_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
+  $cinder_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $cinder_db_host = "${ip_range}.57"
   $cinder_db_password = 'BwgPjjqdbxiKvKm5JMaVrCaT8ePBwP'
   $cinder_db_user = 'cinder'
@@ -207,6 +207,7 @@ class os_params {
   $ks_cinder_public_proto = 'http'
 
   # Heat
+  $heat_db_allowed_hosts = ['os-ci-test%', "${ip_range}.%"]
   $heat_db_host = "${ip_range}.57"
   $heat_db_password = 'rooghah0phe1tieDeixoodo0quil8iox'
   $heat_db_user = 'heat'
