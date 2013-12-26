@@ -114,7 +114,7 @@ class os_sql_node (
     }
 
 # Monitoring DB
-    database { 'monitoring':
+    mysql_database { 'monitoring':
       ensure  => 'present',
       charset => 'utf8',
       require => File['/root/.my.cnf']
@@ -126,7 +126,7 @@ class os_sql_node (
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
-    database_grant { 'clustercheckuser@localhost/monitoring':
+    mysql_grant { 'clustercheckuser@localhost/monitoring':
       privileges => ['all']
     }
     database_user { 'debian-sys-maint@localhost':
