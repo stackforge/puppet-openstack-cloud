@@ -131,8 +131,7 @@ class os_sql_node (
     }
     database_user { 'debian-sys-maint@localhost':
       ensure        => 'present',
-      password_hash =>
-        mysql_password($mysql_debian_sys_maint),
+      password_hash => mysql_password($mysql_debian_sys_maint),
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
