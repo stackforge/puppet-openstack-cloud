@@ -114,6 +114,8 @@ class os_sql_node (
     }
 
 # Monitoring DB
+    notice('Database mapping must be updated to puppetlabs/puppetlabs-mysql >= 2.x (see: https://dev.ring.enovance.com/redmine/issues/4510)')
+
     mysql_database { 'monitoring':
       ensure  => 'present',
       charset => 'utf8',
@@ -129,14 +131,15 @@ class os_sql_node (
     database_grant { 'clustercheckuser@localhost/monitoring':
       privileges => ['all']
     }
-    database_user { 'debian-sys-maint@localhost':
-      ensure        => 'present',
-      password_hash => mysql_password($mysql_debian_sys_maint),
-      provider      => 'mysql',
-      require       => File['/root/.my.cnf']
-    }
 
     Database_user<<| |>>
+  }
+
+  database_user { 'debian-sys-maint@localhost':
+    ensure        => 'present',
+    password_hash => mysql_password($mysql_debian_sys_maint),
+    provider      => 'mysql',
+    require       => File['/root/.my.cnf']
   }
 
   # set the same debian_sys_maint password
