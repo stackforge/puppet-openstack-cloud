@@ -174,8 +174,7 @@ basedir  = /usr
 
 
   mysql::server::config{'basic_config':
-    notify_service => false,
-    notify         => Exec['clean-mysql-binlog'],
+    notify_service => true,
     settings       => inline_template('
 [mysqld]
 ### dim : general ###
@@ -259,16 +258,6 @@ innodb_log_files_in_group       = 2
 #innodb_log_group_home_dir
 #innodb_page_size
 '),
-  }
-
-  exec{'clean-mysql-binlog':
-    # first sync take a long time
-    command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile* ; /etc/init.d/mysql start || { true ; sleep 60 ; }"',
-    require     => [
-      File['/root/.my.cnf'],
-      Service['mysqld'],
-    ],
-    refreshonly => true,
   }
 
 }
