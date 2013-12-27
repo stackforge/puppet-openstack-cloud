@@ -59,6 +59,8 @@ node 'os-ci-test4', /pmaster\d+.enovance.com/ inherits common{
 # Controller nodes (x3)
 node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inherits common {
 
+# os-ci-test13 is the main mgmt
+
 ## Databases:
     class {'os_nosql_node':}
     class {'os_sql_node':}
