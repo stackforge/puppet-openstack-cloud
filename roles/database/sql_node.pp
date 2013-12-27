@@ -114,9 +114,9 @@ class os_sql_node (
     }
 
 # Monitoring DB
-    notice('Database mapping must be updated to puppetlabs/puppetlabs-mysql >= 2.x (see: https://dev.ring.enovance.com/redmine/issues/4510)')
+    warning('Database mapping must be updated to puppetlabs/puppetlabs-mysql >= 2.x (see: https://dev.ring.enovance.com/redmine/issues/4510)')
 
-    mysql_database { 'monitoring':
+    database { 'monitoring':
       ensure  => 'present',
       charset => 'utf8',
       require => File['/root/.my.cnf']
