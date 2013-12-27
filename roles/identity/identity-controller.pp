@@ -128,8 +128,10 @@ class os_identity_controller (
   include 'apache'
 
   class {'keystone::wsgi::apache':
+    servername  => $::fqdn,
     admin_port  => $ks_keystone_admin_port,
     public_port => $ks_keystone_public_port,
+    workers     => $::processorcount,
     ssl         => false,
   }
 
