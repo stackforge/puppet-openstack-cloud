@@ -83,7 +83,8 @@ class os_identity_controller (
 
 # Configure Keystone
   class { 'keystone':
-    enabled          => false,
+    #FIXME(sbadia) https://dev.ring.enovance.com/redmine/issues/4524
+    enabled          => true,
     admin_token      => $ks_admin_token,
     compute_port     => '8774',
     debug            => $debug,
@@ -127,13 +128,14 @@ class os_identity_controller (
 
   include 'apache'
 
-  class {'keystone::wsgi::apache':
-    servername  => $::fqdn,
-    admin_port  => $ks_keystone_admin_port,
-    public_port => $ks_keystone_public_port,
-    workers     => $::processorcount,
-    ssl         => false,
-  }
+  #FIXME(sbadia) https://dev.ring.enovance.com/redmine/issues/4524
+  #class {'keystone::wsgi::apache':
+  #  servername  => $::fqdn,
+  #  admin_port  => $ks_keystone_admin_port,
+  #  public_port => $ks_keystone_public_port,
+  #  workers     => $::processorcount,
+  #  ssl         => false,
+  #}
 
   class {'swift::keystone::auth':
     address          => $ks_swift_internal_host,
