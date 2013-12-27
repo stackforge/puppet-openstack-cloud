@@ -47,7 +47,7 @@ class os_params {
   $keystone_db_host = "${ip_range}.57"
   $keystone_db_password = 'H3YPSYaKbKP40DuvHHpdrhYFVpa10A'
   $keystone_db_user = 'keystone'
-  $keystone_memchached = ["${ip_range}.57:11211"]
+  $keystone_memcached = ["${ip_range}.57:11211"]
   $ks_admin_email = 'dev@enovance.com'
   $ks_admin_password = 'Xokoph5io2aenaoh0nuiquei9aineigo'
   $ks_admin_tenant = 'admin'
