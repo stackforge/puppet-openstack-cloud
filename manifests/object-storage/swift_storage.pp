@@ -47,13 +47,13 @@ class os_swift_storage (
 
   Swift::Storage::Server {
     #devices                => $devices,
-    storage_local_net_ip => $local_ip,
-    workers                => inline_template('<%= @processorcount.to_i / 2 %>'),
-    replicator_concurrency => 2,
-    updater_concurrency    => 1,
-    reaper_concurrency     => 1,
-    require                => Class['swift'],
-    mount_check            => true,
+    storage_local_net_ip    => $local_ip,
+    workers                 => inline_template('<%= @processorcount.to_i / 2 %>'),
+    replicator_concurrency  => 2,
+    updater_concurrency     => 1,
+    reaper_concurrency      => 1,
+    require                 => Class['swift'],
+    mount_check             => true,
   }
   # concurrency at 2 and 1 seems better see
   # http://docs.openstack.org/trunk/openstack-object-storage/admin/content/general-service-tuning.html
