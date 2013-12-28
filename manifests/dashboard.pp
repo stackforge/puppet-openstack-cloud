@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: dashboard::os_dashboard
+# == Class: privatecloud::dashboard
 #
 # Installs the OpenStack Dashboard (Horizon)
 #
@@ -42,7 +42,7 @@
 #   Defaults false
 #
 
-class privatecloud::dashboard::os_dashboard(
+class privatecloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
