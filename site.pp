@@ -23,7 +23,6 @@ import 'manifests/automation/*.pp'
 import 'manifests/cache/*.pp'
 import 'manifests/common/*.pp' # mandatory
 import 'manifests/compute/*.pp'
-import 'manifests/dashboard/*.pp'
 import 'manifests/database/*.pp'
 import 'manifests/identity/*.pp'
 import 'manifests/image/*.pp'
