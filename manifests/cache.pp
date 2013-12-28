@@ -13,10 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Memcached node
+# == Class: privatecloud::cache
+#
+# Install a cache server (used by OpenStack services)
 #
 
-class os_cache_server{
+class privatecloud::cache{
 
   class { 'memcached':
     listen_ip  => $ipaddress_eth0,
