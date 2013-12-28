@@ -20,7 +20,6 @@ import 'params.pp'
 
 # Import manifests
 import 'manifests/automation/*.pp'
-import 'manifests/cache/*.pp'
 import 'manifests/common/*.pp' # mandatory
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
@@ -90,7 +89,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'os_messaging_server': }
 
 # Cache
-    class {'os_cache_server': }
+    class {'privatecloud::cache': }
 
 # Networking
     class {'os_network_common': }
