@@ -18,24 +18,24 @@
 
 import 'params.pp'
 
-# Import roles
-import 'roles/automation/*.pp'
-import 'roles/cache/*.pp'
-import 'roles/common/*.pp' # mandatory
-import 'roles/compute/*.pp'
-import 'roles/dashboard/*.pp'
-import 'roles/database/*.pp'
-import 'roles/identity/*.pp'
-import 'roles/image/*.pp'
-import 'roles/load-balancer/*.pp'
-import 'roles/messaging/*.pp'
-import 'roles/monitoring/*.pp'
-import 'roles/network/*.pp'
-import 'roles/object-storage/*.pp'
-import 'roles/orchestration/*.pp'
-import 'roles/spof/*.pp'
-import 'roles/telemetry/*.pp'
-import 'roles/volume/*.pp'
+# Import manifests
+import 'manifests/automation/*.pp'
+import 'manifests/cache/*.pp'
+import 'manifests/common/*.pp' # mandatory
+import 'manifests/compute/*.pp'
+import 'manifests/dashboard/*.pp'
+import 'manifests/database/*.pp'
+import 'manifests/identity/*.pp'
+import 'manifests/image/*.pp'
+import 'manifests/load-balancer/*.pp'
+import 'manifests/messaging/*.pp'
+import 'manifests/monitoring/*.pp'
+import 'manifests/network/*.pp'
+import 'manifests/object-storage/*.pp'
+import 'manifests/orchestration/*.pp'
+import 'manifests/spof/*.pp'
+import 'manifests/telemetry/*.pp'
+import 'manifests/volume/*.pp'
 
 node common {
 
