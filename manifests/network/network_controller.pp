@@ -53,7 +53,7 @@ class os_network_controller(
     # For later (when https://review.openstack.org/#/c/63228/ got merged)
     # enable_security_group => true
   }
-  # While https://review.openstack.org/#/c/63228/ is not merged: 
+  # While https://review.openstack.org/#/c/63228/ is not merged:
   neutron_plugin_ml2 {
     'securitygroup/firewall_driver': value => true;
   }

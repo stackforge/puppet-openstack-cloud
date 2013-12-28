@@ -19,8 +19,8 @@
 class authorized_keys ($keys, $account='root', $home = '') {
     # This line allows default homedir based on $account variable.
     # If $home is empty, the default is used.
-    $rhome = $account ? {'root' => '/root', default => $home}
-    $homedir = $rhome ? {'' => "/home/${account}", default => $rhome}
+    $rhome   = $account ? {'root' => '/root', default            => $home}
+    $homedir = $rhome ? {''       => "/home/${account}", default => $rhome}
     file { "${homedir}/.ssh":
         ensure  => directory,
         owner   => $ensure ? {'present' => $account, default => undef },

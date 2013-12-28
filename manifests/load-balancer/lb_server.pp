@@ -180,7 +180,7 @@ monitor fail if horizon_dead
   }
 
   if $keystone {
-    os_haproxy_listen_http { 'keystone_api_cluster': ports => $ks_keystone_public_port }
+    os_haproxy_listen_http { 'keystone_api_cluster': ports       => $ks_keystone_public_port }
     os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
   }
   if $swift_api {
