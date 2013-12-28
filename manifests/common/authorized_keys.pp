@@ -21,12 +21,14 @@ class authorized_keys ($keys, $account='root', $home = '') {
     # If $home is empty, the default is used.
     $rhome   = $account ? {'root' => '/root', default            => $home}
     $homedir = $rhome ? {''       => "/home/${account}", default => $rhome}
+
     file { "${homedir}/.ssh":
         ensure  => directory,
         owner   => $ensure ? {'present' => $account, default => undef },
         group   => $ensure ? {'present' => $account, default => undef },
         mode    => '0755',
     }
+
     file { "${homedir}/.ssh/authorized_keys":
         owner   => $ensure ? {'present' => $account, default => undef },
         group   => $ensure ? {'present' => $account, default => undef },
@@ -41,5 +43,6 @@ class authorized_keys ($keys, $account='root', $home = '') {
             require => File["${homedir}/.ssh/authorized_keys"],
         }
     }
+
     addkey{$keys:;}
 }
