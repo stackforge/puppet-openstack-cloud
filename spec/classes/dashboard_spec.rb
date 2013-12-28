@@ -55,6 +55,7 @@ describe 'privatecloud::dashboard' do
     let :facts do
       { :osfamily => 'RedHat',
         :operatingsystemrelease => '6',
+        :ipaddress_eth0         => '10.0.0.1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
