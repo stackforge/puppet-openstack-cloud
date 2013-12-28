@@ -35,7 +35,7 @@ describe 'privatecloud::dashboard' do
           :secret_key          => '/etc/ssl/secret',
           :keystone_host       => 'localhost',
           :can_set_mount_point => 'False',
-          :fqdn                => '10.0.0.1,'
+          :fqdn                => '10.0.0.1'
         )
     end
   end
