@@ -13,6 +13,7 @@ require 'puppet-lint/tasks/puppet-lint'
 PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.send('disable_class_parameter_defaults')
+PuppetLint.configuration.send('disable_autoloader_layout')
 
 task(:default).clear
 task :default => [:spec, :lint]
