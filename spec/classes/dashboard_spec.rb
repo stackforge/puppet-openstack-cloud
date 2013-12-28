@@ -20,22 +20,17 @@ require 'spec_helper'
 
 describe 'privatecloud::dashboard' do
 
-  let :default_params do
-    { :listen_ssl => false }
-  end
-
-  let :params do
-    {}
-  end
-
   shared_examples_for 'openstack dashboard' do
-    let :p do
-      default_params.merge(params)
+
+    let :params do
+      { :listen_ssl  => false,
+        :secret_key  => '/etc/ssl/secret' }
     end
 
     it 'configure horizon' do
         should contain_class('horizon').with(
-          :listen_ssl => false
+          :listen_ssl  => false,
+          :secret_key  => '/etc/ssl/secret'
         )
     end
   end
