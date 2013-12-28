@@ -66,7 +66,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'os_sql_node':}
 
 ## Dashboard:
-    class {'dashboard::os_dashboard':}
+    class {'privatecloud::dashboard::os_dashboard':}
 
 ## Telemetry
     class {'os_telemetry_common':}
