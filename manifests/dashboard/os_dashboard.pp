@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: os_dashboard
+# == Class: dashboard::os_dashboard
 #
 # Installs the OpenStack Dashboard (Horizon)
 #
@@ -42,7 +42,7 @@
 #   Defaults false
 #
 
-class os_dashboard(
+class dashboard::os_dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
@@ -56,7 +56,7 @@ class os_dashboard(
     can_set_mount_point => 'False',
     # fqdn can can be ambiguous since we use reverse DNS here,
     # e.g: 127.0.0.1 instead of a public IP address.
-    # We forge $local_ip to avoid this situatioe
+    # We force $local_ip to avoid this situation
     fqdn                => $local_ip
   }
 
