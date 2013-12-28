@@ -18,7 +18,7 @@
 
 require 'spec_helper'
 
-describe 'privatecloud::dashboard::os_dashboard' do
+describe 'privatecloud::dashboard' do
 
   let :default_params do
     { :listen_ssl => false }
