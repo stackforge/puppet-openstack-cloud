@@ -18,7 +18,7 @@
 
 require 'spec_helper'
 
-describe 'dashboard::os_dashboard' do
+describe 'privatecloud::dashboard::os_dashboard' do
 
   let :default_params do
     { :listen_ssl => false }
@@ -35,14 +35,16 @@ describe 'dashboard::os_dashboard' do
 
     it 'configure horizon' do
         should contain_class('horizon').with(
-          :listen_ssl => 'False'
+          :listen_ssl => false
         )
     end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily => 'Debian',
+        :operatingsystemrelease => '12.04',
+        :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
     it_configures 'openstack dashboard'
@@ -50,7 +52,9 @@ describe 'dashboard::os_dashboard' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :operatingsystemrelease => '6',
+        :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
     it_configures 'openstack dashboard'

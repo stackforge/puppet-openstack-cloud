@@ -42,7 +42,7 @@
 #   Defaults false
 #
 
-class dashboard::os_dashboard(
+class privatecloud::dashboard::os_dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
