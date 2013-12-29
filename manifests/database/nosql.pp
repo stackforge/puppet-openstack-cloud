@@ -16,7 +16,7 @@
 # MongoDB Server Node
 #
 
-class os_nosql_node {
+class privatecloud::database::nosql {
 
   class { 'mongodb':
     packagename => 'mongodb-10gen'
