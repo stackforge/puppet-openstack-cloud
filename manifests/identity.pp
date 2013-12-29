@@ -16,7 +16,7 @@
 # Identity controller
 #
 
-class os_identity_controller (
+class privatecloud::identity (
   $identity_roles_addons        = $os_params::identity_roles_addons,
   $keystone_db_host             = $os_params::keystone_db_host,
   $keystone_db_password         = $os_params::keystone_db_password,
