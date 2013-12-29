@@ -23,6 +23,7 @@ fixtures:
       repo: 'git://github.com/puppetlabs/puppetlabs-rabbitmq'
       ref: 'origin/2.x'
     'memcached': 'git://github.com/saz/puppet-memcached'
+    'ntp': 'git://github.com/enovance/puppetlabs-ntp.git'
     'sysctl': 'git://github.com/duritong/puppet-sysctl.git'
     'inifile':  'git://github.com/puppetlabs/puppetlabs-inifile'
     'vswitch': 'git://github.com/stackforge/puppet-vswitch'
