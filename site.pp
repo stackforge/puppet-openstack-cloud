@@ -19,7 +19,6 @@
 import 'params.pp'
 
 # Import manifests
-import 'manifests/automation/*.pp'
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
 import 'manifests/image/*.pp'
