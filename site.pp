@@ -26,7 +26,6 @@ import 'manifests/monitoring/*.pp'
 import 'manifests/network/*.pp'
 import 'manifests/object-storage/*.pp'
 import 'manifests/orchestration/*.pp'
-import 'manifests/spof/*.pp'
 import 'manifests/telemetry/*.pp'
 import 'manifests/volume/*.pp'
 
@@ -69,7 +68,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'os_telemetry_server':}
 
 ## SPOF services
-    class {'os_spof_node':}
+    class {'privatecloud::spof':}
 
 ## Identity
     class {'privatecloud::identity':

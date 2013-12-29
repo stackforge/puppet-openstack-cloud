@@ -16,7 +16,7 @@
 # SPOF node usually installed twice, and managed by Pacemaker / Corosync
 #
 
-class os_spof_node(
+class privatecloud::spof(
   $debug                          = $os_params::debug,
   $spof_nodes_are_separated       = $os_params::spof_nodes_are_separated,
 ) {
