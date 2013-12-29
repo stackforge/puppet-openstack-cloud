@@ -41,7 +41,7 @@ node common {
   class { 'os_params': }
 
 # Common system configuration
-  class { 'os_common_system': }
+  class { 'privatecloud': }
 
 }
 
