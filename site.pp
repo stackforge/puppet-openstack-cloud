@@ -60,8 +60,8 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'privatecloud::loadbalancer':}
 
 ## Databases:
-    class {'os_nosql_node':}
-    class {'os_sql_node':}
+    class {'privatecloud::database::sql':}
+    class {'privatecloud::database::nosql':}
 
 ## Dashboard:
     class {'privatecloud::dashboard':}

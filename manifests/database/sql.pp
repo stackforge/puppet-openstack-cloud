@@ -16,7 +16,7 @@
 # MySQL Galera Node
 #
 
-class os_sql_node (
+class privatecloud::database::sql (
     $local_ip                  = $ipaddress,
     $service_provider          = sysv,
     $galera_nextserver         = $os_params::galera_nextserver,
