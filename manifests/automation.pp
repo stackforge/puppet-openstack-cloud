@@ -16,7 +16,7 @@
 # Puppet Master node
 #
 
-class os_puppet_master{
+class privatecloud::automation{
 
   # Ensure git is installed
   class { 'git': }
