@@ -22,7 +22,6 @@ import 'params.pp'
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
 import 'manifests/image/*.pp'
-import 'manifests/messaging/*.pp'
 import 'manifests/monitoring/*.pp'
 import 'manifests/network/*.pp'
 import 'manifests/object-storage/*.pp'
@@ -85,7 +84,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     Class['os_swift_ringbuilder'] -> Class['os_swift_proxy']
 
 # Messaging
-    class {'os_messaging_server': }
+    class {'privatecloud::messaging': }
 
 # Cache
     class {'privatecloud::cache': }

@@ -16,7 +16,7 @@
 # RabbitMQ node
 #
 
-class os_messaging_server(
+class privatecloud::messaging(
   $rabbit_names    = $os_params::rabbit_names,
   $rabbit_password = $os_params::rabbit_password
 ){
