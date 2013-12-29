@@ -20,10 +20,8 @@ import 'params.pp'
 
 # Import manifests
 import 'manifests/automation/*.pp'
-import 'manifests/common/*.pp' # mandatory
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
-import 'manifests/identity/*.pp'
 import 'manifests/image/*.pp'
 import 'manifests/load-balancer/*.pp'
 import 'manifests/messaging/*.pp'
@@ -74,7 +72,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'os_spof_node':}
 
 ## Identity
-    class {'os_identity_controller':
+    class {'privatecloud::identity':
       local_ip => $ipaddress_eth0,
     }
 
