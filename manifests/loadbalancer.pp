@@ -16,7 +16,7 @@
 # HAproxy nodes
 #
 
-class os_lb_server(
+class privatecloud::loadbalancer(
   $ceilometer_api                 = true,
   $cinder_api                     = true,
   $glance_api                     = true,
