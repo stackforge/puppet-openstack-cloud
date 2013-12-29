@@ -23,7 +23,6 @@ import 'manifests/automation/*.pp'
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
 import 'manifests/image/*.pp'
-import 'manifests/load-balancer/*.pp'
 import 'manifests/messaging/*.pp'
 import 'manifests/monitoring/*.pp'
 import 'manifests/network/*.pp'
@@ -56,6 +55,9 @@ node 'os-ci-test4', /pmaster\d+.enovance.com/ inherits common{
 node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inherits common {
 
 # os-ci-test13 is the main mgmt
+
+## Load-Balancer:
+    class {'privatecloud::loadbalancer':}
 
 ## Databases:
     class {'os_nosql_node':}
