@@ -20,11 +20,6 @@ class privatecloud::rbd::monitor (
   $id
 ) {
 
-  class { 'role_ceph':
-    fsid           => $os_params::ceph_fsid,
-    auth_type      => 'cephx',
-  }
-
   ceph::mon { $id:
     monitor_secret => $os_params::ceph_mon_secret,
     mon_port       => 6789,
