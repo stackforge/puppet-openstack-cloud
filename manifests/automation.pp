@@ -13,7 +13,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Puppet Master node
+# == Class: privatecloud::automation
+#
+# Installs the Automation Server (puppet master)
+#
 #
 
 class privatecloud::automation{
