@@ -185,7 +185,7 @@ monitor fail if horizon_dead
     privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $spice_port, httpchk => 'httpchk GET /' }
   }
   if $glance_api {
-    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $ks_glance_public_port }
+    privatecloud::loadbalancer::listen_http{ 'glance_api_cluster': ports => $ks_glance_public_port }
   }
   if $neutron_api {
     privatecloud::loadbalancer::listen_http{ 'neutron_api_cluster': ports => $ks_neutron_public_port }
