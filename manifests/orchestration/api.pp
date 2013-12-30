@@ -23,6 +23,8 @@ class privatecloud::orchestration::api(
   $local_ip                        = $ipaddress_eth0,
 ) {
 
+  include 'privatecloud::orchestration'
+
   class { 'heat::api': }
 
   class { 'heat::api_cfn': }

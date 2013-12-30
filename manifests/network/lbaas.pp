@@ -20,6 +20,8 @@ class privatecloud::network::lbaas(
   $debug                 = $os_params::debug
 ) {
 
+  include 'privatecloud::network'
+
   class { 'neutron::agents::lbaas':
     debug         => $debug,
   }

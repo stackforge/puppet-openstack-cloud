@@ -21,6 +21,8 @@ class privatecloud::telemetry::centralagent(
   $enabled = true,
 ){
 
+  include 'privatecloud::telemetry'
+
   class { 'ceilometer::agent::central':
     enabled => $enabled,
   }

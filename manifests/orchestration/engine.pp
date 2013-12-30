@@ -24,6 +24,8 @@ class privatecloud::orchestration::engine(
   $ks_heat_password           = $os_params::ks_heat_password,
 ) {
 
+  include 'privatecloud::orchestration'
+
   class { 'heat::engine':
     enabled                       => $enabled,
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",

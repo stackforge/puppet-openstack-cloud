@@ -18,6 +18,8 @@
 
 class privatecloud::volume::storage {
 
+  include 'privatecloud::volume'
+
   class { 'cinder::volume::rbd':
     rbd_pool           => $os_params::cinder_rbd_pool,
     glance_api_version => $os_params::glance_api_version,

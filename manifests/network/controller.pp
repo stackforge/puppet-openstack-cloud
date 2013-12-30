@@ -26,6 +26,8 @@ class privatecloud::network::controller(
   $local_ip                = $ipaddress_eth0,
 ) {
 
+  include 'privatecloud::network'
+
   $encoded_user = uriescape($neutron_db_user)
   $encoded_password = uriescape($neutron_db_password)
 

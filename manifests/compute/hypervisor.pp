@@ -21,6 +21,8 @@ class privatecloud::compute::hypervisor(
   $libvirt_type      = 'kvm',
 ) {
 
+  include 'privatecloud::compute'
+
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',
     unless  => '/bin/grep "nbd" /etc/modules',

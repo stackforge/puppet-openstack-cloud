@@ -25,6 +25,8 @@ class privatecloud::telemetry::server(
   $local_ip                       = $ipaddress_eth0,
 ){
 
+  include 'privatecloud::telemetry'
+
 # Install MongoDB database
   class { 'ceilometer::db':
     database_connection => $ceilometer_database_connection,

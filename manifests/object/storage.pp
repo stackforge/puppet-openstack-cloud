@@ -36,6 +36,8 @@ class privatecloud::object::storage (
   $onloopdevices  = false,
 ) {
 
+  include 'privatecloud::object'
+
   class { 'swift::storage':
     storage_local_net_ip => $local_ip,
   }
