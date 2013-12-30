@@ -24,7 +24,7 @@ class privatecloud::image(
   $ks_keystone_glance_password = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
-  $local_ip                    = $ipaddress_eth0,
+  $local_ip                    = $::ipaddress_eth0,
 ) {
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)

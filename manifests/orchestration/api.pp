@@ -20,7 +20,7 @@ class privatecloud::orchestration::api(
   $ks_heat_public_port             = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port         = $os_params::ks_heat_cfn_public_port,
   $ks_heat_cloudwatch_public_port  = $os_params::ks_heat_cloudwatch_public_port,
-  $local_ip                        = $ipaddress_eth0,
+  $local_ip                        = $::ipaddress_eth0,
 ) {
 
   include 'privatecloud::orchestration'

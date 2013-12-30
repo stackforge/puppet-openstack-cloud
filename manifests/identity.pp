@@ -72,7 +72,7 @@ class privatecloud::identity (
   $ks_swift_public_host         = $os_params::ks_swift_public_host,
   $ks_swift_public_port         = $os_params::ks_swift_public_port,
   $ks_swift_public_proto        = $os_params::ks_swift_public_proto,
-  $local_ip                     = $ipaddress_eth0,
+  $local_ip                     = $::ipaddress_eth0,
   $region                       = $os_params::region,
   $verbose                      = $os_params::verbose,
   $debug                        = $os_params::debug

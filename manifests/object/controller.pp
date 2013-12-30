@@ -32,7 +32,7 @@ class privatecloud::object::controller(
   include 'privatecloud::object'
 
   class { 'swift::proxy':
-    proxy_local_net_ip => $ipaddress_eth0,
+    proxy_local_net_ip => $::ipaddress_eth0,
     port               => $ks_swift_internal_port,
     pipeline           => [
       #'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
