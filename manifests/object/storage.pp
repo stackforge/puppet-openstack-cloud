@@ -27,14 +27,14 @@ define set_io_scheduler(){
 }
 
 # swift storage
-class os_swift_storage (
+class privatecloud::object::storage (
   $local_ip       = $ipaddress_eth0,
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',
   $account_port   = '6002',
   $onloopdevices  = false,
-) inherits os_swift_common {
+) {
 
   class { 'swift::storage':
     storage_local_net_ip => $local_ip,
