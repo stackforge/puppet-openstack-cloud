@@ -17,7 +17,7 @@
 # Could be managed by spof node as Active / Passive.
 #
 
-class os_telemetry_central_agent(
+class privatecloud::telemetry::centralagent(
   $enabled = true,
 ){
 
