@@ -17,7 +17,7 @@
 #
 
 class privatecloud::rbd::monitor (
-  $id,
+  $id             => $uniqueid,
   $mon_addr       => $ipaddress_eth0,
   $monitor_secret => $os_params::ceph_mon_secret
 ) {
