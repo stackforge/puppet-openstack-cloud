@@ -63,6 +63,7 @@ class privatecloud::image(
   # TODO(EmilienM) Rename local_ip to a more general param, like "api_eth"
   $local_ip                    = $::ipaddress_eth0,
 ) {
+
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)
 
@@ -84,6 +85,7 @@ class privatecloud::image(
     rabbit_host     => $rabbit_host,
   }
 
+  # TODO(EmilienM) We should migrate the backend to Ceph (WIP). For now, I let Swift.
   class { 'glance::backend::swift':
     swift_store_user         => 'services:glance',
     swift_store_key          => $ks_keystone_glance_password,

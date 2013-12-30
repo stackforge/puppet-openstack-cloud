@@ -13,17 +13,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# RabbitMQ node
+# == Class: privatecloud::messaging
+#
+# Install Messsaging Server (RabbitMQ)
+#
+# === Parameters:
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to OpenStack queues.
+#   Default value in params
 #
 
 class privatecloud::messaging(
-  $rabbit_names    = $os_params::rabbit_names,
+  $rabbit_hosts    = $os_params::rabbit_hosts,
   $rabbit_password = $os_params::rabbit_password
 ){
+
   class { 'rabbitmq::server':
     delete_guest_user        => true,
     config_cluster           => false, # true > Broken on RHEL/CentOS
-    cluster_nodes            => $rabbit_names,
+    cluster_nodes            => $rabbit_hosts,
     wipe_db_on_cookie_change => true,
   }
 

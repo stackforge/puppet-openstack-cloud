@@ -13,7 +13,31 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Common networking
+# == Class: privatecloud::network
+#
+# Common class for network nodes
+#
+# === Parameters:
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to nova queues.
+#   Default value in params
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Default value in params
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Default value in params
+#
+# [*tunnel_eth*]
+#   (optional) Which interface we connect to create overlay tunnels.
+#   Default value in params
 #
 
 class privatecloud::network(
@@ -21,7 +45,7 @@ class privatecloud::network(
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,
   $rabbit_password     = $os_params::rabbit_password,
-  $local_ip            = $os_params::tunnel_int
+  $tunnel_eth          = $os_params::tunnel_int
 ) {
 
   class { 'neutron':
@@ -42,7 +66,7 @@ class privatecloud::network(
 
   class { 'neutron::agents::ovs':
     enable_tunneling => true,
-    local_ip         => $local_ip
+    local_ip         => $tunnel_eth
   }
 
 }

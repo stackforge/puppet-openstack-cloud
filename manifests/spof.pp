@@ -13,18 +13,25 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# SPOF node usually installed twice, and managed by Pacemaker / Corosync
+# == Class: privatecloud::spof
+#
+# Install all SPOF services in active / passive with Pacemaker / Corosync
+#
+# === Parameters:
+#
+# [*cluster_eth*]
+#   (optional) Interface used by Corosync to send multicast traffic
+#   Default to $::network_eth0
 #
 
 class privatecloud::spof(
-  $debug = $os_params::debug,
+  $cluster_eth = $::network_eth0,
 ) {
 
-  # Corosync & Pacemaker
   class { 'corosync':
     enable_secauth    => false,
     authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
-    bind_address      => $::network_eth0,
+    bind_address      => $cluster_eth,
     multicast_address => '239.1.1.2',
   }
 
@@ -39,9 +46,6 @@ class privatecloud::spof(
   corosync::service { 'pacemaker':
     version => '0',
   }
-
-  # Resources managed by Corosync as Active / Passive
-  # https://github.com/madkiss/openstack-resource-agents
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
@@ -115,17 +119,15 @@ class privatecloud::spof(
     }
   }
 
-  # Run OpenStack Networking Metadata service
+  # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
   class { 'privatecloud::network::metadata':
     enabled => false,
   }
 
-  # Run Heat Engine service
   class { 'privatecloud::orchestration::engine':
     enabled => false,
   }
 
-  # Run Ceilometer Agent Central service
   class { 'privatecloud::telemetry::centralagent':
     enabled => false,
   }
