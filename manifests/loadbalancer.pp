@@ -161,66 +161,48 @@ monitor fail if horizon_dead
     }
   }
 
-  define os_haproxy_listen_http( $ports ) {
-    if $name == '6082' { # spice doesn't support OPTIONS
-      $httpchk = 'httpchk GET /'
-    } else {
-      $httpchk = 'httpchk'
-    }
-    haproxy::listen { $name:
-      ipaddress => '0.0.0.0',
-      ports     => $ports,
-      options   => {
-        'mode'        => 'http',
-        'balance'     => 'roundrobin',
-        'option'      => ['tcpka', 'tcplog', $httpchk],
-        'http-check'  => 'expect ! rstatus ^5',
-      }
-    }
-  }
-
   if $keystone {
-    os_haproxy_listen_http { 'keystone_api_cluster': ports       => $ks_keystone_public_port }
-    os_haproxy_listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
+    privatecloud::loadbalancer::listen_http { 'keystone_api_cluster': ports       => $ks_keystone_public_port }
+    privatecloud::loadbalancer::listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
   }
   if $swift_api {
-    os_haproxy_listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
+    privatecloud::loadbalancer::listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
   }
   if $nova_api {
-    os_haproxy_listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
+    privatecloud::loadbalancer::listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
   }
   if $ec2_api {
-    os_haproxy_listen_http{ 'ec2_api_cluster': ports => $ks_ec2_public_port }
+    privatecloud::loadbalancer::listen_http{ 'ec2_api_cluster': ports => $ks_ec2_public_port }
   }
   if $metadata_api {
-    os_haproxy_listen_http{ 'metadata_api_cluster': ports => $ks_metadata_public_port }
+    privatecloud::loadbalancer::listen_http{ 'metadata_api_cluster': ports => $ks_metadata_public_port }
   }
   if $spice {
-    os_haproxy_listen_http{ 'spice_cluster': ports => $spice_port }
+    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $spice_port }
   }
   if $glance_api {
-    os_haproxy_listen_http{ 'spice_cluster': ports => $ks_glance_public_port }
+    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $ks_glance_public_port }
   }
   if $neutron_api {
-    os_haproxy_listen_http{ 'neutron_api_cluster': ports => $ks_neutron_public_port }
+    privatecloud::loadbalancer::listen_http{ 'neutron_api_cluster': ports => $ks_neutron_public_port }
   }
   if $cinder_api {
-    os_haproxy_listen_http{ 'cinder_api_cluster': ports => $ks_cinder_public_port }
+    privatecloud::loadbalancer::listen_http{ 'cinder_api_cluster': ports => $ks_cinder_public_port }
   }
   if $ceilometer_api {
-    os_haproxy_listen_http{ 'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
+    privatecloud::loadbalancer::listen_http{ 'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
   }
   if $heat_api {
-    os_haproxy_listen_http{ 'heat_api_cluster': ports => $ks_heat_public_port }
+    privatecloud::loadbalancer::listen_http{ 'heat_api_cluster': ports => $ks_heat_public_port }
   }
   if $heat_cfn_api {
-    os_haproxy_listen_http{ 'heat_api_cfn_cluster': ports => $ks_heat_cfn_public_port }
+    privatecloud::loadbalancer::listen_http{ 'heat_api_cfn_cluster': ports => $ks_heat_cfn_public_port }
   }
   if $heat_cloudwatch_api {
-    os_haproxy_listen_http{ 'heat_api_cloudwatch_cluster': ports => $ks_heat_cloudwatch_public_port }
+    privatecloud::loadbalancer::listen_http{ 'heat_api_cloudwatch_cluster': ports => $ks_heat_cloudwatch_public_port }
   }
   if $horizon {
-    os_haproxy_listen_http{ 'horizon_cluster': ports => $horizon_port }
+    privatecloud::loadbalancer::listen_http{ 'horizon_cluster': ports => $horizon_port }
   }
 
   haproxy::listen { 'galera_cluster':
