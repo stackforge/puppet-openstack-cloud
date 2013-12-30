@@ -13,14 +13,251 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Identity controller
+# == Class: privatecloud::identity
+#
+# Install Identity Server (Keystone)
+#
+# === Parameters:
+#
+# [*identity_roles_addons*]
+#   (optional) Extra keystone roles to create
+#   Default value in params
+#
+# [*keystone_db_host*]
+#   (optional) Hostname or IP address to connect to keystone database
+#   Default value in params
+#
+# [*keystone_db_user*]
+#   (optional) Username to connect to keystone database
+#   Default value in params
+#
+# [*keystone_db_password*]
+#   (optional) Password to connect to keystone database
+#   Default value in params
+#
+# [*keystone_memcached*]
+#   (optional) Memcached servers used by Keystone. Should be an array.
+#   Default value in params
+#
+# [*ks_admin_email*]
+#   (optional) Email address of admin user in Keystone
+#   Default value in params
+#
+# [*ks_admin_password*]
+#   (optional) Password of admin user in Keystone
+#   Default value in params
+#
+# [*ks_admin_tenant*]
+#   (optional) Admin tenant name in Keystone
+#   Default value in params
+#
+# [*ks_admin_token*]
+#   (optional) Admin token used by Keystone.
+#   Default value in params
+#
+# [*ks_glance_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Glance API
+#   Default value in params
+#
+# [*ks_glance_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Glance API
+#   Default value in params
+#
+# [*ks_glance_public_host*]
+#   (optional) Public Hostname or IP to connect to Glance API
+#   Default value in params
+#
+# [*ks_ceilometer_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Ceilometer API
+#   Default value in params
+#
+# [*ks_ceilometer_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Ceilometer API
+#   Default value in params
+#
+# [*ks_ceilometer_public_host*]
+#   (optional) Public Hostname or IP to connect to Ceilometer API
+#   Default value in params
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_public_host*]
+#   (optional) Public Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_nova_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Nova API
+#   Default value in params
+#
+# [*ks_nova_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Nova API
+#   Default value in params
+#
+# [*ks_nova_public_host*]
+#   (optional) Public Hostname or IP to connect to Nova API
+#   Default value in params
+#
+# [*ks_cinder_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Cinder API
+#   Default value in params
+#
+# [*ks_cinder_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Cinder API
+#   Default value in params
+#
+# [*ks_cinder_public_host*]
+#   (optional) Public Hostname or IP to connect to Cinder API
+#   Default value in params
+#
+# [*ks_neutron_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Neutron API
+#   Default value in params
+#
+# [*ks_neutron_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Neutron API
+#   Default value in params
+#
+# [*ks_neutron_public_host*]
+#   (optional) Public Hostname or IP to connect to Neutron API
+#   Default value in params
+#
+# [*ks_heat_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Heat API
+#   Default value in params
+#
+# [*ks_heat_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Heat API
+#   Default value in params
+#
+# [*ks_heat_public_host*]
+#   (optional) Public Hostname or IP to connect to Heat API
+#   Default value in params
+#
+# [*ks_swift_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Swift API
+#   Default value in params
+#
+# [*ks_swift_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Swift API
+#   Default value in params
+#
+# [*ks_swift_public_host*]
+#   (optional) Public Hostname or IP to connect to Swift API
+#   Default value in params
+#
+# [*ks_ceilometer_password*]
+#   (optional) Password used by Ceilometer to connect to Keystone API
+#   Default value in params
+#
+# [*ks_swift_password*]
+#   (optional) Password used by Swift to connect to Keystone API
+#   Default value in params
+#
+# [*ks_nova_password*]
+#   (optional) Password used by Nova to connect to Keystone API
+#   Default value in params
+#
+# [*ks_neutron_password*]
+#   (optional) Password used by Neutron to connect to Keystone API
+#   Default value in params
+#
+# [*ks_heat_password*]
+#   (optional) Password used by Heat to connect to Keystone API
+#   Default value in params
+#
+# [*ks_glance_password*]
+#   (optional) Password used by Glance to connect to Keystone API
+#   Default value in params
+#
+# [*ks_cinder_password*]
+#   (optional) Password used by Cinder to connect to Keystone API
+#   Default value in params
+#
+# [*ks_swift_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_ceilometer_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_heat_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_nova_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_neutron_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_glance_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_cinder_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_ceilometer_public_port*]
+#   (optional) TCP port to connect to Ceilometer API from public network
+#   Default value in params
+#
+# [*ks_ceilometer_internal_port*]
+#   (optional) TCP port to connect to Ceilometer API from internal network
+#   Default value in params
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP port to connect to Keystone API from internal network
+#   Default value in params
+#
+# [*ks_keystone_public_port*]
+#   (optional) TCP port to connect to Keystone API from public network
+#   Default value in params
+#
+# [*ks_keystone_admin_port*]
+#   (optional) TCP port to connect to Keystone API from admin network
+#   Default value in params
+#
+# [*ks_swift_internal_port*]
+#   (optional) TCP port to connect to Swift API from internal network
+#   Default value in params
+#
+# [*ks_swift_public_port*]
+#   (optional) TCP port to connect to Swift API from public network
+#   Default value in params
+#
+# [*local_ip*]
+#   (optional) Which interface we bind the Keystone server. Should be depracted soon (see below).
+#   Default to $::ipaddress_eth0
+#
+# [*region*]
+#   (optional) OpenStack Region Name
+#   Default value in params
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Default value in params
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Default value in params
 #
 
 class privatecloud::identity (
   $identity_roles_addons        = $os_params::identity_roles_addons,
   $keystone_db_host             = $os_params::keystone_db_host,
-  $keystone_db_password         = $os_params::keystone_db_password,
   $keystone_db_user             = $os_params::keystone_db_user,
+  $keystone_db_password         = $os_params::keystone_db_password,
+  #TODO(EmilienM) Drop this param and use a more general, like "memcached_severs"
   $keystone_memcached           = $os_params::keystone_memcached,
   $ks_admin_email               = $os_params::ks_admin_email,
   $ks_admin_password            = $os_params::ks_admin_password,
@@ -72,6 +309,7 @@ class privatecloud::identity (
   $ks_swift_public_host         = $os_params::ks_swift_public_host,
   $ks_swift_public_port         = $os_params::ks_swift_public_port,
   $ks_swift_public_proto        = $os_params::ks_swift_public_proto,
+  # TODO(EmilienM) Rename local_ip to a more general param, like "api_eth"
   $local_ip                     = $::ipaddress_eth0,
   $region                       = $os_params::region,
   $verbose                      = $os_params::verbose,
@@ -213,7 +451,7 @@ class privatecloud::identity (
     listening_service => 'keystone_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,
-    ports             => $ks_keystone_internal_port,
+    ports             => $ks_keystone_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -224,18 +462,5 @@ class privatecloud::identity (
     ports             => $ks_keystone_admin_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
-
-# Todo(EmilienM): check if we still actually need this workaround. If not, we have to delete this section:
-#
-# Workaround for error "HTTPConnectionPool(host='127.0.0.1', port=35357): Max retries exceeded with url"
-# In fact, when keystone finish to start but admin port isn't already usable, so wait a bit
-# exec{'wait-keystone': command => '/bin/sleep 5' }
-# Service['keystone'] -> Exec['wait-keystone']
-# Exec['wait-keystone'] -> Keystone_tenant <| |>
-# Exec['wait-keystone'] -> Keystone_user <| |>
-# Exec['wait-keystone'] -> Keystone_role  <| |>
-# Exec['wait-keystone'] -> Keystone_service <| |>
-# Exec['wait-keystone'] -> Keystone_user_role <| |>
-# Exec['wait-keystone'] -> Keystone_endpoint <| |>
 
 }

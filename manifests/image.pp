@@ -13,17 +13,54 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Image controller
+# == Class: privatecloud::image
+#
+# Install Image Server (Glance)
+#
+# === Parameters:
+#
+# [*glance_db_user*]
+#   (optional) Username to connect to glance database
+#   Default value in params
+#
+# [*glance_db_password*]
+#   (optional) Password to connect to glance database
+#   Default value in params
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_glance_public_port*]
+#   (optional) TCP port to connect to Glance API from internal network
+#   Default value in params
+#
+# [*ks_glance_password*]
+#   (optional) Password used by Glance to connect to Keystone API
+#   Default value in params
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to nova queues.
+#   Default value in params
+#
+# [*local_ip*]
+#   (optional) Which interface we bind the Keystone server. Should be depracted soon (see below).
+#   Default to $::ipaddress_eth0
 #
 
 class privatecloud::image(
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,
   $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_port     = $os_params::ks_glance_internal_port,
-  $ks_keystone_glance_password = $os_params::ks_glance_password,
+  $ks_glance_public_port       = $os_params::ks_glance_public_port,
+  $ks_glance_password          = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
+  # TODO(EmilienM) Rename local_ip to a more general param, like "api_eth"
   $local_ip                    = $::ipaddress_eth0,
 ) {
   $encoded_glance_user     = uriescape($glance_db_user)
@@ -34,7 +71,7 @@ class privatecloud::image(
     verbose                   => false,
     debug                     => false,
     auth_host                 => $ks_keystone_internal_host,
-    keystone_password         => $ks_keystone_glance_password,
+    keystone_password         => $ks_glance_password,
     keystone_tenant           => 'services',
     keystone_user             => 'glance',
     log_facility              => 'LOG_LOCAL0',
@@ -53,7 +90,8 @@ class privatecloud::image(
     swift_store_auth_address => $ks_keystone_internal_host,
   }
 
-  @@haproxy::balancermember{"${::fqdn}-glance_api":
+  # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
+  @@haproxy::balancermember{"${::fqdn}-public_api":
     listening_service => 'glance_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $local_ip,

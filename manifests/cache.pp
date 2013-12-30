@@ -17,11 +17,19 @@
 #
 # Install a cache server (used by OpenStack services)
 #
+# === Parameters:
+#
+# [*listen_ip*]
+#   (optional) IP address on which memcached instance should listen
+#   Default to $::ipaddress_eth0
+#
 
-class privatecloud::cache{
+class privatecloud::cache (
+  $listen_ip = $::ipaddress_eth0,
+){
 
   class { 'memcached':
-    listen_ip  => $::ipaddress_eth0,
+    listen_ip  => $listen_ip,
     max_memory => '60%',
   }
 
