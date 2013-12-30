@@ -1,6 +1,8 @@
 #
 # Copyright (C) 2013 eNovance SAS <licensing@enovance.com>
 #
+# Author: Emilien Macchi <emilien.macchi@enovance.com>
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -13,17 +15,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-class privatecloud::rbd (
-  $fsid,
-  $auth_type = 'cephx',
-  $release = 'cuttlefish'
+class privatecloud::rbd::osd (
+  $public_address,
+  $cluster_address,
+  $devices
 ) {
 
-  class { 'ceph::conf':
-    fsid            => $os_params::ceph_fsid,
-    auth_type       => $auth_type,
-    cluster_network => $os_params::ceph_cluster_network,
-    public_network  => $os_params::ceph_public_network,
+  class { 'ceph::osd' :
+    public_address  => $public_address,
+    cluster_address => $cluster_address,
   }
+
+  privatecloud::rbd::device { $devices: }
+  privatecloud::rbd::journal { $devices: }
 
 }
