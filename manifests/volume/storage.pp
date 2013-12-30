@@ -16,7 +16,7 @@
 # Volume storage
 #
 
-class os_volume_storage {
+class privatecloud::volume::storage {
 
   class { 'cinder::volume::rbd':
     rbd_pool           => $os_params::cinder_rbd_pool,
