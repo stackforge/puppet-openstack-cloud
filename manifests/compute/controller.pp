@@ -16,7 +16,7 @@
 # Compute controller node
 #
 
-class os_compute_controller(
+class privatecloud::compute::controller(
   $ks_keystone_internal_host            = $os_params::ks_keystone_internal_host,
   $ks_nova_password                     = $os_params::ks_nova_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,

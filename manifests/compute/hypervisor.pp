@@ -16,7 +16,7 @@
 # Hypervisor Compute node
 #
 
-class os_compute_hypervisor(
+class privatecloud::compute::hypervisor(
   $local_ip          = $ipaddress_eth1,
   $libvirt_type      = 'kvm',
 ) {
