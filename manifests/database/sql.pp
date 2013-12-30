@@ -60,7 +60,6 @@ class privatecloud::database::sql (
       root_password => $mysql_password,
     },
     service_provider  => 'debian',
-    require           => Apt::Source['mariadb'],
     notify            => Service['xinetd'],
   }
 
