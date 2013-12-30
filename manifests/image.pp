@@ -16,7 +16,7 @@
 # Image controller
 #
 
-class os_image_controller(
+class privatecloud::image(
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,
   $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
