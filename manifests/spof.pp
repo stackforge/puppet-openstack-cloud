@@ -45,7 +45,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-    source  => 'puppet:///privatecloud/heartbeat/ceilometer-agent-central',
+    source  => 'puppet:///modules/privatecloud/heartbeat/ceilometer-agent-central',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -69,7 +69,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
-    source  => 'puppet:///privatecloud/heartbeat/neutron-metadata-agent',
+    source  => 'puppet:///modules/privatecloud/heartbeat/neutron-metadata-agent',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -93,7 +93,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-    source  => 'puppet:///privatecloud/heartbeat/heat-engine',
+    source  => 'puppet:///modules/privatecloud/heartbeat/heat-engine',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
