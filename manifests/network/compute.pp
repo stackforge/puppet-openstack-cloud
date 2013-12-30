@@ -13,13 +13,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Network VPNaaS node
+# Network Compute node (Agent)
 #
 
-class os_network_vpn(
-  $debug                 = $os_params::debug
+class privatecloud::network::compute(
+  $neutron_endpoint = $os_params::ks_neutron_admin_host,
+  $neutron_protocol = $os_params::ks_neutron_public_proto,
+  $neutron_password = $os_params::ks_neutron_password,
 ) {
 
-  class { 'neutron::agents::vpnaas': }
+  class { 'nova::network::neutron':
+      neutron_admin_password => $neutron_password,
+      neutron_admin_auth_url => "${neutron_protocol}://${neutron_endpoint}:35357/v2.0",
+      neutron_url            => "${neutron_protocol}://${neutron_endpoint}:9696"
+  }
 
 }

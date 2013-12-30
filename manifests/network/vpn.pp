@@ -13,15 +13,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Network LBaaS node
+# Network VPNaaS node
 #
 
-class os_network_lbaas(
+class privatecloud::network::vpn(
   $debug                 = $os_params::debug
 ) {
 
-  class { 'neutron::agents::lbaas':
-    debug         => $debug,
-  }
+  class { 'neutron::agents::vpnaas': }
 
 }

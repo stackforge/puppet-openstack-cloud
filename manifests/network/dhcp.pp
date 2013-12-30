@@ -13,24 +13,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Network L3 node
+# Network DHCP node
 #
 
-class os_network_l3(
-  $external_int = $os_params::external_int,
-  $debug        = $os_params::debug,
+class privatecloud::network::dhcp(
+  $debug   = $os_params::debug
 ) {
 
-  class { 'neutron::agents::l3':
-    debug                        => $debug,
-    handle_internal_only_routers => false,
-  } ->
-  vs_bridge{'br-ex':
-    external_ids => 'bridge-id=br-ex',
-  } ->
-  vs_port{$external_int:
-    ensure => present,
-    bridge => 'br-ex'
+  class { 'neutron::agents::dhcp':
+    debug   => $debug
   }
 
 }

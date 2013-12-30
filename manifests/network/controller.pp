@@ -16,7 +16,7 @@
 # Network Controller node (API + Scheduler)
 #
 
-class os_network_controller(
+class privatecloud::network::controller(
   $neutron_db_host         = $os_params::neutron_db_host,
   $neutron_db_user         = $os_params::neutron_db_user,
   $neutron_db_password     = $os_params::neutron_db_password,
