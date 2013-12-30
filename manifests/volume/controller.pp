@@ -16,7 +16,7 @@
 # Volume controller
 #
 
-class os_volume_controller(
+class privatecloud::volume::controller(
   $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
