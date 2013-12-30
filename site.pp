@@ -92,8 +92,7 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
     class {'privatecloud::cache': }
 
 # Networking
-    class {'os_network_common': }
-    class {'os_network_controller': }
+    class {'privatecloud::network::controller': }
 
 # Orchestration
     class {'os_orchestration_common': }
@@ -106,12 +105,11 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
 # We need at least two nodes for DHCP High availability
 node 'os-ci-test8', /net\d+.enovance.com/ inherits common {
 
-    class {'os_network_common': }
-    class {'os_network_dhcp': }
-    class {'os_network_metadata': }
-    class {'os_network_lbaas': }
-    class {'os_network_l3': }
-    class {'os_network_vpn':}
+    class {'privatecloud::network::dhcp': }
+    class {'privatecloud::network::metadata': }
+    class {'privatecloud::network::lbaas': }
+    class {'privatecloud::network::l3': }
+    class {'privatecloud::network::vpn':}
 
 }
 

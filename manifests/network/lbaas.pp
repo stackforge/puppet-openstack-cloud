@@ -13,15 +13,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Network DHCP node
+# Network LBaaS node
 #
 
-class os_network_dhcp(
-  $debug   = $os_params::debug
+class privatecloud::network::lbaas(
+  $debug                 = $os_params::debug
 ) {
 
-  class { 'neutron::agents::dhcp':
-    debug   => $debug
+  class { 'neutron::agents::lbaas':
+    debug         => $debug,
   }
 
 }

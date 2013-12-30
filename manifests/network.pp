@@ -16,7 +16,7 @@
 # Common networking
 #
 
-class os_network_common(
+class privatecloud::network(
   $verbose             = $os_params::verbose,
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,

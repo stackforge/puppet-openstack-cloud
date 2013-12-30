@@ -17,7 +17,7 @@
 # Could be managed by spof_node manifest
 #
 
-class os_network_metadata(
+class privatecloud::network::metadata(
   $enabled                              = true,
   $debug                                = $os_params::debug,
   $ks_neutron_password                  = $os_params::ks_neutron_password,
