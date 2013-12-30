@@ -19,6 +19,7 @@
 import 'params.pp'
 
 # Import manifests
+import 'manifests/*.pp'
 import 'manifests/compute/*.pp'
 import 'manifests/database/*.pp'
 import 'manifests/image/*.pp'
@@ -33,9 +34,6 @@ node common {
 
 # Params
   class { 'os_params': }
-
-# Common system configuration
-  class { 'privatecloud': }
 
 }
 
@@ -62,6 +60,9 @@ node 'os-ci-test13', 'os-ci-test12', 'os-ci-test11', /mgmt\d+.enovance.com/ inhe
 
 ## Dashboard:
     class {'privatecloud::dashboard':}
+
+## Compute:
+    class {'privatecloud::compute::controller':}
 
 ## Telemetry
     class {'os_telemetry_common':}
@@ -133,7 +134,7 @@ node 'os-ci-test10', /compute\d+.enovance.com/ inherits common {
   class { 'os_network_compute': }
 
 ## Compute
-  class { 'os_compute_hypervisor':
+  class { 'privatecloud::compute::hypervisor':
     local_ip => $ipaddress_eth0,
   }
 

@@ -13,10 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Compute Common (controller/hypervisor)
+# == Class: privatecloud::compute
+#
+# Common class for compute nodes
+#
+# === Parameters:
+#
+# (WIP)
 #
 
-class os_compute_common(
+class privatecloud::compute(
   $nova_db_host            = $os_params::nova_db_host,
   $nova_db_user            = $os_params::nova_db_user,
   $nova_db_password        = $os_params::nova_db_password,
