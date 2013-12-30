@@ -23,7 +23,7 @@ class privatecloud::volume::controller(
   $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
   $ks_swift_internal_host    = $os_params::ks_swift_internal_host,
   $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
-  $local_ip                  = $ipaddress_eth0,
+  $local_ip                  = $::ipaddress_eth0,
 ) {
 
   include 'privatecloud::volume'

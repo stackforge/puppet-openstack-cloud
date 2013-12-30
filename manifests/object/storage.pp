@@ -28,7 +28,7 @@ define set_io_scheduler(){
 
 # swift storage
 class privatecloud::object::storage (
-  $local_ip       = $ipaddress_eth0,
+  $local_ip       = $::ipaddress_eth0,
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',

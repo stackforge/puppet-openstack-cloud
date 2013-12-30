@@ -22,7 +22,7 @@ class privatecloud::telemetry::server(
   $ks_ceilometer_internal_port    = $os_params::ks_keystone_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $ceilometer_database_connection = $os_params::ceilometer_database_connection,
-  $local_ip                       = $ipaddress_eth0,
+  $local_ip                       = $::ipaddress_eth0,
 ){
 
   include 'privatecloud::telemetry'

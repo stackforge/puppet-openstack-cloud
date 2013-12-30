@@ -21,7 +21,7 @@
 class privatecloud::cache{
 
   class { 'memcached':
-    listen_ip  => $ipaddress_eth0,
+    listen_ip  => $::ipaddress_eth0,
     max_memory => '60%',
   }
 

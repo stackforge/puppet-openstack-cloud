@@ -23,7 +23,7 @@ class privatecloud::network::controller(
   $ks_neutron_password     = $os_params::ks_neutron_password,
   $ks_keystone_admin_host  = $os_params::ks_keystone_admin_host,
   $ks_keystone_public_port = $os_params::ks_keystone_public_port,
-  $local_ip                = $ipaddress_eth0,
+  $local_ip                = $::ipaddress_eth0,
 ) {
 
   include 'privatecloud::network'

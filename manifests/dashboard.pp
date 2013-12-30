@@ -34,7 +34,7 @@
 #
 # [*local_ip*]
 #   (optional) Local interface used to listen on the Horizon Dashboard
-#   Defaults to $ipaddress_eth0
+#   Defaults to $::ipaddress_eth0
 #
 # [*listen_ssl*]
 #   (optional) Enable SSL on OpenStack Dashboard vhost
@@ -46,7 +46,7 @@ class privatecloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
-  $local_ip                  = $ipaddress_eth0,
+  $local_ip                  = $::ipaddress_eth0,
   $listen_ssl                = false,
 ) {
 
