@@ -16,7 +16,7 @@
 # Telemetry server nodes
 #
 
-class os_telemetry_server(
+class privatecloud::telemetry::server(
   $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
   $ks_ceilometer_internal_port    = $os_params::ks_keystone_internal_port,
