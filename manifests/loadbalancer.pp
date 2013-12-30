@@ -32,6 +32,7 @@ class privatecloud::loadbalancer(
   $keystone_api_admin             = true,
   $keystone_api                   = true,
   $horizon                        = true,
+  $spice                          = true,
   $haproxy_auth                   = $os_params::haproxy_auth,
   $keepalived_email               = $os_params::keepalived_email,
   $keepalived_interface           = 'eth0',
@@ -40,13 +41,16 @@ class privatecloud::loadbalancer(
   $keepalived_smtp                = $os_params::keepalived_smtp,
   $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
+  $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
   $ks_glance_public_port          = $os_params::ks_glance_public_port,
   $ks_heat_public_port            = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
   $ks_heat_cloudwatch_public_port = $os_params::ks_heat_cloudwatch_public_port,
   $ks_keystone_admin_port         = $os_params::ks_keystone_admin_port,
   $ks_keystone_public_port        = $os_params::ks_keystone_public_port,
+  $ks_metadata_public_port        = $os_params::ks_metadata_public_port,
   $ks_neutron_public_port         = $os_params::ks_neutron_public_port,
+  $ks_nova_public_port            = $os_params::ks_nova_public_port,
   $ks_swift_public_port           = $os_params::ks_swift_public_port,
   $horizon_port                   = $os_params::horizon_port,
   $spice_port                     = $os_params::spice_port,
@@ -161,7 +165,7 @@ monitor fail if horizon_dead
     }
   }
 
-  if $keystone {
+  if $keystone_api {
     privatecloud::loadbalancer::listen_http { 'keystone_api_cluster': ports       => $ks_keystone_public_port }
     privatecloud::loadbalancer::listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
   }
