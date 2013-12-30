@@ -227,7 +227,7 @@ innodb_autoinc_lock_mode=2
 innodb_locks_unsafe_for_binlog=1
 # sileht: galera stuff TODO: change login/password
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
-wsrep_cluster_name="os_galera_cluster"
+wsrep_cluster_name="galera_cluster"
 <%- if hostname != galera_master -%>
 wsrep_cluster_address="gcomm://<%= @galera_nextserver[@galera_master] %>"
 <%- else -%>

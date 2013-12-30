@@ -17,8 +17,7 @@
 #
 
 class privatecloud::spof(
-  $debug                          = $os_params::debug,
-  $spof_nodes_are_separated       = $os_params::spof_nodes_are_separated,
+  $debug = $os_params::debug,
 ) {
 
   # Corosync & Pacemaker
@@ -121,26 +120,18 @@ class privatecloud::spof(
     }
   }
 
-  # If SPOF nodes are separated from controller nodes,
-  # we should import common OpenStack classes:
-  if $spof_nodes_are_separated {
-    class { 'os_network_common': }
-    class { 'os_orchestration_common': }
-    class { 'os_telemetry_common': }
-  }
-
   # Run OpenStack Networking Metadata service
-  class { 'os_network_metadata':
+  class { 'privatecloud::network::metadata':
     enabled => false,
   }
 
   # Run Heat Engine service
-  class { 'os_orchestration_engine':
+  class { 'privatecloud::orchestration::engine':
     enabled => false,
   }
 
   # Run Ceilometer Agent Central service
-  class { 'os_telemetry_central_agent':
+  class { 'privatecloud::telemetry::centralagent':
     enabled => false,
   }
 

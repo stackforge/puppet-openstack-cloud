@@ -26,7 +26,7 @@ class privatecloud::object::ringbuilder(
   Ring_container_device <<| |>>
   Ring_account_device <<| |>>
 
-  Class['swift'] -> Class['os_swift_ringbuilder']
+  Class['swift'] -> Class['privatecloud::object::ringbuilder']
 
   swift::ringbuilder::create{ ['account', 'container']:
     part_power     => 9,
