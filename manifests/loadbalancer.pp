@@ -42,6 +42,7 @@ class privatecloud::loadbalancer(
   $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
+  $ks_ec2_public_port             = $os_params::ks_ec2_public_port,
   $ks_glance_public_port          = $os_params::ks_glance_public_port,
   $ks_heat_public_port            = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
@@ -82,7 +83,7 @@ monitor fail if swift_api_dead
 <%- end -%>
 <%- if @keystone_api -%>
 acl keystone_api_dead nbsrv(keystone_api_cluster) lt 1
-monitor fail if keystone_dead
+monitor fail if keystone_api_dead
 <% end -%>
 <%- if @galera -%>
 acl galera_dead nbsrv(galera_cluster) lt 1
