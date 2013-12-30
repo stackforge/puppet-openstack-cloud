@@ -16,7 +16,7 @@
 # Swift nodes
 #
 
-class os_swift_common(
+class privatecloud::object(
   $swift_hash_suffix = $os_params::swift_hash_suffix
 ) {
 
@@ -26,6 +26,6 @@ class os_swift_common(
     swift_hash_suffix => $swift_hash_suffix,
   }
 
-  class {'os_swift_system::tweaking': }
+  class {'privatecloud::object::tweaking': }
 
 }

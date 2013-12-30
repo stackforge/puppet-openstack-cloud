@@ -16,11 +16,11 @@
 # Swift ring builder node
 #
 
-class os_swift_ringbuilder(
+class privatecloud::object::ringbuilder(
     $rsyncd_ipaddress            = ipaddress_eth0,
     $replicas                    = $os_params::replicas,
     $swift_rsync_max_connections = $os_params::swift_rsync_max_connections,
-) inherits os_swift_common {
+) {
 
   Ring_object_device <<| |>>
   Ring_container_device <<| |>>

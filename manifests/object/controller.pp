@@ -16,7 +16,7 @@
 # Swift Proxy node
 #
 
-class os_swift_proxy(
+class privatecloud::object::controller(
   $ks_keystone_admin_host = $os_params::ks_keystone_admin_host,
   $ks_keystone_admin_port = $os_params::ks_keystone_admin_port,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
@@ -27,7 +27,7 @@ class os_swift_proxy(
   $statsd_host = $os_params::statsd_host,
   $statsd_port = $os_params::statsd_port,
   $swift_memchached = $os_params::swift_memchached
-) inherits os_swift_common {
+) {
 
   class { 'swift::proxy':
     proxy_local_net_ip => $ipaddress_eth0,
