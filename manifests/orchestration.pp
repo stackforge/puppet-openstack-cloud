@@ -16,7 +16,7 @@
 # Orchestration common node
 #
 
-class os_orchestration_common(
+class privatecloud::orchestration(
   $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
   $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
