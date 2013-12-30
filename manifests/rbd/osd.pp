@@ -26,7 +26,7 @@ class privatecloud::rbd::osd (
     cluster_address => $cluster_address,
   }
 
-  privatecloud::rbd::device { $devices: }
   privatecloud::rbd::journal { $devices: }
+  ceph::osd::device { $devices: }
 
 }

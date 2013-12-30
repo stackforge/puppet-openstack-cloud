@@ -22,8 +22,7 @@ define privatecloud::rbd::journal (
 ) {
 
   $osd_id_fact = "ceph_osd_id_${ceph_osd_device}1"
-  # NOTE(EmilienM) I've change double quotes to simple qotes, not sure though:
-  $osd_id = inline_template('<%= scope.lookupvar(osd_id_fact) or 'undefined' %>')
+  $osd_id = inline_template("<%= scope.lookupvar(osd_id_fact) or 'undefined' %>")
 
   if $osd_id != 'undefined' {
     $osd_data = regsubst($::ceph::conf::osd_data, '\$id', $osd_id)
