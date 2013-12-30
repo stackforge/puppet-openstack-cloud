@@ -178,7 +178,7 @@ monitor fail if horizon_dead
     privatecloud::loadbalancer::listen_http{ 'metadata_api_cluster': ports => $ks_metadata_public_port }
   }
   if $spice {
-    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $spice_port }
+    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $spice_port, httpchk => 'httpchk GET /' }
   }
   if $glance_api {
     privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $ks_glance_public_port }

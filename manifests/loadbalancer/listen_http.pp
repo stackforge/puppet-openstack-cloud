@@ -17,12 +17,9 @@
 #
 # privatecloud::loadbalancer::listen_http
 #
-define privatecloud::loadbalancer::listen_http( $ports = 'unset' ) {
-  if $name == '6082' { # spice doesn't support OPTIONS
-    $httpchk = 'httpchk GET /'
-  } else {
-    $httpchk = 'httpchk'
-  }
+define privatecloud::loadbalancer::listen_http(
+  $ports   = 'unset',
+  $httpchk = 'httpchk') {
 
   haproxy::listen { $name:
     ipaddress => '0.0.0.0',
