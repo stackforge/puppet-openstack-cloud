@@ -12,18 +12,21 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+#
 
 class privatecloud::rbd (
-  $fsid,
-  $auth_type = 'cephx',
-  $release = 'cuttlefish'
+  $fsid            = $os_params::ceph_fsid,
+  $auth_type       = 'cephx',
+  $release         = 'cuttlefish',
+  $cluster_network = $os_params::ceph_cluster_network,
+  $public_network  = $os_params::ceph_public_network
 ) {
 
   class { 'ceph::conf':
-    fsid            => $os_params::ceph_fsid,
+    fsid            => $fsid,
     auth_type       => $auth_type,
-    cluster_network => $os_params::ceph_cluster_network,
-    public_network  => $os_params::ceph_public_network,
+    cluster_network => $cluster_network,
+    public_network  => $public_network,
   }
 
 }

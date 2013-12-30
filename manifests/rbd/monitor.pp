@@ -17,15 +17,17 @@
 #
 
 class privatecloud::rbd::monitor (
-  $id
+  $id,
+  $mon_addr       => $ipaddress_eth0,
+  $monitor_secret => $os_params::ceph_mon_secret
 ) {
 
   include 'privatecloud::rbd'
 
   ceph::mon { $id:
-    monitor_secret => $os_params::ceph_mon_secret,
+    monitor_secret => $monitor_secret,
     mon_port       => 6789,
-    mon_addr       => $ipaddress_eth0,
+    mon_addr       => $mon_addr,
   }
 
 }
