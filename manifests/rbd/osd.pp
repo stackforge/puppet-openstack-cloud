@@ -27,6 +27,7 @@ class privatecloud::rbd::osd (
   }
 
   privatecloud::rbd::journal { $devices: }
-  ceph::osd::device { $devices: }
+  $osd_ceph = prefix($devices,'/dev/')
+  ceph::osd::device { $osd_ceph: }
 
 }
