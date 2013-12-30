@@ -13,7 +13,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Swift nodes
+# == Class: privatecloud::object
+#
+# Common class for object storage nodes
+#
+# === Parameters:
+#
+# [*swift_hash_suffix*]
+#   (optional) String of text to be used as a salt when hashing to determine mappings in the ring.
+#   Default value in params
 #
 
 class privatecloud::object(

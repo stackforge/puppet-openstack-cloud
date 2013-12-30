@@ -16,14 +16,13 @@
 
 class privatecloud::rbd (
   $fsid            = $os_params::ceph_fsid,
-  $auth_type       = 'cephx',
   $cluster_network = $os_params::ceph_cluster_network,
   $public_network  = $os_params::ceph_public_network
 ) {
 
   class { 'ceph::conf':
     fsid            => $fsid,
-    auth_type       => $auth_type,
+    auth_type       => 'cephx',
     cluster_network => $cluster_network,
     public_network  => $public_network,
   }
