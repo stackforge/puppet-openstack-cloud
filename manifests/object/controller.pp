@@ -29,6 +29,8 @@ class privatecloud::object::controller(
   $swift_memchached = $os_params::swift_memchached
 ) {
 
+  include 'privatecloud::object'
+
   class { 'swift::proxy':
     proxy_local_net_ip => $ipaddress_eth0,
     port               => $ks_swift_internal_port,
