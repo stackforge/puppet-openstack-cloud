@@ -16,7 +16,7 @@
 # Orchestration APIs node
 #
 
-class os_orchestration_api(
+class privatecloud::orchestration::api(
   $ks_heat_public_port             = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port         = $os_params::ks_heat_cfn_public_port,
   $ks_heat_cloudwatch_public_port  = $os_params::ks_heat_cloudwatch_public_port,

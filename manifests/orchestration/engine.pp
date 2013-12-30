@@ -17,7 +17,7 @@
 # Could be managed by spof node as Active / Passive.
 #
 
-class os_orchestration_engine(
+class privatecloud::orchestration::engine(
   $enabled                    = true,
   $ks_heat_public_host        = $os_params::ks_heat_public_host,
   $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
