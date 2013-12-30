@@ -17,7 +17,6 @@
 class privatecloud::rbd (
   $fsid            = $os_params::ceph_fsid,
   $auth_type       = 'cephx',
-  $release         = 'cuttlefish',
   $cluster_network = $os_params::ceph_cluster_network,
   $public_network  = $os_params::ceph_public_network
 ) {
