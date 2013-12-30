@@ -20,6 +20,8 @@ class privatecloud::network::dhcp(
   $debug   = $os_params::debug
 ) {
 
+  include 'privatecloud::network'
+
   class { 'neutron::agents::dhcp':
     debug   => $debug
   }

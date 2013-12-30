@@ -20,6 +20,8 @@ class privatecloud::network::vpn(
   $debug                 = $os_params::debug
 ) {
 
+  include 'privatecloud::network'
+
   class { 'neutron::agents::vpnaas': }
 
 }

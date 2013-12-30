@@ -23,6 +23,8 @@ class privatecloud::compute::controller(
   $local_ip                             = $ipaddress_eth0,
 ){
 
+  include 'privatecloud::compute'
+
   class { [
     'nova::scheduler',
     'nova::cert',

@@ -28,6 +28,8 @@ class privatecloud::network::metadata(
   $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host
 ) {
 
+  include 'privatecloud::network'
+
   class { 'neutron::agents::metadata':
     enabled       => $enabled,
     shared_secret => $neutron_metadata_proxy_shared_secret,

@@ -22,6 +22,8 @@ class privatecloud::network::compute(
   $neutron_password = $os_params::ks_neutron_password,
 ) {
 
+  include 'privatecloud::network'
+
   class { 'nova::network::neutron':
       neutron_admin_password => $neutron_password,
       neutron_admin_auth_url => "${neutron_protocol}://${neutron_endpoint}:35357/v2.0",

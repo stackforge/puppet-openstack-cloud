@@ -21,6 +21,8 @@ class privatecloud::network::l3(
   $debug        = $os_params::debug,
 ) {
 
+  include 'privatecloud::network'
+
   class { 'neutron::agents::l3':
     debug                        => $debug,
     handle_internal_only_routers => false,

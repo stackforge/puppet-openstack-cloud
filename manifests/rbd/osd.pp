@@ -21,6 +21,8 @@ class privatecloud::rbd::osd (
   $devices
 ) {
 
+  include 'privatecloud::rbd'
+
   class { 'ceph::osd' :
     public_address  => $public_address,
     cluster_address => $cluster_address,

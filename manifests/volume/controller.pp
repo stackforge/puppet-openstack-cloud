@@ -26,6 +26,8 @@ class privatecloud::volume::controller(
   $local_ip                  = $ipaddress_eth0,
 ) {
 
+  include 'privatecloud::volume'
+
   class { 'cinder::scheduler': }
 
   class { 'cinder::api':
