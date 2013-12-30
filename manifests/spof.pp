@@ -41,16 +41,11 @@ class privatecloud::spof(
   }
 
   # Resources managed by Corosync as Active / Passive
-  vcsrepo { '/usr/lib/ocf/resource.d/openstack/':
-    ensure   => latest,
-    provider => git,
-    source   => 'https://github.com/madkiss/openstack-resource-agents',
-    revision => 'master',
-  }
+  # https://github.com/madkiss/openstack-resource-agents
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-    source  => '/usr/lib/ocf/resource.d/openstack/ceilometer-agent-central',
+    source  => 'puppet:///privatecloud/heartbeat/ceilometer-agent-central',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -74,7 +69,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
-    source  => '/usr/lib/ocf/resource.d/openstack/neutron-metadata-agent',
+    source  => 'puppet:///privatecloud/heartbeat/neutron-metadata-agent',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -98,7 +93,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-    source  => '/usr/lib/ocf/resource.d/openstack/heat-engine',
+    source  => 'puppet:///privatecloud/heartbeat/heat-engine',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
