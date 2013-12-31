@@ -45,7 +45,7 @@ class privatecloud::network(
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,
   $rabbit_password     = $os_params::rabbit_password,
-  $tunnel_eth          = $os_params::tunnel_int
+  $tunnel_eth          = $::ipaddress_eth0
 ) {
 
   class { 'neutron':
