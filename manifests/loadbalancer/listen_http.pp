@@ -18,11 +18,12 @@
 # privatecloud::loadbalancer::listen_http
 #
 define privatecloud::loadbalancer::listen_http(
-  $ports   = 'unset',
-  $httpchk = 'httpchk') {
+  $ports     = 'unset',
+  $httpchk   = 'httpchk',
+  $listen_ip = '0.0.0.0') {
 
   haproxy::listen { $name:
-    ipaddress => '0.0.0.0',
+    ipaddress => $listen_ip,
     ports     => $ports,
     options   => {
       'mode'        => 'http',

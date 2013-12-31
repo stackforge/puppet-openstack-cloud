@@ -35,9 +35,9 @@ class privatecloud::loadbalancer(
   $spice                          = true,
   $haproxy_auth                   = $os_params::haproxy_auth,
   $keepalived_email               = $os_params::keepalived_email,
-  $keepalived_interface           = 'eth0',
+  $keepalived_interface           = 'eth1',
   $keepalived_ipvs                = [],
-  $keepalived_localhost_ip        = $::ipaddress_eth0,
+  $keepalived_localhost_ip        = $::ipaddress_eth1,
   $keepalived_smtp                = $os_params::keepalived_smtp,
   $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
@@ -156,7 +156,7 @@ monitor fail if horizon_dead
   }
 
   haproxy::listen { 'monitor':
-    ipaddress => '0.0.0.0',
+    ipaddress => $keepalived_localhost_ip,
     ports     => '9300',
     options   => {
       'mode'        => 'http',
@@ -167,51 +167,111 @@ monitor fail if horizon_dead
   }
 
   if $keystone_api {
-    privatecloud::loadbalancer::listen_http { 'keystone_api_cluster': ports       => $ks_keystone_public_port }
-    privatecloud::loadbalancer::listen_http { 'keystone_api_admin_cluster': ports => $ks_keystone_admin_port }
+    privatecloud::loadbalancer::listen_http {
+      'keystone_api_cluster':
+        ports     => $ks_keystone_public_port,
+        listen_ip => $keepalived_localhost_ip;
+      'keystone_api_admin_cluster':
+        ports     => $ks_keystone_admin_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $swift_api {
-    privatecloud::loadbalancer::listen_http{ 'swift_api_cluster': ports => $ks_swift_public_port, httpchk => 'httpchk /healthcheck'  }
+    privatecloud::loadbalancer::listen_http{
+      'swift_api_cluster':
+        ports     => $ks_swift_public_port,
+        httpchk   => 'httpchk /healthcheck',
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $nova_api {
-    privatecloud::loadbalancer::listen_http{ 'nova_api_cluster': ports => $ks_nova_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'nova_api_cluster':
+        ports     => $ks_nova_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $ec2_api {
-    privatecloud::loadbalancer::listen_http{ 'ec2_api_cluster': ports => $ks_ec2_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'ec2_api_cluster':
+        ports     => $ks_ec2_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $metadata_api {
-    privatecloud::loadbalancer::listen_http{ 'metadata_api_cluster': ports => $ks_metadata_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'metadata_api_cluster':
+        ports     => $ks_metadata_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $spice {
-    privatecloud::loadbalancer::listen_http{ 'spice_cluster': ports => $spice_port, httpchk => 'httpchk GET /' }
+    privatecloud::loadbalancer::listen_http{
+      'spice_cluster':
+        ports     => $spice_port,
+        listen_ip => $keepalived_localhost_ip,
+        httpchk   => 'httpchk GET /';
+    }
   }
   if $glance_api {
-    privatecloud::loadbalancer::listen_http{ 'glance_api_cluster': ports => $ks_glance_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'glance_api_cluster':
+        ports     => $ks_glance_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $neutron_api {
-    privatecloud::loadbalancer::listen_http{ 'neutron_api_cluster': ports => $ks_neutron_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'neutron_api_cluster':
+        ports     => $ks_neutron_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $cinder_api {
-    privatecloud::loadbalancer::listen_http{ 'cinder_api_cluster': ports => $ks_cinder_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'cinder_api_cluster':
+        ports     => $ks_cinder_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $ceilometer_api {
-    privatecloud::loadbalancer::listen_http{ 'ceilometer_api_cluster': ports => $ks_ceilometer_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'ceilometer_api_cluster':
+        ports     => $ks_ceilometer_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $heat_api {
-    privatecloud::loadbalancer::listen_http{ 'heat_api_cluster': ports => $ks_heat_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'heat_api_cluster':
+        ports     => $ks_heat_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $heat_cfn_api {
-    privatecloud::loadbalancer::listen_http{ 'heat_api_cfn_cluster': ports => $ks_heat_cfn_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'heat_api_cfn_cluster':
+        ports     => $ks_heat_cfn_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $heat_cloudwatch_api {
-    privatecloud::loadbalancer::listen_http{ 'heat_api_cloudwatch_cluster': ports => $ks_heat_cloudwatch_public_port }
+    privatecloud::loadbalancer::listen_http{
+      'heat_api_cloudwatch_cluster':
+        ports     => $ks_heat_cloudwatch_public_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
   if $horizon {
-    privatecloud::loadbalancer::listen_http{ 'horizon_cluster': ports => $horizon_port }
+    privatecloud::loadbalancer::listen_http{
+      'horizon_cluster':
+        ports     => $horizon_port,
+        listen_ip => $keepalived_localhost_ip;
+    }
   }
 
   haproxy::listen { 'galera_cluster':
-    ipaddress          => '0.0.0.0',
+    ipaddress          => $keepalived_localhost_ip,
     ports              => 3306,
     options            => {
       'mode'           => 'tcp',
