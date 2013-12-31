@@ -88,7 +88,7 @@ class privatecloud::compute(
     debug               => $debug
   }
 
-  # NOTE(EmilienM) A patch in puppet-nova is under review to integrate this one on nova::compute class
+  # NOTE(EmilienM) https://review.openstack.org/#/c/64453/ is under review to integrate this one on nova::compute class
   nova_config {
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
   }
