@@ -97,6 +97,9 @@ class privatecloud::image(
     swift_store_auth_address => $ks_keystone_internal_host,
   }
 
+  class { 'glance::cache::cleaner': }
+  class { 'glance::cache::pruner': }
+
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
   @@haproxy::balancermember{"${::fqdn}-public_api":
     listening_service => 'glance_api_cluster',
