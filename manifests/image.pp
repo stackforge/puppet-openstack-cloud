@@ -19,6 +19,10 @@
 #
 # === Parameters:
 #
+# [*glance_db_host*]
+#   (optional) Hostname or IP address to connect to glance database
+#   Default value in params
+#
 # [*glance_db_user*]
 #   (optional) Username to connect to glance database
 #   Default value in params
@@ -53,6 +57,7 @@
 #
 
 class privatecloud::image(
+  $glance_db_host              = $os_params::glance_db_host,
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,
   $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
@@ -68,7 +73,7 @@ class privatecloud::image(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { ['glance::api', 'glance::registry']:
-    sql_connection            => "mysql://${encoded_glance_user}:${encoded_glance_password}@${os_params::glance_db_host}/glance",
+    sql_connection            => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     verbose                   => false,
     debug                     => false,
     auth_host                 => $ks_keystone_internal_host,
