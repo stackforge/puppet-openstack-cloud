@@ -50,6 +50,13 @@ class privatecloud::dashboard(
   $listen_ssl                = false,
 ) {
 
+  #FIXME https://review.openstack.org/#/c/64523/
+  file {
+    '/etc/apache2/conf.d/openstack-dashboard.conf':
+      ensure  => file,
+      source  => 'puppet:///modules/privatecloud/apache/openstack-dashboard.conf';
+  }
+
   class {'horizon':
     secret_key          => $secret_key,
     keystone_host       => $ks_keystone_internal_host,
@@ -57,7 +64,9 @@ class privatecloud::dashboard(
     # fqdn can can be ambiguous since we use reverse DNS here,
     # e.g: 127.0.0.1 instead of a public IP address.
     # We force $local_ip to avoid this situation
-    fqdn                => $local_ip
+    #FIXME https://review.openstack.org/#/c/64523/
+    fqdn                => $local_ip,
+    require             => File['/etc/apache2/conf.d/openstack-dashboard.conf'];
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
@@ -67,5 +76,6 @@ class privatecloud::dashboard(
     ports             => $horizon_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
+
 
 }
