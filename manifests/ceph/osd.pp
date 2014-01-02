@@ -12,11 +12,11 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 class privatecloud::ceph::osd (
-  $public_address,
-  $cluster_address,
-  $devices
+  $public_address  = $::ipaddress_eth0,
+  $cluster_address = $::ipaddress_eth0,
+  $devices         = ['sdb','sdc'],
 ) {
 
   include 'privatecloud::ceph'
@@ -29,7 +29,5 @@ class privatecloud::ceph::osd (
   privatecloud::ceph::journal { $devices: }
   $osd_ceph = prefix($devices,'/dev/')
   ceph::osd::device { $osd_ceph: }
-
-  class { 'privatecloud::ceph::pools': setup_pools => true }
 
 }
