@@ -14,13 +14,13 @@
 # under the License.
 #
 #
-
+#
 define privatecloud::ceph::journal (
   $ceph_osd_device = $name
 ) {
 
   $osd_id_fact = "ceph_osd_id_${ceph_osd_device}1"
-  $osd_id = inline_template("<%= scope.lookupvar(osd_id_fact) or 'undefined' %>")
+  $osd_id = inline_template('<%= scope.lookupvar(osd_id_fact) or "undefined" %>')
 
   if $osd_id != 'undefined' {
     $osd_data = regsubst($::ceph::conf::osd_data, '\$id', $osd_id)
