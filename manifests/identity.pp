@@ -235,9 +235,9 @@
 #   (optional) TCP port to connect to Swift API from public network
 #   Default value in params
 #
-# [*local_ip*]
-#   (optional) Which interface we bind the Keystone server. Should be depracted soon (see below).
-#   Default to $::ipaddress_eth0
+# [*api_eth*]
+#   (optional) Which interface we bind the Keystone server.
+#   Default value in params
 #
 # [*region*]
 #   (optional) OpenStack Region Name
@@ -308,8 +308,7 @@ class privatecloud::identity (
   $ks_swift_public_host         = $os_params::ks_swift_public_host,
   $ks_swift_public_port         = $os_params::ks_swift_public_port,
   $ks_swift_public_proto        = $os_params::ks_swift_public_proto,
-  # TODO(EmilienM) Rename local_ip to a more general param, like "api_eth"
-  $local_ip                     = $::ipaddress_eth0,
+  $api_eth                      = $os_params::api_eth,
   $region                       = $os_params::region,
   $verbose                      = $os_params::verbose,
   $debug                        = $os_params::debug
@@ -449,7 +448,7 @@ class privatecloud::identity (
   @@haproxy::balancermember{"${::fqdn}-keystone_api":
     listening_service => 'keystone_api_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => $ks_keystone_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
@@ -457,7 +456,7 @@ class privatecloud::identity (
   @@haproxy::balancermember{"${::fqdn}-keystone_api_admin":
     listening_service => 'keystone_api_admin_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => $ks_keystone_admin_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }

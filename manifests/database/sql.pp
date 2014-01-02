@@ -17,7 +17,7 @@
 #
 
 class privatecloud::database::sql (
-    $local_ip                  = $ipaddress,
+    $api_eth                   = $os_params::api_eth,
     $service_provider          = sysv,
     $galera_nextserver         = $os_params::galera_nextserver,
     $galera_master             = $os_params::galera_master,
@@ -56,7 +56,7 @@ class privatecloud::database::sql (
   class { 'mysql::server':
     package_name      => 'mariadb-galera-server',
     config_hash       => {
-      bind_address  => $local_ip,
+      bind_address  => $api_eth,
       root_password => $mysql_password,
     },
     service_provider  => 'debian',
@@ -165,7 +165,7 @@ basedir  = /usr
   @@haproxy::balancermember{$::fqdn:
     listening_service => 'galera_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => '3306',
     options           =>
       inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master -%>backup<% end %>')
@@ -239,8 +239,8 @@ wsrep_auto_increment_control=1
 wsrep_drupal_282555_workaround=0
 wsrep_causal_reads=0
 wsrep_sst_method=rsync
-wsrep_node_address="<%= @local_ip %>"
-wsrep_node_incoming_address="<%= @local_ip %>"
+wsrep_node_address="<%= @api_eth %>"
+wsrep_node_incoming_address="<%= @api_eth %>"
 
 # this value here are used by /usr/bin/innobackupex
 # and wsrep_sst_xtrabackup take only one configuration file and use the last one

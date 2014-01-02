@@ -32,9 +32,9 @@
 #   (optional) Port used to connect to OpenStack Dashboard
 #   Default value in params
 #
-# [*local_ip*]
-#   (optional) Local interface used to listen on the Horizon Dashboard
-#   Defaults to $::ipaddress_eth0
+# [*api_eth*]
+#   (optional) Which interface we bind the Horizon server.
+#   Default value in params
 #
 # [*listen_ssl*]
 #   (optional) Enable SSL on OpenStack Dashboard vhost
@@ -46,7 +46,7 @@ class privatecloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
-  $local_ip                  = $::ipaddress_eth0,
+  $api_eth                   = $os_params::api_eth,
   $listen_ssl                = false,
 ) {
 
@@ -63,16 +63,16 @@ class privatecloud::dashboard(
     can_set_mount_point => 'False',
     # fqdn can can be ambiguous since we use reverse DNS here,
     # e.g: 127.0.0.1 instead of a public IP address.
-    # We force $local_ip to avoid this situation
+    # We force $api_eth to avoid this situation
     #FIXME https://review.openstack.org/#/c/64523/
-    fqdn                => $local_ip,
+    fqdn                => $api_eth,
     require             => File['/etc/apache2/conf.d/openstack-dashboard.conf'];
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
     listening_service => 'horizon_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => $horizon_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
