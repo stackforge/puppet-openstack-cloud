@@ -12,23 +12,22 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-#
 
-class privatecloud::rbd (
-  $fsid            = $os_params::ceph_fsid,
-  $cluster_network = $os_params::ceph_cluster_network,
-  $public_network  = $os_params::ceph_public_network
+class privatecloud::ceph::osd (
+  $public_address,
+  $cluster_address,
+  $devices
 ) {
 
-  class { 'ceph::conf':
-    fsid            => $fsid,
-    auth_type       => 'cephx',
-    cluster_network => $cluster_network,
-    public_network  => $public_network,
+  include 'privatecloud::ceph'
+
+  class { 'ceph::osd' :
+    public_address  => $public_address,
+    cluster_address => $cluster_address,
   }
 
-  Exec {
-    path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
-  }
+  privatecloud::ceph::journal { $devices: }
+  $osd_ceph = prefix($devices,'/dev/')
+  ceph::osd::device { $osd_ceph: }
 
 }

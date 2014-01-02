@@ -14,18 +14,21 @@
 # under the License.
 #
 
-class privatecloud::rbd::monitor (
-  $id             = $::uniqueid,
-  $mon_addr       = $::ipaddress_eth0,
-  $monitor_secret = $os_params::ceph_mon_secret
+class privatecloud::ceph (
+  $fsid            = $os_params::ceph_fsid,
+  $cluster_network = $os_params::ceph_cluster_network,
+  $public_network  = $os_params::ceph_public_network
 ) {
 
-  include 'privatecloud::rbd'
+  class { 'ceph::conf':
+    fsid            => $fsid,
+    auth_type       => 'cephx',
+    cluster_network => $cluster_network,
+    public_network  => $public_network,
+  }
 
-  ceph::mon { $id:
-    monitor_secret => $monitor_secret,
-    mon_port       => 6789,
-    mon_addr       => $mon_addr,
+  Exec {
+    path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
   }
 
 }

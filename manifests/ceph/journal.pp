@@ -15,7 +15,7 @@
 #
 #
 
-define privatecloud::rbd::journal (
+define privatecloud::ceph::journal (
   $ceph_osd_device = $name
 ) {
 
