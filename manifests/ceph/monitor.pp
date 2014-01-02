@@ -12,22 +12,20 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+#
 
-class privatecloud::rbd::osd (
-  $public_address,
-  $cluster_address,
-  $devices
+class privatecloud::ceph::monitor (
+  $id             = $::uniqueid,
+  $mon_addr       = $::ipaddress_eth0,
+  $monitor_secret = $os_params::ceph_mon_secret
 ) {
 
-  include 'privatecloud::rbd'
+  include 'privatecloud::ceph'
 
-  class { 'ceph::osd' :
-    public_address  => $public_address,
-    cluster_address => $cluster_address,
+  ceph::mon { $id:
+    monitor_secret => $monitor_secret,
+    mon_port       => 6789,
+    mon_addr       => $mon_addr,
   }
-
-  privatecloud::rbd::journal { $devices: }
-  $osd_ceph = prefix($devices,'/dev/')
-  ceph::osd::device { $osd_ceph: }
 
 }
