@@ -47,17 +47,4 @@ class privatecloud::network::controller(
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
-  class { 'neutron::plugins::ml2':
-    type_drivers            => ['gre'],
-    tenant_network_types    => ['gre'],
-    mechanism_drivers       => ['openvswitch'],
-    tunnel_id_ranges        => ['1:10000'],
-    # For later (when https://review.openstack.org/#/c/63228/ got merged)
-    # enable_security_group => true
-  }
-  # While https://review.openstack.org/#/c/63228/ is not merged:
-  neutron_plugin_ml2 {
-    'securitygroup/firewall_driver': value => true;
-  }
-
 }
