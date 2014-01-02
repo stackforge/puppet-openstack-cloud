@@ -13,7 +13,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# MongoDB Server Node
+# == Class: privatecloud::database::nosql
+#
+# Install a nosql server (MongoDB)
 #
 
 class privatecloud::database::nosql {
