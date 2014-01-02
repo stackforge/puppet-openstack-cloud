@@ -35,7 +35,7 @@
 #   (optional) Password to connect to keystone database
 #   Default value in params
 #
-# [*keystone_memcached*]
+# [*memcache_servers*]
 #   (optional) Memcached servers used by Keystone. Should be an array.
 #   Default value in params
 #
@@ -257,8 +257,7 @@ class privatecloud::identity (
   $keystone_db_host             = $os_params::keystone_db_host,
   $keystone_db_user             = $os_params::keystone_db_user,
   $keystone_db_password         = $os_params::keystone_db_password,
-  #TODO(EmilienM) Drop this param and use a more general, like "memcached_severs"
-  $keystone_memcached           = $os_params::keystone_memcached,
+  $memcache_servers             = $os_params::memcache_servers,
   $ks_admin_email               = $os_params::ks_admin_email,
   $ks_admin_password            = $os_params::ks_admin_password,
   $ks_admin_tenant              = $os_params::ks_admin_tenant,
@@ -327,7 +326,7 @@ class privatecloud::identity (
     debug            => $debug,
     idle_timeout     => 60,
     log_facility     => 'LOG_LOCAL0',
-    memcache_servers => $keystone_memcached,
+    memcache_servers => $memcache_servers,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
     token_driver     => 'keystone.token.backends.memcache.Token',
     token_format     => 'UUID',
