@@ -26,36 +26,36 @@ class privatecloud::storage::rbd::pools(
 
   if $setup_pools {
 
-    exec { 'create glance images pool':
+    exec { 'create_glance_images_pool':
       # TODO: point PG num with a cluster variable + keyring
       command => "ceph osd pool create ${::glance_pool} 128 128",
       unless  => "rados lspools | grep -sq ${::glance_pool}",
-      require => Ceph::Key['admin'],
+      require => Ceph::Key['admin'];
     }
 
-    exec { 'create glance images user and key':
+    exec { 'create_glance_images_user_and_key':
       # TODO: point PG num with a cluster variable + keyring
       command => "\
 ceph auth get-or-create client.${::glance_user} mon 'allow r' \
 osd 'allow class-read object_prefix rbd_children, allow rwx pool=images'",
       unless  => "ceph auth list | egrep '^${::glance_pool}$'",
-      require => Exec['create glance images pool'],
+      require => Exec['create_glance_images_pool'];
     }
 
 
-    exec { 'create cinder volumes pool':
+    exec { 'create_cinder_volumes_pool':
       # TODO: point PG num with a cluster variable + keyring
       command => "/usr/bin/ceph osd pool create ${::cinder_pool} 128 128",
       unless  => "/usr/bin/rados lspools | grep -sq ${::cinder_pool}",
-      require => Ceph::Key['admin'],
+      require => Ceph::Key['admin'];
     }
 
-    exec { 'create cinder volumes user and key':
+    exec { 'create_cinder_volumes_user_and_key':
       # TODO: point PG num with a cluster variable + keyring
       command => "ceph auth get-or-create client.${::cinder_user} mon 'allow r' \
 osd 'allow class-read object_prefix rbd_children, allow rwx pool=${::glance_pool}, allow rx pool=${::cinder_pool}'",
       unless  => "ceph auth list | egrep '^${::cinder_pool}$'",
-      require => Exec['create cinder volumes pool'],
+      require => Exec['create_cinder_volumes_pool'];
     }
 
 #    exec { "create cinder backup pool":

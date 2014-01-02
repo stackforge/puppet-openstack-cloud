@@ -20,7 +20,7 @@ class privatecloud::storage::rbd::monitor (
   $monitor_secret = $os_params::ceph_mon_secret
 ) {
 
-  include 'privatecloud::storage:rbd'
+  include 'privatecloud::storage::rbd'
 
   ceph::mon { $id:
     monitor_secret => $monitor_secret,
