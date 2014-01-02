@@ -30,4 +30,6 @@ class privatecloud::ceph::osd (
   $osd_ceph = prefix($devices,'/dev/')
   ceph::osd::device { $osd_ceph: }
 
+  class { 'privatecloud::ceph::pools': setup_pools => true }
+
 }
