@@ -13,21 +13,22 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class privatecloud::ceph::osd (
-  $public_address  = $::ipaddress_eth0,
-  $cluster_address = $::ipaddress_eth0,
-  $devices         = ['sdb','sdc'],
+
+class privatecloud::storage::rbd (
+  $fsid            = $os_params::ceph_fsid,
+  $cluster_network = $os_params::ceph_cluster_network,
+  $public_network  = $os_params::ceph_public_network
 ) {
 
-  include 'privatecloud::ceph'
-
-  class { 'ceph::osd' :
-    public_address  => $public_address,
-    cluster_address => $cluster_address,
+  class { 'ceph::conf':
+    fsid            => $fsid,
+    auth_type       => 'cephx',
+    cluster_network => $cluster_network,
+    public_network  => $public_network,
   }
 
-  privatecloud::ceph::journal { $devices: }
-  $osd_ceph = prefix($devices,'/dev/')
-  ceph::osd::device { $osd_ceph: }
+  Exec {
+    path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
+  }
 
 }

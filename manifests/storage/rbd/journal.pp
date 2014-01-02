@@ -13,19 +13,27 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-
-class privatecloud::ceph::monitor (
-  $id             = $::uniqueid,
-  $mon_addr       = $::ipaddress_eth0,
-  $monitor_secret = $os_params::ceph_mon_secret
+#
+#
+define privatecloud::storage::rbd::journal (
+  $ceph_osd_device = $name
 ) {
 
-  include 'privatecloud::ceph'
+  $osd_id_fact = "ceph_osd_id_${ceph_osd_device}1"
+  $osd_id = inline_template('<%= scope.lookupvar(osd_id_fact) or "undefined" %>')
 
-  ceph::mon { $id:
-    monitor_secret => $monitor_secret,
-    mon_port       => 6789,
-    mon_addr       => $mon_addr,
+  if $osd_id != 'undefined' {
+    $osd_data = regsubst($::ceph::conf::osd_data, '\$id', $osd_id)
+
+    file { "${osd_data}/journal":
+      ensure  => link,
+      target  => "/dev/mapper/rootfs-journal--${ceph_osd_device}1",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0660',
+      require => Mount[$osd_data],
+      before  => Service["ceph-osd.${osd_id}"]
+    }
   }
 
 }

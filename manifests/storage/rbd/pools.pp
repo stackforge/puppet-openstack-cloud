@@ -12,10 +12,10 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-# Class:: privatecloud::ceph::pools()
+# Class:: privatecloud::storage::pools()
 #
 #
-class privatecloud::ceph::pools(
+class privatecloud::storage::rbd::pools(
   $setup_pools        = false,
   $glance_pool        = 'ceph_glance',
   $glance_user        = 'glance',
@@ -70,4 +70,4 @@ osd 'allow class-read object_prefix rbd_children, allow rwx pool=${::glance_pool
 #    }
   }
 
-} # Class:: privatecloud::ceph::pools
+}
