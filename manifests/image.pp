@@ -51,9 +51,9 @@
 #   (optional) Password to connect to nova queues.
 #   Default value in params
 #
-# [*local_ip*]
-#   (optional) Which interface we bind the Keystone server. Should be depracted soon (see below).
-#   Default to $::ipaddress_eth0
+# [*api_eth*]
+#   (optional) Which interface we bind the Glance API server.
+#   Default value in params
 #
 
 class privatecloud::image(
@@ -65,8 +65,7 @@ class privatecloud::image(
   $ks_glance_password          = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
-  # TODO(EmilienM) Rename local_ip to a more general param, like "api_eth"
-  $local_ip                    = $::ipaddress_eth0,
+  $api_eth                     = $os_params::api_eth,
 ) {
 
   $encoded_glance_user     = uriescape($glance_db_user)
@@ -104,7 +103,7 @@ class privatecloud::image(
   @@haproxy::balancermember{"${::fqdn}-public_api":
     listening_service => 'glance_api_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => $ks_glance_internal_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }

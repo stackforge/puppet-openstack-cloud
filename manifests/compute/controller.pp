@@ -20,7 +20,7 @@ class privatecloud::compute::controller(
   $ks_keystone_internal_host            = $os_params::ks_keystone_internal_host,
   $ks_nova_password                     = $os_params::ks_nova_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
-  $local_ip                             = $::ipaddress_eth0,
+  $api_eth                              = $os_params::api_eth,
 ){
 
   include 'privatecloud::compute'
@@ -45,7 +45,7 @@ class privatecloud::compute::controller(
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
     listening_service => 'ec2_api_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => '8773',
     options           => 'check inter 2000 rise 2 fall 5'
   }
@@ -53,7 +53,7 @@ class privatecloud::compute::controller(
   @@haproxy::balancermember{"${::fqdn}-compute_api_nova":
     listening_service => 'nova_api_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => '8774',
     options           => 'check inter 2000 rise 2 fall 5'
   }
@@ -61,7 +61,7 @@ class privatecloud::compute::controller(
   @@haproxy::balancermember{"${::fqdn}-compute_api_metadata":
     listening_service => 'metadata_api_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => '8775',
     options           => 'check inter 2000 rise 2 fall 5'
   }
@@ -69,7 +69,7 @@ class privatecloud::compute::controller(
   @@haproxy::balancermember{"${::fqdn}-compute_spice":
     listening_service => 'spice_cluster',
     server_names      => $::hostname,
-    ipaddresses       => $local_ip,
+    ipaddresses       => $api_eth,
     ports             => '6082',
     options           => 'check inter 2000 rise 2 fall 5'
   }
