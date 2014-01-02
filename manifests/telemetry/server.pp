@@ -58,7 +58,7 @@ class privatecloud::telemetry::server(
     minute       => '0',
     hour         => '0',
   }
-  #FIXME $RANDOM ?
+
   Cron <| title == 'ceilometer-expirer' |> { command => "sleep $(($RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
 
   @@haproxy::balancermember{"${::fqdn}-ceilometer_api":
