@@ -59,11 +59,6 @@ class privatecloud::network(
     dhcp_agents_per_network => '2',
   }
 
-  class { 'neutron::plugins::ovs':
-    tenant_network_type   => 'gre',
-    network_vlan_ranges   => false
-  }
-
   class { 'neutron::agents::ovs':
     enable_tunneling => true,
     local_ip         => $tunnel_eth
