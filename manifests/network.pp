@@ -46,6 +46,7 @@ class privatecloud::network(
   $rabbit_hosts        = $os_params::rabbit_hosts,
   $rabbit_password     = $os_params::rabbit_password,
   $tunnel_eth          = $os_params::tunnel_eth,
+  $api_eth             = $os_params::api_eth
 ) {
 
   class { 'neutron':
@@ -56,6 +57,7 @@ class privatecloud::network(
     rabbit_hosts            => $rabbit_hosts,
     rabbit_password         => $rabbit_password,
     rabbit_virtual_host     => '/',
+    bind_host               => $api_eth,
     dhcp_agents_per_network => '2',
     core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
     service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']

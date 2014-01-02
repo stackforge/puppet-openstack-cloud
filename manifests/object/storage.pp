@@ -28,7 +28,7 @@ define set_io_scheduler(){
 
 # swift storage
 class privatecloud::object::storage (
-  $api_eth        = $os_params::api_eth,
+  $storage_eth    = $os_params::storage_eth,
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',
@@ -39,7 +39,7 @@ class privatecloud::object::storage (
   include 'privatecloud::object'
 
   class { 'swift::storage':
-    storage_local_net_ip => $api_eth,
+    storage_local_net_ip => $storage_eth,
   }
 
   Rsync::Server::Module {
@@ -49,7 +49,7 @@ class privatecloud::object::storage (
 
   Swift::Storage::Server {
     #devices                => $devices,
-    storage_local_net_ip    => $api_eth,
+    storage_local_net_ip    => $storage_eth,
     workers                 => inline_template('<%= @processorcount.to_i / 2 %>'),
     replicator_concurrency  => 2,
     updater_concurrency     => 1,
@@ -98,22 +98,22 @@ allow_versions = on
   set_io_scheduler{'sdb':}
   set_io_scheduler{$object_nodes:}
 
-  @@ring_container_device { "${api_eth}:${container_port}/sdb":
+  @@ring_container_device { "${storage_eth}:${container_port}/sdb":
     zone        => $swift_zone,
     weight      => '100.0',
   }
-  @@ring_account_device { "${api_eth}:${account_port}/sdb":
+  @@ring_account_device { "${storage_eth}:${account_port}/sdb":
     zone        => $swift_zone,
     weight      => '100.0',
   }
-  $object_urls = prefix($object_nodes, "${api_eth}:${object_port}/")
+  $object_urls = prefix($object_nodes, "${storage_eth}:${object_port}/")
   @@ring_object_device {$object_urls:
     zone        => $swift_zone,
     weight      => '100.0',
   }
 
-  class{[
-    'swift::storage::object',
+  class{
+    ['swift::storage::object',
     'swift::storage::container',
     'swift::storage::account']:
   }
