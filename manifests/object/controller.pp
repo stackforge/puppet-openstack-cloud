@@ -17,16 +17,16 @@
 #
 
 class privatecloud::object::controller(
-  $ks_keystone_admin_host = $os_params::ks_keystone_admin_host,
-  $ks_keystone_admin_port = $os_params::ks_keystone_admin_port,
-  $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port = $os_params::ks_keystone_internal_port,
+  $ks_keystone_admin_host       = $os_params::ks_keystone_admin_host,
+  $ks_keystone_admin_port       = $os_params::ks_keystone_admin_port,
+  $ks_keystone_internal_host    = $os_params::ks_keystone_internal_host,
+  $ks_keystone_internal_port    = $os_params::ks_keystone_internal_port,
   $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
-  $ks_swift_internal_port = $os_params::ks_swift_internal_port,
-  $ks_swift_password = $os_params::ks_swift_password,
-  $statsd_host = $os_params::statsd_host,
-  $statsd_port = $os_params::statsd_port,
-  $swift_memchached = $os_params::swift_memchached
+  $ks_swift_internal_port       = $os_params::ks_swift_internal_port,
+  $ks_swift_password            = $os_params::ks_swift_password,
+  $statsd_host                  = $os_params::statsd_host,
+  $statsd_port                  = $os_params::statsd_port,
+  $memcache_servers             = $os_params::memcache_servers
 ) {
 
   include 'privatecloud::object'
@@ -53,7 +53,7 @@ log_statsd_default_sample_rate = 1
 
   class{'swift::proxy::cache':
     memcache_servers => inline_template(
-      '<%= scope.lookupvar("swift_memchached").join(",") %>'),
+      '<%= scope.lookupvar("memcache_servers").join(",") %>'),
   }
   class { 'swift::proxy::proxy-logging': }
   class { 'swift::proxy::healthcheck': }
