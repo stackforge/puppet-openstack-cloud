@@ -35,7 +35,7 @@
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Default value in params
 #
-# [*ks_glance_public_port*]
+# [*ks_glance_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
 #   Default value in params
 #
@@ -61,7 +61,7 @@ class privatecloud::image(
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,
   $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
-  $ks_glance_public_port       = $os_params::ks_glance_public_port,
+  $ks_glance_internal_port     = $os_params::ks_glance_internal_port,
   $ks_glance_password          = $os_params::ks_glance_password,
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
@@ -72,15 +72,16 @@ class privatecloud::image(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { ['glance::api', 'glance::registry']:
-    sql_connection            => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
-    verbose                   => false,
-    debug                     => false,
-    auth_host                 => $ks_keystone_internal_host,
-    keystone_password         => $ks_glance_password,
-    keystone_tenant           => 'services',
-    keystone_user             => 'glance',
-    log_facility              => 'LOG_LOCAL0',
-    use_syslog                => true
+    sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
+    verbose           => false,
+    debug             => false,
+    auth_host         => $ks_keystone_internal_host,
+    keystone_password => $ks_glance_password,
+    keystone_tenant   => 'services',
+    keystone_user     => 'glance',
+    log_facility      => 'LOG_LOCAL0',
+    bind_host         => $api_eth,
+    use_syslog        => true
   }
 
   class { 'glance::notify::rabbitmq':

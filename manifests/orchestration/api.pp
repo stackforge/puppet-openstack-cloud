@@ -17,25 +17,34 @@
 #
 
 class privatecloud::orchestration::api(
-  $ks_heat_public_port             = $os_params::ks_heat_public_port,
-  $ks_heat_cfn_public_port         = $os_params::ks_heat_cfn_public_port,
-  $ks_heat_cloudwatch_public_port  = $os_params::ks_heat_cloudwatch_public_port,
-  $api_eth                         = $os_params::api_eth,
+  $ks_heat_internal_port            = $os_params::ks_heat_internal_port,
+  $ks_heat_cfn_internal_port        = $os_params::ks_heat_cfn_internal_port,
+  $ks_heat_cloudwatch_internal_port = $os_params::ks_heat_cloudwatch_internal_port,
+  $api_eth                          = $os_params::api_eth,
 ) {
 
   include 'privatecloud::orchestration'
 
-  class { 'heat::api': }
+  class { 'heat::api':
+    bind_host => $api_eth,
+    bind_port => $ks_heat_internal_port
+  }
 
-  class { 'heat::api_cfn': }
+  class { 'heat::api_cfn':
+    bind_host => $api_eth,
+    bind_port => $ks_heat_cfn_internal_port
+  }
 
-  class { 'heat::api_cloudwatch': }
+  class { 'heat::api_cloudwatch':
+    bind_host => $api_eth,
+    bind_port => $ks_heat_cloudwatch_internal_port
+  }
 
   @@haproxy::balancermember{"${::fqdn}-heat_api":
     listening_service => 'heat_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => $ks_heat_public_port,
+    ports             => $ks_heat_internal_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -43,7 +52,7 @@ class privatecloud::orchestration::api(
     listening_service => 'heat_cfn_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => $ks_heat_cfn_public_port,
+    ports             => $ks_heat_cfn_internal_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -51,7 +60,7 @@ class privatecloud::orchestration::api(
     listening_service => 'heat_cloudwatch_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => $ks_heat_cloudwatch_public_port,
+    ports             => $ks_heat_cloudwatch_internal_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 

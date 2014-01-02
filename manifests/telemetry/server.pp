@@ -19,7 +19,7 @@
 class privatecloud::telemetry::server(
   $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
-  $ks_ceilometer_internal_port    = $os_params::ks_keystone_internal_port,
+  $ks_ceilometer_internal_port    = $os_params::ks_ceilometer_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $ceilometer_database_connection = $os_params::ceilometer_database_connection,
   $api_eth                        = $os_params::api_eth,

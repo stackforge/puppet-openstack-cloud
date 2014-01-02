@@ -31,8 +31,9 @@ class privatecloud::volume::controller(
   class { 'cinder::scheduler': }
 
   class { 'cinder::api':
-    keystone_password      => $ks_cinder_password,
-    keystone_auth_host     => $ks_keystone_internal_host,
+    keystone_password  => $ks_cinder_password,
+    keystone_auth_host => $ks_keystone_internal_host,
+    bind_host          => $api_eth
   }
 
   class { 'cinder::backup': }

@@ -331,6 +331,8 @@ class privatecloud::identity (
     token_format     => 'UUID',
     use_syslog       => true,
     verbose          => $verbose,
+    bind_host        => $api_eth,
+    bind_port        => $ks_keystone_internal_port
   }
 
   keystone_config {
