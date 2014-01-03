@@ -23,7 +23,7 @@ class privatecloud::compute::controller(
   $api_eth                              = $os_params::api_eth,
 ){
 
-  include 'privatecloud::compute'
+  #  include 'privatecloud::compute'
 
   class { [
     'nova::scheduler',
@@ -35,13 +35,13 @@ class privatecloud::compute::controller(
     enabled => true,
   }
 
-  class { 'nova::api':
-    enabled                              => true,
-    auth_host                            => $ks_keystone_internal_host,
-    admin_password                       => $ks_nova_password,
-    api_bind_address                     => $api_eth,
-    neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
-  }
+    class { 'nova::api':
+      enabled                              => true,
+      auth_host                            => $ks_keystone_internal_host,
+      admin_password                       => $ks_nova_password,
+      api_bind_address                     => $api_eth,
+      neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
+    }
 
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
     listening_service => 'ec2_api_cluster',
