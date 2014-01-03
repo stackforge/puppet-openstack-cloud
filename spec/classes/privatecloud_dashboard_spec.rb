@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for os_dashboard
+# Unit tests for privatecloud::dashboard class
 #
 
 require 'spec_helper'
