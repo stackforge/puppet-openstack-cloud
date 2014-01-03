@@ -71,7 +71,6 @@ class privatecloud::database::sql (
       bind_address  => $api_eth,
       root_password => $mysql_password,
     },
-    service_provider  => 'debian',
     notify            => Service['xinetd'],
   }
 
