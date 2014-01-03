@@ -50,23 +50,40 @@ class privatecloud::dashboard(
   $listen_ssl                = false,
 ) {
 
-  #FIXME https://review.openstack.org/#/c/64523/
-  file {
-    '/etc/apache2/conf.d/openstack-dashboard.conf':
-      ensure  => file,
-      source  => 'puppet:///modules/privatecloud/apache/openstack-dashboard.conf';
-  }
-
-  class {'horizon':
-    secret_key          => $secret_key,
-    keystone_host       => $ks_keystone_internal_host,
-    can_set_mount_point => 'False',
-    # fqdn can can be ambiguous since we use reverse DNS here,
-    # e.g: 127.0.0.1 instead of a public IP address.
-    # We force $api_eth to avoid this situation
-    #FIXME https://review.openstack.org/#/c/64523/
-    fqdn                => $api_eth,
-    require             => File['/etc/apache2/conf.d/openstack-dashboard.conf'];
+  case $::osfamily {
+    'RedHat': {
+      class {'horizon':
+        secret_key          => $secret_key,
+        keystone_host       => $ks_keystone_internal_host,
+        can_set_mount_point => 'False',
+        # fqdn can can be ambiguous since we use reverse DNS here,
+        # e.g: 127.0.0.1 instead of a public IP address.
+        # We force $api_eth to avoid this situation
+        fqdn                => $api_eth
+      }
+    }
+    'Debian': {
+      case $::operatingsystem {
+        'Debian': {
+          #FIXME(sbadia) https://review.openstack.org/#/c/64523/
+          fail('puppet-horizon does not work yet on Debian. Work in progress by https://review.openstack.org/#/c/64523/')
+        }
+        default: {
+          class {'horizon':
+            secret_key          => $secret_key,
+            keystone_host       => $ks_keystone_internal_host,
+            can_set_mount_point => 'False',
+            # fqdn can can be ambiguous since we use reverse DNS here,
+            # e.g: 127.0.0.1 instead of a public IP address.
+            # We force $api_eth to avoid this situation
+            fqdn                => $api_eth
+          }
+        }
+      }
+    }
+    default: {
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, module puppet-horizon only support osfamily RedHat and Debian")
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":

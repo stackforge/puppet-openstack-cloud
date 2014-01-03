@@ -26,7 +26,8 @@ describe 'privatecloud::dashboard' do
       { :listen_ssl                 => false,
         :ks_keystone_internal_host  => 'localhost',
         :ks_keystone_internal_host  => 'localhost',
-        :secret_key                 => '/etc/ssl/secret' }
+        :secret_key                 => '/etc/ssl/secret',
+        :api_eth                    => '10.0.0.1' }
     end
 
     it 'configure horizon with some params' do
@@ -43,8 +44,8 @@ describe 'privatecloud::dashboard' do
   context 'on Debian platforms' do
     let :facts do
       { :osfamily               => 'Debian',
+        :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
-        :ipaddress_eth0         => '10.0.0.1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
@@ -55,7 +56,6 @@ describe 'privatecloud::dashboard' do
     let :facts do
       { :osfamily => 'RedHat',
         :operatingsystemrelease => '6',
-        :ipaddress_eth0         => '10.0.0.1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
