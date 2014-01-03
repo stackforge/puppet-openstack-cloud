@@ -66,6 +66,8 @@ class privatecloud::image(
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
   $api_eth                     = $os_params::api_eth,
+  $verbose                     = $os_params::verbose,
+  $debug                       = $os_params::debug
 ) {
 
   $encoded_glance_user     = uriescape($glance_db_user)
@@ -73,8 +75,8 @@ class privatecloud::image(
 
   class { ['glance::api', 'glance::registry']:
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
-    verbose           => false,
-    debug             => false,
+    verbose           => $verbose,
+    debug             => $debug,
     auth_host         => $ks_keystone_internal_host,
     keystone_password => $ks_glance_password,
     keystone_tenant   => 'services',
@@ -93,7 +95,7 @@ class privatecloud::image(
   # TODO(EmilienM) We should migrate the backend to Ceph (WIP). For now, I let Swift.
   class { 'glance::backend::swift':
     swift_store_user         => 'services:glance',
-    swift_store_key          => $ks_keystone_glance_password,
+    swift_store_key          => $ks_glance_password,
     swift_store_auth_address => $ks_keystone_internal_host,
   }
 
