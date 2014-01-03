@@ -35,7 +35,7 @@ class privatecloud::messaging(
 
   class { 'rabbitmq::server':
     delete_guest_user        => true,
-    config_cluster           => false, # true > Broken on RHEL/CentOS
+    config_cluster           => true,
     cluster_nodes            => $rabbit_hosts,
     wipe_db_on_cookie_change => true,
   }
