@@ -30,7 +30,7 @@ describe 'privatecloud::dashboard' do
         :api_eth                    => '10.0.0.1' }
     end
 
-    it 'configure horizon with some params' do
+    it 'configure horizon' do
       should contain_class('horizon').with(
           :listen_ssl          => false,
           :secret_key          => '/etc/ssl/secret',

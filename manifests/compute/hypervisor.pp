@@ -19,8 +19,8 @@
 class privatecloud::compute::hypervisor(
   $api_eth              = $os_params::api_eth,
   $libvirt_type         = $os_params::libvirt_type,
-  $ks_nova_public_proto = $os_params::ks_nova_public_proto,
-  $ks_nova_public_host  = $os_params::ks_nova_public_host
+  $ks_nova_internal_proto = $os_params::ks_nova_internal_proto,
+  $ks_nova_internal_host  = $os_params::ks_nova_internal_host
 ) {
 
   include 'privatecloud::compute'
@@ -92,8 +92,8 @@ Host *
     agent_enabled              => true,
     server_listen              => '0.0.0.0',
     server_proxyclient_address => $api_eth,
-    proxy_protocol             => $ks_nova_public_proto,
-    proxy_host                 => $ks_nova_public_host,
+    proxy_protocol             => $ks_nova_internal_proto,
+    proxy_host                 => $ks_nova_internal_host,
   }
 
   class { 'nova::compute::neutron': }

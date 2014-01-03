@@ -42,12 +42,27 @@ describe 'privatecloud::compute::controller' do
         :neutron_metadata_proxy_shared_secret => 'secrete' }
     end
 
-    it 'configure compute controller' do
+    it 'configure nova-scheduler' do
       should contain_class('nova::scheduler').with(:enabled => true)
+    end
+
+    it 'configure nova-cert' do
       should contain_class('nova::cert').with(:enabled => true)
+    end
+
+    it 'configure nova-consoleauth' do
       should contain_class('nova::consoleauth').with(:enabled => true)
+    end
+
+    it 'configure nova-conductor' do
       should contain_class('nova::conductor').with(:enabled => true)
+    end
+
+    it 'configure nova-spircehtml5proxy' do
       should contain_class('nova::spicehtml5proxy').with(:enabled => true)
+    end
+
+    it 'configure nova-api' do
       should contain_class('nova::api').with(
           :enabled                              => true,
           :auth_host                            => '10.0.0.1',
