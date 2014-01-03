@@ -52,9 +52,21 @@ class privatecloud::database::sql (
 
   include 'xinetd'
 
+  case $::osfamily {
+    'RedHat': {
+        $package_name = 'MariaDB-Galera-server'
+# service_name is 'mysql' with Maria-Galera-server while it's 'mysqld'
+# with RHEL MySQL package.
+        $service_name = 'mysql'
+    }
+    'Debian': {
+        $package_name = 'mariadb-galera-server'
+    }
+  }
 
   class { 'mysql::server':
-    package_name      => 'mariadb-galera-server',
+    package_name      => $package_name,
+    service_name      => $service_name,
     config_hash       => {
       bind_address  => $api_eth,
       root_password => $mysql_password,
