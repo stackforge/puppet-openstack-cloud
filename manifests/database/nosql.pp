@@ -20,8 +20,11 @@
 
 class privatecloud::database::nosql {
 
+  # use mongo's own repo instead of the distro's
+  class { 'mongodb::globals':
+    manage_package_repo => true
+  }->
   class { 'mongodb':
-    packagename => 'mongodb-10gen'
   }
 
 }
