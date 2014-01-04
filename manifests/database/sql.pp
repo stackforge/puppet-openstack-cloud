@@ -46,7 +46,7 @@ class privatecloud::database::sql (
     $neutron_db_user           = $os_params::neutron_db_user,
     $neutron_db_password       = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
-    $mysql_password            = $os_params::mysql_password
+    $mysql_password            = $os_params::mysql_password,
     $mysql_sys_maint           = $os_params::mysql_sys_maint
 ) {
 
