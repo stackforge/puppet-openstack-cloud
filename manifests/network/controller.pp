@@ -32,9 +32,9 @@ class privatecloud::network::controller(
   $encoded_password = uriescape($neutron_db_password)
 
   class { 'neutron::server':
-    auth_password => $os_params::ks_neutron_password,
-    auth_host     => $os_params::ks_keystone_admin_host,
-    auth_port     => $os_params::ks_keystone_public_port,
+    auth_password => $ks_neutron_password,
+    auth_host     => $ks_keystone_admin_host,
+    auth_port     => $ks_keystone_public_port,
     connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     api_workers   => $::processorcount
   }
