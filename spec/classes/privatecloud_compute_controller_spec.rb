@@ -42,6 +42,20 @@ describe 'privatecloud::compute::controller' do
         :neutron_metadata_proxy_shared_secret => 'secrete' }
     end
 
+    it 'configure nova common' do
+      should contain_class('nova').with(
+          :verbose                 => true,
+          :debug                   => true,
+          :rabbit_userid           => 'nova',
+          :rabbit_hosts            => ['10.0.0.1'],
+          :rabbit_password         => 'secrete',
+          :rabbit_virtual_host     => '/',
+          :database_connection     => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
+          :glance_api_servers      => 'http://10.0.0.1:9292'
+        )
+      should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
+    end
+
     it 'configure nova-scheduler' do
       should contain_class('nova::scheduler').with(:enabled => true)
     end
