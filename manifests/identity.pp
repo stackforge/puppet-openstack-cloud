@@ -332,7 +332,8 @@ class privatecloud::identity (
     use_syslog       => true,
     verbose          => $verbose,
     bind_host        => $api_eth,
-    bind_port        => $ks_keystone_internal_port
+    public_port      => $ks_keystone_public_port,
+    admin_port       => $ks_keystone_admin_port
   }
 
   keystone_config {
