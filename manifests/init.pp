@@ -43,12 +43,12 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # DNS
-  $datacenter = 'ci'
-    class { 'resolver':
-      dcinfo      => { ci   => $os_params::dns_ips, },
-      domainname  => $os_params::site_domain,
-      searchpath  => $os_params::site_domain,
-    }
+  class { 'dnsclient':
+    nameservers => $os_params::dns_ips,
+    options     => 'UNSET',
+    search      => $os_params::site_domain,
+    donain      => $os_params::site_domain,
+  }
 
 # NTP
   class { 'ntp': }
