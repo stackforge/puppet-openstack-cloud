@@ -23,7 +23,7 @@ class privatecloud::compute::controller(
   $api_eth                              = $os_params::api_eth,
 ){
 
-  #  include 'privatecloud::compute'
+  include 'privatecloud::compute'
 
   class { [
     'nova::scheduler',
