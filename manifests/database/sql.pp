@@ -46,7 +46,7 @@ class privatecloud::database::sql (
     $neutron_db_user           = $os_params::neutron_db_user,
     $neutron_db_password       = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
-    $mysql_debian_sys_maint    = $os_params::mysql_debian_sys_maint,
+    $mysql_sys_maint    = $os_params::mysql_sys_maint,
     $mysql_password            = $os_params::mysql_password
 ) {
 
@@ -147,7 +147,7 @@ class privatecloud::database::sql (
 
   database_user { 'debian-sys-maint@localhost':
     ensure        => 'present',
-    password_hash => mysql_password($mysql_debian_sys_maint),
+    password_hash => mysql_password($mysql_sys_maint),
     provider      => 'mysql',
     require       => File['/root/.my.cnf']
   }
@@ -158,12 +158,12 @@ class privatecloud::database::sql (
 [client]
 host     = localhost
 user     = debian-sys-maint
-password = ${mysql_debian_sys_maint}
+password = ${mysql_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 [mysql_upgrade]
 host     = localhost
 user     = debian-sys-maint
-password = ${mysql_debian_sys_maint}
+password = ${mysql_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 ",
