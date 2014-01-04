@@ -46,8 +46,8 @@ class privatecloud::database::sql (
     $neutron_db_user           = $os_params::neutron_db_user,
     $neutron_db_password       = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
-    $mysql_sys_maint    = $os_params::mysql_sys_maint,
     $mysql_password            = $os_params::mysql_password
+    $mysql_sys_maint           = $os_params::mysql_sys_maint
 ) {
 
   include 'xinetd'
@@ -55,9 +55,6 @@ class privatecloud::database::sql (
   case $::osfamily {
     'RedHat': {
         $package_name = 'MariaDB-Galera-server'
-# service_name is 'mysql' with Maria-Galera-server while it's 'mysqld'
-# with RHEL MySQL package.
-        $service_name = 'mysql'
     }
     'Debian': {
         $package_name = 'mariadb-galera-server'
@@ -66,7 +63,8 @@ class privatecloud::database::sql (
 
   class { 'mysql::server':
     package_name      => $package_name,
-    service_name      => $service_name,
+    # with MariaDB package, service_name is mysql for all OS
+    service_name      => 'mysql',
     config_hash       => {
       bind_address  => $api_eth,
       root_password => $mysql_password,
@@ -145,24 +143,24 @@ class privatecloud::database::sql (
     Database_user<<| |>>
   }
 
-  database_user { 'debian-sys-maint@localhost':
+  database_user { 'sys-maint@localhost':
     ensure        => 'present',
     password_hash => mysql_password($mysql_sys_maint),
     provider      => 'mysql',
     require       => File['/root/.my.cnf']
   }
 
-  # set the same debian_sys_maint password
-  file{'/etc/mysql/debian.cnf':
-    content => "# Automatically generated for Debian scripts. DO NOT TOUCH!
+  # set the same sys_maint password
+  file{'/etc/mysql/sys.cnf':
+    content => "# Automatically generated. DO NOT TOUCH!
 [client]
 host     = localhost
-user     = debian-sys-maint
+user     = sys-maint
 password = ${mysql_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 [mysql_upgrade]
 host     = localhost
-user     = debian-sys-maint
+user     = sys-maint
 password = ${mysql_sys_maint}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
@@ -188,38 +186,31 @@ basedir  = /usr
     notify         => Exec['clean-mysql-binlog'],
     settings       => inline_template('
 [mysqld]
-### dim : general ###
-max_connections         = 1000
-connect_timeout         = 5
-wait_timeout            = 600
-max_allowed_packet      = 64M
-thread_cache_size       = 128
-sort_buffer_size        = 4M
-bulk_insert_buffer_size = 16M
-tmp_table_size          = 128M
-max_heap_table_size     = 128M
-query_cache_limit  = 1M
-query_cache_size   = 16M
-
-### dim : myisam ###
-myisam_recover          = BACKUP
-key_buffer_size         = 16M
-open-files-limit        = 65535
-table_open_cache        = 500
-table_definition_cache  = 500
-myisam_sort_buffer_size = 512M
-concurrent_insert       = 2
-read_buffer_size        = 2M
-read_rnd_buffer_size    = 1M
-
-### dim : log ###
-slow_query_log      = 1
-slow_query_log_file = /var/log/mysql/slow.log
-log_error           = /var/log/mysql/error.log
-long_query_time     = 1
-log_slow_verbosity  = query_plan
-
-### dim : innodb conf  ###
+max_connections                 = 1000
+connect_timeout                 = 5
+wait_timeout                    = 600
+max_allowed_packet              = 64M
+thread_cache_size               = 128
+sort_buffer_size                = 4M
+bulk_insert_buffer_size         = 16M
+tmp_table_size                  = 128M
+max_heap_table_size             = 128M
+query_cache_limit               = 1M
+query_cache_size                = 16M
+myisam_recover                  = BACKUP
+key_buffer_size                 = 16M
+open-files-limit                = 65535
+table_open_cache                = 500
+table_definition_cache          = 500
+myisam_sort_buffer_size         = 512M
+concurrent_insert               = 2
+read_buffer_size                = 2M
+read_rnd_buffer_size            = 1M
+slow_query_log                  = 1
+slow_query_log_file             = /var/log/mysql/slow.log
+log_error                       = /var/log/mysql/error.log
+long_query_time                 = 1
+log_slow_verbosity              = query_plan
 innodb_buffer_pool_size         = 64M
 innodb_flush_log_at_trx_commit  = 1
 innodb_lock_wait_timeout        = 50
@@ -230,44 +221,36 @@ innodb_io_capacity              = 1000
 innodb_file_format              = Barracuda
 innodb_file_format_max          = Barracuda
 innodb_max_dirty_pages_pct      = 50
-
-# sileht: mandatory for galera
-binlog_format=ROW
-innodb_autoinc_lock_mode=2
-innodb_locks_unsafe_for_binlog=1
-# sileht: galera stuff TODO: change login/password
-wsrep_provider=/usr/lib/galera/libgalera_smm.so
-wsrep_cluster_name="galera_cluster"
+binlog_format                   = ROW
+innodb_autoinc_lock_mode        = 2
+innodb_locks_unsafe_for_binlog  = 1
+wsrep_provider                  = /usr/lib/galera/libgalera_smm.so
+wsrep_cluster_name              = "galera_cluster"
 <%- if hostname != galera_master -%>
-wsrep_cluster_address="gcomm://<%= @galera_nextserver[@galera_master] %>"
+# This node is Galera Master
+wsrep_cluster_address           = "gcomm://<%= @galera_nextserver[@galera_master] %>"
 <%- else -%>
-wsrep_cluster_address="gcomm://"
+# This node is not Galera Master
+wsrep_cluster_address           = "gcomm://"
 <%- end -%>
-wsrep_sst_auth=root:<%= scope.lookupvar("$mysql_password") %>
-wsrep_certify_nonPK=1
-wsrep_convert_LOCK_to_trx=0
-wsrep_auto_increment_control=1
-wsrep_drupal_282555_workaround=0
-wsrep_causal_reads=0
-wsrep_sst_method=rsync
-wsrep_node_address="<%= @api_eth %>"
-wsrep_node_incoming_address="<%= @api_eth %>"
-
+wsrep_sst_auth                  = root:<%= scope.lookupvar("$mysql_password") %>
+wsrep_certify_nonPK             = 1
+wsrep_convert_LOCK_to_trx       = 0
+wsrep_auto_increment_control    = 1
+wsrep_drupal_282555_workaround  = 0
+wsrep_causal_reads              = 0
+wsrep_sst_method                = rsync
+wsrep_node_address              = "<%= @api_eth %>"
+wsrep_node_incoming_address     = "<%= @api_eth %>"
 # this value here are used by /usr/bin/innobackupex
 # and wsrep_sst_xtrabackup take only one configuration file and use the last one
 # (/etc/mysql/my.cnf is not used)
-datadir = /var/lib/mysql
-tmpdir = /tmp
+datadir                         = /var/lib/mysql
+tmpdir                          = /tmp
 innodb_flush_method             = O_DIRECT
 innodb_log_buffer_size          = 32M
 innodb_log_file_size            = 256M
 innodb_log_files_in_group       = 2
-#innodb_data_file_path
-#innodb_data_home_dir
-#innodb_fast_checksum
-#innodb_log_block_size
-#innodb_log_group_home_dir
-#innodb_page_size
 '),
   }
 
