@@ -16,9 +16,7 @@
 # Network VPNaaS node
 #
 
-class privatecloud::network::vpn(
-  $debug                 = $os_params::debug
-) {
+class privatecloud::network::vpn{
 
   include 'privatecloud::network'
 
