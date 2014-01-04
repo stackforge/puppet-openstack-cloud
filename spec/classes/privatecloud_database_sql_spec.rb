@@ -63,7 +63,7 @@ describe 'privatecloud::database::sql' do
       should contain_class('mysql::server').with(
           :package_name => platform_params[:package_name],
           :service_name => 'mysql',
-          :config_hash  => { :bind_address => '10.0.0.1', :root_password => 'secrete' },
+          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => 'secrete' },
           :notify       => 'Service[xinetd]'
         )
     end
