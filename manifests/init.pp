@@ -47,7 +47,7 @@ This node is under the control of Puppet ${::puppetversion}.
     nameservers => $os_params::dns_ips,
     options     => 'UNSET',
     search      => $os_params::site_domain,
-    donain      => $os_params::site_domain,
+    domain      => $os_params::site_domain,
   }
 
 # NTP
