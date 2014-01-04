@@ -53,13 +53,21 @@ describe 'privatecloud::network::controller' do
           :rabbit_password         => 'secrete',
           :rabbit_virtual_host     => '/',
           :bind_host               => '10.0.0.1',
-          :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin'
+          :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
+          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
 
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
           :local_ip         => '10.0.1.1'
       )
+      should contain_class('neutron::plugins::ml2').with(
+          :type_drivers         => ['gre'],
+          :tenant_network_types => ['gre'],
+          :mechanism_drivers    => ['openvswitch'],
+          :tunnel_id_ranges     => ['1:10000']
+      )
+      should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value(true)
     end
 
     it 'configure neutron server' do
