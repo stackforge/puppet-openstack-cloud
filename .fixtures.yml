@@ -30,5 +30,6 @@ fixtures:
     'tempest': 'git://github.com/stackforge/puppet-tempest'
     'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo'
     'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
+    'xinetd': 'git://github.com/puppetlabs/puppetlabs-xinetd.git'
   symlinks:
     'privatecloud': '#{source_dir}'
