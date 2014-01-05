@@ -24,11 +24,10 @@ class privatecloud::volume(
   $rabbit_password            = $os_params::rabbit_password,
   $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
   $ks_cinder_password         = $os_params::ks_cinder_password,
-  $ks_glance_internal_host    = $os_params::ks_glance_internal_host,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
-
 ) {
+
   $encoded_user = uriescape($cinder_db_user)
   $encoded_password = uriescape($cinder_db_password)
 
@@ -45,11 +44,12 @@ class privatecloud::volume(
     use_syslog          => true
   }
 
-  class { 'cinder::ceilometer': }
-
-  class { 'cinder::glance':
-    glance_api_servers     => $ks_glance_internal_host,
-    glance_request_timeout => '10'
+  #TODO(EmilienM) While https://review.openstack.org/#/c/65008/ got merged
+  #               we can't declare ceilometer class due to bug LP #1266259
+  # class { 'cinder::ceilometer': }
+  # Temp fix:
+  cinder_config {
+    'DEFAULT/notification_driver': value => 'cinder.openstack.common.notifier.rpc_notifier';
   }
 
 }
