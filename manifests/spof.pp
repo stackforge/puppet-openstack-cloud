@@ -19,7 +19,7 @@
 #
 # === Parameters:
 #
-# [*cluster_eth*]
+# [*cluster_ip*]
 #   (optional) Interface used by Corosync to send multicast traffic
 #   Default to params.
 #
