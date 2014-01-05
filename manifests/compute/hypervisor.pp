@@ -17,10 +17,13 @@
 #
 
 class privatecloud::compute::hypervisor(
-  $api_eth              = $os_params::api_eth,
-  $libvirt_type         = $os_params::libvirt_type,
+  $api_eth                = $os_params::api_eth,
+  $libvirt_type           = $os_params::libvirt_type,
   $ks_nova_internal_proto = $os_params::ks_nova_internal_proto,
-  $ks_nova_internal_host  = $os_params::ks_nova_internal_host
+  $ks_nova_internal_host  = $os_params::ks_nova_internal_host,
+  $ks_nova_public_host    = $os_params::ks_nova_public_host,
+  $nova_ssh_private_key   = $os_params::nova_ssh_private_key,
+  $nova_ssh_public_key    = $os_params::nova_ssh_public_key
 ) {
 
   include 'privatecloud::compute'
@@ -46,14 +49,14 @@ class privatecloud::compute::hypervisor(
     mode    => '0600',
     owner   => 'nova',
     group   => 'nova',
-    content => $os_params::nova_ssh_private_key
+    content => $nova_ssh_private_key
   } ->
   file{ '/var/lib/nova/.ssh/authorized_keys':
     ensure  => present,
     mode    => '0600',
     owner   => 'nova',
     group   => 'nova',
-    content => $os_params::nova_ssh_public_key
+    content => $nova_ssh_public_key
   } ->
   file{ '/var/lib/nova/.ssh/config':
     ensure  => present,
@@ -67,11 +70,12 @@ Host *
   }
 
   class { 'nova::compute':
-    enabled         => true,
-    vnc_enabled     => false,
-    #TODO(EmilienM) Bug #1259545 currently WIP
-    virtio_nic      => false,
-    neutron_enabled => true
+    enabled                       => true,
+    vncproxy_host                 => $ks_nova_public_host,
+    vncserver_proxyclient_address => $api_eth,
+    #TODO(EmilienM) Bug #1259545 currently WIP:
+    virtio_nic                    => false,
+    neutron_enabled               => true
   }
 
   class { 'nova::compute::libvirt':
@@ -86,14 +90,6 @@ Host *
   exec{'/etc/init.d/open-iscsi stop':
     subscribe   => Exec['/etc/init.d/open-iscsi start'],
     refreshonly => true
-  }
-
-  class { 'nova::compute::spice':
-    agent_enabled              => true,
-    server_listen              => '0.0.0.0',
-    server_proxyclient_address => $api_eth,
-    proxy_protocol             => $ks_nova_internal_proto,
-    proxy_host                 => $ks_nova_internal_host,
   }
 
   class { 'nova::compute::neutron': }

@@ -30,7 +30,8 @@ class privatecloud::compute::controller(
     'nova::cert',
     'nova::consoleauth',
     'nova::conductor',
-    'nova::spicehtml5proxy',
+    # TODO(Emilien) Migrate to spice asap
+    'nova::vncproxy',
   ]:
     enabled => true,
   }
