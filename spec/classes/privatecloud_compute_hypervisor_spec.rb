@@ -38,7 +38,10 @@ describe 'privatecloud::compute::hypervisor' do
     let :params do
       { :libvirt_type                         => 'kvm',
         :api_eth                              => '10.0.0.1',
+        :nova_ssh_private_key                 => 'secrete',
+        :nova_ssh_public_key                  => 'public',
         :ks_nova_internal_proto               => 'http',
+        :ks_nova_public_host                  => '7.7.7.7',
         :ks_nova_internal_host                => '10.0.0.1' }
     end
 
@@ -58,10 +61,11 @@ describe 'privatecloud::compute::hypervisor' do
 
     it 'configure nova-compute' do
       should contain_class('nova::compute').with(
-          :enabled          => true,
-          :vnc_enabled      => false,
-          :virtio_nic       => false,
-          :neutron_enabled  => true
+          :enabled                       => true,
+          :vncproxy_host                 => '7.7.7.7',
+          :vncserver_proxyclient_address => '10.0.0.1',
+          :virtio_nic                    => false,
+          :neutron_enabled               => true
         )
     end
 
@@ -70,16 +74,6 @@ describe 'privatecloud::compute::hypervisor' do
           :libvirt_type      => 'kvm',
           :vncserver_listen  => '0.0.0.0',
           :migration_support => true,
-        )
-    end
-
-    it 'configure nova spice agent' do
-      should contain_class('nova::compute::spice').with(
-          :agent_enabled              => true,
-          :server_listen              => '0.0.0.0',
-          :server_proxyclient_address => '10.0.0.1',
-          :proxy_protocol             => 'http',
-          :proxy_host                 => '10.0.0.1'
         )
     end
 

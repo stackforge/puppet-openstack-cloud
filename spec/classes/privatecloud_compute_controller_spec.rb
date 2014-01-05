@@ -72,8 +72,8 @@ describe 'privatecloud::compute::controller' do
       should contain_class('nova::conductor').with(:enabled => true)
     end
 
-    it 'configure nova-spircehtml5proxy' do
-      should contain_class('nova::spicehtml5proxy').with(:enabled => true)
+    it 'configure nova-vncproxy' do
+      should contain_class('nova::vncproxy').with(:enabled => true)
     end
 
     it 'configure nova-api' do
@@ -101,7 +101,7 @@ describe 'privatecloud::compute::controller' do
     end
 
 #TODO(Emilien) Problem with Spice: http://paste.openstack.org/show/pxIyzg5gqeJVR2nUPtoB/
-#    it_configures 'openstack compute controller'
+    it_configures 'openstack compute controller'
   end
 
 end
