@@ -40,7 +40,7 @@ innodb_max_dirty_pages_pct      = 50
 binlog_format                   = ROW
 innodb_autoinc_lock_mode        = 2
 innodb_locks_unsafe_for_binlog  = 1
-wsrep_provider                  = /usr/lib/galera/libgalera_smm.so
+wsrep_provider                  = "<%= @wsrep_provider %>"
 wsrep_cluster_name              = "galera_cluster"
 <% if @hostname != @galera_master -%>
 # This node is not Galera Master (connect wsrep to galera_master)
