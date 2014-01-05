@@ -65,10 +65,12 @@ class privatecloud::database::sql (
 
         # TODO(Gonéri)
         # MariaDB-Galera-server-5.5.34-1.x86_64 doesn't create this
-        # directory
-        file { '/var/log/mysql':
+        $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
+        file { $dirs:
             ensure => directory,
-            mode   => 0750
+            mode   => 0750,
+            before => Service['mysqld'],
+            owner  => 'mysql'
         }
 
     }
