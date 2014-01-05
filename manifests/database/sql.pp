@@ -54,10 +54,18 @@ class privatecloud::database::sql (
 
   case $::osfamily {
     'RedHat': {
-        $package_name = 'MariaDB-Galera-server'
+        class { 'mysql':
+            server_package_name => 'MariaDB-Galera-server',
+            client_package_name => 'MariaDB-client',
+            service_name         => 'mysql'
+        }
     }
     'Debian': {
-        $package_name = 'mariadb-galera-server'
+        class { 'mysql':
+            server_package_name => 'mariadb-galera-server',
+            client_package_name => 'mariadb-client',
+            service_name         => 'mysql'
+        }
     }
     default: {
       err "${::osfamily} not supported yet"
@@ -65,14 +73,12 @@ class privatecloud::database::sql (
   }
 
   class { 'mysql::server':
-    package_name      => $package_name,
     # with MariaDB package, service_name is mysql for all OS
-    service_name      => 'mysql',
-    config_hash       => {
-      bind_address  => $api_eth,
-      root_password => $mysql_password,
+    config_hash         => {
+      bind_address      => $api_eth,
+      root_password     => $mysql_password,
     },
-    notify            => Service['xinetd'],
+    notify              => Service['xinetd'],
   }
 
   if $::hostname == $galera_master {
