@@ -30,15 +30,18 @@ describe 'privatecloud::telemetry::server' do
         ks_keystone_internal_host  => '10.0.0.1',
         ks_keystone_internal_port  => '5000',
         ks_keystone_internal_proto => 'http',
+        ks_ceilometer_password     => 'secrete',
         verbose                    => true,
         debug                      => true }"
     end
 
     let :params do
       { :ks_keystone_internal_host            => '10.0.0.1',
-        :ks_nova_password                     => 'secrete',
+        :ks_keystone_internal_proto           => 'http',
+        :ks_ceilometer_internal_port          => '8777',
+        :ks_ceilometer_password               => 'secrete',
         :api_eth                              => '10.0.0.1',
-        :neutron_metadata_proxy_shared_secret => 'secrete' }
+        :ceilometer_database_connection       => 'mongodb://10.0.0.2/ceilometer' }
     end
 
     it 'configure ceilometer common' do
@@ -55,21 +58,43 @@ describe 'privatecloud::telemetry::server' do
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
         )
       should contain_ceilometer_config('DEFAULT/syslog_log_facility').with('value' => 'LOG_LOCAL0')
-      should contain_ceilometer_config('DEFAULT/user_syslog').with('value' => 'yes')
+      should contain_ceilometer_config('DEFAULT/use_syslog').with('value' => 'yes')
     end
 
-    it 'configure nova-scheduler' do
-      should contain_class('nova::scheduler').with(:enabled => true)
+    it 'configure ceilometer db' do
+      should contain_class('ceilometer::db').with(
+          :database_connection => 'mongodb://10.0.0.2/ceilometer'
+        )
+    end
+
+    it 'configure ceilometer collector' do
+      should contain_class('ceilometer::collector')
+    end
+
+    it 'configure ceilometer alarm evaluator' do
+      should contain_class('ceilometer::alarm::evaluator')
+    end
+
+    it 'configure ceilometer alarm notifier' do
+      should contain_class('ceilometer::alarm::notifier')
     end
 
     it 'configure ceilometer-api' do
       should contain_class('ceilometer::api').with(
-          :auth_host                            => '10.0.0.1',
-          :admin_password                       => 'secrete',
-          :api_bind_address                     => '10.0.0.1',
-          :neutron_metadata_proxy_shared_secret => 'secrete'
+          :keystone_password => 'secrete',
+          :keystone_host     => '10.0.0.1',
+          :keystone_protocol => 'http',
         )
     end
+
+    it 'configure ceilometer-expirer' do
+      should contain_class('ceilometer::expirer').with(
+          :time_to_live => '2592000',
+          :minute       => '0',
+          :hour         => '0',
+        )
+    end
+
   end
 
   context 'on Debian platforms' do
