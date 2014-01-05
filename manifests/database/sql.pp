@@ -67,7 +67,7 @@ class privatecloud::database::sql (
         # MariaDB-Galera-server-5.5.34-1.x86_64 doesn't create this
         # directory
         file { '/var/log/mysql':
-            ensure => directory
+            ensure => directory,
             mode   => 0750
         }
 
