@@ -16,15 +16,20 @@
 # Volume storage
 #
 
-class privatecloud::volume::storage {
+class privatecloud::volume::storage(
+  $cinder_rbd_pool        = $os_params::cinder_rbd_pool,
+  $glance_api_version     = $os_params::glance_api_version,
+  $cinder_rbd_user        = $os_params::cinder_rbd_user,
+  $cinder_rbd_secret_uuid = $os_params::cinder_rbd_secret_uuid,
+) {
 
   include 'privatecloud::volume'
 
   class { 'cinder::volume::rbd':
-    rbd_pool           => $os_params::cinder_rbd_pool,
-    glance_api_version => $os_params::glance_api_version,
-    rbd_user           => $os_params::cinder_rbd_user,
-    rbd_secret_uuid    => $os_params::cinder_rbd_secret_uuid
+    rbd_pool           => $cinder_rbd_pool,
+    glance_api_version => $glance_api_version,
+    rbd_user           => $cinder_rbd_user,
+    rbd_secret_uuid    => $cinder_rbd_secret_uuid
   }
 
 }

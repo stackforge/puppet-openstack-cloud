@@ -23,6 +23,7 @@ class privatecloud::volume::controller(
   $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
   $ks_swift_internal_host    = $os_params::ks_swift_internal_host,
   $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
+  $ks_glance_internal_host   = $os_params::ks_glance_internal_host,
   $api_eth                   = $os_params::api_eth,
 ) {
 
@@ -40,6 +41,11 @@ class privatecloud::volume::controller(
 
   class { 'cinder::backup::swift':
     backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH"
+  }
+
+  class { 'cinder::glance':
+    glance_api_servers     => $ks_glance_internal_host,
+    glance_request_timeout => '10'
   }
 
   @@haproxy::balancermember{"${::fqdn}-cinder_api":
