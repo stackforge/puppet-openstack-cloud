@@ -21,17 +21,17 @@
 #
 # [*cluster_eth*]
 #   (optional) Interface used by Corosync to send multicast traffic
-#   Default to $::network_eth0
+#   Default to params.
 #
 
 class privatecloud::spof(
-  $cluster_eth = $::network_eth0,
+  $cluster_ip = $os_params::cluster_ip,
 ) {
 
   class { 'corosync':
     enable_secauth    => false,
     authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
-    bind_address      => $cluster_eth,
+    bind_address      => $cluster_ip,
     multicast_address => '239.1.1.2',
   }
 
