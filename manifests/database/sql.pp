@@ -52,6 +52,7 @@ class privatecloud::database::sql (
 
   include 'xinetd'
 
+  # TODO(Gonéri): OS/values detection should be moved in a params.pp
   case $::osfamily {
     'RedHat': {
         class { 'mysql':
@@ -59,6 +60,17 @@ class privatecloud::database::sql (
             client_package_name => 'MariaDB-client',
             service_name         => 'mysql'
         }
+        # galera-23.2.7-1.rhel6.x86_64
+        $wsrep_provider = "/usr/lib64/galera/libgalera_smm.so"
+
+        # TODO(Gonéri)
+        # MariaDB-Galera-server-5.5.34-1.x86_64 doesn't create this
+        # directory
+        file { '/var/log/mysql':
+            ensure => directory
+            mode   => 0750
+        }
+
     }
     'Debian': {
         class { 'mysql':
@@ -66,6 +78,7 @@ class privatecloud::database::sql (
             client_package_name => 'mariadb-client',
             service_name         => 'mysql'
         }
+        $wsrep_provider = "/usr/lib/galera/libgalera_smm.so"
     }
     default: {
       err "${::osfamily} not supported yet"
@@ -189,10 +202,11 @@ basedir  = /usr
   }
 
 
+  # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
     notify_service => false,
     notify         => Exec['clean-mysql-binlog'],
-    settings       => template('privatecloud/database/mysql.conf.erb'),
+    settings       => template('privatecloud/database/mysql.conf.erb')
   }
 
   exec{'clean-mysql-binlog':
