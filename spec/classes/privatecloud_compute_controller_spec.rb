@@ -100,7 +100,6 @@ describe 'privatecloud::compute::controller' do
       { :osfamily => 'RedHat' }
     end
 
-#TODO(Emilien) Problem with Spice: http://paste.openstack.org/show/pxIyzg5gqeJVR2nUPtoB/
     it_configures 'openstack compute controller'
   end
 
