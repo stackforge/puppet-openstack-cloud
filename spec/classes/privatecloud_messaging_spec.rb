@@ -31,7 +31,7 @@ describe 'privatecloud::messaging' do
       should contain_class('rabbitmq::server').with(
           :delete_guest_user        => true,
           :config_cluster           => true,
-          :cluster_nodes            => ['10.0.0.1'],
+          :cluster_disk_nodes       => ['10.0.0.1'],
           :wipe_db_on_cookie_change => true
         )
     end
