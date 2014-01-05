@@ -73,7 +73,6 @@ class privatecloud::database::sql (
   }
 
   class { 'mysql::server':
-    # with MariaDB package, service_name is mysql for all OS
     config_hash         => {
       bind_address      => $api_eth,
       root_password     => $mysql_password,
