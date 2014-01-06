@@ -163,17 +163,16 @@ class privatecloud::database::sql (
       privileges => ['all']
     }
 
+    database_user { 'sys-maint@localhost':
+      ensure        => 'present',
+      password_hash => mysql_password($mysql_sys_maint),
+      provider      => 'mysql',
+      require       => File['/root/.my.cnf']
+    }
+
     Database_user<<| |>>
   }
 
-  database_user { 'sys-maint@localhost':
-    ensure        => 'present',
-    password_hash => mysql_password($mysql_sys_maint),
-    provider      => 'mysql',
-    require       => File['/root/.my.cnf']
-  }
-
-  # set the same sys_maint password
   file{'/etc/mysql/sys.cnf':
     content => "# Automatically generated. DO NOT TOUCH!
 [client]
@@ -194,16 +193,6 @@ basedir  = /usr
   # Disabled because monitor depends on checkmulti which is broken
   #  class { 'monitor::galera::httpsrv': }
 
-  @@haproxy::balancermember{$::fqdn:
-    listening_service => 'galera_cluster',
-    server_names      => $::hostname,
-    ipaddresses       => $api_eth,
-    ports             => '3306',
-    options           =>
-      inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master -%>backup<% end %>')
-  }
-
-
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
     notify_service => false,
@@ -219,6 +208,15 @@ basedir  = /usr
       Service['mysqld'],
     ],
     refreshonly => true,
+  }
+
+  @@haproxy::balancermember{$::fqdn:
+    listening_service => 'galera_cluster',
+    server_names      => $::hostname,
+    ipaddresses       => $api_eth,
+    ports             => '3306',
+    options           =>
+      inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master -%>backup<% end %>')
   }
 
 }
