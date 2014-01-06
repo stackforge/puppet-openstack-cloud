@@ -22,12 +22,14 @@ class privatecloud::orchestration::engine(
   $ks_heat_public_host        = $os_params::ks_heat_public_host,
   $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
   $ks_heat_password           = $os_params::ks_heat_password,
+  $auth_encryption_key        = $os_params::auth_encryption_key
 ) {
 
   include 'privatecloud::orchestration'
 
   class { 'heat::engine':
     enabled                       => $enabled,
+    auth_encryption_key           => $auth_encryption_key,
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",
     heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:8000/v1/waitcondition",
     heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"

@@ -32,6 +32,9 @@ describe 'privatecloud::orchestration::api' do
         ks_keystone_admin_host     => '10.0.0.1',
         ks_keystone_admin_port     => '5000',
         ks_keystone_admin_proto    => 'http',
+        ks_heat_public_host        => '10.0.0.1',
+        ks_heat_public_proto       => 'http',
+        ks_heat_password           => 'secrete',
         heat_db_host               => '10.0.0.1',
         heat_db_user               => 'heat',
         heat_db_password           => 'secrete',
@@ -40,9 +43,10 @@ describe 'privatecloud::orchestration::api' do
     end
 
     let :params do
-      { :ks_heat_internal_port => '80040',
-        :ks_heat_internal_port => '80040',
-        :api_eth               => '10.0.0.1' }
+      { :ks_heat_internal_port            => '8004',
+        :ks_heat_cfn_internal_port        => '8000',
+        :ks_heat_cloudwatch_internal_port => '8003',
+        :api_eth                          => '10.0.0.1' }
     end
 
     it 'configure heat common' do
@@ -57,42 +61,22 @@ describe 'privatecloud::orchestration::api' do
           :keystone_protocol       => 'http',
           :keystone_password       => 'secrete',
           :auth_uri                => 'http://10.0.0.1:5000/v2.0',
-          :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat',
-          :metering_secret         => 'secrete'
+          :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat'
         )
     end
 
-    it 'configure ceilometer db' do
-      should contain_class('ceilometer::db').with(
-          :database_connection => 'mongodb://10.0.0.2/ceilometer'
+    it 'configure heat api' do
+      should contain_class('heat::api').with(
+          :bind_host => '10.0.0.1',
+          :bind_port => '8004'
         )
-    end
-
-    it 'configure ceilometer collector' do
-      should contain_class('ceilometer::collector')
-    end
-
-    it 'configure ceilometer alarm evaluator' do
-      should contain_class('ceilometer::alarm::evaluator')
-    end
-
-    it 'configure ceilometer alarm notifier' do
-      should contain_class('ceilometer::alarm::notifier')
-    end
-
-    it 'configure ceilometer-api' do
-      should contain_class('ceilometer::api').with(
-          :keystone_password => 'secrete',
-          :keystone_host     => '10.0.0.1',
-          :keystone_protocol => 'http',
+      should contain_class('heat::api_cfn').with(
+          :bind_host => '10.0.0.1',
+          :bind_port => '8000'
         )
-    end
-
-    it 'configure ceilometer-expirer' do
-      should contain_class('ceilometer::expirer').with(
-          :time_to_live => '2592000',
-          :minute       => '0',
-          :hour         => '0',
+      should contain_class('heat::api_cloudwatch').with(
+          :bind_host => '10.0.0.1',
+          :bind_port => '8003'
         )
     end
 
