@@ -53,19 +53,104 @@ describe 'privatecloud::database::sql' do
         :nova_db_password          => 'secrete',
         :nova_db_allowed_hosts     => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :neutron_db_host           => '10.0.0.1',
-        :neutron_db_user           => 'glance',
+        :neutron_db_user           => 'neutron',
         :neutron_db_password       => 'secrete',
         :neutron_db_allowed_hosts  => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :mysql_sys_maint           => 'sys' }
     end
 
     it 'configure mysql galera server' do
+      should contain_class('mysql').with(
+          :server_package_name => platform_params[:server_package_name],
+          :client_package_name => platform_params[:client_package_name],
+          :service_name => 'mysql'
+        )
+
       should contain_class('mysql::server').with(
-          :package_name => platform_params[:package_name],
-          :service_name => 'mysql',
           :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => 'secrete' },
           :notify       => 'Service[xinetd]'
         )
+    end
+
+    context 'configure databases on the galera master server' do
+
+      before :each do
+        facts.merge!( :hostname => '10.0.0.1' )
+      end
+
+      it 'configure keystone database' do
+        should contain_class('keystone::db::mysql').with(
+            :dbname        => 'keystone',
+            :user          => 'keystone',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure glance database' do
+        should contain_class('glance::db::mysql').with(
+            :dbname        => 'glance',
+            :user          => 'glance',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure nova database' do
+        should contain_class('nova::db::mysql').with(
+            :dbname        => 'nova',
+            :user          => 'nova',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure cinder database' do
+        should contain_class('cinder::db::mysql').with(
+            :dbname        => 'cinder',
+            :user          => 'cinder',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure neutron database' do
+        should contain_class('neutron::db::mysql').with(
+            :dbname        => 'neutron',
+            :user          => 'neutron',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure heat database' do
+        should contain_class('heat::db::mysql').with(
+            :dbname        => 'heat',
+            :user          => 'heat',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure monitoring database' do
+        should contain_database('monitoring').with(
+          :ensure   => 'present',
+          :charset  => 'utf8'
+        )
+        should contain_database_user('clustercheckuser@localhost').with(
+          :ensure        => 'present',
+          :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F',
+          :provider      => 'mysql'
+        )
+        should contain_database_grant('clustercheckuser@localhost/monitoring').with(
+          :privileges => 'all'
+        )
+        should contain_database_user('sys-maint@localhost').with(
+          :ensure        => 'present',
+          :password_hash => '*BE353D0D7826681F8B7C136ED9824915F5B99E7D',
+          :provider      => 'mysql'
+        )
+      end
     end
 
   end
@@ -76,7 +161,9 @@ describe 'privatecloud::database::sql' do
     end
 
     let :platform_params do
-      { :package_name => 'mariadb-galera-server' }
+      { :server_package_name => 'mariadb-galera-server',
+        :client_package_name => 'mariadb-client',
+        :wsrep_provider      => '/usr/lib/galera/libgalera_smm.so' }
     end
 
     it_configures 'openstack database sql'
@@ -88,7 +175,9 @@ describe 'privatecloud::database::sql' do
     end
 
     let :platform_params do
-      { :package_name => 'MariaDB-Galera-server' }
+      { :server_package_name => 'MariaDB-Galera-server',
+        :client_package_name => 'MariaDB-client',
+        :wsrep_provider      => '/usr/lib64/galera/libgalera_smm.so' }
     end
 
     it_configures 'openstack database sql'
