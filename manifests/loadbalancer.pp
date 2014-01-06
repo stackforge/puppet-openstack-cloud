@@ -37,7 +37,7 @@ class privatecloud::loadbalancer(
   $keepalived_email               = $os_params::keepalived_email,
   $keepalived_interface           = $os_params::keepalived_interface,
   $keepalived_ipvs                = [],
-  $keepalived_localhost_ip        = $::ipaddress_eth1,
+  $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
   $keepalived_smtp                = $os_params::keepalived_smtp,
   $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
