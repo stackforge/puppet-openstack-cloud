@@ -22,7 +22,7 @@ class privatecloud::orchestration::engine(
   $ks_heat_public_host        = $os_params::ks_heat_public_host,
   $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
   $ks_heat_password           = $os_params::ks_heat_password,
-  $auth_encryption_key        = $os_params::auth_encryption_key
+  $auth_encryption_key        = $os_params::heat_auth_encryption_key
 ) {
 
   include 'privatecloud::orchestration'
