@@ -43,11 +43,11 @@ describe 'privatecloud::orchestration::engine' do
     end
 
     let :params do
-      { :enabled              => true,
+      { :enabled                   => true,
         :auth_encryption_key  => 'secrete',
-        :ks_heat_public_host  => '10.0.0.1',
-        :ks_heat_public_proto => 'http',
-        :ks_heat_password     => 'secrete' }
+        :ks_heat_public_host       => '10.0.0.1',
+        :ks_heat_public_proto      => 'http',
+        :ks_heat_password          => 'secrete' }
     end
 
     it 'configure heat common' do
@@ -69,6 +69,7 @@ describe 'privatecloud::orchestration::engine' do
     it 'configure heat engine' do
       should contain_class('heat::engine').with(
           :enabled                       => true,
+          :auth_encryption_key           => 'secrete',
           :heat_metadata_server_url      => 'http://10.0.0.1:8000',
           :heat_waitcondition_server_url => 'http://10.0.0.1:8000/v1/waitcondition',
           :heat_watch_server_url         => 'http://10.0.0.1:8003'
