@@ -35,7 +35,7 @@ class privatecloud::loadbalancer(
   $spice                          = true,
   $haproxy_auth                   = $os_params::haproxy_auth,
   $keepalived_email               = $os_params::keepalived_email,
-  $keepalived_interface           = 'eth1',
+  $keepalived_interface           = $os_params::keepalived_interface,
   $keepalived_ipvs                = [],
   $keepalived_localhost_ip        = $::ipaddress_eth1,
   $keepalived_smtp                = $os_params::keepalived_smtp,
