@@ -172,7 +172,7 @@ monitor fail if horizon_dead
     privatecloud::loadbalancer::listen_http {
       'keystone_api_cluster':
         ports     => $ks_keystone_public_port,
-        listen_ip => $keepalived_localhost_ip;
+        listen_ip => $openstack_vip;
       'keystone_api_admin_cluster':
         ports     => $ks_keystone_admin_port,
         listen_ip => $openstack_vip;
