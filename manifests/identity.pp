@@ -337,7 +337,6 @@ class privatecloud::identity (
   }
 
   keystone_config {
-    'token/expiration': value => '86400';
     'ec2/driver':       value => 'keystone.contrib.ec2.backends.sql.Ec2';
   }
 
@@ -370,6 +369,7 @@ class privatecloud::identity (
     servername  => $::fqdn,
     admin_port  => $ks_keystone_admin_port,
     public_port => $ks_keystone_public_port,
+    # TODO(EmilienM) not sure workers is useful when using WSGI backend
     workers     => $::processorcount,
     ssl         => false,
   }
@@ -384,6 +384,10 @@ class privatecloud::identity (
     region           => $region,
   }
 
+  class {'swift::keystone::dispersion':
+    auth_pass => $ks_swift_dispersion_password
+  }
+
   class {'ceilometer::keystone::auth':
     admin_address    => $ks_ceilometer_admin_host,
     internal_address => $ks_ceilometer_internal_host,
@@ -394,10 +398,6 @@ class privatecloud::identity (
     region           => $region,
   }
 
-  class {'swift::keystone::dispersion':
-    auth_pass => $ks_swift_dispersion_password
-  }
-
   class { 'nova::keystone::auth':
     admin_address    => $ks_nova_admin_host,
     cinder           => true,
@@ -405,6 +405,7 @@ class privatecloud::identity (
     password         => $ks_nova_password,
     public_address   => $ks_nova_public_host,
     public_protocol  => $ks_nova_public_proto,
+    region           => $region
   }
 
   class { 'neutron::keystone::auth':
@@ -413,6 +414,7 @@ class privatecloud::identity (
     password         => $ks_neutron_password,
     public_address   => $ks_neutron_public_host,
     public_protocol  => $ks_neutron_public_proto,
+    region           => $region
   }
 
   class { 'cinder::keystone::auth':
@@ -421,6 +423,7 @@ class privatecloud::identity (
     password         => $ks_cinder_password,
     public_address   => $ks_cinder_public_host,
     public_protocol  => $ks_cinder_public_proto,
+    region           => $region
   }
 
   class { 'glance::keystone::auth':
@@ -429,6 +432,7 @@ class privatecloud::identity (
     password         => $ks_glance_password,
     public_address   => $ks_glance_public_host,
     public_protocol  => $ks_glance_public_proto,
+    region           => $region
   }
 
   class { 'heat::keystone::auth':
@@ -437,6 +441,7 @@ class privatecloud::identity (
     password         => $ks_heat_password,
     public_address   => $ks_heat_public_host,
     public_protocol  => $ks_heat_public_proto,
+    region           => $region
   }
 
   class { 'heat::keystone::auth_cfn':
@@ -445,6 +450,7 @@ class privatecloud::identity (
     password         => $ks_heat_password,
     public_address   => $ks_heat_public_host,
     public_protocol  => $ks_heat_public_proto,
+    region           => $region
   }
 
 

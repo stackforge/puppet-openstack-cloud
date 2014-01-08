@@ -34,7 +34,7 @@ describe 'privatecloud::identity' do
         :ks_admin_token               => 'SECRETE',
         :ks_ceilometer_admin_host     => '10.0.0.1',
         :ks_ceilometer_internal_host  => '10.0.0.1',
-        :ks_ceilometer_password       => 'password',
+        :ks_ceilometer_password       => 'secrete',
         :ks_ceilometer_public_host    => '10.0.0.1',
         :ks_ceilometer_public_port    => '8777',
         :ks_ceilometer_public_proto   => 'http',
@@ -73,7 +73,7 @@ describe 'privatecloud::identity' do
         :ks_nova_public_proto         => 'http',
         :ks_swift_dispersion_password => 'secrete',
         :ks_swift_internal_host       => '10.0.0.1',
-        :ks_swift_internal_port       => '10.0.0.1',
+        :ks_swift_internal_port       => '8080',
         :ks_swift_password            => 'secrete',
         :ks_swift_public_host         => '10.0.0.1',
         :ks_swift_public_port         => '8080',
@@ -86,21 +86,148 @@ describe 'privatecloud::identity' do
 
     it 'configure keystone server' do
       should contain_class('keystone').with(
+        :enabled          => false,
+        :admin_token      => 'SECRETE',
+        :compute_port     => '8774',
+        :debug            => true,
+        :verbose          => true,
+        :idle_timeout     => '60',
+        :log_facility     => 'LOG_LOCAL0',
+        :memcache_servers => ['10.0.0.1','10.0.0.2'],
+        :sql_connection   => 'mysql://keystone:secrete@10.0.0.1/keystone',
+        :token_driver     => 'keystone.token.backends.memcache.Token',
+        :token_format     => 'UUID',
+        :use_syslog       => true,
+        :bind_host        => '10.0.0.1',
+        :public_port      => '5000',
+        :admin_port       => '35357'
       )
+      should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
     end
 
     it 'configure keystone admin role' do
       should contain_class('keystone::roles::admin').with(
+        :email        => 'admin@openstack.org',
+        :password     => 'secrete',
+        :admin_tenant => 'admin'
       )
     end
 
     it 'configure apache to run keystone with wsgi' do
       should contain_class('keystone::wsgi::apache').with(
+        :servername  => 'keystone.openstack.org',
+        :admin_port  => '35357',
+        :public_port => '5000',
+        :workers     => '2',
+        :ssl         => false
       )
     end
 
     it 'configure keystone endpoint' do
       should contain_class('keystone::endpoint').with(
+        :admin_address    => '10.0.0.1',
+        :admin_port       => '35357',
+        :internal_address => '10.0.0.1',
+        :internal_port    => '5000',
+        :public_address   => '10.0.0.1',
+        :public_port      => '5000',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure swift endpoints' do
+      should contain_class('swift::keystone::auth').with(
+        :address         => '10.0.0.1',
+        :password        => 'secrete',
+        :port            => '8080',
+        :public_address  => '10.0.0.1',
+        :public_port     => '8080',
+        :public_protocol => 'http',
+        :region          => 'BigCloud'
+      )
+    end
+
+    it 'configure swift dispersion' do
+      should contain_class('swift::keystone::dispersion').with( :auth_pass => 'secrete' )
+    end
+
+    it 'configure ceilometer endpoints' do
+      should contain_class('ceilometer::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :port             => '8777',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure nova endpoints' do
+      should contain_class('nova::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :cinder           => true,
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure neutron endpoints' do
+      should contain_class('neutron::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure cinder endpoints' do
+      should contain_class('cinder::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure glance endpoints' do
+      should contain_class('glance::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure heat endpoints' do
+      should contain_class('heat::keystone::auth').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
+      )
+    end
+
+    it 'configure heat cloudformation endpoints' do
+      should contain_class('heat::keystone::auth_cfn').with(
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_protocol  => 'http',
+        :region           => 'BigCloud'
       )
     end
 
@@ -108,18 +235,26 @@ describe 'privatecloud::identity' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily               => 'Debian',
+        :operatingsystemrelease => '12.04',
+        :processorcount         => '2',
+        :concat_basedir         => '/var/lib/puppet/concat',
+        :fqdn                   => 'keystone.openstack.org' }
     end
 
-#    it_configures 'openstack identity'
+    it_configures 'openstack identity'
   end
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily               => 'RedHat',
+        :operatingsystemrelease => '6',
+        :processorcount         => '2',
+        :concat_basedir         => '/var/lib/puppet/concat',
+        :fqdn                   => 'keystone.openstack.org' }
     end
 
-#    it_configures 'openstack identity'
+    it_configures 'openstack identity'
   end
 
 end
