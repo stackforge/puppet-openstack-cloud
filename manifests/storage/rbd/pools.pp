@@ -77,7 +77,7 @@ osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_pool},
 
     @@exec { 'get-or-set virsh secret':
       command => 'virsh secret-define --file /etc/ceph/secret.xml',
-      unless  => "virsh secret-list | tail -n +3 | awk '{print $1}' | grep -sq ${ceph_fsid}",
+      unless  => "virsh secret-list | tail -n +3 | cut -f1 -d' ' | grep -sq ${ceph_fsid}",
       tag     => 'ceph_compute_get_secret',
       require => [ Package['libvirt-bin'], File['/etc/ceph/secret.xml'] ],
     }
