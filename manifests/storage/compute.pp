@@ -20,8 +20,8 @@ class privatecloud::storage::compute(
   if $has_ceph {
 
     File <<| tag == 'ceph_compute_secret_file' |>>
-    Exec <<| tag == 'get-or-set virsh secret' |>>
-    Exec <<| tag == 'set-secret-value virsh' |>>
+    Exec <<| tag == 'get_or_set_virsh_secret' |>>
+    Exec <<| tag == 'set_secret_value_virsh' |>>
 
   }
 
