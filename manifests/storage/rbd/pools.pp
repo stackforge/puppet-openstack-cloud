@@ -75,19 +75,19 @@ osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_pool},
       tag     => 'ceph_compute_secret_file',
     }
 
-    @@exec { 'get-or-set virsh secret':
+    @@exec { 'get_or_set_virsh_secret':
       command => 'virsh secret-define --file /etc/ceph/secret.xml',
       unless  => "virsh secret-list | tail -n +3 | cut -f1 -d' ' | grep -sq ${ceph_fsid}",
       tag     => 'ceph_compute_get_secret',
-      require => [ Package['libvirt-bin'], File['/etc/ceph/secret.xml'] ],
+      require => [Package['libvirt-bin'],File['/etc/ceph/secret.xml']],
+      notify  => Exec['set_secret_value_virsh'],
     }
 
-    @@exec { 'set-secret-value virsh':
-      command => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_glance}",
-      tag     => 'ceph_compute_set_secret',
-      require => [ Exec['get-or-set virsh secret'] ],
+    @@exec { 'set_secret_value_virsh':
+      command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_glance}",
+      tag          => 'ceph_compute_set_secret',
+      refreshonly  =>  true,
     }
 
-  }
-
-}
+  } # if setup pools
+} # class
