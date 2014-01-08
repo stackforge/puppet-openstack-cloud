@@ -211,6 +211,10 @@
 #   (optional) TCP port to connect to Ceilometer API from public network
 #   Default value in params
 #
+# [*ks_ceilometer_admin_port*]
+#   (optional) TCP port to connect to Ceilometer API from admin network
+#   Default value in params
+#
 # [*ks_ceilometer_internal_port*]
 #   (optional) TCP port to connect to Ceilometer API from internal network
 #   Default value in params
@@ -227,12 +231,72 @@
 #   (optional) TCP port to connect to Keystone API from admin network
 #   Default value in params
 #
-# [*ks_swift_internal_port*]
-#   (optional) TCP port to connect to Swift API from internal network
-#   Default value in params
-#
 # [*ks_swift_public_port*]
 #   (optional) TCP port to connect to Swift API from public network
+#   Default value in params
+#
+# [*ks_nova_internal_port*]
+#   (optional) TCP port to connect to Nova API from internal network
+#   Default value in params
+#
+# [*ks_nova_public_port*]
+#   (optional) TCP port to connect to Nova API from public network
+#   Default value in params
+#
+# [*ks_ec2_public_port*]
+#   (optional) TCP port to connect to EC2 API from public network
+#   Default value in params
+#
+# [*ks_nova_admin_port*]
+#   (optional) TCP port to connect to Nova API from admin network
+#   Default value in params
+#
+# [*ks_cinder_internal_port*]
+#   (optional) TCP port to connect to Cinder API from internal network
+#   Default value in params
+#
+# [*ks_cinder_public_port*]
+#   (optional) TCP port to connect to Cinder API from public network
+#   Default value in params
+#
+# [*ks_cinder_admin_port*]
+#   (optional) TCP port to connect to Cinder API from admin network
+#   Default value in params
+#
+# [*ks_neutron_internal_port*]
+#   (optional) TCP port to connect to Neutron API from internal network
+#   Default value in params
+#
+# [*ks_neutron_public_port*]
+#   (optional) TCP port to connect to Neutron API from public network
+#   Default value in params
+#
+# [*ks_neutron_admin_port*]
+#   (optional) TCP port to connect to Neutron API from admin network
+#   Default value in params
+#
+# [*ks_heat_internal_port*]
+#   (optional) TCP port to connect to Heat API from internal network
+#   Default value in params
+#
+# [*ks_heat_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Default value in params
+#
+# [*ks_heat_admin_port*]
+#   (optional) TCP port to connect to Heat API from admin network
+#   Default value in params
+#
+# [*ks_glance_internal_port*]
+#   (optional) TCP port to connect to Glance API from internal network
+#   Default value in params
+#
+# [*ks_glance_public_port*]
+#   (optional) TCP port to connect to Glance API from public network
+#   Default value in params
+#
+# [*ks_glance_admin_port*]
+#   (optional) TCP port to connect to Glance API from admin network
 #   Default value in params
 #
 # [*api_eth*]
@@ -273,6 +337,7 @@ class privatecloud::identity (
   $ks_cinder_password           = $os_params::ks_cinder_password,
   $ks_cinder_public_host        = $os_params::ks_cinder_public_host,
   $ks_cinder_public_proto       = $os_params::ks_cinder_public_proto,
+  $ks_cinder_public_port        = $os_params::ks_cinder_public_port,
   $ks_glance_admin_host         = $os_params::ks_glance_admin_host,
   $ks_glance_internal_host      = $os_params::ks_glance_internal_host,
   $ks_glance_password           = $os_params::ks_glance_password,
@@ -283,7 +348,9 @@ class privatecloud::identity (
   $ks_heat_password             = $os_params::ks_heat_password,
   $ks_heat_public_host          = $os_params::ks_heat_public_host,
   $ks_heat_public_proto         = $os_params::ks_heat_public_proto,
-  $ks_internal_ceilometer_port  = $os_params::ks_internal_ceilometer_port,
+  $ks_heat_public_port          = $os_params::ks_heat_public_port,
+  $ks_heat_cfn_public_port      = $os_params::ks_heat_cfn_public_port,
+  $ks_ceilometer_public_port    = $os_params::ks_ceilometer_public_port,
   $ks_keystone_admin_host       = $os_params::ks_keystone_admin_host,
   $ks_keystone_admin_port       = $os_params::ks_keystone_admin_port,
   $ks_keystone_internal_host    = $os_params::ks_keystone_internal_host,
@@ -296,15 +363,17 @@ class privatecloud::identity (
   $ks_neutron_password          = $os_params::ks_neutron_password,
   $ks_neutron_public_host       = $os_params::ks_neutron_public_host,
   $ks_neutron_public_proto      = $os_params::ks_neutron_public_proto,
+  $ks_neutron_public_port       = $os_params::ks_neutron_public_port,
   $ks_nova_admin_host           = $os_params::ks_nova_admin_host,
   $ks_nova_internal_host        = $os_params::ks_nova_internal_host,
   $ks_nova_password             = $os_params::ks_nova_password,
   $ks_nova_public_host          = $os_params::ks_nova_public_host,
   $ks_nova_public_proto         = $os_params::ks_nova_public_proto,
   $ks_nova_public_port          = $os_params::ks_nova_public_port,
+  $ks_ec2_public_port           = $os_params::ks_ec2_public_port,
   $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
   $ks_swift_internal_host       = $os_params::ks_swift_internal_host,
-  $ks_swift_internal_port       = $os_params::ks_swift_internal_port,
+  $ks_swift_admin_host          = $os_params::ks_swift_admin_host,
   $ks_swift_password            = $os_params::ks_swift_password,
   $ks_swift_public_host         = $os_params::ks_swift_public_host,
   $ks_swift_public_port         = $os_params::ks_swift_public_port,
@@ -372,17 +441,18 @@ class privatecloud::identity (
     public_port => $ks_keystone_public_port,
     # TODO(EmilienM) not sure workers is useful when using WSGI backend
     workers     => $::processorcount,
-    ssl         => false,
+    ssl         => false
   }
 
   class {'swift::keystone::auth':
     address          => $ks_swift_internal_host,
     password         => $ks_swift_password,
-    port             => $ks_swift_internal_port,
     public_address   => $ks_swift_public_host,
     public_port      => $ks_swift_public_port,
     public_protocol  => $ks_swift_public_proto,
-    region           => $region,
+    admin_address    => $ks_swift_admin_host,
+    internal_address => $ks_swift_internal_host,
+    region           => $region
   }
 
   class {'swift::keystone::dispersion':
@@ -392,66 +462,66 @@ class privatecloud::identity (
   class {'ceilometer::keystone::auth':
     admin_address    => $ks_ceilometer_admin_host,
     internal_address => $ks_ceilometer_internal_host,
-    password         => $ks_ceilometer_password,
-    port             => $ks_internal_ceilometer_port,
     public_address   => $ks_ceilometer_public_host,
-    public_protocol  => $ks_ceilometer_public_proto,
+    port             => $ks_ceilometer_public_port,
     region           => $region,
+    password         => $ks_ceilometer_password
   }
 
   class { 'nova::keystone::auth':
-    admin_address    => $ks_nova_admin_host,
     cinder           => true,
+    admin_address    => $ks_nova_admin_host,
     internal_address => $ks_nova_internal_host,
-    password         => $ks_nova_password,
     public_address   => $ks_nova_public_host,
-    public_protocol  => $ks_nova_public_proto,
-    region           => $region
+    compute_port     => $ks_nova_public_port,
+    ec2_port         => $ks_ec2_public_port,
+    region           => $region,
+    password         => $ks_nova_password
   }
 
   class { 'neutron::keystone::auth':
     admin_address    => $ks_neutron_admin_host,
     internal_address => $ks_neutron_internal_host,
-    password         => $ks_neutron_password,
     public_address   => $ks_neutron_public_host,
-    public_protocol  => $ks_neutron_public_proto,
-    region           => $region
+    port             => $ks_neutron_public_port,
+    region           => $region,
+    password         => $ks_neutron_password
   }
 
   class { 'cinder::keystone::auth':
     admin_address    => $ks_cinder_admin_host,
     internal_address => $ks_cinder_internal_host,
-    password         => $ks_cinder_password,
     public_address   => $ks_cinder_public_host,
-    public_protocol  => $ks_cinder_public_proto,
-    region           => $region
+    port             => $ks_cinder_public_port,
+    region           => $region,
+    password         => $ks_cinder_password
   }
 
   class { 'glance::keystone::auth':
     admin_address    => $ks_glance_admin_host,
     internal_address => $ks_glance_internal_host,
-    password         => $ks_glance_password,
     public_address   => $ks_glance_public_host,
-    public_protocol  => $ks_glance_public_proto,
-    region           => $region
+    port             => $ks_glance_public_port,
+    region           => $region,
+    password         => $ks_glance_password
   }
 
   class { 'heat::keystone::auth':
     admin_address    => $ks_heat_admin_host,
     internal_address => $ks_heat_internal_host,
-    password         => $ks_heat_password,
     public_address   => $ks_heat_public_host,
-    public_protocol  => $ks_heat_public_proto,
-    region           => $region
+    port             => $ks_heat_public_port,
+    region           => $region,
+    password         => $ks_heat_password
   }
 
   class { 'heat::keystone::auth_cfn':
     admin_address    => $ks_heat_admin_host,
     internal_address => $ks_heat_internal_host,
-    password         => $ks_heat_password,
     public_address   => $ks_heat_public_host,
-    public_protocol  => $ks_heat_public_proto,
-    region           => $region
+    port             => $ks_heat_cfn_public_port,
+    region           => $region,
+    password         => $ks_heat_password
   }
 
 
