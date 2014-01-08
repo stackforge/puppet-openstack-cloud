@@ -43,6 +43,7 @@ describe 'privatecloud::identity' do
         :ks_cinder_password           => 'secrete',
         :ks_cinder_public_host        => '10.0.0.1',
         :ks_cinder_public_proto       => 'http',
+        :ks_cinder_public_port        => '8776',
         :ks_glance_admin_host         => '10.0.0.1',
         :ks_glance_internal_host      => '10.0.0.1',
         :ks_glance_password           => 'secrete',
@@ -53,7 +54,8 @@ describe 'privatecloud::identity' do
         :ks_heat_password             => 'secrete',
         :ks_heat_public_host          => '10.0.0.1',
         :ks_heat_public_proto         => 'http',
-        :ks_internal_ceilometer_port  => '8777',
+        :ks_heat_public_port          => '8004',
+        :ks_heat_cfn_public_port      => '8000',
         :ks_keystone_admin_host       => '10.0.0.1',
         :ks_keystone_admin_port       => '35357',
         :ks_keystone_internal_host    => '10.0.0.1',
@@ -66,19 +68,21 @@ describe 'privatecloud::identity' do
         :ks_neutron_password          => 'secrete',
         :ks_neutron_public_host       => '10.0.0.1',
         :ks_neutron_public_proto      => 'http',
+        :ks_neutron_public_port       => '9696',
         :ks_nova_admin_host           => '10.0.0.1',
         :ks_nova_internal_host        => '10.0.0.1',
         :ks_nova_password             => 'secrete',
         :ks_nova_public_host          => '10.0.0.1',
         :ks_nova_public_proto         => 'http',
         :ks_nova_public_port          => '8774',
+        :ks_ec2_public_port           => '8773',
         :ks_swift_dispersion_password => 'secrete',
         :ks_swift_internal_host       => '10.0.0.1',
-        :ks_swift_internal_port       => '8080',
         :ks_swift_password            => 'secrete',
         :ks_swift_public_host         => '10.0.0.1',
         :ks_swift_public_port         => '8080',
         :ks_swift_public_proto        => 'http',
+        :ks_swift_admin_host          => '10.0.0.1',
         :region                       => 'BigCloud',
         :verbose                      => true,
         :debug                        => true,
@@ -139,13 +143,14 @@ describe 'privatecloud::identity' do
 
     it 'configure swift endpoints' do
       should contain_class('swift::keystone::auth').with(
-        :address         => '10.0.0.1',
-        :password        => 'secrete',
-        :port            => '8080',
-        :public_address  => '10.0.0.1',
-        :public_port     => '8080',
-        :public_protocol => 'http',
-        :region          => 'BigCloud'
+        :address          => '10.0.0.1',
+        :password         => 'secrete',
+        :public_address   => '10.0.0.1',
+        :public_port      => '8080',
+        :public_protocol  => 'http',
+        :admin_address    => '10.0.0.1',
+        :internal_address => '10.0.0.1',
+        :region           => 'BigCloud'
       )
     end
 
@@ -173,6 +178,8 @@ describe 'privatecloud::identity' do
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_protocol  => 'http',
+        :compute_port     => '8774',
+        :ec2_port         => '8773',
         :region           => 'BigCloud'
       )
     end
@@ -184,6 +191,7 @@ describe 'privatecloud::identity' do
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_protocol  => 'http',
+        :port             => '9696',
         :region           => 'BigCloud'
       )
     end
@@ -206,6 +214,7 @@ describe 'privatecloud::identity' do
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_protocol  => 'http',
+        :port             => '9292',
         :region           => 'BigCloud'
       )
     end
@@ -217,6 +226,7 @@ describe 'privatecloud::identity' do
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_protocol  => 'http',
+        :port             => '8004',
         :region           => 'BigCloud'
       )
     end
@@ -228,6 +238,7 @@ describe 'privatecloud::identity' do
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_protocol  => 'http',
+        :port             => '8000',
         :region           => 'BigCloud'
       )
     end
