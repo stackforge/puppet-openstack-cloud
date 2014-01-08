@@ -26,7 +26,6 @@ class privatecloud::storage::rbd::osd (
     cluster_address => $cluster_address,
   }
 
-  privatecloud::storage::rbd::journal { $devices: }
   $osd_ceph = prefix($devices,'/dev/')
   ceph::osd::device { $osd_ceph: }
 
