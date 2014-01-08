@@ -43,11 +43,13 @@ describe 'privatecloud::orchestration::engine' do
     end
 
     let :params do
-      { :enabled                   => true,
-        :auth_encryption_key  => 'secrete',
-        :ks_heat_public_host       => '10.0.0.1',
-        :ks_heat_public_proto      => 'http',
-        :ks_heat_password          => 'secrete' }
+      { :enabled                        => true,
+        :auth_encryption_key            => 'secrete',
+        :ks_heat_public_host            => '10.0.0.1',
+        :ks_heat_public_proto           => 'http',
+        :ks_heat_cfn_public_port        => '8000',
+        :ks_heat_cloudwatch_public_port => '8003',
+        :ks_heat_password               => 'secrete' }
     end
 
     it 'configure heat common' do

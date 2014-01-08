@@ -301,6 +301,7 @@ class privatecloud::identity (
   $ks_nova_password             = $os_params::ks_nova_password,
   $ks_nova_public_host          = $os_params::ks_nova_public_host,
   $ks_nova_public_proto         = $os_params::ks_nova_public_proto,
+  $ks_nova_public_port          = $os_params::ks_nova_public_port,
   $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
   $ks_swift_internal_host       = $os_params::ks_swift_internal_host,
   $ks_swift_internal_port       = $os_params::ks_swift_internal_port,
@@ -321,7 +322,7 @@ class privatecloud::identity (
   class { 'keystone':
     enabled          => false,
     admin_token      => $ks_admin_token,
-    compute_port     => '8774',
+    compute_port     => $ks_nova_public_port,
     debug            => $debug,
     idle_timeout     => 60,
     log_facility     => 'LOG_LOCAL0',

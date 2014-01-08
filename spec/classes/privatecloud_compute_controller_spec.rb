@@ -39,6 +39,10 @@ describe 'privatecloud::compute::controller' do
       { :ks_keystone_internal_host            => '10.0.0.1',
         :ks_nova_password                     => 'secrete',
         :api_eth                              => '10.0.0.1',
+        :spice_port                           => '6082',
+        :ks_ec2_public_port                   => '8773',
+        :ks_nova_public_port                  => '8774',
+        :ks_metadata_public_port              => '8775',
         :neutron_metadata_proxy_shared_secret => 'secrete' }
     end
 

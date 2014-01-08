@@ -21,6 +21,10 @@ class privatecloud::compute::controller(
   $ks_nova_password                     = $os_params::ks_nova_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
   $api_eth                              = $os_params::api_eth,
+  $spice_port                           = $os_params::spice_port,
+  $ks_nova_public_port                  = $os_params::ks_nova_public_port,
+  $ks_ec2_public_port                   = $os_params::ks_ec2_public_port,
+  $ks_metadata_public_port              = $os_params::ks_metadata_public_port
 ){
 
   include 'privatecloud::compute'
@@ -48,7 +52,7 @@ class privatecloud::compute::controller(
     listening_service => 'ec2_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => '8773',
+    ports             => $ks_ec2_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -56,7 +60,7 @@ class privatecloud::compute::controller(
     listening_service => 'nova_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => '8774',
+    ports             => $ks_nova_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -64,7 +68,7 @@ class privatecloud::compute::controller(
     listening_service => 'metadata_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => '8775',
+    ports             => $ks_metadata_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
@@ -72,7 +76,7 @@ class privatecloud::compute::controller(
     listening_service => 'spice_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => '6082',
+    ports             => $spice_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
