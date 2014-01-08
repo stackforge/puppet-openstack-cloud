@@ -71,6 +71,7 @@ describe 'privatecloud::identity' do
         :ks_nova_password             => 'secrete',
         :ks_nova_public_host          => '10.0.0.1',
         :ks_nova_public_proto         => 'http',
+        :ks_nova_public_port          => '8774',
         :ks_swift_dispersion_password => 'secrete',
         :ks_swift_internal_host       => '10.0.0.1',
         :ks_swift_internal_port       => '8080',

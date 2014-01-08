@@ -18,11 +18,13 @@
 #
 
 class privatecloud::orchestration::engine(
-  $enabled                    = true,
-  $ks_heat_public_host        = $os_params::ks_heat_public_host,
-  $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
-  $ks_heat_password           = $os_params::ks_heat_password,
-  $auth_encryption_key        = $os_params::heat_auth_encryption_key
+  $enabled                        = true,
+  $ks_heat_public_host            = $os_params::ks_heat_public_host,
+  $ks_heat_public_proto           = $os_params::ks_heat_public_proto,
+  $ks_heat_password               = $os_params::ks_heat_password,
+  $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
+  $ks_heat_cloudwatch_public_port = $os_params::ks_heat_cloudwatch_public_port,
+  $auth_encryption_key            = $os_params::heat_auth_encryption_key
 ) {
 
   include 'privatecloud::orchestration'
@@ -30,9 +32,9 @@ class privatecloud::orchestration::engine(
   class { 'heat::engine':
     enabled                       => $enabled,
     auth_encryption_key           => $auth_encryption_key,
-    heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:8000",
-    heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:8000/v1/waitcondition",
-    heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:8003"
+    heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}",
+    heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}/v1/waitcondition",
+    heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cloudwatch_public_port}"
   }
 
 }
