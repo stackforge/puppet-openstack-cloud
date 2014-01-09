@@ -23,15 +23,18 @@ describe 'privatecloud::messaging' do
   shared_examples_for 'openstack messaging' do
 
     let :params do
-      { :rabbit_hosts    => ['10.0.0.1'],
-        :rabbit_password => 'secrete' }
+      {
+        :rabbit_names    => ['foo','boo','zoo'],
+        :rabbit_hosts    => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :rabbit_password => 'secrete'
+      }
     end
 
     it 'configure rabbitmq-server' do
       should contain_class('rabbitmq::server').with(
           :delete_guest_user        => true,
           :config_cluster           => true,
-          :cluster_disk_nodes       => ['10.0.0.1'],
+          :cluster_disk_nodes       => params[:rabbit_names],
           :wipe_db_on_cookie_change => true
         )
     end

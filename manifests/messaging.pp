@@ -30,13 +30,14 @@
 
 class privatecloud::messaging(
   $rabbit_hosts    = $os_params::rabbit_hosts,
+  $rabbit_names    = $os_params::rabbit_names,
   $rabbit_password = $os_params::rabbit_password
 ){
 
   class { 'rabbitmq::server':
     delete_guest_user        => true,
     config_cluster           => true,
-    cluster_disk_nodes       => $rabbit_hosts,
+    cluster_disk_nodes       => $rabbit_names,
     wipe_db_on_cookie_change => true,
   }
 
@@ -44,7 +45,7 @@ class privatecloud::messaging(
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq::server'],
   }
-  rabbitmq_user { ['nova', 'glance', 'neutron', 'cinder', 'ceilometer', 'heat']:
+  rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat']:
     admin    => true,
     password => $rabbit_password,
     provider => 'rabbitmqctl',
