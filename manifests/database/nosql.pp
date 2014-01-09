@@ -17,14 +17,16 @@
 #
 # Install a nosql server (MongoDB)
 #
-
-class privatecloud::database::nosql {
+class privatecloud::database::nosql(
+  $bind_ip = undef,
+) {
 
   # use mongo's own repo instead of the distro's
   class { 'mongodb::globals':
     manage_package_repo => true
   }->
   class { 'mongodb':
+    bind_ip => $bind_ip,
   }
 
 }
