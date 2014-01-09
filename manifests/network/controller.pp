@@ -23,6 +23,7 @@ class privatecloud::network::controller(
   $ks_neutron_password     = $os_params::ks_neutron_password,
   $ks_keystone_admin_host  = $os_params::ks_keystone_admin_host,
   $ks_keystone_public_port = $os_params::ks_keystone_public_port,
+  $ks_neutron_public_port  = $os_params::ks_neutron_public_port,
   $api_eth                 = $os_params::api_eth,
   $ks_admin_tenant         = $os_params::ks_admin_tenant,
   $public_cidr             = $os_params::public_cidr
@@ -58,7 +59,7 @@ class privatecloud::network::controller(
     listening_service => 'neutron_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => '9696',
+    ports             => $ks_neutron_public_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
