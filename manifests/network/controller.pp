@@ -24,6 +24,8 @@ class privatecloud::network::controller(
   $ks_keystone_admin_host  = $os_params::ks_keystone_admin_host,
   $ks_keystone_public_port = $os_params::ks_keystone_public_port,
   $api_eth                 = $os_params::api_eth,
+  $ks_admin_tenant         = $os_params::ks_admin_tenant,
+  $public_cidr             = $os_params::public_cidr
 ) {
 
   include 'privatecloud::network'
@@ -37,6 +39,19 @@ class privatecloud::network::controller(
     auth_port     => $ks_keystone_public_port,
     connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     api_workers   => $::processorcount
+  }
+
+  neutron_network { 'public':
+    ensure          => present,
+    router_external => 'True',
+    tenant_name     => $ks_admin_tenant
+  }
+
+  neutron_subnet {'public_subnet':
+    ensure       => present,
+    cidr         => $public_cidr,
+    network_name => 'public',
+    tenant_name  => 'admin'
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":
