@@ -35,6 +35,7 @@ class privatecloud::compute::controller(
     'nova::consoleauth',
     'nova::conductor',
     # TODO(Emilien) Migrate to spice asap
+    #'nova::spicehtml5proxy',
     'nova::vncproxy',
   ]:
     enabled => true,
