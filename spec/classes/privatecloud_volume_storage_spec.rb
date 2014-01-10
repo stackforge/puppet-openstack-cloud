@@ -36,8 +36,8 @@ describe 'privatecloud::volume::storage' do
     end
 
     let :params do
-      { :cinder_rbd_pool         => 'cinder',
-        :cinder_rbd_user         => 'ceph-cinder',
+      { :cinder_rbd_pool         => 'ceph_cinder',
+        :cinder_rbd_user         => 'cinder',
         :cinder_rbd_secret_uuid  => 'secrete',
         :glance_api_version      => '2' }
     end
@@ -60,9 +60,9 @@ describe 'privatecloud::volume::storage' do
 
     it 'configure cinder volume with rbd backend' do
       should contain_class('cinder::volume::rbd').with(
-          :rbd_pool           => 'cinder',
+          :rbd_pool           => 'ceph_cinder',
           :glance_api_version => '2',
-          :rbd_user           => 'ceph-cinder',
+          :rbd_user           => 'cinder',
           :rbd_secret_uuid    => 'secrete'
         )
     end
