@@ -31,6 +31,8 @@ describe 'privatecloud::image' do
         :ks_glance_password        => 'secrete',
         :rabbit_host               => '10.0.0.1',
         :rabbit_password           => 'secrete',
+        :rbd_store_user            => 'glance',
+        :rbd_store_pool            => 'ceph_glance',
         :debug                     => true,
         :verbose                   => true,
         :api_eth                   => '10.0.0.1' }
@@ -74,11 +76,10 @@ describe 'privatecloud::image' do
         )
     end
 
-    it 'configure glance swift backend' do
-      should contain_class('glance::backend::swift').with(
-          :swift_store_user          => 'services:glance',
-          :swift_store_key           => 'secrete',
-          :swift_store_auth_address  => '10.0.0.1',
+    it 'configure glance rbd backend' do
+      should contain_class('glance::backend::rbd').with(
+          :rbd_store_pool => 'ceph_glance',
+          :rbd_store_user => 'glance'
         )
     end
 
