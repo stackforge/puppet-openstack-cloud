@@ -20,11 +20,10 @@ class privatecloud::volume::controller(
   $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
-  $ks_swift_internal_proto   = $os_params::ks_swift_internal_proto,
-  $ks_swift_internal_host    = $os_params::ks_swift_internal_host,
-  $ks_swift_internal_port    = $os_params::ks_swift_internal_port,
   $ks_glance_internal_host   = $os_params::ks_glance_internal_host,
   $api_eth                   = $os_params::api_eth,
+  $backup_ceph_pool          = 'ceph_backup_cinder',
+  $backup_ceph_user          = 'cinder'
 ) {
 
   include 'privatecloud::volume'
@@ -39,8 +38,9 @@ class privatecloud::volume::controller(
 
   class { 'cinder::backup': }
 
-  class { 'cinder::backup::swift':
-    backup_swift_url => "${ks_swift_internal_proto}://${ks_swift_internal_host}:${ks_swift_internal_port}/v1/AUTH"
+  class { 'cinder::backup::ceph':
+    backup_ceph_user => $backup_ceph_user,
+    backup_ceph_pool => $backup_ceph_pool
   }
 
   class { 'cinder::glance':

@@ -40,9 +40,8 @@ describe 'privatecloud::volume::controller' do
         :ks_cinder_internal_port   => '8776',
         :ks_keystone_internal_host => '10.0.0.1',
         :ks_glance_internal_host   => '10.0.0.1',
-        :ks_swift_internal_port    => '8080',
-        :ks_swift_internal_host    => '10.0.0.1',
-        :ks_swift_internal_proto   => 'http',
+        :backup_ceph_user          => 'cinder',
+        :backup_ceph_pool          => 'ceph_backup_cinder',
         :api_eth                   => '10.0.0.1' }
     end
 
@@ -81,10 +80,11 @@ describe 'privatecloud::volume::controller' do
         )
     end
 
-    it 'configure cinder backup using swift backend' do
+    it 'configure cinder backup using ceph backend' do
       should contain_class('cinder::backup')
-      should contain_class('cinder::backup::swift').with(
-          :backup_swift_url => 'http://10.0.0.1:8080/v1/AUTH',
+      should contain_class('cinder::backup::ceph').with(
+          :backup_ceph_user => 'cinder',
+          :backup_ceph_pool => 'ceph_backup_cinder'
         )
     end
 
