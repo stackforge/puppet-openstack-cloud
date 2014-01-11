@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::compute::hypervisor class
+# Unit tests for privatecloud::database::sql class
 #
 
 require 'spec_helper'

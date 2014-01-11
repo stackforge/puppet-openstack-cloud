@@ -41,7 +41,7 @@ describe 'privatecloud::network::dhcp' do
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
-          :debug                   => true,
+          :debug                   => false,
           :rabbit_user             => 'neutron',
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',

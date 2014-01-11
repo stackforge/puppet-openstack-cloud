@@ -13,6 +13,7 @@ fixtures:
     'apache': 'git://github.com/puppetlabs/puppetlabs-apache.git'
     'concat': 'git://github.com/puppetlabs/puppetlabs-concat.git'
     'haproxy': 'git://github.com/puppetlabs/puppetlabs-haproxy.git'
+    'keepalived': 'git://github.com/puppetlabs/puppetlabs-keepalived.git'
     'firewall': 'git://github.com/puppetlabs/puppetlabs-firewall.git'
     'mongodb': 'git://github.com/puppetlabs/puppetlabs-mongodb.git'
     'mysql':

@@ -27,19 +27,15 @@ class privatecloud::loadbalancer(
   $nova_api                       = true,
   $ec2_api                        = true,
   $metadata_api                   = true,
-  $spice_api                      = true,
   $swift_api                      = true,
   $keystone_api_admin             = true,
   $keystone_api                   = true,
   $horizon                        = true,
   $spice                          = true,
   $haproxy_auth                   = $os_params::haproxy_auth,
-  $keepalived_email               = $os_params::keepalived_email,
   $keepalived_interface           = $os_params::keepalived_interface,
   $keepalived_ipvs                = [ $os_params::openstack_vip, $os_params::mysql_vip ],
   $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
-  $keepalived_smtp                = $os_params::keepalived_smtp,
-  $ks_cinder_ceilometer_port      = $os_params::ks_ceilometer_public_port,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
   $ks_ec2_public_port             = $os_params::ks_ec2_public_port,
@@ -61,10 +57,7 @@ class privatecloud::loadbalancer(
 
   class { 'haproxy': }
 
-  class { 'keepalived':
-    notification_email_to => $keepalived_email,
-    smtp_server           => $keepalived_smtp,
-  }
+  class { 'keepalived': }
 
   keepalived::vrrp_script { 'haproxy':
     name_is_process => true
