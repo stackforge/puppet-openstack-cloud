@@ -69,12 +69,6 @@ describe 'privatecloud::loadbalancer' do
       should contain_class('keepalived')
     end
 
-    it 'configure haproxy vrrp script' do
-      should contain_keepalived_vrrp_script('haproxy').with(
-          :name_is_process => true
-        )
-    end
-
   end
 
   context 'on Debian platforms' do
