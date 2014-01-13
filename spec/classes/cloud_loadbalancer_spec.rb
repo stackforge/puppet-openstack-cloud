@@ -63,7 +63,9 @@ describe 'cloud::loadbalancer' do
     end
 
     it 'configure haproxy server' do
-      should contain_class('haproxy')
+      should contain_class('haproxy').with({
+        'manage_service' => 'false',
+      })
     end
 
     it 'configure keepalived server' do
@@ -72,7 +74,9 @@ describe 'cloud::loadbalancer' do
 
     it 'configure vrrp_instance with MASTER state' do
       should contain_keepalived__instance('1').with({
-        'state' => 'MASTER',
+        'state'         => 'MASTER',
+        'notify_master' => '"/etc/init.d/haproxy start"',
+        'notify_backup' => '"/etc/init.d/haproxy stop"',
       })
     end
 
@@ -121,7 +125,9 @@ describe 'cloud::loadbalancer' do
     end
 
     it 'configure haproxy server' do
-      should contain_class('haproxy')
+      should contain_class('haproxy').with({
+        'manage_service' => 'false',
+      })
     end
 
     it 'configure keepalived server' do
@@ -129,7 +135,10 @@ describe 'cloud::loadbalancer' do
     end
 
     it 'configure vrrp_instance with BACKUP state' do
-      should contain_keepalived__instance('1')
+      should contain_keepalived__instance('1').with({
+        'notify_master' => '"/etc/init.d/haproxy start"',
+        'notify_backup' => '"/etc/init.d/haproxy stop"',
+      })
     end
 
   end
