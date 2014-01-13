@@ -19,4 +19,5 @@ PuppetLint.configuration.send('disable_nested_classes_or_defines')
 PuppetLint.configuration.send('disable_selector_inside_resource')
 
 task(:default).clear
-task :default => [:spec, :lint]
+task :default => [:spec_prep, :spec_standalone, :lint]
+
