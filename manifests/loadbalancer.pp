@@ -56,7 +56,9 @@ class cloud::loadbalancer(
   $mysql_vip                      = $os_params::mysql_vip
 ){
 
-  class { 'haproxy': }
+  class { 'haproxy':
+    manage_service => false,
+  }
 
   class { 'keepalived': }
 
@@ -65,11 +67,13 @@ class cloud::loadbalancer(
   }
 
   keepalived::instance { '1':
-    interface         => $keepalived_interface,
-    virtual_ips       => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
-    state             => $keepalived_state,
-    track_script      => ['haproxy'],
-    priority          => 50,
+    interface     => $keepalived_interface,
+    virtual_ips   => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
+    state         => $keepalived_state,
+    track_script  => ['haproxy'],
+    priority      => 50,
+    notify_master => '"/etc/init.d/haproxy start"',
+    notify_backup => '"/etc/init.d/haproxy stop"',
   }
 
   $monitors_data = inline_template('
