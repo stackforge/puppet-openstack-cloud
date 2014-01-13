@@ -23,16 +23,21 @@
 #   (optional) Interface used by Corosync to send multicast traffic
 #   Default to params.
 #
+# [*multicast_address*]
+#   (optionnal) IP address used to send multicast traffic
+#   Default to '239.1.1.2'.
+#
 
 class privatecloud::spof(
-  $cluster_ip = $os_params::cluster_ip,
+  $cluster_ip        = $os_params::cluster_ip,
+  $multicast_address = '239.1.1.2'
 ) {
 
   class { 'corosync':
     enable_secauth    => false,
     authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
     bind_address      => $cluster_ip,
-    multicast_address => '239.1.1.2',
+    multicast_address => $multicast_address
   }
 
   cs_property {
