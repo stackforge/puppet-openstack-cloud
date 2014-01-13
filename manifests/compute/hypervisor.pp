@@ -23,7 +23,8 @@ class privatecloud::compute::hypervisor(
   $ks_nova_internal_host  = $os_params::ks_nova_internal_host,
   $ks_nova_public_host    = $os_params::ks_nova_public_host,
   $nova_ssh_private_key   = $os_params::nova_ssh_private_key,
-  $nova_ssh_public_key    = $os_params::nova_ssh_public_key
+  $nova_ssh_public_key    = $os_params::nova_ssh_public_key,
+  $has_ceph               = false
 ) {
 
   include 'privatecloud::compute'
@@ -93,5 +94,11 @@ Host *
   }
 
   class { 'nova::compute::neutron': }
+
+  if $has_ceph {
+    File <<| tag == 'ceph_compute_secret_file' |>>
+    Exec <<| tag == 'get_or_set_virsh_secret' |>>
+    Exec <<| tag == 'set_secret_value_virsh' |>>
+  }
 
 }
