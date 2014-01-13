@@ -58,17 +58,17 @@ class privatecloud::database::sql (
         class { 'mysql':
             server_package_name => 'MariaDB-Galera-server',
             client_package_name => 'MariaDB-client',
-            service_name         => 'mysql'
+            service_name        => 'mysql'
         }
         # galera-23.2.7-1.rhel6.x86_64
-        $wsrep_provider = "/usr/lib64/galera/libgalera_smm.so"
+        $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
 
         # TODO(Gonéri)
         # MariaDB-Galera-server-5.5.34-1.x86_64 doesn't create this
         $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
         file { $dirs:
             ensure => directory,
-            mode   => 0750,
+            mode   => '0750',
             before => Service['mysqld'],
             owner  => 'mysql'
         }
@@ -78,9 +78,9 @@ class privatecloud::database::sql (
         class { 'mysql':
             server_package_name => 'mariadb-galera-server',
             client_package_name => 'mariadb-client',
-            service_name         => 'mysql'
+            service_name        => 'mysql'
         }
-        $wsrep_provider = "/usr/lib/galera/libgalera_smm.so"
+        $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
     }
     default: {
       err "${::osfamily} not supported yet"
