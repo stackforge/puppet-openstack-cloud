@@ -73,12 +73,7 @@ class privatecloud::network(
     tenant_network_types    => ['gre'],
     mechanism_drivers       => ['openvswitch'],
     tunnel_id_ranges        => ['1:10000'],
-    # For later (when https://review.openstack.org/#/c/63228/ got merged)
-    # enable_security_group => true
-  }
-  # While https://review.openstack.org/#/c/63228/ is not merged:
-  neutron_plugin_ml2 {
-    'securitygroup/firewall_driver': value => true;
+    enable_security_group => true
   }
 
 }
