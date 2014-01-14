@@ -68,10 +68,6 @@ Consult the documentation linked above to help you make your decision but don't 
 
 The swift portions of this module needs Puppet's [exported resources](http://docs.puppetlabs.com/puppet/3/reference/lang_exported.html).  Exported resources leverages the PuppetDB to export and share data across other Puppet managed nodes.
 
-### Installing openstack
-
-    puppet module install puppetlabs/openstack
-
 ### Installing latest unstable cloud module from source
 
     cd /etc/puppet/modules
