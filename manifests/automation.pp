@@ -13,13 +13,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::automation
+# == Class: cloud::automation
 #
 # Installs the Automation Server (puppet master)
 #
 #
 
-class privatecloud::automation{
+class cloud::automation{
 
   # Ensure git is installed
   class { 'git': }

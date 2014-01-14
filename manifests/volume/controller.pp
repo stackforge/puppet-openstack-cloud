@@ -16,7 +16,7 @@
 # Volume controller
 #
 
-class privatecloud::volume::controller(
+class cloud::volume::controller(
   $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
   $ks_cinder_password        = $os_params::ks_cinder_password,
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
@@ -26,7 +26,7 @@ class privatecloud::volume::controller(
   $backup_ceph_user          = 'cinder'
 ) {
 
-  include 'privatecloud::volume'
+  include 'cloud::volume'
 
   class { 'cinder::scheduler': }
 

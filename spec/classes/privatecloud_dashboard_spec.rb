@@ -13,12 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::dashboard class
+# Unit tests for cloud::dashboard class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::dashboard' do
+describe 'cloud::dashboard' do
 
   shared_examples_for 'openstack dashboard' do
 

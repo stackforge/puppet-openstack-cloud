@@ -16,7 +16,7 @@
 # HAproxy nodes
 #
 
-class privatecloud::loadbalancer(
+class cloud::loadbalancer(
   $ceilometer_api                 = true,
   $cinder_api                     = true,
   $glance_api                     = true,
@@ -162,7 +162,7 @@ monitor fail if horizon_dead
   }
 
   if $keystone_api {
-    privatecloud::loadbalancer::listen_http {
+    cloud::loadbalancer::listen_http {
       'keystone_api_cluster':
         ports     => $ks_keystone_public_port,
         listen_ip => $openstack_vip;
@@ -172,7 +172,7 @@ monitor fail if horizon_dead
     }
   }
   if $swift_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'swift_api_cluster':
         ports     => $ks_swift_public_port,
         httpchk   => 'httpchk /healthcheck',
@@ -180,28 +180,28 @@ monitor fail if horizon_dead
     }
   }
   if $nova_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'nova_api_cluster':
         ports     => $ks_nova_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $ec2_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'ec2_api_cluster':
         ports     => $ks_ec2_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $metadata_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'metadata_api_cluster':
         ports     => $ks_metadata_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $spice {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'spice_cluster':
         ports     => $spice_port,
         listen_ip => $openstack_vip,
@@ -209,56 +209,56 @@ monitor fail if horizon_dead
     }
   }
   if $glance_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'glance_api_cluster':
         ports     => $ks_glance_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $neutron_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'neutron_api_cluster':
         ports     => $ks_neutron_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $cinder_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'cinder_api_cluster':
         ports     => $ks_cinder_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $ceilometer_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'ceilometer_api_cluster':
         ports     => $ks_ceilometer_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $heat_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'heat_api_cluster':
         ports     => $ks_heat_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $heat_cfn_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'heat_api_cfn_cluster':
         ports     => $ks_heat_cfn_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $heat_cloudwatch_api {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'heat_api_cloudwatch_cluster':
         ports     => $ks_heat_cloudwatch_public_port,
         listen_ip => $openstack_vip;
     }
   }
   if $horizon {
-    privatecloud::loadbalancer::listen_http{
+    cloud::loadbalancer::listen_http{
       'horizon_cluster':
         ports     => $horizon_port,
         listen_ip => $openstack_vip;

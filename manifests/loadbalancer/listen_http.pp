@@ -15,9 +15,9 @@
 #
 # Define::
 #
-# privatecloud::loadbalancer::listen_http
+# cloud::loadbalancer::listen_http
 #
-define privatecloud::loadbalancer::listen_http(
+define cloud::loadbalancer::listen_http(
   $ports     = 'unset',
   $httpchk   = 'httpchk',
   $listen_ip = '0.0.0.0') {

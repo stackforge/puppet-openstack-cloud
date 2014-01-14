@@ -17,11 +17,11 @@
 # Could be managed by spof node as Active / Passive.
 #
 
-class privatecloud::telemetry::centralagent(
+class cloud::telemetry::centralagent(
   $enabled = true,
 ){
 
-  include 'privatecloud::telemetry'
+  include 'cloud::telemetry'
 
   class { 'ceilometer::agent::central':
     enabled => $enabled,

@@ -16,11 +16,11 @@
 # Network LBaaS node
 #
 
-class privatecloud::network::lbaas(
+class cloud::network::lbaas(
   $debug                 = $os_params::debug
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'neutron::agents::lbaas':
     debug         => $debug,

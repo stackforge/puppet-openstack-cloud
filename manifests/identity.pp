@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::identity
+# == Class: cloud::identity
 #
 # Install Identity Server (Keystone)
 #
@@ -316,7 +316,7 @@
 #   Default value in params
 #
 
-class privatecloud::identity (
+class cloud::identity (
   $identity_roles_addons        = $os_params::identity_roles_addons,
   $keystone_db_host             = $os_params::keystone_db_host,
   $keystone_db_user             = $os_params::keystone_db_user,

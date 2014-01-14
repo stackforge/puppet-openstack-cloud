@@ -16,7 +16,7 @@
 # Swift Proxy node
 #
 
-class privatecloud::object::controller(
+class cloud::object::controller(
   $ks_keystone_admin_host       = $os_params::ks_keystone_admin_host,
   $ks_keystone_admin_port       = $os_params::ks_keystone_admin_port,
   $ks_keystone_internal_host    = $os_params::ks_keystone_internal_host,
@@ -30,7 +30,7 @@ class privatecloud::object::controller(
   $api_eth                      = $os_params::api_eth,
 ) {
 
-  include 'privatecloud::object'
+  include 'cloud::object'
 
   class { 'swift::proxy':
     proxy_local_net_ip => $api_eth,

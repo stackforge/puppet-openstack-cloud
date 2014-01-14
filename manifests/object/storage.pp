@@ -27,7 +27,7 @@ define set_io_scheduler(){
 }
 
 # swift storage
-class privatecloud::object::storage (
+class cloud::object::storage (
   $storage_eth    = $os_params::storage_eth,
   $swift_zone     = undef,
   $object_port    = '6000',
@@ -36,7 +36,7 @@ class privatecloud::object::storage (
   $onloopdevices  = false,
 ) {
 
-  include 'privatecloud::object'
+  include 'cloud::object'
 
   class { 'swift::storage':
     storage_local_net_ip => $storage_eth,

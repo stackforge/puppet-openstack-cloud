@@ -17,7 +17,7 @@
 # Could be managed by spof_node manifest
 #
 
-class privatecloud::network::metadata(
+class cloud::network::metadata(
   $enabled                              = true,
   $debug                                = $os_params::debug,
   $ks_neutron_password                  = $os_params::ks_neutron_password,
@@ -28,7 +28,7 @@ class privatecloud::network::metadata(
   $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'neutron::agents::metadata':
     enabled       => $enabled,

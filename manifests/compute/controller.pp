@@ -16,7 +16,7 @@
 # Compute controller node
 #
 
-class privatecloud::compute::controller(
+class cloud::compute::controller(
   $ks_keystone_internal_host            = $os_params::ks_keystone_internal_host,
   $ks_nova_password                     = $os_params::ks_nova_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
@@ -27,7 +27,7 @@ class privatecloud::compute::controller(
   $ks_metadata_public_port              = $os_params::ks_metadata_public_port
 ){
 
-  include 'privatecloud::compute'
+  include 'cloud::compute'
 
   class { [
     'nova::scheduler',

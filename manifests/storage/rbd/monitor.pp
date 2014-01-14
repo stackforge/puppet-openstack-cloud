@@ -14,13 +14,13 @@
 # under the License.
 #
 
-class privatecloud::storage::rbd::monitor (
+class cloud::storage::rbd::monitor (
   $id             = $::uniqueid,
   $mon_addr       = $::ipaddress_eth0,
   $monitor_secret = $os_params::ceph_mon_secret
 ) {
 
-  include 'privatecloud::storage::rbd'
+  include 'cloud::storage::rbd'
 
   ceph::mon { $id:
     monitor_secret => $monitor_secret,

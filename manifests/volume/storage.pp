@@ -16,14 +16,14 @@
 # Volume storage
 #
 
-class privatecloud::volume::storage(
+class cloud::volume::storage(
   $glance_api_version     = $os_params::glance_api_version,
   $cinder_rbd_pool        = 'ceph_cinder',
   $cinder_rbd_user        = 'cinder',
   $cinder_rbd_secret_uuid = $os_params::cinder_rbd_secret_uuid,
 ) {
 
-  include 'privatecloud::volume'
+  include 'cloud::volume'
 
   class { 'cinder::volume::rbd':
     rbd_pool           => $cinder_rbd_pool,

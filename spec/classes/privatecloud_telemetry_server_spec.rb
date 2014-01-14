@@ -13,17 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::telemetry::server class
+# Unit tests for cloud::telemetry::server class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::telemetry::server' do
+describe 'cloud::telemetry::server' do
 
   shared_examples_for 'openstack telemetry server' do
 
     let :pre_condition do
-      "class { 'privatecloud::telemetry':
+      "class { 'cloud::telemetry':
         ceilometer_secret          => 'secrete',
         rabbit_hosts               => ['10.0.0.1'],
         rabbit_password            => 'secrete',

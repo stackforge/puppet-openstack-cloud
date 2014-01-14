@@ -13,11 +13,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::database::nosql
+# == Class: cloud::database::nosql
 #
 # Install a nosql server (MongoDB)
 #
-class privatecloud::database::nosql(
+class cloud::database::nosql(
   $bind_ip = undef,
 ) {
 

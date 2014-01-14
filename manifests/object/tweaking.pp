@@ -16,7 +16,7 @@
 # Swift tweaking
 #
 
-class privatecloud::object::tweaking {
+class cloud::object::tweaking {
   file {'/etc/sysctl.d/swift-tuning.conf':
     content => "
 # disable TIME_WAIT.. wait..

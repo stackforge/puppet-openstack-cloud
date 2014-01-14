@@ -16,7 +16,7 @@
 # MySQL Galera Node
 #
 
-class privatecloud::database::sql (
+class cloud::database::sql (
     $api_eth                   = $os_params::api_eth,
     $service_provider          = sysv,
     $galera_nextserver         = $os_params::galera_nextserver,
@@ -197,7 +197,7 @@ basedir  = /usr
   mysql::server::config{'basic_config':
     notify_service => false,
     notify         => Exec['clean-mysql-binlog'],
-    settings       => template('privatecloud/database/mysql.conf.erb')
+    settings       => template('cloud/database/mysql.conf.erb')
   }
 
   exec{'clean-mysql-binlog':

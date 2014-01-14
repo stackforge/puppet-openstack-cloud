@@ -16,13 +16,13 @@
 # Network Compute node (Agent)
 #
 
-class privatecloud::network::compute(
+class cloud::network::compute(
   $neutron_endpoint = $os_params::ks_neutron_admin_host,
   $neutron_protocol = $os_params::ks_neutron_public_proto,
   $neutron_password = $os_params::ks_neutron_password,
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'nova::network::neutron':
       neutron_admin_password => $neutron_password,

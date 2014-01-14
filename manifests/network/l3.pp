@@ -16,12 +16,12 @@
 # Network L3 node
 #
 
-class privatecloud::network::l3(
+class cloud::network::l3(
   $external_int = $os_params::external_int,
   $debug        = $os_params::debug,
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'neutron::agents::l3':
     debug                        => $debug,

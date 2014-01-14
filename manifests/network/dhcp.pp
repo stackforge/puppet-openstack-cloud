@@ -16,11 +16,11 @@
 # Network DHCP node
 #
 
-class privatecloud::network::dhcp(
+class cloud::network::dhcp(
   $debug   = $os_params::debug
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'neutron::agents::dhcp':
     debug   => $debug

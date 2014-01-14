@@ -16,7 +16,7 @@
 # Network Controller node (API + Scheduler)
 #
 
-class privatecloud::network::controller(
+class cloud::network::controller(
   $neutron_db_host         = $os_params::neutron_db_host,
   $neutron_db_user         = $os_params::neutron_db_user,
   $neutron_db_password     = $os_params::neutron_db_password,
@@ -29,7 +29,7 @@ class privatecloud::network::controller(
   $public_cidr             = $os_params::public_cidr
 ) {
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   $encoded_user = uriescape($neutron_db_user)
   $encoded_password = uriescape($neutron_db_password)

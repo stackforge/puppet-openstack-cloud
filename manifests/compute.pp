@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::compute
+# == Class: cloud::compute
 #
 # Common class for compute nodes
 #
@@ -56,7 +56,7 @@
 #   Default value in params
 #
 
-class privatecloud::compute(
+class cloud::compute(
   $nova_db_host            = $os_params::nova_db_host,
   $nova_db_user            = $os_params::nova_db_user,
   $nova_db_password        = $os_params::nova_db_password,

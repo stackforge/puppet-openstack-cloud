@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::object
+# == Class: cloud::object
 #
 # Common class for object storage nodes
 #
@@ -24,7 +24,7 @@
 #   Default value in params
 #
 
-class privatecloud::object(
+class cloud::object(
   $swift_hash_suffix = $os_params::swift_hash_suffix
 ) {
 
@@ -34,6 +34,6 @@ class privatecloud::object(
     swift_hash_suffix => $swift_hash_suffix,
   }
 
-  class {'privatecloud::object::tweaking': }
+  class {'cloud::object::tweaking': }
 
 }
