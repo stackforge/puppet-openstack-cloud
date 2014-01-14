@@ -1,5 +1,5 @@
-cloud
-=====
+puppet-cloud
+============
 
 #### Table of Contents
 
