@@ -13,13 +13,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class privatecloud::storage::rbd::osd (
+class cloud::storage::rbd::osd (
   $public_address  = $::ipaddress_eth0,
   $cluster_address = $::ipaddress_eth0,
   $devices         = ['sdb','sdc'],
 ) {
 
-  include 'privatecloud::storage::rbd'
+  include 'cloud::storage::rbd'
 
   class { 'ceph::osd' :
     public_address  => $public_address,

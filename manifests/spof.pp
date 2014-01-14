@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::spof
+# == Class: cloud::spof
 #
 # Install all SPOF services in active / passive with Pacemaker / Corosync
 #
@@ -28,7 +28,7 @@
 #   Default to '239.1.1.2'.
 #
 
-class privatecloud::spof(
+class cloud::spof(
   $cluster_ip        = $os_params::cluster_ip,
   $multicast_address = '239.1.1.2'
 ) {
@@ -54,7 +54,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-    source  => 'puppet:///modules/privatecloud/heartbeat/ceilometer-agent-central',
+    source  => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -78,7 +78,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
-    source  => 'puppet:///modules/privatecloud/heartbeat/neutron-metadata-agent',
+    source  => 'puppet:///modules/cloud/heartbeat/neutron-metadata-agent',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -102,7 +102,7 @@ class privatecloud::spof(
 
   Package['corosync'] ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-    source  => 'puppet:///modules/privatecloud/heartbeat/heat-engine',
+    source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
@@ -125,15 +125,15 @@ class privatecloud::spof(
   }
 
   # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
-  class { 'privatecloud::network::metadata':
+  class { 'cloud::network::metadata':
     enabled => false,
   }
 
-  class { 'privatecloud::orchestration::engine':
+  class { 'cloud::orchestration::engine':
     enabled => false,
   }
 
-  class { 'privatecloud::telemetry::centralagent':
+  class { 'cloud::telemetry::centralagent':
     enabled => false,
   }
 

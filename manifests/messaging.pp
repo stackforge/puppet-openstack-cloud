@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::messaging
+# == Class: cloud::messaging
 #
 # Install Messsaging Server (RabbitMQ)
 #
@@ -28,7 +28,7 @@
 #   Default value in params
 #
 
-class privatecloud::messaging(
+class cloud::messaging(
   $rabbit_hosts    = $os_params::rabbit_hosts,
   $rabbit_names    = $os_params::rabbit_names,
   $rabbit_password = $os_params::rabbit_password

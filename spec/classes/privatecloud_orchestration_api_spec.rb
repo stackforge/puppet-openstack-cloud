@@ -13,17 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::orchestration::api class
+# Unit tests for cloud::orchestration::api class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::orchestration::api' do
+describe 'cloud::orchestration::api' do
 
   shared_examples_for 'openstack orchestration api' do
 
     let :pre_condition do
-      "class { 'privatecloud::orchestration':
+      "class { 'cloud::orchestration':
         rabbit_hosts               => ['10.0.0.1'],
         rabbit_password            => 'secrete',
         ks_keystone_internal_host  => '10.0.0.1',

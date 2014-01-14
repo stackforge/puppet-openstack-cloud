@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::image
+# == Class: cloud::image
 #
 # Install Image Server (Glance)
 #
@@ -56,7 +56,7 @@
 #   Default value in params
 #
 
-class privatecloud::image(
+class cloud::image(
   $glance_db_host              = $os_params::glance_db_host,
   $glance_db_user              = $os_params::glance_db_user,
   $glance_db_password          = $os_params::glance_db_password,

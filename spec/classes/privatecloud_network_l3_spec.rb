@@ -13,17 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::network::l3 class
+# Unit tests for cloud::network::l3 class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::network::l3' do
+describe 'cloud::network::l3' do
 
   shared_examples_for 'openstack network l3' do
 
     let :pre_condition do
-      "class { 'privatecloud::network':
+      "class { 'cloud::network':
         rabbit_hosts            => ['10.0.0.1'],
         rabbit_password         => 'secrete',
         tunnel_eth              => '10.0.1.1',

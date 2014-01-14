@@ -16,7 +16,7 @@
 # Telemetry server nodes
 #
 
-class privatecloud::telemetry::server(
+class cloud::telemetry::server(
   $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
   $ks_ceilometer_internal_port    = $os_params::ks_ceilometer_internal_port,
@@ -25,7 +25,7 @@ class privatecloud::telemetry::server(
   $api_eth                        = $os_params::api_eth,
 ){
 
-  include 'privatecloud::telemetry'
+  include 'cloud::telemetry'
 
 # Install MongoDB database
   class { 'ceilometer::db':

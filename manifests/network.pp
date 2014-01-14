@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::network
+# == Class: cloud::network
 #
 # Common class for network nodes
 #
@@ -40,7 +40,7 @@
 #   Default value in params
 #
 
-class privatecloud::network(
+class cloud::network(
   $verbose             = $os_params::verbose,
   $debug               = $os_params::debug,
   $rabbit_hosts        = $os_params::rabbit_hosts,

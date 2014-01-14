@@ -16,7 +16,7 @@
 # Volume Common
 #
 
-class privatecloud::volume(
+class cloud::volume(
   $cinder_db_host             = $os_params::cinder_db_host,
   $cinder_db_user             = $os_params::cinder_db_user,
   $cinder_db_password         = $os_params::cinder_db_password,

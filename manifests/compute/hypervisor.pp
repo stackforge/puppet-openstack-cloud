@@ -16,7 +16,7 @@
 # Hypervisor Compute node
 #
 
-class privatecloud::compute::hypervisor(
+class cloud::compute::hypervisor(
   $api_eth                = $os_params::api_eth,
   $libvirt_type           = $os_params::libvirt_type,
   $ks_nova_internal_proto = $os_params::ks_nova_internal_proto,
@@ -27,7 +27,7 @@ class privatecloud::compute::hypervisor(
   $has_ceph               = false
 ) {
 
-  include 'privatecloud::compute'
+  include 'cloud::compute'
 
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',

@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: privatecloud::cache
+# == Class: cloud::cache
 #
 # Install a cache server (used by OpenStack services)
 #
@@ -24,7 +24,7 @@
 #   Default to $::ipaddress_eth0
 #
 
-class privatecloud::cache (
+class cloud::cache (
   $listen_ip = $::ipaddress_eth0,
 ){
 

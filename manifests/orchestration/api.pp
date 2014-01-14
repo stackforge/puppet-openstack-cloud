@@ -16,14 +16,14 @@
 # Orchestration APIs node
 #
 
-class privatecloud::orchestration::api(
+class cloud::orchestration::api(
   $ks_heat_internal_port            = $os_params::ks_heat_internal_port,
   $ks_heat_cfn_internal_port        = $os_params::ks_heat_cfn_internal_port,
   $ks_heat_cloudwatch_internal_port = $os_params::ks_heat_cloudwatch_internal_port,
   $api_eth                          = $os_params::api_eth,
 ) {
 
-  include 'privatecloud::orchestration'
+  include 'cloud::orchestration'
 
   class { 'heat::api':
     bind_host => $api_eth,

@@ -13,12 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::cache
+# Unit tests for cloud::cache
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::cache' do
+describe 'cloud::cache' do
 
   shared_examples_for 'cache server' do
 

@@ -14,7 +14,7 @@
 # under the License.
 #
 
-class privatecloud::storage::rbd (
+class cloud::storage::rbd (
   $fsid            = $os_params::ceph_fsid,
   $cluster_network = $os_params::ceph_cluster_network,
   $public_network  = $os_params::ceph_public_network

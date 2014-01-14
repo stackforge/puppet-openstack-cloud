@@ -13,12 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Class: privatecloud
+# Class: cloud
 #
 # Installs the private cloud system requirements
 #
 
-class privatecloud {
+class cloud {
 
 # motd
   file

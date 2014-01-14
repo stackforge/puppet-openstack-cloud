@@ -16,7 +16,7 @@
 # Used by Controller, Storage, Network and Compute nodes
 #
 
-class privatecloud::telemetry(
+class cloud::telemetry(
   $ceilometer_secret          = $os_params::ceilometer_secret,
   $rabbit_hosts               = $os_params::rabbit_hosts,
   $rabbit_password            = $os_params::rabbit_password,

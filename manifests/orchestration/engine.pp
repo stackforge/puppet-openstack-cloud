@@ -17,7 +17,7 @@
 # Could be managed by spof node as Active / Passive.
 #
 
-class privatecloud::orchestration::engine(
+class cloud::orchestration::engine(
   $enabled                        = true,
   $ks_heat_public_host            = $os_params::ks_heat_public_host,
   $ks_heat_public_proto           = $os_params::ks_heat_public_proto,
@@ -27,7 +27,7 @@ class privatecloud::orchestration::engine(
   $auth_encryption_key            = $os_params::heat_auth_encryption_key
 ) {
 
-  include 'privatecloud::orchestration'
+  include 'cloud::orchestration'
 
   class { 'heat::engine':
     enabled                       => $enabled,

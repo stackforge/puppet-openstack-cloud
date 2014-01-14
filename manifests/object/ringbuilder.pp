@@ -16,7 +16,7 @@
 # Swift ring builder node
 #
 
-class privatecloud::object::ringbuilder(
+class cloud::object::ringbuilder(
     $rsyncd_ipaddress            = ipaddress_eth0,
     $replicas                    = $os_params::replicas,
     $swift_rsync_max_connections = $os_params::swift_rsync_max_connections,
@@ -26,7 +26,7 @@ class privatecloud::object::ringbuilder(
   Ring_container_device <<| |>>
   Ring_account_device <<| |>>
 
-  Class['swift'] -> Class['privatecloud::object::ringbuilder']
+  Class['swift'] -> Class['cloud::object::ringbuilder']
 
   swift::ringbuilder::create{ ['account', 'container']:
     part_power     => 9,

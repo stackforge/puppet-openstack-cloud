@@ -16,9 +16,9 @@
 # Network VPNaaS node
 #
 
-class privatecloud::network::vpn{
+class cloud::network::vpn{
 
-  include 'privatecloud::network'
+  include 'cloud::network'
 
   class { 'neutron::agents::vpnaas': }
 

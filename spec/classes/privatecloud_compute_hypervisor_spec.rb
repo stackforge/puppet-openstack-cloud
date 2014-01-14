@@ -13,17 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::compute::hypervisor class
+# Unit tests for cloud::compute::hypervisor class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::compute::hypervisor' do
+describe 'cloud::compute::hypervisor' do
 
   shared_examples_for 'openstack compute hypervisor' do
 
     let :pre_condition do
-      "class { 'privatecloud::compute':
+      "class { 'cloud::compute':
         nova_db_host            => '10.0.0.1',
         nova_db_user            => 'nova',
         nova_db_password        => 'secrete',

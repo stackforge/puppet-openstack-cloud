@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class privatecloud::storage::rbd::pools(
+class cloud::storage::rbd::pools(
   $setup_pools          = false,
   $glance_pool          = 'ceph_glance',
   $glance_user          = 'glance',
@@ -70,7 +70,7 @@ osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_pool},
 #    }
 
     @@file { '/etc/ceph/secret.xml':
-      content => template('privatecloud/storage/ceph/secret-compute.xml.erb'),
+      content => template('cloud/storage/ceph/secret-compute.xml.erb'),
       tag     => 'ceph_compute_secret_file',
     }
 

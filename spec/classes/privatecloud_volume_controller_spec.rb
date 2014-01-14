@@ -13,17 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::volume::controller class
+# Unit tests for cloud::volume::controller class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::volume::controller' do
+describe 'cloud::volume::controller' do
 
   shared_examples_for 'openstack volume controller' do
 
     let :pre_condition do
-      "class { 'privatecloud::volume':
+      "class { 'cloud::volume':
         cinder_db_host             => '10.0.0.1',
         cinder_db_user             => 'cinder',
         cinder_db_password         => 'secrete',

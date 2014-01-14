@@ -13,12 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for privatecloud::messaging class
+# Unit tests for cloud::messaging class
 #
 
 require 'spec_helper'
 
-describe 'privatecloud::messaging' do
+describe 'cloud::messaging' do
 
   shared_examples_for 'openstack messaging' do
 
