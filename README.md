@@ -16,7 +16,7 @@ puppet-cloud
 Overview
 --------
 
-The Openstack Puppet Modules are a flexible Puppet implementation capable of configuring the core [Openstack](http://docs.openstack.org/) services:
+The OpenStack Puppet Modules are a flexible Puppet implementation capable of configuring the core [OpenStack](http://docs.openstack.org/) services:
 
 * Nova (compute)
 * Glance (image)
@@ -37,7 +37,7 @@ These Puppet modules are based on the [openstack documentation](http://docs.open
 Module Description
 ------------------
 
-There are a lot of moving pieces in Openstack, consequently there are several Puppet modules needed to cover all these pieces.  Each module is then made up of several class definitions, resource declarations, defined resources, and custom types/providers.  A common pattern to reduce this complexity in Puppet is to create a composite module that bundles all these component type modules into a common set of configurations.  The cloud module is doing this compositing and exposing a set of variables needed to be successful in getting a functional stack up and running.
+There are a lot of moving pieces in OpenStack, consequently there are several Puppet modules needed to cover all these pieces.  Each module is then made up of several class definitions, resource declarations, defined resources, and custom types/providers.  A common pattern to reduce this complexity in Puppet is to create a composite module that bundles all these component type modules into a common set of configurations.  The cloud module is doing this compositing and exposing a set of variables needed to be successful in getting a functional stack up and running.
 
 **Pre-module Dependencies**
 
@@ -53,13 +53,13 @@ Setup
 
 **What the cloud module affects**
 
-* The entirety of Openstack!
+* The entirety of OpenStack!
 
 ### Installing Puppet
 
 Puppet Labs provides two tools for getting started with managing configuration modeling with Puppet, Puppet Enterprise or its underlying opensource projects, i.e. Puppet and MCollective.
 
-* [Puppet Enterprise](http://docs.puppetlabs.com/#puppet-enterprisepelatest) is a complete configuration management platform, with an optimized set of components proven to work well together.  Is free up to 10 nodes so if you're just using Puppet for Openstack management this might just work perfectly.  It will come configured with a handful of extra components that make for a richer experience, like a web interface for managing the orchestration of Puppet and certificate management.
+* [Puppet Enterprise](http://docs.puppetlabs.com/#puppet-enterprisepelatest) is a complete configuration management platform, with an optimized set of components proven to work well together.  Is free up to 10 nodes so if you're just using Puppet for OpenStack management this might just work perfectly.  It will come configured with a handful of extra components that make for a richer experience, like a web interface for managing the orchestration of Puppet and certificate management.
 * [Puppet](http://docs.puppetlabs.com/#puppetpuppet) manages your servers: you describe machine configurations in an easy-to-read declarative language, and Puppet will bring your systems into the desired state and keep them there.  This is the opensource version of Puppet and should be available in your operating system's package repositories but it is generally suggested you use the [yum](http://yum.puppetlabs.com) or [apt](http://apt.puppetlabs.com) repositories from Puppet Labs if possible.
 
 Consult the documentation linked above to help you make your decision but don't fret about the choice to much, opensource Puppet agents are compatible with Puppet Enterprise Puppet masters.
