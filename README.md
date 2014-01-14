@@ -23,7 +23,7 @@ The Openstack Puppet Modules are a flexible Puppet implementation capable of con
 * Keystone (identity)
 * Cinder (volume)
 * Horizon (dashboard)
-* Heat (orchestraton)
+* Heat (orchestration)
 * Ceilometer (telemetry)
 * Neutron (networking)
 * Swift (object storage)
