@@ -30,6 +30,9 @@ The OpenStack Puppet Modules are a flexible Puppet implementation capable of con
 
 Cinder, Glance and Nova can use Ceph as backend storage, using [puppet-ceph](https://github.com/enovance/puppet-ceph).
 
+Only KVM and QEMU are supported as hypervisors, for now.
+Neutron use ML2 plugin with GRE and Open-vSwitch drivers.
+
 [Puppet Modules](http://docs.puppetlabs.com/learning/modules1.html#modules) are a collection of related contents that can be used to model the configuration of a discrete service.
 
 These Puppet modules are based on the [openstack documentation](http://docs.openstack.org/).
