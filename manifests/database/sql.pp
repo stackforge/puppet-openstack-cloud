@@ -175,12 +175,14 @@ class cloud::database::sql (
 
   exec{'clean-mysql-binlog':
     # first sync take a long time
-    command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile*  || { true ; sleep 60 ; }"',
+    command     => "/bin/bash -c '/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; /bin/rm  ${::mysql::params::datadir}/ib_logfile*'",
     require     => [
       File['/root/.my.cnf'],
       Service['mysqld'],
     ],
-    unless      => 'test `du -sh /var/lib/mysql/ib_logfile0 | cut -f1` = "256M"',
+    notify      => Exec['mysqld-restart'],
+    refreshonly => true,
+    onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
   }
 
 
@@ -208,8 +210,8 @@ basedir  = /usr
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
     notify_service => true,
-    settings       => template('cloud/database/mysql.conf.erb'),
-    require        => Exec['clean-mysql-binlog'];
+    notify         => Exec['clean-mysql-binlog'],
+    settings       => template('cloud/database/mysql.conf.erb')
   }
 
   @@haproxy::balancermember{$::fqdn:
