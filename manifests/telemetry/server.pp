@@ -27,10 +27,19 @@ class cloud::telemetry::server(
 
   include 'cloud::telemetry'
 
-# Install MongoDB database
+  $db_conn = regsubst($ceilometer_database_connection, 'mongodb:\/\/(\.*)', '\2')
+  exec {'check_mongodb' :
+    command   => "/usr/bin/mongo ${db_conn}",
+    logoutput => false,
+    tries     => 60,
+    try_sleep => 5,
+    require   => Service['mongodb'],
+  }
+
+  # Install MongoDB database
   class { 'ceilometer::db':
     database_connection => $ceilometer_database_connection,
-    require             => Class['mongodb']
+    require             => Exec['check_mongodb'],
   }
 
 # Install Ceilometer-collector
