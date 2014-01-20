@@ -27,7 +27,8 @@ describe 'cloud::database::sql' do
     end
 
     let :params do
-      { :service_provider          => 'sysv',
+      {
+        :service_provider          => 'sysv',
         :api_eth                   => '10.0.0.1',
         :galera_master             => '10.0.0.1',
         :galera_nextserver         => ['10.0.0.1','10.0.0.2','10.0.0.3'],
@@ -56,7 +57,10 @@ describe 'cloud::database::sql' do
         :neutron_db_user           => 'neutron',
         :neutron_db_password       => 'secrete',
         :neutron_db_allowed_hosts  => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :mysql_sys_maint           => 'sys' }
+        :mysql_sys_maint           => 'sys',
+        :cluster_check_dbuser      => 'clustercheckuser',
+        :cluster_check_dbpassword  => 'clustercheckpassword!'
+      }
     end
 
     it 'configure mysql galera server' do

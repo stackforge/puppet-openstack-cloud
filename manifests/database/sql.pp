@@ -47,7 +47,9 @@ class cloud::database::sql (
     $neutron_db_password       = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
     $mysql_password            = $os_params::mysql_password,
-    $mysql_sys_maint           = $os_params::mysql_sys_maint
+    $mysql_sys_maint           = $os_params::mysql_sys_maint,
+    $cluster_check_dbuser      = $os_params::cluster_check_dbuser,
+    $cluster_check_dbpassword  = $os_params::cluster_check_dbpassword
 ) {
 
   include 'xinetd'
@@ -144,6 +146,7 @@ class cloud::database::sql (
       allowed_hosts => $heat_db_allowed_hosts,
     }
 
+
 # Monitoring DB
     warning('Database mapping must be updated to puppetlabs/puppetlabs-mysql >= 2.x (see: https://dev.ring.enovance.com/redmine/issues/4510)')
 
@@ -152,14 +155,14 @@ class cloud::database::sql (
       charset => 'utf8',
       require => File['/root/.my.cnf']
     }
-    database_user { 'clustercheckuser@localhost':
+    database_user { "${cluster_check_dbuser}@localhost":
       ensure        => 'present',
       # can not change password in clustercheck script
-      password_hash => mysql_password('clustercheckpassword!'),
+      password_hash => mysql_password($cluster_check_dbpassword),
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
-    database_grant { 'clustercheckuser@localhost/monitoring':
+    database_grant { "${cluster_check_dbuser}@localhost/monitoring":
       privileges => ['all']
     }
 
@@ -171,7 +174,32 @@ class cloud::database::sql (
     }
 
     Database_user<<| |>>
-  }
+
+    # Haproxy http monitoring
+    file_line { 'mysqlchk-in-etc-services':
+      path   => '/etc/services',
+      line   => 'mysqlchk 9200/tcp',
+      match  => '^mysqlchk 9200/tcp$',
+      notify => Service['xinetd'];
+    }
+
+    file {
+      '/etc/xinetd.d/mysqlchk':
+        content => template('cloud/database/mysqlchk.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        require => File['/usr/bin/clustercheck'],
+        notify  => Service['xinetd'];
+      '/usr/bin/clustercheck':
+        ensure  => present,
+        content => template('cloud/database/clustercheck.erb'),
+        mode    => '0755',
+        owner   => 'root',
+        group   => 'root';
+    }
+
+  } # if $::hostname == $galera_master
 
   exec{'clean-mysql-binlog':
     # first sync take a long time
