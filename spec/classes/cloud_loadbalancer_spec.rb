@@ -20,7 +20,7 @@ require 'spec_helper'
 
 describe 'cloud::loadbalancer' do
 
-  shared_examples_for 'openstack master loadbalancer' do
+  shared_examples_for 'openstack loadbalancer' do
 
     let :params do
       { :ceilometer_api                 => true,
@@ -39,7 +39,6 @@ describe 'cloud::loadbalancer' do
         :horizon                        => true,
         :spice                          => true,
         :haproxy_auth                   => 'root:secrete',
-        :keepalived_state               => 'MASTER',
         :keepalived_priority            => 50,
         :keepalived_interface           => 'eth0',
         :keepalived_ipvs                => ['10.0.0.1', '10.0.0.2'],
@@ -73,76 +72,33 @@ describe 'cloud::loadbalancer' do
       should contain_class('keepalived')
     end
 
-    it 'configure vrrp_instance with MASTER state' do
-      should contain_keepalived__instance('1').with({
-        'state'         => 'MASTER',
-        'priority'      => 50,
-        'notify_master' => '"/etc/init.d/haproxy start"',
-        'notify_backup' => '"/etc/init.d/haproxy stop"',
-      })
+    context 'configure keepalived in backup' do
+      it 'configure vrrp_instance with BACKUP state' do
+        should contain_keepalived__instance('1').with({
+          'interface'     => 'eth0',
+          'track_script'  => ['haproxy'],
+          'state'         => 'BACKUP',
+          'priority'      => 50,
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
     end
 
-  end
-
-  shared_examples_for 'openstack backup loadbalancer' do
-
-    let :params do
-      { :ceilometer_api                 => true,
-        :cinder_api                     => true,
-        :glance_api                     => true,
-        :neutron_api                    => true,
-        :heat_api                       => true,
-        :heat_cfn_api                   => true,
-        :heat_cloudwatch_api            => true,
-        :nova_api                       => true,
-        :ec2_api                        => true,
-        :metadata_api                   => true,
-        :swift_api                      => true,
-        :keystone_api_admin             => true,
-        :keystone_api                   => true,
-        :horizon                        => true,
-        :spice                          => true,
-        :haproxy_auth                   => 'root:secrete',
-        :keepalived_state               => 'BACKUP',
-        :keepalived_priority            => 49,
-        :keepalived_interface           => 'eth0',
-        :keepalived_ipvs                => ['10.0.0.1', '10.0.0.2'],
-        :keepalived_localhost_ip        => '127.0.0.1',
-        :horizon_port                   => '80',
-        :spice_port                     => '6082',
-        :openstack_vip                  => '10.0.0.3',
-        :mysql_vip                      => '10.0.0.4',
-        :ks_ceilometer_public_port      => '8777',
-        :ks_nova_public_port            => '8774',
-        :ks_ec2_public_port             => '8773',
-        :ks_metadata_public_port        => '8777',
-        :ks_glance_public_port          => '9292',
-        :ks_swift_public_port           => '8080',
-        :ks_keystone_public_port        => '5000',
-        :ks_keystone_admin_port         => '35357',
-        :ks_cinder_public_port          => '8776',
-        :ks_neutron_public_port         => '9696',
-        :ks_heat_public_port            => '8004',
-        :ks_heat_cfn_public_port        => '8000',
-        :ks_heat_cloudwatch_public_port => '8003' }
-    end
-
-    it 'configure haproxy server' do
-      should contain_class('haproxy').with({
-        'manage_service' => 'false',
-      })
-    end
-
-    it 'configure keepalived server' do
-      should contain_class('keepalived')
-    end
-
-    it 'configure vrrp_instance with BACKUP state' do
-      should contain_keepalived__instance('1').with({
-        'priority'      => '49',
-        'notify_master' => '"/etc/init.d/haproxy start"',
-        'notify_backup' => '"/etc/init.d/haproxy stop"',
-      })
+    context 'configure keepalived in master' do
+      before :each do
+        params.merge!( :keepalived_state => 'MASTER' )
+      end
+      it 'configure vrrp_instance with MASTER state' do
+        should contain_keepalived__instance('1').with({
+          'interface'     => 'eth0',
+          'track_script'  => ['haproxy'],
+          'state'         => 'MASTER',
+          'priority'      => 50,
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
     end
 
   end
@@ -153,8 +109,7 @@ describe 'cloud::loadbalancer' do
         :concat_basedir => '/var/lib/puppet/concat' }
     end
 
-    it_configures 'openstack master loadbalancer'
-    it_configures 'openstack backup loadbalancer'
+    it_configures 'openstack loadbalancer'
   end
 
   context 'on RedHat platforms' do
@@ -163,8 +118,7 @@ describe 'cloud::loadbalancer' do
         :concat_basedir => '/var/lib/puppet/concat' }
     end
 
-    it_configures 'openstack master loadbalancer'
-    it_configures 'openstack backup loadbalancer'
+    it_configures 'openstack loadbalancer'
   end
 
 end
