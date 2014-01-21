@@ -61,6 +61,12 @@ describe 'cloud::telemetry::server' do
       should contain_ceilometer_config('DEFAULT/use_syslog').with('value' => 'yes')
     end
 
+    it 'check mongodb is started' do
+      should contain_exec('check_mongodb').with({
+        :command => '/usr/bin/mongo 10.0.0.2/ceilometer',
+      })
+    end
+
     it 'configure ceilometer db' do
       should contain_class('ceilometer::db').with(
           :database_connection => 'mongodb://10.0.0.2/ceilometer'
