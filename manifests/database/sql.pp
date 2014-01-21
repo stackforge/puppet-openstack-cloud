@@ -17,39 +17,40 @@
 #
 
 class cloud::database::sql (
-    $api_eth                   = $os_params::api_eth,
-    $service_provider          = 'sysv',
-    $galera_nextserver         = $os_params::galera_nextserver,
-    $galera_master             = $os_params::galera_master,
-    $mysql_password            = $os_params::mysql_password,
-    $keystone_db_host          = $os_params::keystone_db_host,
-    $keystone_db_user          = $os_params::keystone_db_user,
-    $keystone_db_password      = $os_params::keystone_db_password,
-    $keystone_db_allowed_hosts = $os_params::keystone_db_allowed_hosts,
-    $cinder_db_host            = $os_params::cinder_db_host,
-    $cinder_db_user            = $os_params::cinder_db_user,
-    $cinder_db_password        = $os_params::cinder_db_password,
-    $cinder_db_allowed_hosts   = $os_params::cinder_db_allowed_hosts,
-    $glance_db_host            = $os_params::glance_db_host,
-    $glance_db_user            = $os_params::glance_db_user,
-    $glance_db_password        = $os_params::glance_db_password,
-    $glance_db_allowed_hosts   = $os_params::glance_db_allowed_hosts,
-    $heat_db_host              = $os_params::heat_db_host,
-    $heat_db_user              = $os_params::heat_db_user,
-    $heat_db_password          = $os_params::heat_db_password,
-    $heat_db_allowed_hosts     = $os_params::heat_db_allowed_hosts,
-    $nova_db_host              = $os_params::nova_db_host,
-    $nova_db_user              = $os_params::nova_db_user,
-    $nova_db_password          = $os_params::nova_db_password,
-    $nova_db_allowed_hosts     = $os_params::nova_db_allowed_hosts,
-    $neutron_db_host           = $os_params::neutron_db_host,
-    $neutron_db_user           = $os_params::neutron_db_user,
-    $neutron_db_password       = $os_params::neutron_db_password,
-    $neutron_db_allowed_hosts  = $os_params::neutron_db_allowed_hosts,
-    $mysql_password            = $os_params::mysql_password,
-    $mysql_sys_maint           = $os_params::mysql_sys_maint,
-    $cluster_check_dbuser      = $os_params::cluster_check_dbuser,
-    $cluster_check_dbpassword  = $os_params::cluster_check_dbpassword
+    $api_eth                        = $os_params::api_eth,
+    $service_provider               = 'sysv',
+    $galera_nextserver              = $os_params::galera_nextserver,
+    $galera_master                  = $os_params::galera_master,
+    $keystone_db_host               = $os_params::keystone_db_host,
+    $keystone_db_user               = $os_params::keystone_db_user,
+    $keystone_db_password           = $os_params::keystone_db_password,
+    $keystone_db_allowed_hosts      = $os_params::keystone_db_allowed_hosts,
+    $cinder_db_host                 = $os_params::cinder_db_host,
+    $cinder_db_user                 = $os_params::cinder_db_user,
+    $cinder_db_password             = $os_params::cinder_db_password,
+    $cinder_db_allowed_hosts        = $os_params::cinder_db_allowed_hosts,
+    $glance_db_host                 = $os_params::glance_db_host,
+    $glance_db_user                 = $os_params::glance_db_user,
+    $glance_db_password             = $os_params::glance_db_password,
+    $glance_db_allowed_hosts        = $os_params::glance_db_allowed_hosts,
+    $heat_db_host                   = $os_params::heat_db_host,
+    $heat_db_user                   = $os_params::heat_db_user,
+    $heat_db_password               = $os_params::heat_db_password,
+    $heat_db_allowed_hosts          = $os_params::heat_db_allowed_hosts,
+    $nova_db_host                   = $os_params::nova_db_host,
+    $nova_db_user                   = $os_params::nova_db_user,
+    $nova_db_password               = $os_params::nova_db_password,
+    $nova_db_allowed_hosts          = $os_params::nova_db_allowed_hosts,
+    $neutron_db_host                = $os_params::neutron_db_host,
+    $neutron_db_user                = $os_params::neutron_db_user,
+    $neutron_db_password            = $os_params::neutron_db_password,
+    $neutron_db_allowed_hosts       = $os_params::neutron_db_allowed_hosts,
+    $mysql_root_password            = $os_params::mysql_root_password,
+    $mysql_sys_maint_user           = $os_params::mysql_sys_maint_user,
+    $mysql_sys_maint_password       = $os_params::mysql_sys_maint_password,
+    $galera_clustercheck_dbuser     = $os_params::galera_clustercheck_dbuser,
+    $galera_clustercheck_dbpassword = $os_params::galera_clustercheck_dbuser,
+    $galera_clustercheck_ipaddress  = $::ipaddress
 ) {
 
   include 'xinetd'
@@ -92,7 +93,7 @@ class cloud::database::sql (
   class { 'mysql::server':
     config_hash         => {
       bind_address      => $api_eth,
-      root_password     => $mysql_password,
+      root_password     => $mysql_root_password,
     },
     notify              => Service['xinetd'],
   }
@@ -155,20 +156,20 @@ class cloud::database::sql (
       charset => 'utf8',
       require => File['/root/.my.cnf']
     }
-    database_user { "${cluster_check_dbuser}@localhost":
+    database_user { "${galera_clustercheck_dbuser}@localhost":
       ensure        => 'present',
       # can not change password in clustercheck script
-      password_hash => mysql_password($cluster_check_dbpassword),
+      password_hash => mysql_password($galera_clustercheck_dbpassword),
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
-    database_grant { "${cluster_check_dbuser}@localhost/monitoring":
+    database_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
       privileges => ['all']
     }
 
-    database_user { 'sys-maint@localhost':
+    database_user { "${mysql_sys_maint_user}@localhost":
       ensure        => 'present',
-      password_hash => mysql_password($mysql_sys_maint),
+      password_hash => mysql_password($mysql_sys_maint_password),
       provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
@@ -218,12 +219,12 @@ class cloud::database::sql (
 [client]
 host     = localhost
 user     = sys-maint
-password = ${mysql_sys_maint}
+password = ${mysql_sys_maint_password}
 socket   = /var/run/mysqld/mysqld.sock
 [mysql_upgrade]
 host     = localhost
 user     = sys-maint
-password = ${mysql_sys_maint}
+password = ${mysql_sys_maint_password}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 ",
