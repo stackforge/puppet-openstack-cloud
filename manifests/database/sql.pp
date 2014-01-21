@@ -173,6 +173,17 @@ class cloud::database::sql (
     Database_user<<| |>>
   }
 
+  exec{'clean-mysql-binlog':
+    # first sync take a long time
+    command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile*  || { true ; sleep 60 ; }"',
+    require     => [
+      File['/root/.my.cnf'],
+      Service['mysqld'],
+    ],
+    unless => 'test `du -sh /var/lib/mysql/ib_logfile0 | cut -f1` = "256M"',
+  }
+
+
   file{'/etc/mysql/sys.cnf':
     content => "# Automatically generated. DO NOT TOUCH!
 [client]
@@ -188,6 +199,7 @@ socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 ",
     mode    => '0600',
+    require => Exec['clean-mysql-binlog'],
   }
 
   # Disabled because monitor depends on checkmulti which is broken
@@ -195,19 +207,9 @@ basedir  = /usr
 
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
-    notify_service => false,
-    notify         => Exec['clean-mysql-binlog'],
+    notify_service => true,
     settings       => template('cloud/database/mysql.conf.erb')
-  }
-
-  exec{'clean-mysql-binlog':
-    # first sync take a long time
-    command     => '/bin/bash -c "/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; killall -9 nc ; /bin/rm -f /var/lib/mysql/ib_logfile* ; /etc/init.d/mysql start || { true ; sleep 60 ; }"',
-    require     => [
-      File['/root/.my.cnf'],
-      Service['mysqld'],
-    ],
-    refreshonly => true,
+    require        => Exec['clean-mysql-binlog'],
   }
 
   @@haproxy::balancermember{$::fqdn:
