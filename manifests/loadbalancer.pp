@@ -15,7 +15,6 @@
 #
 # HAproxy nodes
 #
-
 class cloud::loadbalancer(
   $ceilometer_api                 = true,
   $cinder_api                     = true,
@@ -36,7 +35,7 @@ class cloud::loadbalancer(
   $keepalived_state               = 'BACKUP',
   $keepalived_priority            = 50,
   $keepalived_interface           = $os_params::keepalived_interface,
-  $keepalived_ipvs                = [ $os_params::openstack_vip, $os_params::mysql_vip ],
+  $keepalived_ipvs                = [$os_params::openstack_vip,$os_params::mysql_vip],
   $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
@@ -77,83 +76,12 @@ class cloud::loadbalancer(
     notify_backup => '"/etc/init.d/haproxy stop"',
   }
 
-  $monitors_data = inline_template('
-<%- if @swift_api -%>
-acl swift_api_dead nbsrv(swift_api_cluster) lt 1
-monitor fail if swift_api_dead
-<%- end -%>
-<%- if @keystone_api -%>
-acl keystone_api_dead nbsrv(keystone_api_cluster) lt 1
-monitor fail if keystone_api_dead
-<% end -%>
-<%- if @galera -%>
-acl galera_dead nbsrv(galera_cluster) lt 1
-monitor fail if galera_dead
-<%- end -%>
-<%- if @neutron_api -%>
-acl neutron_api_dead nbsrv(neutron_api_cluster) lt 1
-monitor fail if neutron_api_dead
-<%- end -%>
-<%- if @cinder_api -%>
-acl cinder_api_dead nbsrv(cinder_api_cluster) lt 1
-monitor fail if cinder_api_dead
-<%- end -%>
-<%- if @nova_api -%>
-acl nova_api_dead nbsrv(nova_api_cluster) lt 1
-monitor fail if nova_api_dead
-<%- end -%>
-<%- if @nova_ec2 -%>
-acl nova_ec2_dead nbsrv(nova_ec2_cluster) lt 1
-monitor fail if nova_ec2_dead
-<%- end -%>
-<%- if @nova_metadata -%>
-acl nova_metadata_dead nbsrv(nova_metadata_cluster) lt 1
-monitor fail if nova_metadata_dead
-<%- end -%>
-<%- if @spice -%>
-acl spice_dead nbsrv(spice_cluster) lt 1
-monitor fail if spice_dead
-<%- end -%>
-<%- if @glance_api -%>
-acl nova_api_dead nbsrv(glance_api_cluster) lt 1
-monitor fail if nova_api_dead
-<%- end -%>
-<%- if @ceilometer_api -%>
-acl ceilometer_api_dead nbsrv(ceilometer_api_cluster) lt 1
-monitor fail if ceilometer_api_dead
-<%- end -%>
-<%- if @heat_api -%>
-acl heat_api_dead nbsrv(heat_api_cluster) lt 1
-monitor fail if heat_api_dead
-<%- end -%>
-<%- if @heat_cfn_api -%>
-acl heat_api_cfn_dead nbsrv(heat_api_cfn_cluster) lt 1
-monitor fail if heat_api_cfn_dead
-<%- end -%>
-<%- if @heat_cloudwatch_api -%>
-acl heat_api_cloudwatch_dead nbsrv(heat_api_cloudwatch_cluster) lt 1
-monitor fail if heat_api_cloudwatch_dead
-<%- end -%>
-<%- if @horizon -%>
-acl horizon_dead nbsrv(horizon_cluster) lt 1
-monitor fail if horizon_dead
-<%- end -%>
-')
-
-  file{'/etc/logrotate.d/haproxy':
-    content => "
-  /var/log/haproxy.log
-{
-        rotate 7
-        daily
-        missingok
-        notifempty
-        delaycompress
-        compress
-        postrotate
-        endscript
-}
-"
+  file { '/etc/logrotate.d/haproxy':
+    ensure  => file,
+    source  => 'puppet:///cloud/logrotate/haproxy',
+    owner   => root,
+    group   => root,
+    mode    => '0644';
   }
 
   haproxy::listen { 'monitor':
@@ -163,7 +91,7 @@ monitor fail if horizon_dead
       'mode'        => 'http',
       'monitor-uri' => '/status',
       'stats'       => ['enable','uri     /admin','realm   Haproxy\ Statistics',"auth    ${haproxy_auth}", 'refresh 5s' ],
-      ''            => $monitors_data,
+      ''            => template('cloud/loadbalancer/monitor.erb'),
     }
   }
 
