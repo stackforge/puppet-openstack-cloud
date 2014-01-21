@@ -76,6 +76,20 @@ describe 'cloud::database::sql' do
         )
     end
 
+    context 'configure mysqlchk http replication' do
+      it { should contain_file_line('mysqlchk-in-etc-services').with(
+        :line   => 'mysqlchk 9200/tcp',
+        :path   => '/etc/services',
+        :notify => 'Service[xinetd]'
+      )}
+
+      it { should contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
+      it { should contain_file('/usr/bin/clustercheck').with_mode('0755') }
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME="#{params[:cluster_check_dbuser]}"/)}
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD="#{params[:cluster_check_dbpassword]}"/)}
+
+    end
+
     context 'configure databases on the galera master server' do
 
       before :each do
@@ -141,12 +155,12 @@ describe 'cloud::database::sql' do
           :ensure   => 'present',
           :charset  => 'utf8'
         )
-        should contain_database_user('clustercheckuser@localhost').with(
+        should contain_database_user("#{params[:cluster_check_dbuser]}@localhost").with(
           :ensure        => 'present',
           :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F',
           :provider      => 'mysql'
         )
-        should contain_database_grant('clustercheckuser@localhost/monitoring').with(
+        should contain_database_grant("#{params[:cluster_check_dbuser]}@localhost/monitoring").with(
           :privileges => 'all'
         )
         should contain_database_user('sys-maint@localhost').with(

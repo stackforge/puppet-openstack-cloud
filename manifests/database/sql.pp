@@ -18,7 +18,7 @@
 
 class cloud::database::sql (
     $api_eth                   = $os_params::api_eth,
-    $service_provider          = sysv,
+    $service_provider          = 'sysv',
     $galera_nextserver         = $os_params::galera_nextserver,
     $galera_master             = $os_params::galera_master,
     $mysql_password            = $os_params::mysql_password,
@@ -175,31 +175,31 @@ class cloud::database::sql (
 
     Database_user<<| |>>
 
-    # Haproxy http monitoring
-    file_line { 'mysqlchk-in-etc-services':
-      path   => '/etc/services',
-      line   => 'mysqlchk 9200/tcp',
-      match  => '^mysqlchk 9200/tcp$',
-      notify => Service['xinetd'];
-    }
-
-    file {
-      '/etc/xinetd.d/mysqlchk':
-        content => template('cloud/database/mysqlchk.erb'),
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0755',
-        require => File['/usr/bin/clustercheck'],
-        notify  => Service['xinetd'];
-      '/usr/bin/clustercheck':
-        ensure  => present,
-        content => template('cloud/database/clustercheck.erb'),
-        mode    => '0755',
-        owner   => 'root',
-        group   => 'root';
-    }
-
   } # if $::hostname == $galera_master
+
+  # Haproxy http monitoring
+  file_line { 'mysqlchk-in-etc-services':
+    path   => '/etc/services',
+    line   => 'mysqlchk 9200/tcp',
+    match  => '^mysqlchk 9200/tcp$',
+    notify => Service['xinetd'];
+  }
+
+  file {
+    '/etc/xinetd.d/mysqlchk':
+      content => template('cloud/database/mysqlchk.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => File['/usr/bin/clustercheck'],
+      notify  => Service['xinetd'];
+    '/usr/bin/clustercheck':
+      ensure  => present,
+      content => template('cloud/database/clustercheck.erb'),
+      mode    => '0755',
+      owner   => 'root',
+      group   => 'root';
+  }
 
   exec{'clean-mysql-binlog':
     # first sync take a long time
@@ -213,7 +213,8 @@ class cloud::database::sql (
 
 
   file{'/etc/mysql/sys.cnf':
-    content => "# Automatically generated. DO NOT TOUCH!
+    content => "# Managed by Puppet
+# Module cloud::database::sql
 [client]
 host     = localhost
 user     = sys-maint
@@ -229,9 +230,6 @@ basedir  = /usr
     mode    => '0600',
     require => Exec['clean-mysql-binlog'],
   }
-
-  # Disabled because monitor depends on checkmulti which is broken
-  #  class { 'monitor::galera::httpsrv': }
 
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
