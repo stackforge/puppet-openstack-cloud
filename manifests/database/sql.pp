@@ -180,7 +180,7 @@ class cloud::database::sql (
       File['/root/.my.cnf'],
       Service['mysqld'],
     ],
-    unless => 'test `du -sh /var/lib/mysql/ib_logfile0 | cut -f1` = "256M"',
+    unless      => 'test `du -sh /var/lib/mysql/ib_logfile0 | cut -f1` = "256M"',
   }
 
 
@@ -208,8 +208,8 @@ basedir  = /usr
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
   mysql::server::config{'basic_config':
     notify_service => true,
-    settings       => template('cloud/database/mysql.conf.erb')
-    require        => Exec['clean-mysql-binlog'],
+    settings       => template('cloud/database/mysql.conf.erb'),
+    require        => Exec['clean-mysql-binlog'];
   }
 
   @@haproxy::balancermember{$::fqdn:
