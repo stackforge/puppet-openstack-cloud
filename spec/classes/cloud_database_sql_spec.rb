@@ -27,36 +27,42 @@ describe 'cloud::database::sql' do
     end
 
     let :params do
-      { :service_provider          => 'sysv',
-        :api_eth                   => '10.0.0.1',
-        :galera_master             => '10.0.0.1',
-        :galera_nextserver         => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :mysql_password            => 'secrete',
-        :keystone_db_host          => '10.0.0.1',
-        :keystone_db_user          => 'keystone',
-        :keystone_db_password      => 'secrete',
-        :keystone_db_allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :cinder_db_host            => '10.0.0.1',
-        :cinder_db_user            => 'cinder',
-        :cinder_db_password        => 'secrete',
-        :cinder_db_allowed_hosts   => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :glance_db_host            => '10.0.0.1',
-        :glance_db_user            => 'glance',
-        :glance_db_password        => 'secrete',
-        :glance_db_allowed_hosts   => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :heat_db_host              => '10.0.0.1',
-        :heat_db_user              => 'heat',
-        :heat_db_password          => 'secrete',
-        :heat_db_allowed_hosts     => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :nova_db_host              => '10.0.0.1',
-        :nova_db_user              => 'nova',
-        :nova_db_password          => 'secrete',
-        :nova_db_allowed_hosts     => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :neutron_db_host           => '10.0.0.1',
-        :neutron_db_user           => 'neutron',
-        :neutron_db_password       => 'secrete',
-        :neutron_db_allowed_hosts  => ['10.0.0.1','10.0.0.2','10.0.0.3'],
-        :mysql_sys_maint           => 'sys' }
+      {
+        :service_provider               => 'sysv',
+        :api_eth                        => '10.0.0.1',
+        :galera_master                  => '10.0.0.1',
+        :galera_nextserver              => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :keystone_db_host               => '10.0.0.1',
+        :keystone_db_user               => 'keystone',
+        :keystone_db_password           => 'secrete',
+        :keystone_db_allowed_hosts      => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :cinder_db_host                 => '10.0.0.1',
+        :cinder_db_user                 => 'cinder',
+        :cinder_db_password             => 'secrete',
+        :cinder_db_allowed_hosts        => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :glance_db_host                 => '10.0.0.1',
+        :glance_db_user                 => 'glance',
+        :glance_db_password             => 'secrete',
+        :glance_db_allowed_hosts        => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :heat_db_host                   => '10.0.0.1',
+        :heat_db_user                   => 'heat',
+        :heat_db_password               => 'secrete',
+        :heat_db_allowed_hosts          => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :nova_db_host                   => '10.0.0.1',
+        :nova_db_user                   => 'nova',
+        :nova_db_password               => 'secrete',
+        :nova_db_allowed_hosts          => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :neutron_db_host                => '10.0.0.1',
+        :neutron_db_user                => 'neutron',
+        :neutron_db_password            => 'secrete',
+        :neutron_db_allowed_hosts       => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :mysql_root_password            => 'secrete',
+        :mysql_sys_maint_user           => 'sys-maint',
+        :mysql_sys_maint_password       => 'sys',
+        :galera_clustercheck_dbuser     => 'clustercheckuser',
+        :galera_clustercheck_dbpassword => 'clustercheckpassword!',
+        :galera_clustercheck_ipaddress  => '10.0.0.1'
+      }
     end
 
     it 'configure mysql galera server' do
@@ -67,10 +73,25 @@ describe 'cloud::database::sql' do
         )
 
       should contain_class('mysql::server').with(
-          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => 'secrete' },
+          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => params[:mysql_root_password] },
           :notify       => 'Service[xinetd]'
         )
-    end
+    end # configure mysql galera server
+
+    context 'configure mysqlchk http replication' do
+      it { should contain_file_line('mysqlchk-in-etc-services').with(
+        :line   => 'mysqlchk 9200/tcp',
+        :path   => '/etc/services',
+        :notify => 'Service[xinetd]'
+      )}
+
+      it { should contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
+      it { should contain_file('/usr/bin/clustercheck').with_mode('0755') }
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME="#{params[:galera_clustercheck_dbuser]}"/)}
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD="#{params[:galera_clustercheck_dbpassword]}"/)}
+      it { should contain_file('/etc/xinetd.d/mysqlchk').with_content(/bind            = #{params[:galera_clustercheck_ipaddress]}/)}
+
+    end # configure mysqlchk http replication
 
     context 'configure databases on the galera master server' do
 
@@ -137,23 +158,35 @@ describe 'cloud::database::sql' do
           :ensure   => 'present',
           :charset  => 'utf8'
         )
-        should contain_database_user('clustercheckuser@localhost').with(
+        should contain_database_user("#{params[:galera_clustercheck_dbuser]}@localhost").with(
           :ensure        => 'present',
           :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F',
           :provider      => 'mysql'
         )
-        should contain_database_grant('clustercheckuser@localhost/monitoring').with(
+        should contain_database_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
           :privileges => 'all'
         )
-        should contain_database_user('sys-maint@localhost').with(
+        should contain_database_user("#{params[:mysql_sys_maint_user]}@localhost").with(
           :ensure        => 'present',
           :password_hash => '*BE353D0D7826681F8B7C136ED9824915F5B99E7D',
           :provider      => 'mysql'
         )
-      end
-    end
+      end # configure monitoring database
+    end # configure databases on the galera master server
 
-  end
+    context 'configure MySQL sys config' do
+      it { should contain_file('/etc/mysql/sys.cnf').with(
+        :mode    => '0600',
+        :owner   => 'root',
+        :group   => 'root',
+        :require => 'Exec[clean-mysql-binlog]'
+      )}
+
+      it { should contain_file('/etc/mysql/sys.cnf').with_content(/password = #{params[:mysql_sys_maint_password]}/)}
+
+    end # configure MySQL sys config
+
+  end # openstack database sql
 
   context 'on Debian platforms' do
     let :facts do
