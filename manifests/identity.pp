@@ -343,6 +343,7 @@ class cloud::identity (
   $ks_glance_password           = $os_params::ks_glance_password,
   $ks_glance_public_host        = $os_params::ks_glance_public_host,
   $ks_glance_public_proto       = $os_params::ks_glance_public_proto,
+  $ks_glance_public_port        = $os_params::ks_glance_public_port,
   $ks_heat_admin_host           = $os_params::ks_heat_admin_host,
   $ks_heat_internal_host        = $os_params::ks_heat_internal_host,
   $ks_heat_password             = $os_params::ks_heat_password,
