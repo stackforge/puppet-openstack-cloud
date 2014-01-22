@@ -212,22 +212,11 @@ class cloud::database::sql (
     unless      => 'test `du -sh /var/lib/mysql/ib_logfile0 | cut -f1` = "256M"',
   }
 
-
   file{'/etc/mysql/sys.cnf':
-    content => "# Managed by Puppet
-# Module cloud::database::sql
-[client]
-host     = localhost
-user     = sys-maint
-password = ${mysql_sys_maint_password}
-socket   = /var/run/mysqld/mysqld.sock
-[mysql_upgrade]
-host     = localhost
-user     = sys-maint
-password = ${mysql_sys_maint_password}
-socket   = /var/run/mysqld/mysqld.sock
-basedir  = /usr
-",
+    ensure  => file,
+    content => template('cloud/database/sys.cnf.erb'),
+    owner   => 'root',
+    group   => 'root',
     mode    => '0600',
     require => Exec['clean-mysql-binlog'],
   }
