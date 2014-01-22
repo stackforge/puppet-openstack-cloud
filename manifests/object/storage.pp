@@ -15,16 +15,7 @@
 #
 # Swift Storage node
 #
-
-define set_io_scheduler(){
-  # TODO: Add it on server boot
-  exec{"/bin/echo deadline > /sys/block/${name}/queue/scheduler":
-    onlyif => [
-      "/usr/bin/test '-e /sys/block/${name}/queue/scheduler'",
-      "/bin/grep -v -F '[deadline]' /sys/block/${name}/queue/scheduler"
-    ],
-  }
-}
+import 'set_io_scheduler.pp'
 
 # swift storage
 class cloud::object::storage (
@@ -95,8 +86,8 @@ allow_versions = on
   $object_nodes = flatten([ range('sdc','sdd')])
   swift::storage::xfs { $object_nodes: }
   swift::storage::xfs { 'sdb': }
-  set_io_scheduler{'sdb':}
-  set_io_scheduler{$object_nodes:}
+  cloud::object::set_io_scheduler {'sdb':}
+  cloud::object::set_io_scheduler {$object_nodes:}
 
   @@ring_container_device { "${storage_eth}:${container_port}/sdb":
     zone        => $swift_zone,
