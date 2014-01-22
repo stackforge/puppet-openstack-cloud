@@ -68,7 +68,7 @@ class cloud::telemetry::server(
     hour         => '0',
   }
 
-  Cron <| title == 'ceilometer-expirer' |> { command => "sleep $(($RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
+  Cron <| title == 'ceilometer-expirer' |> { command => "sleep $((\$RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
 
   @@haproxy::balancermember{"${::fqdn}-ceilometer_api":
     listening_service => 'ceilometer_api_cluster',
