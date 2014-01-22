@@ -39,6 +39,7 @@ describe 'cloud::loadbalancer' do
         :horizon                        => true,
         :spice                          => true,
         :haproxy_auth                   => 'root:secrete',
+        :keepalived_priority            => 50,
         :keepalived_interface           => 'eth0',
         :keepalived_ipvs                => ['10.0.0.1', '10.0.0.2'],
         :keepalived_localhost_ip        => '127.0.0.1',
@@ -57,16 +58,47 @@ describe 'cloud::loadbalancer' do
         :ks_cinder_public_port          => '8776',
         :ks_neutron_public_port         => '9696',
         :ks_heat_public_port            => '8004',
-        :ks_heat_cfn_public_port               => '8000',
+        :ks_heat_cfn_public_port        => '8000',
         :ks_heat_cloudwatch_public_port => '8003' }
     end
 
     it 'configure haproxy server' do
-      should contain_class('haproxy')
+      should contain_class('haproxy').with({
+        'manage_service' => 'false',
+      })
     end
 
     it 'configure keepalived server' do
       should contain_class('keepalived')
+    end
+
+    context 'configure keepalived in backup' do
+      it 'configure vrrp_instance with BACKUP state' do
+        should contain_keepalived__instance('1').with({
+          'interface'     => 'eth0',
+          'track_script'  => ['haproxy'],
+          'state'         => 'BACKUP',
+          'priority'      => 50,
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
+    end
+
+    context 'configure keepalived in master' do
+      before :each do
+        params.merge!( :keepalived_state => 'MASTER' )
+      end
+      it 'configure vrrp_instance with MASTER state' do
+        should contain_keepalived__instance('1').with({
+          'interface'     => 'eth0',
+          'track_script'  => ['haproxy'],
+          'state'         => 'MASTER',
+          'priority'      => 50,
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
     end
 
   end
