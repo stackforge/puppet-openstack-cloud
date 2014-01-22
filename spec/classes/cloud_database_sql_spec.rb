@@ -76,7 +76,7 @@ describe 'cloud::database::sql' do
           :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => params[:mysql_root_password] },
           :notify       => 'Service[xinetd]'
         )
-    end
+    end # configure mysql galera server
 
     context 'configure mysqlchk http replication' do
       it { should contain_file_line('mysqlchk-in-etc-services').with(
@@ -91,7 +91,7 @@ describe 'cloud::database::sql' do
       it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD="#{params[:galera_clustercheck_dbpassword]}"/)}
       it { should contain_file('/etc/xinetd.d/mysqlchk').with_content(/bind            = #{params[:galera_clustercheck_ipaddress]}/)}
 
-    end
+    end # configure mysqlchk http replication
 
     context 'configure databases on the galera master server' do
 
@@ -171,10 +171,22 @@ describe 'cloud::database::sql' do
           :password_hash => '*BE353D0D7826681F8B7C136ED9824915F5B99E7D',
           :provider      => 'mysql'
         )
-      end
-    end
+      end # configure monitoring database
+    end # configure databases on the galera master server
 
-  end
+    context 'configure MySQL sys config' do
+      it { should contain_file('/etc/mysql/sys.cnf').with(
+        :mode    => '0600',
+        :owner   => 'root',
+        :group   => 'root',
+        :require => 'Exec[clean-mysql-binlog]'
+      )}
+
+      it { should contain_file('/etc/mysql/sys.cnf').with_content(/password = #{params[:mysql_sys_maint_password]}/)}
+
+    end # configure MySQL sys config
+
+  end # openstack database sql
 
   context 'on Debian platforms' do
     let :facts do
