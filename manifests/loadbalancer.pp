@@ -78,7 +78,7 @@ class cloud::loadbalancer(
 
   file { '/etc/logrotate.d/haproxy':
     ensure  => file,
-    source  => 'puppet:///cloud/logrotate/haproxy',
+    source  => 'puppet:///modules/cloud/logrotate/haproxy',
     owner   => root,
     group   => root,
     mode    => '0644';
