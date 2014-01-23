@@ -39,6 +39,7 @@ describe 'cloud::loadbalancer' do
         :horizon                        => true,
         :spice                          => true,
         :haproxy_auth                   => 'root:secrete',
+        :keepalived_state               => 'BACKUP',
         :keepalived_priority            => 50,
         :keepalived_interface           => 'eth0',
         :keepalived_ipvs                => ['10.0.0.1', '10.0.0.2'],
@@ -66,24 +67,24 @@ describe 'cloud::loadbalancer' do
       should contain_class('haproxy').with({
         'manage_service' => 'false',
       })
-    end
+    end # configure haproxy server
 
     it 'configure keepalived server' do
       should contain_class('keepalived')
-    end
+    end # configure keepalived server
 
     context 'configure keepalived in backup' do
       it 'configure vrrp_instance with BACKUP state' do
         should contain_keepalived__instance('1').with({
-          'interface'     => 'eth0',
+          'interface'     => params[:keepalived_interface],
           'track_script'  => ['haproxy'],
-          'state'         => 'BACKUP',
-          'priority'      => 50,
+          'state'         => params[:keepalived_state],
+          'priority'      => params[:keepalived_priority],
           'notify_master' => '"/etc/init.d/haproxy start"',
           'notify_backup' => '"/etc/init.d/haproxy stop"',
         })
-      end
-    end
+      end # configure vrrp_instance with BACKUP state
+    end # configure keepalived in backup
 
     context 'configure keepalived in master' do
       before :each do
@@ -91,17 +92,47 @@ describe 'cloud::loadbalancer' do
       end
       it 'configure vrrp_instance with MASTER state' do
         should contain_keepalived__instance('1').with({
-          'interface'     => 'eth0',
+          'interface'     => params[:keepalived_interface],
           'track_script'  => ['haproxy'],
           'state'         => 'MASTER',
-          'priority'      => 50,
+          'priority'      => params[:keepalived_priority],
           'notify_master' => '"/etc/init.d/haproxy start"',
           'notify_backup' => '"/etc/init.d/haproxy stop"',
         })
       end
-    end
+    end # configure keepalived in master
 
-  end
+    context 'configure logrotate file' do
+      it { should contain_file('/etc/logrotate.d/haproxy').with(
+        :source => 'puppet:///modules/cloud/logrotate/haproxy',
+        :mode   => '0644',
+        :owner  => 'root',
+        :group  => 'root'
+      )}
+    end # configure logrotate file
+
+    context 'configure monitor haproxy listen' do
+      it { should contain_haproxy__listen('monitor').with(
+        :ipaddress => params[:openstack_vip],
+        :ports     => '9300'
+      )}
+    end # configure monitor haproxy listen
+
+    context 'configure monitor haproxy listen' do
+      it { should contain_haproxy__listen('galera_cluster').with(
+        :ipaddress => params[:mysql_vip],
+        :ports     => '3306',
+        :options   => {
+          'mode'           => 'tcp',
+          'balance'        => 'roundrobin',
+          'option'         => ['tcpka','tcplog','httpchk'],
+          'timeout client' => '400s',
+          'timeout server' => '400s'
+        }
+      )}
+    end # configure monitor haproxy listen
+
+  end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do
     let :facts do
