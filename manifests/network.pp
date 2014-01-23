@@ -73,7 +73,7 @@ class cloud::network(
     tenant_network_types    => ['gre'],
     mechanism_drivers       => ['openvswitch'],
     tunnel_id_ranges        => ['1:10000'],
-    enable_security_group   => true
+    enable_security_group   => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   }
 
 }

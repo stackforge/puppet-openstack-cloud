@@ -57,12 +57,12 @@ describe 'cloud::network::l3' do
           :local_ip         => '10.0.1.1'
       )
       should contain_class('neutron::plugins::ml2').with(
-          :type_drivers         => ['gre'],
-          :tenant_network_types => ['gre'],
-          :mechanism_drivers    => ['openvswitch'],
-          :tunnel_id_ranges     => ['1:10000']
+          :type_drivers           => ['gre'],
+          :tenant_network_types   => ['gre'],
+          :mechanism_drivers      => ['openvswitch'],
+          :tunnel_id_ranges       => ['1:10000'],
+          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
-      should contain_neutron_plugin_ml2('securitygroup/firewall_driver').with_value(true)
     end
 
     it 'configure neutron l3' do
