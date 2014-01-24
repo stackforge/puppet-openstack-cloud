@@ -20,7 +20,7 @@ class cloud::database::sql (
     $api_eth                        = $os_params::api_eth,
     $service_provider               = 'sysv',
     $galera_nextserver              = $os_params::galera_nextserver,
-    $galera_master                  = $os_params::galera_master,
+    $galera_master_name             = $os_params::galera_master_name,
     $keystone_db_host               = $os_params::keystone_db_host,
     $keystone_db_user               = $os_params::keystone_db_user,
     $keystone_db_password           = $os_params::keystone_db_password,
@@ -98,7 +98,7 @@ class cloud::database::sql (
     notify              => Service['xinetd'],
   }
 
-  if $::hostname == $galera_master {
+  if $::hostname == $galera_master_name {
 
 # OpenStack DB
     class { 'keystone::db::mysql':
@@ -176,7 +176,7 @@ class cloud::database::sql (
 
     Database_user<<| |>>
 
-  } # if $::hostname == $galera_master
+  } # if $::hostname == $galera_master_name
 
   # Haproxy http monitoring
   file_line { 'mysqlchk-in-etc-services':
@@ -236,7 +236,7 @@ class cloud::database::sql (
     ipaddresses       => $api_eth,
     ports             => '3306',
     options           =>
-      inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master -%>backup<% end %>')
+      inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master_name -%>backup<% end %>')
   }
 
 }

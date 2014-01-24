@@ -42,8 +42,8 @@ innodb_autoinc_lock_mode        = 2
 innodb_locks_unsafe_for_binlog  = 1
 wsrep_provider                  = "<%= @wsrep_provider %>"
 wsrep_cluster_name              = "galera_cluster"
-<% if @hostname != @galera_master -%>
-# This node is not Galera Master (connect wsrep to galera_master)
+<% if @hostname != @galera_master_name -%>
+# This node is not Galera Master (connect wsrep to galera_master_name)
 wsrep_cluster_address           = "gcomm://<%= @galera_nextserver[0] %>"
 <% else -%>
 # This node is Galera Master (connect wsrep to localhost)
