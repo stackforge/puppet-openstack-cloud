@@ -46,14 +46,14 @@ describe 'cloud::telemetry::centralagent' do
           :rabbit_userid           => 'ceilometer',
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',
-          :metering_secret         => 'secrete'
+          :metering_secret         => 'secrete',
+          :use_syslog              => true,
+          :log_facility            => 'LOG_LOCAL0'
         )
       should contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
         )
-      should contain_ceilometer_config('DEFAULT/syslog_log_facility').with('value' => 'LOG_LOCAL0')
-      should contain_ceilometer_config('DEFAULT/use_syslog').with('value' => 'yes')
     end
 
     it 'configure ceilometer central agent' do
