@@ -30,7 +30,7 @@ describe 'cloud::database::sql' do
       {
         :service_provider               => 'sysv',
         :api_eth                        => '10.0.0.1',
-        :galera_master                  => '10.0.0.1',
+        :galera_master_name             => 'os-ci-test1',
         :galera_nextserver              => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :keystone_db_host               => '10.0.0.1',
         :keystone_db_user               => 'keystone',
@@ -96,7 +96,7 @@ describe 'cloud::database::sql' do
     context 'configure databases on the galera master server' do
 
       before :each do
-        facts.merge!( :hostname => '10.0.0.1' )
+        facts.merge!( :hostname => 'os-ci-test1' )
       end
 
       it 'configure keystone database' do
