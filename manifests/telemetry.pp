@@ -35,11 +35,8 @@ class cloud::telemetry(
     rabbit_userid   => 'ceilometer',
     verbose         => $verbose,
     debug           => $debug,
-  }
-
-  ceilometer_config {
-    'DEFAULT/syslog_log_facility':               value => 'LOG_LOCAL0';
-    'DEFAULT/use_syslog':                        value => 'yes';
+    use_syslog      => true,
+    log_facility    => 'LOG_LOCAL0'
   }
 
   class { 'ceilometer::agent::auth':
