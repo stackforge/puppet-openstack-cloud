@@ -53,7 +53,7 @@ class cloud::loadbalancer(
   $horizon_port                   = $os_params::horizon_port,
   $spice_port                     = $os_params::spice_port,
   $openstack_vip                  = $os_params::openstack_vip,
-  $mysql_vip                      = $os_params::mysql_vip
+  $galera_ip                      = $os_params::galera_ip
 ){
 
   class { 'haproxy':
@@ -200,7 +200,7 @@ class cloud::loadbalancer(
   }
 
   haproxy::listen { 'galera_cluster':
-    ipaddress          => $mysql_vip,
+    ipaddress          => $galera_ip,
     ports              => 3306,
     options            => {
       'mode'           => 'tcp',
