@@ -40,8 +40,9 @@ describe 'cloud::volume::controller' do
         :ks_cinder_internal_port   => '8776',
         :ks_keystone_internal_host => '10.0.0.1',
         :ks_glance_internal_host   => '10.0.0.1',
-        :backup_ceph_user          => 'cinder',
-        :backup_ceph_pool          => 'ceph_backup_cinder',
+        # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
+        #:backup_ceph_user          => 'cinder',
+        #:backup_ceph_pool          => 'ceph_backup_cinder',
         :api_eth                   => '10.0.0.1' }
     end
 
@@ -80,13 +81,14 @@ describe 'cloud::volume::controller' do
         )
     end
 
-    it 'configure cinder backup using ceph backend' do
-      should contain_class('cinder::backup')
-      should contain_class('cinder::backup::ceph').with(
-          :backup_ceph_user => 'cinder',
-          :backup_ceph_pool => 'ceph_backup_cinder'
-        )
-    end
+    # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
+    #it 'configure cinder backup using ceph backend' do
+    #  should contain_class('cinder::backup')
+    #  should contain_class('cinder::backup::ceph').with(
+    #      :backup_ceph_user => 'cinder',
+    #      :backup_ceph_pool => 'ceph_backup_cinder'
+    #    )
+    #end
 
   end
 
