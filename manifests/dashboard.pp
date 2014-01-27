@@ -63,6 +63,7 @@ class cloud::dashboard(
 # e.g: 127.0.0.1 instead of a public IP address.
 # We force $api_eth to avoid this situation
     fqdn                => $api_eth,
+    bind_address        => $api_eth
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
