@@ -35,7 +35,7 @@ class cloud::loadbalancer(
   $keepalived_state               = 'BACKUP',
   $keepalived_priority            = 50,
   $keepalived_interface           = $os_params::keepalived_interface,
-  $keepalived_ipvs                = [$os_params::openstack_vip,$os_params::mysql_vip],
+  $keepalived_ipvs                = $os_params::vip_public_ip,
   $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
