@@ -22,8 +22,9 @@ class cloud::volume::controller(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
   $ks_glance_internal_host   = $os_params::ks_glance_internal_host,
   $api_eth                   = $os_params::api_eth,
-  $backup_ceph_pool          = 'ceph_backup_cinder',
-  $backup_ceph_user          = 'cinder'
+  # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
+  #$backup_ceph_pool          = 'ceph_backup_cinder',
+  #$backup_ceph_user          = 'cinder'
 ) {
 
   include 'cloud::volume'
@@ -38,10 +39,11 @@ class cloud::volume::controller(
 
   class { 'cinder::backup': }
 
-  class { 'cinder::backup::ceph':
-    backup_ceph_user => $backup_ceph_user,
-    backup_ceph_pool => $backup_ceph_pool
-  }
+  # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
+  #class { 'cinder::backup::ceph':
+  #  backup_ceph_user => $backup_ceph_user,
+  #  backup_ceph_pool => $backup_ceph_pool
+  #}
 
   class { 'cinder::glance':
     glance_api_servers     => $ks_glance_internal_host,
