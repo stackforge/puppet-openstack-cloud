@@ -87,8 +87,9 @@ cache = swift.cache')
   }
 
   class { 'swift::dispersion':
-    auth_url  => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0
-endpoint_type=internalURL",
+    auth_url  => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
+    swift_dir => '/etc/swift
+endpoint_type=internalURL',
     auth_pass => $ks_swift_dispersion_password
   }
 
