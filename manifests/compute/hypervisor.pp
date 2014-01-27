@@ -95,14 +95,6 @@ Host *
     migration_support => true,
   }
 
-  exec{'/etc/init.d/open-iscsi start':
-    onlyif => '/bin/grep "GenerateName=yes" /etc/iscsi/initiatorname.iscsi'
-  }
-  exec{'/etc/init.d/open-iscsi stop':
-    subscribe   => Exec['/etc/init.d/open-iscsi start'],
-    refreshonly => true
-  }
-
   class { 'nova::compute::neutron': }
 
   if $has_ceph {
