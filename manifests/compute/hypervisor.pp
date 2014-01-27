@@ -13,7 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::compute::hypervisor
+#
 # Hypervisor Compute node
+#
+# === Parameters:
+#
+# [*has_ceph]
+#   (optional) Enable or not ceph capabilities on compute node.
+#   If RBD is Cinder backend and/or virtual machines are stored on Ceph cluster,
+#   it should be set to True.
+#   Default to false.
 #
 
 class cloud::compute::hypervisor(
