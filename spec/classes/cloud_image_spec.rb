@@ -78,7 +78,7 @@ describe 'cloud::image' do
 
     it 'configure glance rbd backend' do
       should contain_class('glance::backend::rbd').with(
-          :rbd_store_pool => 'ceph_glance',
+          :rbd_store_pool => 'images',
           :rbd_store_user => 'glance'
         )
     end
