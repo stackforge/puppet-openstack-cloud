@@ -101,7 +101,7 @@ describe 'cloud::identity' do
         :memcache_servers => ['10.0.0.1','10.0.0.2'],
         :sql_connection   => 'mysql://keystone:secrete@10.0.0.1/keystone',
         :token_driver     => 'keystone.token.backends.memcache.Token',
-        :token_format     => 'UUID',
+        :token_provider   => 'keystone.token.providers.pki.Provider',
         :use_syslog       => true,
         :bind_host        => '10.0.0.1',
         :public_port      => '5000',
