@@ -35,7 +35,7 @@ class cloud::loadbalancer(
   $keepalived_state               = 'BACKUP',
   $keepalived_priority            = 50,
   $keepalived_interface           = $os_params::keepalived_interface,
-  $keepalived_ipvs                = $os_params::vip_public_ip,
+  $keepalived_ipvs                = [$os_params::vip_public_ip,$os_params::galera_ip],
   $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
   $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
@@ -52,8 +52,8 @@ class cloud::loadbalancer(
   $ks_swift_public_port           = $os_params::ks_swift_public_port,
   $horizon_port                   = $os_params::horizon_port,
   $spice_port                     = $os_params::spice_port,
-  $openstack_vip                  = $os_params::openstack_vip,
-  $mysql_vip                      = $os_params::mysql_vip
+  $vip_public_ip                  = $os_params::vip_public_ip,
+  $galera_ip                      = $os_params::galera_ip
 ){
 
   class { 'haproxy':
@@ -85,7 +85,7 @@ class cloud::loadbalancer(
   }
 
   haproxy::listen { 'monitor':
-    ipaddress => $openstack_vip,
+    ipaddress => $vip_public_ip,
     ports     => '9300',
     options   => {
       'mode'        => 'http',
@@ -99,10 +99,10 @@ class cloud::loadbalancer(
     cloud::loadbalancer::listen_http {
       'keystone_api_cluster':
         ports     => $ks_keystone_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
       'keystone_api_admin_cluster':
         ports     => $ks_keystone_admin_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $swift_api {
@@ -110,35 +110,35 @@ class cloud::loadbalancer(
       'swift_api_cluster':
         ports     => $ks_swift_public_port,
         httpchk   => 'httpchk /healthcheck',
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $nova_api {
     cloud::loadbalancer::listen_http{
       'nova_api_cluster':
         ports     => $ks_nova_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $ec2_api {
     cloud::loadbalancer::listen_http{
       'ec2_api_cluster':
         ports     => $ks_ec2_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $metadata_api {
     cloud::loadbalancer::listen_http{
       'metadata_api_cluster':
         ports     => $ks_metadata_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $spice {
     cloud::loadbalancer::listen_http{
       'spice_cluster':
         ports     => $spice_port,
-        listen_ip => $openstack_vip,
+        listen_ip => $vip_public_ip,
         httpchk   => 'httpchk GET /';
     }
   }
@@ -146,61 +146,61 @@ class cloud::loadbalancer(
     cloud::loadbalancer::listen_http{
       'glance_api_cluster':
         ports     => $ks_glance_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $neutron_api {
     cloud::loadbalancer::listen_http{
       'neutron_api_cluster':
         ports     => $ks_neutron_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $cinder_api {
     cloud::loadbalancer::listen_http{
       'cinder_api_cluster':
         ports     => $ks_cinder_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $ceilometer_api {
     cloud::loadbalancer::listen_http{
       'ceilometer_api_cluster':
         ports     => $ks_ceilometer_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $heat_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cluster':
         ports     => $ks_heat_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $heat_cfn_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cfn_cluster':
         ports     => $ks_heat_cfn_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $heat_cloudwatch_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cloudwatch_cluster':
         ports     => $ks_heat_cloudwatch_public_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
   if $horizon {
     cloud::loadbalancer::listen_http{
       'horizon_cluster':
         ports     => $horizon_port,
-        listen_ip => $openstack_vip;
+        listen_ip => $vip_public_ip;
     }
   }
 
   haproxy::listen { 'galera_cluster':
-    ipaddress          => $mysql_vip,
+    ipaddress          => $galera_ip,
     ports              => 3306,
     options            => {
       'mode'           => 'tcp',
