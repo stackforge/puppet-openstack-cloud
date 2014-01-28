@@ -215,7 +215,7 @@ class cloud::database::sql (
     path   => '/etc/services',
     line   => 'mysqlchk 9200/tcp',
     match  => '^mysqlchk 9200/tcp$',
-    notify => Service['xinetd'];
+    notify => [ Service['xinetd'], Exec['reload_xinetd'] ]
   }
 
   file {
@@ -225,7 +225,7 @@ class cloud::database::sql (
       group   => 'root',
       mode    => '0755',
       require => File['/usr/bin/clustercheck'],
-      notify  => Service['xinetd'];
+      notify  => [ Service['xinetd'], Exec['reload_xinetd'] ];
     '/usr/bin/clustercheck':
       ensure  => present,
       content => template('cloud/database/clustercheck.erb'),
@@ -233,6 +233,12 @@ class cloud::database::sql (
       owner   => 'root',
       group   => 'root';
   }
+
+  exec{ 'reload_xinetd':
+      command => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',
+      refreshonly => true,
+  }
+
 
   exec{'clean-mysql-binlog':
     # first sync take a long time
