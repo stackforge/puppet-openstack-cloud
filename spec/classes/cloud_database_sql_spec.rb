@@ -31,7 +31,7 @@ describe 'cloud::database::sql' do
         :service_provider               => 'sysv',
         :api_eth                        => '10.0.0.1',
         :galera_master_name             => 'os-ci-test1',
-        :galera_nextserver              => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :galera_internal_ips            => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :keystone_db_host               => '10.0.0.1',
         :keystone_db_user               => 'keystone',
         :keystone_db_password           => 'secrete',
@@ -73,7 +73,7 @@ describe 'cloud::database::sql' do
         )
 
       should contain_class('mysql::server').with(
-          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => params[:mysql_root_password] },
+          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => params[:mysql_root_password], 'service_name' => 'mysql' },
           :notify       => 'Service[xinetd]'
         )
     end # configure mysql galera server

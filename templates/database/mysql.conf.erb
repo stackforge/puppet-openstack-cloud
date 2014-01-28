@@ -42,14 +42,8 @@ innodb_autoinc_lock_mode        = 2
 innodb_locks_unsafe_for_binlog  = 1
 wsrep_provider                  = "<%= @wsrep_provider %>"
 wsrep_cluster_name              = "galera_cluster"
-<% if @hostname != @galera_master_name -%>
-# This node is not Galera Master (connect wsrep to galera_master_name)
-wsrep_cluster_address           = "gcomm://<%= @galera_nextserver[0] %>"
-<% else -%>
-# This node is Galera Master (connect wsrep to localhost)
-wsrep_cluster_address           = "gcomm://"
-<% end -%>
-wsrep_sst_auth                  = root:<%= @mysql_password %>
+wsrep_cluster_address           = "gcomm://<%= @gcomm_definition %>"
+wsrep_sst_auth                  = root:<%= @mysql_root_password %>
 wsrep_certify_nonPK             = 1
 wsrep_convert_LOCK_to_trx       = 0
 wsrep_auto_increment_control    = 1

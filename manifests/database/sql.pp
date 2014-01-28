@@ -15,12 +15,15 @@
 #
 # MySQL Galera Node
 #
-
+# === Parameters
+#
+#  [*galera_internal_ips*]
+#    Array of internal ip of the galera nodes.
 class cloud::database::sql (
     $api_eth                        = $os_params::api_eth,
     $service_provider               = 'sysv',
-    $galera_nextserver              = $os_params::galera_nextserver,
     $galera_master_name             = $os_params::galera_master_name,
+    $galera_internal_ips            = $os_params::galera_internal_ips,
     $keystone_db_host               = $os_params::keystone_db_host,
     $keystone_db_user               = $os_params::keystone_db_user,
     $keystone_db_password           = $os_params::keystone_db_password,
@@ -90,15 +93,34 @@ class cloud::database::sql (
     }
   }
 
-  class { 'mysql::server':
-    config_hash         => {
-      bind_address      => $api_eth,
-      root_password     => $mysql_root_password,
-    },
-    notify              => Service['xinetd'],
+  if($::osfamily == 'Debian'){
+
+    file { '/etc/init.d/mysql-bootstrap':
+      content => template('cloud/database/etc_initd_mysql_debian'),
+      owner   => 'root',
+      mode    => '0755',
+      group   => 'root',
+      notify  => Service['mysqld'],
+      before  => Package['mysql-server'],
+    }
+
   }
 
+  $gcomm_base = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
+
   if $::hostname == $galera_master_name {
+
+
+    class { 'mysql::server':
+      config_hash         => {
+        bind_address      => $api_eth,
+        root_password     => $mysql_root_password,
+        service_name      => 'mysql-bootstrap',
+      },
+      notify              => Service['xinetd'],
+    }
+
+    $gcomm_definition = "${gcomm_base}&pc.bootstrap=1"
 
 # OpenStack DB
     class { 'keystone::db::mysql':
@@ -175,8 +197,18 @@ class cloud::database::sql (
     }
 
     Database_user<<| |>>
+  } else {
+    $gcomm_definition = $gcomm_base
 
-  } # if $::hostname == $galera_master_name
+    class { 'mysql::server':
+      config_hash         => {
+        bind_address      => $api_eth,
+        root_password     => $mysql_root_password,
+        service_name      => 'mysql',
+      },
+      notify              => Service['xinetd'],
+    }
+  } # if $::hostname == $galera_master
 
   # Haproxy http monitoring
   file_line { 'mysqlchk-in-etc-services':
