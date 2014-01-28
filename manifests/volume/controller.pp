@@ -23,8 +23,8 @@ class cloud::volume::controller(
   $ks_glance_internal_host   = $os_params::ks_glance_internal_host,
   $api_eth                   = $os_params::api_eth,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
-  #$backup_ceph_pool          = 'ceph_backup_cinder',
-  #$backup_ceph_user          = 'cinder'
+  #$backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
+  #$backup_ceph_user          = $os_params::cinder_rbd_backup_user
 ) {
 
   include 'cloud::volume'
