@@ -94,7 +94,16 @@ class cloud::database::sql (
   }
 
   if($::osfamily == 'Debian'){
-    class { 'cloud::debian::galera_patch' : }
+
+    file { '/etc/init.d/mysql-bootstrap':
+      content => template('cloud/database/etc_initd_mysql_debian'),
+      owner   => 'root',
+      mode    => '0755',
+      group   => 'root',
+      notify  => Service['mysqld'],
+      before  => Package['mysql-server'],
+    }
+
   }
 
   $gcomm_base = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
