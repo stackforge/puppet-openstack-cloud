@@ -32,7 +32,7 @@ describe 'cloud::image' do
         :rabbit_host               => '10.0.0.1',
         :rabbit_password           => 'secrete',
         :rbd_store_user            => 'glance',
-        :rbd_store_pool            => 'ceph_glance',
+        :rbd_store_pool            => 'images',
         :debug                     => true,
         :verbose                   => true,
         :api_eth                   => '10.0.0.1' }

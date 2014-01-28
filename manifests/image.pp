@@ -66,8 +66,8 @@ class cloud::image(
   $rabbit_password             = $os_params::rabbit_password,
   $rabbit_host                 = $os_params::rabbit_hosts[0],
   $api_eth                     = $os_params::api_eth,
-  $rbd_store_pool              = 'ceph_glance',
-  $rbd_store_user              = 'glance',
+  $rbd_store_pool              = $os_params::glance_rbd_pool,
+  $rbd_store_user              = $os_params::glance_rbd_user,
   $verbose                     = $os_params::verbose,
   $debug                       = $os_params::debug
 ) {
@@ -94,7 +94,6 @@ class cloud::image(
     rabbit_host     => $rabbit_host,
   }
 
-  # TODO(EmilienM) We should migrate the backend to Ceph (WIP). For now, I let Swift.
   class { 'glance::backend::rbd':
     rbd_store_user => $rbd_store_user,
     rbd_store_pool => $rbd_store_pool
