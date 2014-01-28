@@ -46,8 +46,8 @@ describe 'cloud::loadbalancer' do
         :keepalived_localhost_ip        => '127.0.0.1',
         :horizon_port                   => '80',
         :spice_port                     => '6082',
-        :openstack_vip                  => '10.0.0.3',
-        :mysql_vip                      => '10.0.0.4',
+        :vip_public_ip                  => '10.0.0.3',
+        :galera_ip                      => '10.0.0.4',
         :ks_ceilometer_public_port      => '8777',
         :ks_nova_public_port            => '8774',
         :ks_ec2_public_port             => '8773',
@@ -113,14 +113,14 @@ describe 'cloud::loadbalancer' do
 
     context 'configure monitor haproxy listen' do
       it { should contain_haproxy__listen('monitor').with(
-        :ipaddress => params[:openstack_vip],
+        :ipaddress => params[:vip_public_ip],
         :ports     => '9300'
       )}
     end # configure monitor haproxy listen
 
     context 'configure monitor haproxy listen' do
       it { should contain_haproxy__listen('galera_cluster').with(
-        :ipaddress => params[:mysql_vip],
+        :ipaddress => params[:galera_ip],
         :ports     => '3306',
         :options   => {
           'mode'           => 'tcp',
