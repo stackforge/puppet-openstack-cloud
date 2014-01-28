@@ -64,11 +64,6 @@ describe 'cloud::compute::hypervisor' do
       should contain_exec('/sbin/modprobe nbd').with('unless' => '/bin/grep -q "^nbd " "/proc/modules"')
     end
 
-    it 'start and stop isci service' do
-      should contain_exec('/etc/init.d/open-iscsi start').with('onlyif' => '/bin/grep "GenerateName=yes" /etc/iscsi/initiatorname.iscsi')
-      should contain_exec('/etc/init.d/open-iscsi stop').with('refreshonly' => true)
-    end
-
     it 'configure nova-compute' do
       should contain_class('nova::compute').with(
           :enabled                       => true,
