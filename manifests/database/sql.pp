@@ -242,9 +242,13 @@ class cloud::database::sql (
       group   => 'root';
   }
 
+  # Hack for Debian. The puppet-xinetd module do not correctly reload
+  # the configuration on “notify”
+  # TODO(Gonéri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
+  # get merged
   exec{ 'reload_xinetd':
-      command => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',
-      refreshonly => true,
+    command     => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',
+    refreshonly => true,
   }
 
 
