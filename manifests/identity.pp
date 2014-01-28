@@ -399,7 +399,7 @@ class cloud::identity (
     memcache_servers => $memcache_servers,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
     token_driver     => 'keystone.token.backends.memcache.Token',
-    token_provider   => 'keystone.token.providers.pki.Provider',
+    token_provider   => 'keystone.token.providers.uuid.Provider',
     use_syslog       => true,
     verbose          => $verbose,
     bind_host        => $api_eth,
