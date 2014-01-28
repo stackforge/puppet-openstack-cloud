@@ -15,15 +15,15 @@
 #
 class cloud::storage::rbd::pools(
   $setup_pools          = false,
-  $glance_pool          = 'ceph_glance',
-  $glance_user          = 'glance',
-  $cinder_pool          = 'ceph_cinder',
+  $glance_user          = $os_params::glance_rbd_user,
+  $glance_pool          = $os_params::glance_rbd_pool,
+  $cinder_user          = $os_params::cinder_rbd_user,
+  $cinder_pool          = $os_params::cinder_rbd_pool,
   $pool_default_pg_num  = $::ceph::conf::pool_default_pg_num,
   $pool_default_pgp_num = $::ceph::conf::pool_default_pgp_num,
-  $cinder_user          = 'cinder',
-  $cinder_backup_user   = 'cinder',
-  $cinder_backup_pool   = 'ceph_backup_cinder',
-  $ceph_fsid            = $::os_params::ceph_fsid,
+  $cinder_backup_user   = $os_params::cinder_rbd_backup_user,
+  $cinder_backup_pool   = $os_params::cinder_rbd_backup_pool,
+  $ceph_fsid            = $os_params::ceph_fsid,
 ) {
 
   if $setup_pools {
