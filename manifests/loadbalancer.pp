@@ -68,7 +68,7 @@ class cloud::loadbalancer(
 
   keepalived::instance { '1':
     interface     => $keepalived_interface,
-    virtual_ips   => split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ','),
+    virtual_ips   => unique(split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ',')),
     state         => $keepalived_state,
     track_script  => ['haproxy'],
     priority      => $keepalived_priority,
