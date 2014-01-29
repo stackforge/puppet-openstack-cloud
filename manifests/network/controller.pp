@@ -42,19 +42,6 @@ class cloud::network::controller(
     api_workers   => $::processorcount
   }
 
-  neutron_network { 'public':
-    ensure          => present,
-    router_external => 'True',
-    tenant_name     => $ks_admin_tenant
-  }
-
-  neutron_subnet {'public_subnet':
-    ensure       => present,
-    cidr         => $public_cidr,
-    network_name => 'public',
-    tenant_name  => 'admin'
-  }
-
   @@haproxy::balancermember{"${::fqdn}-neutron_api":
     listening_service => 'neutron_api_cluster',
     server_names      => $::hostname,
