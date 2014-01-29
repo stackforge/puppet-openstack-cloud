@@ -390,7 +390,7 @@ class cloud::identity (
 
 # Configure Keystone
   class { 'keystone':
-    enabled          => false,
+    enabled          => true,
     admin_token      => $ks_admin_token,
     compute_port     => $ks_nova_public_port,
     debug            => $debug,
@@ -434,16 +434,16 @@ class cloud::identity (
 
   keystone_config { 'ssl/enable': ensure => absent }
 
-  include 'apache'
-
-  class {'keystone::wsgi::apache':
-    servername  => $::fqdn,
-    admin_port  => $ks_keystone_admin_port,
-    public_port => $ks_keystone_public_port,
-    # TODO(EmilienM) not sure workers is useful when using WSGI backend
-    workers     => $::processorcount,
-    ssl         => false
-  }
+  # TODO(EmilienM) Disable WSGI - bug #98
+  #include 'apache'
+  # class {'keystone::wsgi::apache':
+  #   servername  => $::fqdn,
+  #   admin_port  => $ks_keystone_admin_port,
+  #   public_port => $ks_keystone_public_port,
+  #   # TODO(EmilienM) not sure workers is useful when using WSGI backend
+  #   workers     => $::processorcount,
+  #   ssl         => false
+  # }
 
   class {'swift::keystone::auth':
     address          => $ks_swift_internal_host,
