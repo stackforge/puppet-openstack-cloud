@@ -73,8 +73,8 @@ class cloud::compute(
   $glance_api_port         = $os_params::ks_glance_api_internal_port,
   $verbose                 = $os_params::verbose,
   $debug                   = $os_params::debug,
-  $use_syslog              = $os_params::nova_use_syslog,
-  $log_facility            = $os_params::nova_log_facility
+  $use_syslog              = $os_params::use_syslog,
+  $log_facility            = $os_params::log_facility
 ) {
 
   if !defined(Resource['nova_config']) {

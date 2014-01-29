@@ -78,8 +78,8 @@ class cloud::volume(
   $ks_cinder_password         = $os_params::ks_cinder_password,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
-  $log_facility               = $os_params::cinder_log_facility,
-  $use_syslog                 = $os_params::cinder_use_syslog
+  $log_facility               = $os_params::log_facility,
+  $use_syslog                 = $os_params::use_syslog
 ) {
 
   $encoded_user = uriescape($cinder_db_user)
