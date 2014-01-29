@@ -13,9 +13,61 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Volume Common
 #
-
+# == Class: cloud::volume
+#
+# Common class for volume nodes
+#
+# === Parameters:
+#
+# [*cinder_db_host*]
+#   (optional) Cinder database host
+#   Default value in params
+#
+# [*cinder_db_user*]
+#   (optional) Cinder database user
+#   Default value in params
+#
+# [*cinder_db_password*]
+#   (optional) Cinder database password
+#   Default value in params
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to nova queues.
+#   Default value in params
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Keystone host (authentication)
+#   Default value in params
+#
+# [*ks_cinder_password*]
+#   (optional) Keystone password for cinder user.
+#   Default value in params
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Default value in params
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Default value in params
+#
+# [*tunnel_eth*]
+#   (optional) Which interface we connect to create overlay tunnels.
+#   Default value in params
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::volume(
   $cinder_db_host             = $os_params::cinder_db_host,
   $cinder_db_user             = $os_params::cinder_db_user,
@@ -26,6 +78,8 @@ class cloud::volume(
   $ks_cinder_password         = $os_params::ks_cinder_password,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
+  $log_facility               = $os_params::cinder_log_facility,
+  $use_syslog                 = $os_params::cinder_use_syslog
 ) {
 
   $encoded_user = uriescape($cinder_db_user)
@@ -40,8 +94,8 @@ class cloud::volume(
     rabbit_virtual_host => '/',
     verbose             => $verbose,
     debug               => $debug,
-    log_facility        => 'LOG_LOCAL0',
-    use_syslog          => true
+    log_facility        => $log_facility,
+    use_syslog          => $use_syslog
   }
 
   class { 'cinder::ceilometer': }
