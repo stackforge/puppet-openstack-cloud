@@ -25,6 +25,8 @@ class cloud::volume::storage(
 
   include 'cloud::volume'
 
+  include 'cinder::volume'
+
   class { 'cinder::volume::rbd':
     rbd_pool           => $cinder_rbd_pool,
     glance_api_version => $glance_api_version,
