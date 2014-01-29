@@ -41,6 +41,7 @@ binlog_format                   = ROW
 innodb_autoinc_lock_mode        = 2
 innodb_locks_unsafe_for_binlog  = 1
 wsrep_provider                  = "<%= @wsrep_provider %>"
+wsrep_provider_options          = "gmcast.listen_addr=tcp://<%= @api_eth %>:4567; "
 wsrep_cluster_name              = "galera_cluster"
 wsrep_cluster_address           = "gcomm://<%= @gcomm_definition %>"
 wsrep_sst_auth                  = root:<%= @mysql_root_password %>
