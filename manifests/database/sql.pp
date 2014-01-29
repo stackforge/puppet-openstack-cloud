@@ -249,6 +249,7 @@ class cloud::database::sql (
   exec{ 'reload_xinetd':
     command     => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',
     refreshonly => true,
+    require     => Service['xinetd'],
   }
 
 
