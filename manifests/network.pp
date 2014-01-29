@@ -47,7 +47,14 @@
 #   (optionnal) Bridge mapping for provider networks
 #   Default value in params
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::network(
   $verbose                  = $os_params::verbose,
   $debug                    = $os_params::debug,
@@ -57,6 +64,8 @@ class cloud::network(
   $api_eth                  = $os_params::api_eth,
   $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
   $provider_bridge_mappings = $os_params::provider_bridge_mappings
+  $use_syslog               = $os_params::neutron_use_syslog,
+  $log_facility             = $os_params::neutron_log_facility
 ) {
 
   class { 'neutron':
@@ -68,6 +77,8 @@ class cloud::network(
     rabbit_password         => $rabbit_password,
     rabbit_virtual_host     => '/',
     bind_host               => $api_eth,
+    log_facility            => $log_facility,
+    use_syslog              => $use_syslog,
     dhcp_agents_per_network => '2',
     core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
     service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
