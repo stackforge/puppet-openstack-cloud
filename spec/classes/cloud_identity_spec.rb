@@ -86,6 +86,8 @@ describe 'cloud::identity' do
         :region                       => 'BigCloud',
         :verbose                      => true,
         :debug                        => true,
+        :log_facility                 => 'LOG_LOCAL0',
+        :use_syslog                   => true,
         :api_eth                      => '10.0.0.1' }
     end
 
