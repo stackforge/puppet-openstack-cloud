@@ -57,9 +57,7 @@ describe 'cloud::volume::controller' do
           :log_facility            => 'LOG_LOCAL0',
           :use_syslog              => true
         )
-
-      should contain_cinder_config('DEFAULT/notification_driver').with('value' => 'cinder.openstack.common.notifier.rpc_notifier')
-
+      should contain_class('cinder::ceilometer')
     end
 
     it 'configure cinder scheduler' do
