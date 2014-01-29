@@ -44,12 +44,6 @@ class cloud::volume(
     use_syslog          => true
   }
 
-  #TODO(EmilienM) While https://review.openstack.org/#/c/65008/ got merged
-  #               we can't declare ceilometer class due to bug LP #1266259
-  # class { 'cinder::ceilometer': }
-  # Temp fix:
-  cinder_config {
-    'DEFAULT/notification_driver': value => 'cinder.openstack.common.notifier.rpc_notifier';
-  }
+  class { 'cinder::ceilometer': }
 
 }
