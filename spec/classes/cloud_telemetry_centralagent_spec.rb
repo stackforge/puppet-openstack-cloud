@@ -31,6 +31,8 @@ describe 'cloud::telemetry::centralagent' do
         ks_keystone_internal_port  => '5000',
         ks_keystone_internal_proto => 'http',
         ks_ceilometer_password     => 'secrete',
+        log_facility               => 'LOG_LOCAL0',
+        use_syslog                 => true,
         verbose                    => true,
         debug                      => true }"
     end
