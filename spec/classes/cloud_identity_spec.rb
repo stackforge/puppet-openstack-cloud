@@ -91,7 +91,7 @@ describe 'cloud::identity' do
 
     it 'configure keystone server' do
       should contain_class('keystone').with(
-        :enabled          => false,
+        :enabled          => true,
         :admin_token      => 'SECRETE',
         :compute_port     => '8774',
         :debug            => true,
@@ -118,15 +118,16 @@ describe 'cloud::identity' do
       )
     end
 
-    it 'configure apache to run keystone with wsgi' do
-      should contain_class('keystone::wsgi::apache').with(
-        :servername  => 'keystone.openstack.org',
-        :admin_port  => '35357',
-        :public_port => '5000',
-        :workers     => '2',
-        :ssl         => false
-      )
-    end
+    # TODO(EmilienM) Disable WSGI - bug #98
+    #  it 'configure apache to run keystone with wsgi' do
+    #    should contain_class('keystone::wsgi::apache').with(
+    #      :servername  => 'keystone.openstack.org',
+    #      :admin_port  => '35357',
+    #      :public_port => '5000',
+    #      :workers     => '2',
+    #      :ssl         => false
+    #    )
+    #  end
 
     it 'configure keystone endpoint' do
       should contain_class('keystone::endpoint').with(
