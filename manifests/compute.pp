@@ -55,7 +55,14 @@
 #   (optional) Set log output to debug output
 #   Default value in params
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::compute(
   $nova_db_host            = $os_params::nova_db_host,
   $nova_db_user            = $os_params::nova_db_user,
@@ -65,7 +72,9 @@ class cloud::compute(
   $ks_glance_internal_host = $os_params::ks_glance_internal_host,
   $glance_api_port         = $os_params::ks_glance_api_internal_port,
   $verbose                 = $os_params::verbose,
-  $debug                   = $os_params::debug
+  $debug                   = $os_params::debug,
+  $use_syslog              = $os_params::nova_use_syslog,
+  $log_facility            = $os_params::nova_log_facility
 ) {
 
   if !defined(Resource['nova_config']) {
@@ -84,7 +93,9 @@ class cloud::compute(
     rabbit_password     => $rabbit_password,
     glance_api_servers  => "http://${ks_glance_internal_host}:${glance_api_port}",
     verbose             => $verbose,
-    debug               => $debug
+    debug               => $debug,
+    log_facility        => $log_facility,
+    use_syslog          => $use_syslog
   }
 
   nova_config {
