@@ -66,11 +66,17 @@ describe 'cloud::volume::controller' do
       should contain_class('cinder::scheduler')
     end
 
+    # TODO(Emilien) Disabled for now: http://git.io/uM5sgg
+    # it 'configure cinder glance backend' do
+    #   should contain_class('cinder::glance').with(
+    #       :glance_api_servers     => '10.0.0.1',
+    #       :glance_request_timeout => '10'
+    #     )
+    # end
+    # Replaced by:
     it 'configure cinder glance backend' do
-      should contain_class('cinder::glance').with(
-          :glance_api_servers     => '10.0.0.1',
-          :glance_request_timeout => '10'
-        )
+      should contain_cinder_config('DEFAULT/glance_api_servers').with('value' => '10.0.0.1')
+      should contain_cinder_config('DEFAULT/glance_request_timeout').with('value' => '10')
     end
 
     it 'configure cinder api' do
