@@ -295,7 +295,7 @@
 #   (optional) TCP port to connect to Glance API from public network
 #   Default value in params
 #
-# [*ks_glance_admin_port*]
+# [*ks_glance_api_admin_port*]
 #   (optional) TCP port to connect to Glance API from admin network
 #   Default value in params
 #
