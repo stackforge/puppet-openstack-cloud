@@ -30,7 +30,7 @@ describe 'cloud::compute::controller' do
         rabbit_hosts            => ['10.0.0.1'],
         rabbit_password         => 'secrete',
         ks_glance_internal_host => '10.0.0.1',
-        glance_port             => '9292',
+        glance_api_port         => '9292',
         verbose                 => true,
         debug                   => true }"
     end

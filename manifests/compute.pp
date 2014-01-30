@@ -43,7 +43,7 @@
 #   (optional) Internal Hostname or IP to connect to Glance API
 #   Default value in params
 #
-# [*glance_port*]
+# [*glance_api_port*]
 #   (optional) TCP port to connect to Glance API
 #   Default value in params
 #
@@ -63,7 +63,7 @@ class cloud::compute(
   $rabbit_hosts            = $os_params::rabbit_hosts,
   $rabbit_password         = $os_params::rabbit_password,
   $ks_glance_internal_host = $os_params::ks_glance_internal_host,
-  $glance_port             = $os_params::ks_glance_internal_port,
+  $glance_api_port         = $os_params::ks_glance_api_internal_port,
   $verbose                 = $os_params::verbose,
   $debug                   = $os_params::debug
 ) {
@@ -82,7 +82,7 @@ class cloud::compute(
     rabbit_userid       => 'nova',
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,
-    glance_api_servers  => "http://${ks_glance_internal_host}:${glance_port}",
+    glance_api_servers  => "http://${ks_glance_internal_host}:${glance_api_port}",
     verbose             => $verbose,
     debug               => $debug
   }

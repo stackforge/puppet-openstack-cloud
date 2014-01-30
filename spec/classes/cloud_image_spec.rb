@@ -23,19 +23,19 @@ describe 'cloud::image' do
   shared_examples_for 'openstack image' do
 
     let :params do
-      { :glance_db_host            => '10.0.0.1',
-        :glance_db_user            => 'glance',
-        :glance_db_password        => 'secrete',
-        :ks_keystone_internal_host => '10.0.0.1',
-        :ks_glance_internal_port   => '9292',
-        :ks_glance_password        => 'secrete',
-        :rabbit_host               => '10.0.0.1',
-        :rabbit_password           => 'secrete',
-        :rbd_store_user            => 'glance',
-        :rbd_store_pool            => 'images',
-        :debug                     => true,
-        :verbose                   => true,
-        :api_eth                   => '10.0.0.1' }
+      { :glance_db_host              => '10.0.0.1',
+        :glance_db_user              => 'glance',
+        :glance_db_password          => 'secrete',
+        :ks_keystone_internal_host   => '10.0.0.1',
+        :ks_glance_api_internal_port => '9292',
+        :ks_glance_password          => 'secrete',
+        :rabbit_host                 => '10.0.0.1',
+        :rabbit_password             => 'secrete',
+        :rbd_store_user              => 'glance',
+        :rbd_store_pool              => 'images',
+        :debug                       => true,
+        :verbose                     => true,
+        :api_eth                     => '10.0.0.1' }
     end
 
     it 'configure glance-api' do

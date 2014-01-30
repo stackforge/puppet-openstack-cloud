@@ -16,44 +16,46 @@
 # HAproxy nodes
 #
 class cloud::loadbalancer(
-  $ceilometer_api                 = true,
-  $cinder_api                     = true,
-  $glance_api                     = true,
-  $neutron_api                    = true,
-  $heat_api                       = true,
-  $heat_cfn_api                   = true,
-  $heat_cloudwatch_api            = true,
-  $nova_api                       = true,
-  $ec2_api                        = true,
-  $metadata_api                   = true,
-  $swift_api                      = true,
-  $keystone_api_admin             = true,
-  $keystone_api                   = true,
-  $horizon                        = true,
-  $spice                          = true,
-  $haproxy_auth                   = $os_params::haproxy_auth,
-  $keepalived_state               = 'BACKUP',
-  $keepalived_priority            = 50,
-  $keepalived_interface           = $os_params::keepalived_interface,
-  $keepalived_ipvs                = [$os_params::vip_public_ip,$os_params::galera_ip],
-  $keepalived_localhost_ip        = $os_params::keepalived_localhost_ip,
-  $ks_cinder_public_port          = $os_params::ks_cinder_public_port,
-  $ks_ceilometer_public_port      = $os_params::ks_ceilometer_public_port,
-  $ks_ec2_public_port             = $os_params::ks_ec2_public_port,
-  $ks_glance_public_port          = $os_params::ks_glance_public_port,
-  $ks_heat_public_port            = $os_params::ks_heat_public_port,
-  $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
-  $ks_heat_cloudwatch_public_port = $os_params::ks_heat_cloudwatch_public_port,
-  $ks_keystone_admin_port         = $os_params::ks_keystone_admin_port,
-  $ks_keystone_public_port        = $os_params::ks_keystone_public_port,
-  $ks_metadata_public_port        = $os_params::ks_metadata_public_port,
-  $ks_neutron_public_port         = $os_params::ks_neutron_public_port,
-  $ks_nova_public_port            = $os_params::ks_nova_public_port,
-  $ks_swift_public_port           = $os_params::ks_swift_public_port,
-  $horizon_port                   = $os_params::horizon_port,
-  $spice_port                     = $os_params::spice_port,
-  $vip_public_ip                  = $os_params::vip_public_ip,
-  $galera_ip                      = $os_params::galera_ip
+  $ceilometer_api                   = true,
+  $cinder_api                       = true,
+  $glance_api                       = true,
+  $glance_registry                  = true,
+  $neutron_api                      = true,
+  $heat_api                         = true,
+  $heat_cfn_api                     = true,
+  $heat_cloudwatch_api              = true,
+  $nova_api                         = true,
+  $ec2_api                          = true,
+  $metadata_api                     = true,
+  $swift_api                        = true,
+  $keystone_api_admin               = true,
+  $keystone_api                     = true,
+  $horizon                          = true,
+  $spice                            = true,
+  $haproxy_auth                     = $os_params::haproxy_auth,
+  $keepalived_state                 = 'BACKUP',
+  $keepalived_priority              = 50,
+  $keepalived_interface             = $os_params::keepalived_interface,
+  $keepalived_ipvs                  = [$os_params::vip_public_ip,$os_params::galera_ip],
+  $keepalived_localhost_ip          = $os_params::keepalived_localhost_ip,
+  $ks_cinder_public_port            = $os_params::ks_cinder_public_port,
+  $ks_ceilometer_public_port        = $os_params::ks_ceilometer_public_port,
+  $ks_ec2_public_port               = $os_params::ks_ec2_public_port,
+  $ks_glance_api_public_port        = $os_params::ks_glance_api_public_port,
+  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
+  $ks_heat_public_port              = $os_params::ks_heat_public_port,
+  $ks_heat_cfn_public_port          = $os_params::ks_heat_cfn_public_port,
+  $ks_heat_cloudwatch_public_port   = $os_params::ks_heat_cloudwatch_public_port,
+  $ks_keystone_admin_port           = $os_params::ks_keystone_admin_port,
+  $ks_keystone_public_port          = $os_params::ks_keystone_public_port,
+  $ks_metadata_public_port          = $os_params::ks_metadata_public_port,
+  $ks_neutron_public_port           = $os_params::ks_neutron_public_port,
+  $ks_nova_public_port              = $os_params::ks_nova_public_port,
+  $ks_swift_public_port             = $os_params::ks_swift_public_port,
+  $horizon_port                     = $os_params::horizon_port,
+  $spice_port                       = $os_params::spice_port,
+  $vip_public_ip                    = $os_params::vip_public_ip,
+  $galera_ip                        = $os_params::galera_ip
 ){
 
   class { 'haproxy':
@@ -145,7 +147,14 @@ class cloud::loadbalancer(
   if $glance_api {
     cloud::loadbalancer::listen_http{
       'glance_api_cluster':
-        ports     => $ks_glance_public_port,
+        ports     => $ks_glance_api_public_port,
+        listen_ip => $vip_public_ip;
+    }
+  }
+  if $glance_registry {
+    cloud::loadbalancer::listen_http{
+      'glance_registry_cluster':
+        ports     => $ks_glance_registry_internal_port,
         listen_ip => $vip_public_ip;
     }
   }

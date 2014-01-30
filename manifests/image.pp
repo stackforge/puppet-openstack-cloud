@@ -35,8 +35,12 @@
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Default value in params
 #
-# [*ks_glance_internal_port*]
+# [*ks_glance_api_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
+#   Default value in params
+#
+# [*ks_glance_registry_internal_port*]
+#   (optional) TCP port to connect to Glance Registry from internal network
 #   Default value in params
 #
 # [*ks_glance_password*]
@@ -57,25 +61,40 @@
 #
 
 class cloud::image(
-  $glance_db_host              = $os_params::glance_db_host,
-  $glance_db_user              = $os_params::glance_db_user,
-  $glance_db_password          = $os_params::glance_db_password,
-  $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_port     = $os_params::ks_glance_internal_port,
-  $ks_glance_password          = $os_params::ks_glance_password,
-  $rabbit_password             = $os_params::rabbit_password,
-  $rabbit_host                 = $os_params::rabbit_hosts[0],
-  $api_eth                     = $os_params::api_eth,
-  $rbd_store_pool              = $os_params::glance_rbd_pool,
-  $rbd_store_user              = $os_params::glance_rbd_user,
-  $verbose                     = $os_params::verbose,
-  $debug                       = $os_params::debug
+  $glance_db_host                   = $os_params::glance_db_host,
+  $glance_db_user                   = $os_params::glance_db_user,
+  $glance_db_password               = $os_params::glance_db_password,
+  $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
+  $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
+  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
+  $ks_glance_password               = $os_params::ks_glance_password,
+  $rabbit_password                  = $os_params::rabbit_password,
+  $rabbit_host                      = $os_params::rabbit_hosts[0],
+  $api_eth                          = $os_params::api_eth,
+  $rbd_store_pool                   = $os_params::glance_rbd_pool,
+  $rbd_store_user                   = $os_params::glance_rbd_user,
+  $verbose                          = $os_params::verbose,
+  $debug                            = $os_params::debug
 ) {
 
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)
 
-  class { ['glance::api', 'glance::registry']:
+  class { 'glance::api':
+    sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
+    registry_host     => $ks_glance_internal_host,
+    verbose           => $verbose,
+    debug             => $debug,
+    auth_host         => $ks_keystone_internal_host,
+    keystone_password => $ks_glance_password,
+    keystone_tenant   => 'services',
+    keystone_user     => 'glance',
+    log_facility      => 'LOG_LOCAL0',
+    bind_host         => $api_eth,
+    use_syslog        => true
+  }
+
+  class { 'glance::registry':
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     verbose           => $verbose,
     debug             => $debug,
@@ -103,11 +122,19 @@ class cloud::image(
   class { 'glance::cache::pruner': }
 
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
-  @@haproxy::balancermember{"${::fqdn}-public_api":
+  @@haproxy::balancermember{"${::fqdn}-glance_api":
     listening_service => 'glance_api_cluster',
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => $ks_glance_internal_port,
+    ports             => $ks_glance_api_internal_port,
+    options           => 'check inter 2000 rise 2 fall 5'
+  }
+
+@@haproxy::balancermember{"${::fqdn}-glance_registry":
+    listening_service => 'glance_registry_cluster',
+    server_names      => $::hostname,
+    ipaddresses       => $api_eth,
+    ports             => $ks_glance_registry_internal_port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 
