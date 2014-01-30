@@ -287,11 +287,11 @@
 #   (optional) TCP port to connect to Heat API from admin network
 #   Default value in params
 #
-# [*ks_glance_internal_port*]
+# [*ks_glance_api_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
 #   Default value in params
 #
-# [*ks_glance_public_port*]
+# [*ks_glance_api_public_port*]
 #   (optional) TCP port to connect to Glance API from public network
 #   Default value in params
 #
@@ -343,7 +343,7 @@ class cloud::identity (
   $ks_glance_password           = $os_params::ks_glance_password,
   $ks_glance_public_host        = $os_params::ks_glance_public_host,
   $ks_glance_public_proto       = $os_params::ks_glance_public_proto,
-  $ks_glance_public_port        = $os_params::ks_glance_public_port,
+  $ks_glance_api_public_port    = $os_params::ks_glance_api_public_port,
   $ks_heat_admin_host           = $os_params::ks_heat_admin_host,
   $ks_heat_internal_host        = $os_params::ks_heat_internal_host,
   $ks_heat_password             = $os_params::ks_heat_password,
@@ -502,7 +502,7 @@ class cloud::identity (
     admin_address    => $ks_glance_admin_host,
     internal_address => $ks_glance_internal_host,
     public_address   => $ks_glance_public_host,
-    port             => $ks_glance_public_port,
+    port             => $ks_glance_api_public_port,
     region           => $region,
     password         => $ks_glance_password
   }
