@@ -70,10 +70,6 @@ class cloud::dashboard(
   $debug                     = $os_params::debug
 ) {
 
-  # ensure memcached is running on horizon node, since horizon supports only
-  # one memcached server
-  include 'cloud::cache'
-
   $supported = [ 'RedHat', 'Debian' ]
   if grep($supported, $::osfamily) != [$::osfamily] {
     fail("module puppet-horizon doesn't support ${::osfamily}")
