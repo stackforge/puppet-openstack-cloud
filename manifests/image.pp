@@ -65,6 +65,7 @@ class cloud::image(
   $glance_db_user                   = $os_params::glance_db_user,
   $glance_db_password               = $os_params::glance_db_password,
   $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
+  $ks_glance_internal_host          = $os_params::ks_glance_internal_host,
   $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
   $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
   $ks_glance_password               = $os_params::ks_glance_password,
