@@ -49,7 +49,6 @@ class cloud::database::sql (
     $neutron_db_password            = $os_params::neutron_db_password,
     $neutron_db_allowed_hosts       = $os_params::neutron_db_allowed_hosts,
     $mysql_root_password            = $os_params::mysql_root_password,
-    $mysql_sys_maint_user           = $os_params::mysql_sys_maint_user,
     $mysql_sys_maint_password       = $os_params::mysql_sys_maint_password,
     $galera_clustercheck_dbuser     = $os_params::galera_clustercheck_dbuser,
     $galera_clustercheck_dbpassword = $os_params::galera_clustercheck_dbuser,
@@ -95,6 +94,21 @@ class cloud::database::sql (
             service_name        => $mysql_service_name,
         }
         $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
+
+        database_user { 'debian-sys-maint@localhost':
+          ensure        => 'present',
+          password_hash => mysql_password($mysql_sys_maint_password),
+          provider      => 'mysql',
+          require       => File['/root/.my.cnf']
+        }
+        file{'/etc/mysql/sys.cnf':
+          ensure  => file,
+          content => template('cloud/database/debian.cnf.erb'),
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0600',
+          require => Exec['clean-mysql-binlog'],
+        }
     }
     default: {
       err "${::osfamily} not supported yet"
@@ -211,13 +225,6 @@ class cloud::database::sql (
       privileges => ['all']
     }
 
-    database_user { "${mysql_sys_maint_user}@localhost":
-      ensure        => 'present',
-      password_hash => mysql_password($mysql_sys_maint_password),
-      provider      => 'mysql',
-      require       => File['/root/.my.cnf']
-    }
-
     Database_user<<| |>>
   } # if $::hostname == $galera_master
 
@@ -266,15 +273,6 @@ class cloud::database::sql (
     notify      => Exec['mysqld-restart'],
     refreshonly => true,
     onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
-  }
-
-  file{'/etc/mysql/sys.cnf':
-    ensure  => file,
-    content => template('cloud/database/sys.cnf.erb'),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0600',
-    require => Exec['clean-mysql-binlog'],
   }
 
   # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
