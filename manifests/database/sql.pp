@@ -58,13 +58,21 @@ class cloud::database::sql (
 
   include 'xinetd'
 
+  $gcomm_definition = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
+
+  if $::hostname == $galera_master_name {
+    $mysql_service_name = 'mysql-bootstrap'
+  } else {
+    $mysql_service_name = 'mysql'
+  }
+
   # TODO(Gonéri): OS/values detection should be moved in a params.pp
   case $::osfamily {
     'RedHat': {
         class { 'mysql':
             server_package_name => 'MariaDB-Galera-server',
             client_package_name => 'MariaDB-client',
-            service_name        => 'mysql'
+            service_name        => $mysql_service_name,
         }
         # galera-23.2.7-1.rhel6.x86_64
         $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
@@ -84,7 +92,7 @@ class cloud::database::sql (
         class { 'mysql':
             server_package_name => 'mariadb-galera-server',
             client_package_name => 'mariadb-client',
-            service_name        => 'mysql'
+            service_name        => $mysql_service_name,
         }
         $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
     }
@@ -112,23 +120,29 @@ class cloud::database::sql (
       before  => Package['mysql-server'],
     }
 
+    # The startup time can be longer than the default 30s so we take
+    # care of it there.  Until this bug is not resolved
+    # https://mariadb.atlassian.net/browse/MDEV-5540, we have to do it
+    # the ugly way.
+    file_line { 'debian_increase_mysql_startup_time':
+      line    => 'MYSQLD_STARTUP_TIMEOUT=120',
+      path    => '/etc/init.d/mysql',
+      after   => '^CONF=',
+      require => Package['mysql-server'],
+      notify  => Service['mysqld'],
+    }
   }
 
-  $gcomm_base = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
+  class { 'mysql::server':
+    config_hash         => {
+      bind_address      => $api_eth,
+      root_password     => $mysql_root_password,
+      service_name      => $mysql_service_name,
+    },
+    notify              => Service['xinetd'],
+  }
 
   if $::hostname == $galera_master_name {
-
-
-    class { 'mysql::server':
-      config_hash         => {
-        bind_address      => $api_eth,
-        root_password     => $mysql_root_password,
-        service_name      => 'mysql-bootstrap',
-      },
-      notify              => Service['xinetd'],
-    }
-
-    $gcomm_definition = "${gcomm_base}&pc.bootstrap=1"
 
 # OpenStack DB
     class { 'keystone::db::mysql':
@@ -205,17 +219,6 @@ class cloud::database::sql (
     }
 
     Database_user<<| |>>
-  } else {
-    $gcomm_definition = $gcomm_base
-
-    class { 'mysql::server':
-      config_hash         => {
-        bind_address      => $api_eth,
-        root_password     => $mysql_root_password,
-        service_name      => 'mysql',
-      },
-      notify              => Service['xinetd'],
-    }
   } # if $::hostname == $galera_master
 
   # Haproxy http monitoring
