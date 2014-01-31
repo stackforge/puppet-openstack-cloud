@@ -23,33 +23,36 @@ describe 'cloud::image' do
   shared_examples_for 'openstack image' do
 
     let :params do
-      { :glance_db_host            => '10.0.0.1',
-        :glance_db_user            => 'glance',
-        :glance_db_password        => 'secrete',
-        :ks_keystone_internal_host => '10.0.0.1',
-        :ks_glance_internal_port   => '9292',
-        :ks_glance_password        => 'secrete',
-        :rabbit_host               => '10.0.0.1',
-        :rabbit_password           => 'secrete',
-        :rbd_store_user            => 'glance',
-        :rbd_store_pool            => 'images',
-        :debug                     => true,
-        :verbose                   => true,
-        :api_eth                   => '10.0.0.1' }
+      { :glance_db_host              => '10.0.0.1',
+        :glance_db_user              => 'glance',
+        :glance_db_password          => 'secrete',
+        :ks_keystone_internal_host   => '10.0.0.1',
+        :ks_glance_internal_host     => '10.0.0.1',
+        :openstack_vip               => '10.0.0.42',
+        :ks_glance_api_internal_port => '9292',
+        :ks_glance_password          => 'secrete',
+        :rabbit_host                 => '10.0.0.1',
+        :rabbit_password             => 'secrete',
+        :rbd_store_user              => 'glance',
+        :rbd_store_pool              => 'images',
+        :debug                       => true,
+        :verbose                     => true,
+        :api_eth                     => '10.0.0.1' }
     end
 
     it 'configure glance-api' do
       should contain_class('glance::api').with(
-          :sql_connection    => 'mysql://glance:secrete@10.0.0.1/glance',
-          :keystone_password => 'secrete',
-          :keystone_tenant   => 'services',
-          :keystone_user     => 'glance',
-          :verbose           => true,
-          :debug             => true,
-          :auth_host         => '10.0.0.1',
-          :log_facility      => 'LOG_LOCAL0',
-          :bind_host         => '10.0.0.1',
-          :use_syslog        => true
+          :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+          :keystone_password     => 'secrete',
+          :registry_host         => '10.0.0.42',
+          :keystone_tenant       => 'services',
+          :keystone_user         => 'glance',
+          :verbose               => true,
+          :debug                 => true,
+          :auth_host             => '10.0.0.1',
+          :log_facility          => 'LOG_LOCAL0',
+          :bind_host             => '10.0.0.1',
+          :use_syslog            => true
         )
     end
 
