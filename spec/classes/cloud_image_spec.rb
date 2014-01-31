@@ -40,16 +40,17 @@ describe 'cloud::image' do
 
     it 'configure glance-api' do
       should contain_class('glance::api').with(
-          :sql_connection    => 'mysql://glance:secrete@10.0.0.1/glance',
-          :keystone_password => 'secrete',
-          :keystone_tenant   => 'services',
-          :keystone_user     => 'glance',
-          :verbose           => true,
-          :debug             => true,
-          :auth_host         => '10.0.0.1',
-          :log_facility      => 'LOG_LOCAL0',
-          :bind_host         => '10.0.0.1',
-          :use_syslog        => true
+          :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+          :keystone_password     => 'secrete',
+          :glance_registry_host  => '10.0.0.1',
+          :keystone_tenant       => 'services',
+          :keystone_user         => 'glance',
+          :verbose               => true,
+          :debug                 => true,
+          :auth_host             => '10.0.0.1',
+          :log_facility          => 'LOG_LOCAL0',
+          :bind_host             => '10.0.0.1',
+          :use_syslog            => true
         )
     end
 
