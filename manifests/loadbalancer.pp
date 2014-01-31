@@ -56,9 +56,7 @@ class cloud::loadbalancer(
   $galera_ip                      = $os_params::galera_ip
 ){
 
-  class { 'haproxy':
-    manage_service => false,
-  }
+  class { 'haproxy': }
 
   class { 'keepalived': }
 
