@@ -27,6 +27,10 @@ describe 'cloud::dashboard' do
         :ks_keystone_internal_host  => 'localhost',
         :ks_keystone_internal_host  => 'localhost',
         :secret_key                 => '/etc/ssl/secret',
+        :keystone_host              => 'keystone.openstack.org',
+        :keystone_proto             => 'http',
+        :keystone_port              => '5000',
+        :debug                      => true,
         :api_eth                    => '10.0.0.1' }
     end
 
@@ -34,9 +38,12 @@ describe 'cloud::dashboard' do
       should contain_class('horizon').with(
           :listen_ssl          => false,
           :secret_key          => '/etc/ssl/secret',
-          :keystone_host       => 'localhost',
           :can_set_mount_point => 'False',
-          :fqdn                => '10.0.0.1'
+          :fqdn                => '10.0.0.1',
+          :bind_address        => '10.0.0.1',
+          :swift               => true,
+          :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
+          :django_debug        => true
         )
     end
   end
@@ -46,6 +53,7 @@ describe 'cloud::dashboard' do
       { :osfamily               => 'Debian',
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
+        :processorcount         => '1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
@@ -56,23 +64,11 @@ describe 'cloud::dashboard' do
     let :facts do
       { :osfamily => 'RedHat',
         :operatingsystemrelease => '6',
+        :processorcount         => '1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
 
     it_configures 'openstack dashboard'
   end
-
-  context 'on other platforms' do
-    let :facts do
-      { :osfamily => 'Solaris',
-        :operatingsystemrelease => '10',
-        :concat_basedir         => '/var/lib/puppet/concat' }
-    end
-
-    it 'should fail' do
-      expect { subject }.to  raise_error(/module puppet-horizon doesn't support/)
-    end
-  end
-
 
 end
