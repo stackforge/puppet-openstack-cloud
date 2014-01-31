@@ -93,12 +93,14 @@ class cloud::dashboard(
 
   }
 
-  # TODO(Gonéri): HACK to ensure Horizon can cache its files
-  $horizon_var_dir = [ "/var/lib/openstack-dashboard/static/js", "/var/lib/openstack-dashboard/static/css" ]
-  file {$horizon_var_dir:
-    owner  => 'horizon',
-    group  => 'horizon',
-    ensure => directory,
+  if ($::osfamily == 'Debian') {
+    # TODO(Gonéri): HACK to ensure Horizon can cache its files
+    $horizon_var_dir = [ "/var/lib/openstack-dashboard/static/js", "/var/lib/openstack-dashboard/static/css" ]
+    file {$horizon_var_dir:
+      owner  => 'horizon',
+      group  => 'horizon',
+      ensure => directory,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
