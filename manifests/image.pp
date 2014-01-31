@@ -75,6 +75,7 @@ class cloud::image(
   $rabbit_password                  = $os_params::rabbit_password,
   $rabbit_host                      = $os_params::rabbit_hosts[0],
   $api_eth                          = $os_params::api_eth,
+  $openstack_vip                    = $os_params::vip_public_ip,
   $rbd_store_pool                   = $os_params::glance_rbd_pool,
   $rbd_store_user                   = $os_params::glance_rbd_user,
   $verbose                          = $os_params::verbose,
@@ -86,7 +87,7 @@ class cloud::image(
 
   class { 'glance::api':
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
-    registry_host     => $ks_glance_internal_host,
+    registry_host     => $openstack_vip,
     verbose           => $verbose,
     debug             => $debug,
     auth_host         => $ks_keystone_internal_host,
