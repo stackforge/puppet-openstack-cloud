@@ -41,7 +41,6 @@ describe 'cloud::dashboard' do
           :can_set_mount_point => 'False',
           :fqdn                => '10.0.0.1',
           :bind_address        => '10.0.0.1',
-          :cache_server_ip     => '10.0.0.1',
           :swift               => true,
           :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug        => true
@@ -54,7 +53,6 @@ describe 'cloud::dashboard' do
       { :osfamily               => 'Debian',
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
-        :memorysize             => '1000 MB',
         :processorcount         => '1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end
@@ -66,7 +64,6 @@ describe 'cloud::dashboard' do
     let :facts do
       { :osfamily => 'RedHat',
         :operatingsystemrelease => '6',
-        :memorysize             => '1000 MB',
         :processorcount         => '1',
         :concat_basedir         => '/var/lib/puppet/concat' }
     end

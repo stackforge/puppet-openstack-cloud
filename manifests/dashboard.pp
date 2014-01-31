@@ -86,9 +86,6 @@ class cloud::dashboard(
     # We force $api_eth to avoid this situation
     fqdn                => $api_eth,
     bind_address        => $api_eth,
-# TODO(Gonéri) disabling cache so far:
-# https://github.com/enovance/puppet-cloud/pull/121
-#    cache_server_ip     => $api_eth,
     swift               => true,
     keystone_url        => $keystone_url,
     django_debug        => $debug
