@@ -28,6 +28,7 @@ describe 'cloud::image' do
         :glance_db_password          => 'secrete',
         :ks_keystone_internal_host   => '10.0.0.1',
         :ks_glance_internal_host     => '10.0.0.1',
+        :openstack_vip               => '10.0.0.42',
         :ks_glance_api_internal_port => '9292',
         :ks_glance_password          => 'secrete',
         :rabbit_host                 => '10.0.0.1',
@@ -43,7 +44,7 @@ describe 'cloud::image' do
       should contain_class('glance::api').with(
           :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
           :keystone_password     => 'secrete',
-          :registry_host         => '10.0.0.1',
+          :registry_host         => '10.0.0.42',
           :keystone_tenant       => 'services',
           :keystone_user         => 'glance',
           :verbose               => true,
