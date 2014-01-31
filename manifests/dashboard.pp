@@ -41,6 +41,22 @@
 #   It requires SSL files (keys and certificates)
 #   Defaults false
 #
+# [*keystone_proto*]
+#   (optional) Protocol (http or https) of keystone endpoint.
+#   Defaults to params.
+#
+# [*keystone_host*]
+#   (optional) IP / Host of keystone endpoint.
+#   Defaults to params.
+#
+# [*keystone_port*]
+#   (optional) TCP port of keystone endpoint.
+#   Defaults to params.
+#
+# [*debug*]
+#   (optional) Enable debug or not.
+#   Defaults to params.
+#
 
 class cloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
@@ -48,6 +64,10 @@ class cloud::dashboard(
   $horizon_port              = $os_params::horizon_port,
   $api_eth                   = $os_params::api_eth,
   $listen_ssl                = false,
+  $keystone_host             = $os_params::ks_keystone_internal_host,
+  $keystone_proto            = $os_params::ks_keystone_internal_proto,
+  $keystone_port             = $os_params::ks_keystone_internal_port,
+  $debug                     = $os_params::debug
 ) {
 
   $supported = [ 'RedHat', 'Debian' ]
@@ -55,15 +75,31 @@ class cloud::dashboard(
     fail("module puppet-horizon doesn't support ${::osfamily}")
   }
 
+  # We build the param needed for horizon class
+  $keystone_url = "${keystone_proto}://${keystone_host}:${keystone_port}/v2.0"
+
   class {'horizon':
     secret_key          => $secret_key,
-    keystone_host       => $ks_keystone_internal_host,
     can_set_mount_point => 'False',
-# fqdn can can be ambiguous since we use reverse DNS here,
-# e.g: 127.0.0.1 instead of a public IP address.
-# We force $api_eth to avoid this situation
+    # fqdn can can be ambiguous since we use reverse DNS here,
+    # e.g: 127.0.0.1 instead of a public IP address.
+    # We force $api_eth to avoid this situation
     fqdn                => $api_eth,
-    bind_address        => $api_eth
+    bind_address        => $api_eth,
+    swift               => true,
+    keystone_url        => $keystone_url,
+    django_debug        => $debug
+
+  }
+
+  if ($::osfamily == 'Debian') {
+    # TODO(Gonéri): HACK to ensure Horizon can cache its files
+    $horizon_var_dir = [ "/var/lib/openstack-dashboard/static/js", "/var/lib/openstack-dashboard/static/css" ]
+    file {$horizon_var_dir:
+      owner  => 'horizon',
+      group  => 'horizon',
+      ensure => directory,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-horizon":
