@@ -66,8 +66,11 @@ class cloud::image(
   $glance_db_password               = $os_params::glance_db_password,
   $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
   $ks_glance_internal_host          = $os_params::ks_glance_internal_host,
-  $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
-  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
+  # TODO(Gonéri) will have to use $os_params::ks_glance_api_internal_port
+  # here in the future
+  $ks_glance_api_internal_port      = $os_params::ks_glance_internal_port,
+  # TODO(Gonéri) will have to use $os_params::ks_glance_registry_internal_port
+  $ks_glance_registry_internal_port = $os_params::ks_glance_internal_port,
   $ks_glance_password               = $os_params::ks_glance_password,
   $rabbit_password                  = $os_params::rabbit_password,
   $rabbit_host                      = $os_params::rabbit_hosts[0],

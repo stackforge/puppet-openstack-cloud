@@ -41,8 +41,11 @@ class cloud::loadbalancer(
   $ks_cinder_public_port            = $os_params::ks_cinder_public_port,
   $ks_ceilometer_public_port        = $os_params::ks_ceilometer_public_port,
   $ks_ec2_public_port               = $os_params::ks_ec2_public_port,
-  $ks_glance_api_public_port        = $os_params::ks_glance_api_public_port,
-  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
+  # TODO(Gonéri): will have to use os_params::ks_glance_api_public_port
+  # here in the future
+  $ks_glance_api_public_port        = $os_params::ks_glance_public_port,
+  # TODO(Gonéri) will have to use $os_params::ks_glance_registry_internal_port
+  $ks_glance_registry_internal_port = $os_params::ks_glance_internal_port,
   $ks_heat_public_port              = $os_params::ks_heat_public_port,
   $ks_heat_cfn_public_port          = $os_params::ks_heat_cfn_public_port,
   $ks_heat_cloudwatch_public_port   = $os_params::ks_heat_cloudwatch_public_port,
