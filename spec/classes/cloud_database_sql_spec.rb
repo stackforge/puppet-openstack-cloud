@@ -57,7 +57,6 @@ describe 'cloud::database::sql' do
         :neutron_db_password            => 'secrete',
         :neutron_db_allowed_hosts       => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :mysql_root_password            => 'secrete',
-        :mysql_sys_maint_user           => 'sys-maint',
         :mysql_sys_maint_password       => 'sys',
         :galera_clustercheck_dbuser     => 'clustercheckuser',
         :galera_clustercheck_dbpassword => 'clustercheckpassword!',
@@ -166,26 +165,8 @@ describe 'cloud::database::sql' do
         should contain_database_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
           :privileges => 'all'
         )
-        should contain_database_user("#{params[:mysql_sys_maint_user]}@localhost").with(
-          :ensure        => 'present',
-          :password_hash => '*BE353D0D7826681F8B7C136ED9824915F5B99E7D',
-          :provider      => 'mysql'
-        )
       end # configure monitoring database
     end # configure databases on the galera master server
-
-    context 'configure MySQL sys config' do
-      it { should contain_file('/etc/mysql/sys.cnf').with(
-        :mode    => '0600',
-        :owner   => 'root',
-        :group   => 'root',
-        :require => 'Exec[clean-mysql-binlog]'
-      )}
-
-      it { should contain_file('/etc/mysql/sys.cnf').with_content(/password = #{params[:mysql_sys_maint_password]}/)}
-
-    end # configure MySQL sys config
-
   end # openstack database sql
 
   context 'on Debian platforms' do
