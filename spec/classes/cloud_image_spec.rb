@@ -27,7 +27,6 @@ describe 'cloud::image' do
         :glance_db_user              => 'glance',
         :glance_db_password          => 'secrete',
         :ks_keystone_internal_host   => '10.0.0.1',
-        :ks_glance_internal_host     => '10.0.0.1',
         :openstack_vip               => '10.0.0.42',
         :ks_glance_api_internal_port => '9292',
         :ks_glance_password          => 'secrete',
