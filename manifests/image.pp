@@ -85,6 +85,7 @@ class cloud::image(
   class { 'glance::api':
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     registry_host     => $openstack_vip,
+    registry_port     => $ks_glance_registry_internal_port,
     verbose           => $verbose,
     debug             => $debug,
     auth_host         => $ks_keystone_internal_host,
@@ -93,6 +94,7 @@ class cloud::image(
     keystone_user     => 'glance',
     log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
+    bind_port         => $ks_glance_api_internal_port,
     use_syslog        => true
   }
 
@@ -106,6 +108,7 @@ class cloud::image(
     keystone_user     => 'glance',
     log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
+    bind_port         => $ks_glance_registry_internal_port,
     use_syslog        => true
   }
 
