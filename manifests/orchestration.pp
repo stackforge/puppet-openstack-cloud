@@ -52,4 +52,13 @@ class cloud::orchestration(
     debug             => $debug,
   }
 
+  # Note(EmilienM):
+  # We check if DB tables are created, if not we populate Heat DB.
+  # It's a hack to fit with our setup where we run MySQL/Galera
+  exec {'heat_db_sync':
+    command => 'heat-manage --config-file /etc/heat/heat.conf db_sync',
+    path    => '/usr/bin',
+    unless  => "mysql heat -h ${heat_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+  }
+
 }
