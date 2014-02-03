@@ -101,7 +101,7 @@ class cloud::database::sql (
           provider      => 'mysql',
           require       => File['/root/.my.cnf']
         }
-        file{'/etc/mysql/sys.cnf':
+        file{'/etc/mysql/debian.cnf':
           ensure  => file,
           content => template('cloud/database/debian.cnf.erb'),
           owner   => 'root',
