@@ -130,9 +130,8 @@ class cloud::image(
   # We check if DB tables are created, if not we populate Glance DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'glance_db_sync':
-    command => 'glance-manage db_sync',
-    path    => '/usr/bin',
-    unless  => 'mysql glance -e "show tables" | grep Tables'
+    command => '/usr/bin/glance-manage db_sync',
+    unless  => '/usr/bin/mysql glance -e "show tables" | /bin/grep Tables'
   }
 
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
