@@ -70,7 +70,7 @@ class cloud::image(
   $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
   $ks_glance_password               = $os_params::ks_glance_password,
   $rabbit_password                  = $os_params::rabbit_password,
-  $rabbit_host                      = $os_params::rabbit_hosts[0],
+  $rabbit_host                      = $os_params::rabbit_host,
   $api_eth                          = $os_params::api_eth,
   $openstack_vip                    = $os_params::vip_public_ip,
   $rbd_store_pool                   = $os_params::glance_rbd_pool,
