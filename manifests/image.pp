@@ -126,6 +126,15 @@ class cloud::image(
   class { 'glance::cache::cleaner': }
   class { 'glance::cache::pruner': }
 
+  # Note(EmilienM):
+  # We check if DB tables are created, if not we populate Glance DB.
+  # It's a hack to fit with our setup where we run MySQL/Galera
+  exec {'glance_db_sync':
+    command => 'glance-manage db_sync',
+    path    => '/usr/bin',
+    unless  => 'mysql glance -e "show tables" | grep Tables'
+  }
+
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
   @@haproxy::balancermember{"${::fqdn}-glance_api":
     listening_service => 'glance_api_cluster',
