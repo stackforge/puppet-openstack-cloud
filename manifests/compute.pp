@@ -63,9 +63,7 @@ class cloud::compute(
   $rabbit_hosts            = $os_params::rabbit_hosts,
   $rabbit_password         = $os_params::rabbit_password,
   $ks_glance_internal_host = $os_params::ks_glance_internal_host,
-  #TODO(Gonéri) will have to use $os_params::ks_glance_api_internal_port
-  # here in the future
-  $glance_api_port         = $os_params::ks_glance_internal_port,
+  $glance_api_port         = $os_params::ks_glance_api_internal_port,
   $verbose                 = $os_params::verbose,
   $debug                   = $os_params::debug
 ) {

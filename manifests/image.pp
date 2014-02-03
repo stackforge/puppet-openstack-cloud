@@ -66,11 +66,8 @@ class cloud::image(
   $glance_db_password               = $os_params::glance_db_password,
   $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
   $ks_glance_internal_host          = $os_params::ks_glance_internal_host,
-  # TODO(Gonéri) will have to use $os_params::ks_glance_api_internal_port
-  # here in the future
-  $ks_glance_api_internal_port      = $os_params::ks_glance_internal_port,
-  # TODO(Gonéri) will have to use $os_params::ks_glance_registry_internal_port
-  $ks_glance_registry_internal_port = $os_params::ks_glance_internal_port,
+  $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
+  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
   $ks_glance_password               = $os_params::ks_glance_password,
   $rabbit_password                  = $os_params::rabbit_password,
   $rabbit_host                      = $os_params::rabbit_hosts[0],
@@ -88,6 +85,7 @@ class cloud::image(
   class { 'glance::api':
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     registry_host     => $openstack_vip,
+    registry_port     => $ks_glance_registry_internal_port,
     verbose           => $verbose,
     debug             => $debug,
     auth_host         => $ks_keystone_internal_host,
@@ -96,6 +94,7 @@ class cloud::image(
     keystone_user     => 'glance',
     log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
+    bind_port         => $ks_glance_api_internal_port,
     use_syslog        => true
   }
 
@@ -109,6 +108,7 @@ class cloud::image(
     keystone_user     => 'glance',
     log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
+    bind_port         => $ks_glance_registry_internal_port,
     use_syslog        => true
   }
 
