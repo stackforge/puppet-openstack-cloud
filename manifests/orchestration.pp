@@ -57,7 +57,7 @@ class cloud::orchestration(
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'heat_db_sync':
     command => '/usr/bin/heat-manage --config-file /etc/heat/heat.conf db_sync',
-    unless  => "/usr/bin/mysql heat -h ${heat_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    unless  => "/usr/bin/mysql heat -h ${heat_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 
 }

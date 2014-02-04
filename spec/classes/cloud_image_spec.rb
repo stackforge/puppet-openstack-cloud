@@ -98,7 +98,7 @@ describe 'cloud::image' do
     it 'checks if Glance DB is populated' do
       should contain_exec('glance_db_sync').with(
         :command => '/usr/bin/glance-manage db_sync',
-        :unless  => '/usr/bin/mysql glance -e "show tables" | /bin/grep Tables'
+        :unless  => '/usr/bin/mysql glance -h 10.0.0.1 -u glance -psecrete -e "show tables" | /bin/grep Tables'
       )
     end
   end
