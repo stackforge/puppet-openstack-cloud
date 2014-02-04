@@ -72,13 +72,22 @@ describe 'cloud::network::controller' do
 
     it 'configure neutron server' do
       should contain_class('neutron::server').with(
-          :auth_password => 'secrete',
-          :auth_host     => '10.0.0.1',
-          :auth_port     => '5000',
-          :connection    => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
-          :api_workers   => '2'
+          :auth_password  => 'secrete',
+          :auth_host      => '10.0.0.1',
+          :auth_port      => '5000',
+          :connection     => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
+          :sql_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
+          :api_workers    => '2'
         )
     end
+
+    it 'checks if Neutron DB is populated' do
+      should contain_exec('neutron_db_sync').with(
+        :command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+        :unless  => '/usr/bin/mysql neutron -h 10.0.0.1 -u neutron -psecrete -e "show tables" | /bin/grep Tables'
+      )
+    end
+
   end
 
   context 'on Debian platforms' do

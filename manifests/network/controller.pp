@@ -38,8 +38,19 @@ class cloud::network::controller(
     auth_password => $ks_neutron_password,
     auth_host     => $ks_keystone_admin_host,
     auth_port     => $ks_keystone_public_port,
+    # TODO(EmilienM) This one should work, but it's the case now. Don't drop it.
     connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    # TODO(EmilienM) Should be deprecated - bug GH#152
+    sql_connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     api_workers   => $::processorcount
+  }
+
+  # Note(EmilienM):
+  # We check if DB tables are created, if not we populate Neutron DB.
+  # It's a hack to fit with our setup where we run MySQL/Galera
+  exec {'neutron_db_sync':
+    command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+    unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":

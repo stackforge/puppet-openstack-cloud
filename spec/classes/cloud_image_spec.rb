@@ -95,6 +95,12 @@ describe 'cloud::image' do
       should contain_class('glance::cache::pruner')
     end
 
+    it 'checks if Glance DB is populated' do
+      should contain_exec('glance_db_sync').with(
+        :command => '/usr/bin/glance-manage db_sync',
+        :unless  => '/usr/bin/mysql glance -h 10.0.0.1 -u glance -psecrete -e "show tables" | /bin/grep Tables'
+      )
+    end
   end
 
   context 'on Debian platforms' do
