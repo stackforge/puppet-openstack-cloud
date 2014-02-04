@@ -49,7 +49,7 @@ class cloud::storage::rbd::pools(
 
       exec { 'create_cinder_volumes_user_and_key':
         # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${cinder_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_pool}, allow rx pool=${cinder_pool}'",
+        command => "ceph auth get-or-create client.${cinder_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_pool}, allow rwx pool=${cinder_pool}'",
         unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_user}$'",
         require => Exec['create_cinder_volumes_pool'];
       }
