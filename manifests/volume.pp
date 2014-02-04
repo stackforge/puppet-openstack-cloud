@@ -51,7 +51,7 @@ class cloud::volume(
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'cinder_db_sync':
     command => '/usr/bin/cinder-manage db sync',
-    unless  => "/usr/bin/mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    unless  => "/usr/bin/mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 
 }

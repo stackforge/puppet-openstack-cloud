@@ -80,6 +80,14 @@ describe 'cloud::network::controller' do
           :api_workers    => '2'
         )
     end
+
+    it 'checks if Neutron DB is populated' do
+      should contain_exec('neutron_db_sync').with(
+        :command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+        :unless  => '/usr/bin/mysql neutron -h 10.0.0.1 -u neutron -psecrete -e "show tables" | /bin/grep Tables'
+      )
+    end
+
   end
 
   context 'on Debian platforms' do

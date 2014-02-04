@@ -96,7 +96,7 @@ class cloud::compute(
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'nova_db_sync':
     command => '/usr/bin/nova-manage db sync',
-    unless  => "/usr/bin/mysql nova -h ${nova_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    unless  => "/usr/bin/mysql nova -h ${nova_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 
 }
