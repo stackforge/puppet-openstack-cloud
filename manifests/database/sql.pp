@@ -225,6 +225,11 @@ class cloud::database::sql (
       privileges => ['all']
     }
 
+
+    # TODO(Gonéri):
+    # Here we should do the db_sync.
+    # https://github.com/enovance/puppet-cloud/issues/156
+
     Database_user<<| |>>
   } # if $::hostname == $galera_master
 

@@ -59,6 +59,13 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
     end
 
+    it 'checks if Nova DB is populated' do
+      should contain_exec('nova_db_sync').with(
+        :command => '/usr/bin/nova-manage db sync',
+        :unless  => '/usr/bin/mysql nova -h 10.0.0.1 -u nova -psecrete -e "show tables" | /bin/grep Tables'
+      )
+    end
+
     it 'insert and activate nbd module' do
       should contain_exec('insert_module_nbd').with('command' => '/bin/echo "nbd" > /etc/modules', 'unless' => '/bin/grep "nbd" /etc/modules')
       should contain_exec('/sbin/modprobe nbd').with('unless' => '/bin/grep -q "^nbd " "/proc/modules"')

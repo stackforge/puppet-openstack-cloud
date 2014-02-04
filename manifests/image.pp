@@ -126,6 +126,17 @@ class cloud::image(
   class { 'glance::cache::cleaner': }
   class { 'glance::cache::pruner': }
 
+  # Note(EmilienM):
+  # We check if DB tables are created, if not we populate Glance DB.
+  # It's a hack to fit with our setup where we run MySQL/Galera
+  # TODO(Gonéri)
+  # We have to do this only on the primary node of the galera cluster to avoid race condition
+  # https://github.com/enovance/puppet-cloud/issues/156
+  exec {'glance_db_sync':
+    command => '/usr/bin/glance-manage db_sync',
+    unless  => "/usr/bin/mysql glance -h ${glance_db_host} -u ${encoded_glance_user} -p${encoded_glance_password} -e \"show tables\" | /bin/grep Tables"
+  }
+
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic
   @@haproxy::balancermember{"${::fqdn}-glance_api":
     listening_service => 'glance_api_cluster',

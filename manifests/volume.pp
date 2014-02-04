@@ -46,4 +46,15 @@ class cloud::volume(
 
   class { 'cinder::ceilometer': }
 
+  # Note(EmilienM):
+  # We check if DB tables are created, if not we populate Cinder DB.
+  # It's a hack to fit with our setup where we run MySQL/Galera
+  # TODO(Gonéri)
+  # We have to do this only on the primary node of the galera cluster to avoid race condition
+  # https://github.com/enovance/puppet-cloud/issues/156
+  exec {'cinder_db_sync':
+    command => '/usr/bin/cinder-manage db sync',
+    unless  => "/usr/bin/mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
+  }
+
 }

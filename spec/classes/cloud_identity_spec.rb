@@ -110,6 +110,13 @@ describe 'cloud::identity' do
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
     end
 
+    it 'checks if Keystone DB is populated' do
+      should contain_exec('keystone_db_sync').with(
+        :command => '/usr/bin/keystone-manage db_sync',
+        :unless  => '/usr/bin/mysql keystone -h 10.0.0.1 -u keystone -psecrete -e "show tables" | /bin/grep Tables'
+      )
+    end
+
     it 'configure keystone admin role' do
       should contain_class('keystone::roles::admin').with(
         :email        => 'admin@openstack.org',
