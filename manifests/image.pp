@@ -131,7 +131,7 @@ class cloud::image(
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'glance_db_sync':
     command => '/usr/bin/glance-manage db_sync',
-    unless  => '/usr/bin/mysql glance -e "show tables" | /bin/grep Tables'
+    unless  => "/usr/bin/mysql glance -h ${glance_db_host} -u ${encoded_glance_user} -p${encoded_glance_password} -e \"show tables\" | /bin/grep Tables"
   }
 
   # TODO(EmilienM) For later, I'll also add internal network support in HAproxy for all OpenStack API, to optimize North / South network traffic

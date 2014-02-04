@@ -95,9 +95,8 @@ class cloud::compute(
   # We check if DB tables are created, if not we populate Nova DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'nova_db_sync':
-    command => 'nova-manage db sync',
-    path    => '/usr/bin',
-    unless  => "mysql nova -h ${nova_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    command => '/usr/bin/nova-manage db sync',
+    unless  => "/usr/bin/mysql nova -h ${nova_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
   }
 
 }

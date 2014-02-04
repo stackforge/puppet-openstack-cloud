@@ -529,9 +529,8 @@ class cloud::identity (
   # We check if DB tables are created, if not we populate Keystone DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'keystone_db_sync':
-    command => 'keystone-manage db_sync',
-    path    => '/usr/bin',
-    unless  => "mysql keystone -h ${keystone_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    command => '/usr/bin/keystone-manage db_sync',
+    unless  => "/usr/bin/mysql keystone -h ${keystone_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
   }
 
   @@haproxy::balancermember{"${::fqdn}-keystone_api":

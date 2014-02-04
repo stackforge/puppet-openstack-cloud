@@ -50,9 +50,8 @@ class cloud::volume(
   # We check if DB tables are created, if not we populate Cinder DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
   exec {'cinder_db_sync':
-    command => 'cinder-manage db sync',
-    path    => '/usr/bin',
-    unless  => "mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
+    command => '/usr/bin/cinder-manage db sync',
+    unless  => "/usr/bin/mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | grep Tables"
   }
 
 }
