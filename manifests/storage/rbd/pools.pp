@@ -61,9 +61,10 @@ class cloud::storage::rbd::pools(
       }
 
       if $::ceph_keyring_glance {
-        ceph::key { 'glance':
+        # NOTE(fc): Puppet needs to run a second time to enter this
+        ceph::key { $glance_user:
           secret       => $::ceph_keyring_glance,
-          keyring_path => '/etc/ceph/ceph.client.glance.keyring'
+          keyring_path => "/etc/ceph/ceph.client.${glance_user}.keyring"
         } ->
         file { '/etc/ceph/ceph.client.glance.keyring':
           owner => 'glance',
@@ -73,9 +74,10 @@ class cloud::storage::rbd::pools(
       }
 
       if $::ceph_keyring_cinder {
-        ceph::key { 'cinder':
+        # NOTE(fc): Puppet needs to run a second time to enter this
+        ceph::key { $cinder_user:
           secret       => $::ceph_keyring_cinder,
-          keyring_path => '/etc/ceph/ceph.client.cinder.keyring'
+          keyring_path => "/etc/ceph/ceph.client.${cinder_user}.keyring"
         } ->
         file { '/etc/ceph/ceph.client.cinder.keyring':
           owner => 'cinder',
