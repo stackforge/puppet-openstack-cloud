@@ -47,7 +47,7 @@ class cloud::spof(
   Package['corosync'] ->
   cs_property {
     'no-quorum-policy':         value => 'ignore';
-    'stonith-enabled':          value => false;
+    'stonith-enabled':          value => 'false';
     'pe-warn-series-max':       value => 1000;
     'pe-input-series-max':      value => 1000;
     'cluster-recheck-interval': value => '5min';
