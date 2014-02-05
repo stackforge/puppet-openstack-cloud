@@ -54,6 +54,36 @@ class cloud::storage::rbd::pools(
         require => Exec['create_cinder_volumes_pool'];
       }
 
+      concat::fragment { 'ceph-clients-os':
+        target  => '/etc/ceph/ceph.conf',
+        order   => '95',
+        content => template('cloud/storage/ceph/ceph-client.conf.erb')
+      }
+
+      if $::ceph_keyring_glance {
+        ceph::key { 'glance':
+          secret       => $::ceph_keyring_glance,
+          keyring_path => '/etc/ceph/ceph.client.glance.keyring'
+        } ->
+        file { '/etc/ceph/ceph.client.glance.keyring':
+          owner => 'glance',
+          group => 'glance',
+          mode  => '0400'
+        }
+      }
+
+      if $::ceph_keyring_cinder {
+        ceph::key { 'cinder':
+          secret       => $::ceph_keyring_cinder,
+          keyring_path => '/etc/ceph/ceph.client.cinder.keyring'
+        } ->
+        file { '/etc/ceph/ceph.client.cinder.keyring':
+          owner => 'cinder',
+          group => 'cinder',
+          mode  => '0400'
+        }
+      }
+
 #exec { "create cinder backup pool":
 #TODO: point PG num with a cluster variable + keyring
 #  command => "/usr/bin/ceph osd pool create ${::cinder_backup_pool} 128 128",
