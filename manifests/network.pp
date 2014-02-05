@@ -41,11 +41,11 @@
 #
 # [*provider_vlan_ranges*]
 #   (optionnal) VLAN range for provider networks
-#   Default value to ['physnet1:1000:2999']
+#   Default value in params
 #
 # [*provider_bridge_mappings*]
 #   (optionnal) Bridge mapping for provider networks
-#   Default value to ['physnet1:br-eth1']
+#   Default value in params
 #
 
 class cloud::network(
@@ -55,8 +55,8 @@ class cloud::network(
   $rabbit_password          = $os_params::rabbit_password,
   $tunnel_eth               = $os_params::tunnel_eth,
   $api_eth                  = $os_params::api_eth,
-  $provider_vlan_ranges     = ['physnet1:1000:2999'],
-  $provider_bridge_mappings = ['physnet1:br-eth1']
+  $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
+  $provider_bridge_mappings = $os_params::provider_bridge_mappings
 ) {
 
   class { 'neutron':
