@@ -40,19 +40,18 @@ class cloud::spof(
     multicast_address => $multicast_address
   }
 
-  cs_property {
-    'no-quorum-policy':         value => 'ignore';
-    'stonith-enabled':          value => false;
-    'pe-warn-series-max':       value => 1000;
-    'pe-input-series-max':      value => 1000;
-    'cluster-recheck-interval': value => '5min';
-  }
-
   corosync::service { 'pacemaker':
     version => '0',
   }
 
   Package['corosync'] ->
+  cs_property {
+    'no-quorum-policy':         value => 'ignore';
+    'stonith-enabled':          value => 'false';
+    'pe-warn-series-max':       value => 1000;
+    'pe-input-series-max':      value => 1000;
+    'cluster-recheck-interval': value => '5min';
+  } ->
   file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
     source  => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
     mode    => '0755',
@@ -74,9 +73,7 @@ class cloud::spof(
         on-fail  => 'restart'
       }
     }
-  }
-
-  Package['corosync'] ->
+  } ->
   file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
     source  => 'puppet:///modules/cloud/heartbeat/neutron-metadata-agent',
     mode    => '0755',
@@ -98,9 +95,7 @@ class cloud::spof(
         on-fail   => 'restart'
       }
     }
-  }
-
-  Package['corosync'] ->
+  } ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
     source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
     mode    => '0755',
