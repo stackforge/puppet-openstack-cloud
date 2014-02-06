@@ -18,15 +18,16 @@
 # Install a nosql server (MongoDB)
 #
 class cloud::database::nosql(
-  $bind_ip = undef,
+  $bind_ip = $os_params::api_eth,
 ) {
+
 
   # use mongo's own repo instead of the distro's
   class { 'mongodb::globals':
     manage_package_repo => true
   }->
   class { 'mongodb':
-    bind_ip => $bind_ip,
+    bind_ip => [$bind_ip],
   }
 
 }
