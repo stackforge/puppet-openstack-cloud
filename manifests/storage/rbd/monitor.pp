@@ -16,7 +16,7 @@
 
 class cloud::storage::rbd::monitor (
   $id             = $::uniqueid,
-  $mon_addr       = $::ipaddress_eth0,
+  $mon_addr       = $os_params::api_eth,
   $monitor_secret = $os_params::ceph_mon_secret
 ) {
 
