@@ -22,6 +22,10 @@ describe 'cloud::cache' do
 
   shared_examples_for 'cache server' do
 
+    let :params do
+      { :listen_ip => '10.0.0.1' }
+    end
+
     it 'configure memcached with some params' do
       should contain_class('memcached').with(
           :listen_ip           => '10.0.0.1',
@@ -34,8 +38,7 @@ describe 'cloud::cache' do
     let :facts do
       { :osfamily               => 'Debian',
         :memorysize             => '1000 MB',
-        :processorcount         => '1',
-        :ipaddress_eth0         => '10.0.0.1' }
+        :processorcount         => '1' }
     end
 
     it_configures 'cache server'
@@ -45,8 +48,7 @@ describe 'cloud::cache' do
     let :facts do
       { :osfamily => 'RedHat',
         :memorysize             => '1000 MB',
-        :processorcount         => '1',
-        :ipaddress_eth0         => '10.0.0.1' }
+        :processorcount         => '1' }
     end
 
     it_configures 'cache server'
