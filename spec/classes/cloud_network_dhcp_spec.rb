@@ -24,12 +24,14 @@ describe 'cloud::network::dhcp' do
 
     let :pre_condition do
       "class { 'cloud::network':
-        rabbit_hosts            => ['10.0.0.1'],
-        rabbit_password         => 'secrete',
-        tunnel_eth              => '10.0.1.1',
-        api_eth                 => '10.0.0.1',
-        verbose                 => true,
-        debug                   => true }"
+        rabbit_hosts             => ['10.0.0.1'],
+        rabbit_password          => 'secrete',
+        tunnel_eth               => '10.0.1.1',
+        api_eth                  => '10.0.0.1',
+        provider_vlan_ranges     => ['physnet1:1000:2999'],
+        provider_bridge_mappings => ['physnet1:br-eth1'],
+        verbose                  => true,
+        debug                    => true }"
     end
 
     let :params do
@@ -53,13 +55,16 @@ describe 'cloud::network::dhcp' do
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
+          :tunnel_types     => ['gre'],
+          :bridge_mappings  => ['physnet1:br-eth1'],
           :local_ip         => '10.0.1.1'
       )
       should contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre'],
+          :type_drivers           => ['gre','vlan'],
           :tenant_network_types   => ['gre'],
-          :mechanism_drivers      => ['openvswitch'],
+          :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
+          :network_vlan_ranges    => ['physnet1:1000:2999'],
           :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
     end
