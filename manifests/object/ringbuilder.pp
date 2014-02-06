@@ -17,7 +17,7 @@
 #
 
 class cloud::object::ringbuilder(
-    $rsyncd_ipaddress            = os_params::api_eth,
+    $rsyncd_ipaddress            = $os_params::api_eth,
     $replicas                    = $os_params::replicas,
     $swift_rsync_max_connections = $os_params::swift_rsync_max_connections,
 ) {
