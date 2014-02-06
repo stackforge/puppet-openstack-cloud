@@ -21,13 +21,15 @@ class cloud::database::nosql(
   $bind_ip = $os_params::api_eth,
 ) {
 
+  # bind_ip should be an array
+  $bind_ip_real = any2array($bind_ip)
 
   # use mongo's own repo instead of the distro's
   class { 'mongodb::globals':
     manage_package_repo => true
   }->
   class { 'mongodb':
-    bind_ip => [$bind_ip],
+    bind_ip => $bind_ip_real,
   }
 
 }
