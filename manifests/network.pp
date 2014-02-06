@@ -39,14 +39,24 @@
 #   (optional) Which interface we connect to create overlay tunnels.
 #   Default value in params
 #
+# [*provider_vlan_ranges*]
+#   (optionnal) VLAN range for provider networks
+#   Default value in params
+#
+# [*provider_bridge_mappings*]
+#   (optionnal) Bridge mapping for provider networks
+#   Default value in params
+#
 
 class cloud::network(
-  $verbose             = $os_params::verbose,
-  $debug               = $os_params::debug,
-  $rabbit_hosts        = $os_params::rabbit_hosts,
-  $rabbit_password     = $os_params::rabbit_password,
-  $tunnel_eth          = $os_params::tunnel_eth,
-  $api_eth             = $os_params::api_eth
+  $verbose                  = $os_params::verbose,
+  $debug                    = $os_params::debug,
+  $rabbit_hosts             = $os_params::rabbit_hosts,
+  $rabbit_password          = $os_params::rabbit_password,
+  $tunnel_eth               = $os_params::tunnel_eth,
+  $api_eth                  = $os_params::api_eth,
+  $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
+  $provider_bridge_mappings = $os_params::provider_bridge_mappings
 ) {
 
   class { 'neutron':
@@ -65,15 +75,18 @@ class cloud::network(
 
   class { 'neutron::agents::ovs':
     enable_tunneling => true,
+    tunnel_types     => ['gre'],
+    bridge_mappings  => $provider_bridge_mappings,
     local_ip         => $tunnel_eth
   }
 
   class { 'neutron::plugins::ml2':
-    type_drivers            => ['gre'],
-    tenant_network_types    => ['gre'],
-    mechanism_drivers       => ['openvswitch'],
-    tunnel_id_ranges        => ['1:10000'],
-    enable_security_group   => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+    type_drivers          => ['gre','vlan'],
+    tenant_network_types  => ['gre'],
+    network_vlan_ranges   => $provider_vlan_ranges,
+    tunnel_id_ranges      => ['1:10000'],
+    mechanism_drivers     => ['openvswitch','l2population'],
+    enable_security_group => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   }
 
 }
