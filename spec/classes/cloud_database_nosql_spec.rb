@@ -20,29 +20,59 @@ require 'spec_helper'
 
 describe 'cloud::database::nosql' do
 
+  let :os_params do {
+    :nojournal => false
+    }
+  end
+
+  let :facts do {
+    :osfamily => 'Debian'
+    }
+  end
+
   shared_examples_for 'openstack database nosql' do
 
     it 'configure mongodb server' do
       should contain_class('mongodb::globals').with( :manage_package_repo => true)
+      should contain_class('mongodb::globals').with_before('Class[Mongodb]')
       should contain_class('mongodb')
     end
 
   end
 
   context 'on Debian platforms' do
-    let :facts do
-      { :osfamily => 'Debian' }
+    # default osfamily
+    it_configures 'openstack database nosql'
+  end
+
+  context 'on RedHat platforms' do
+    before do
+      facts.merge!( :osfamily => 'RedHat' )
     end
 
     it_configures 'openstack database nosql'
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      { :osfamily => 'RedHat' }
+  context 'with bind_ip' do
+    let :params do {
+      :bind_ip => [ '1.2.3.4' ]
+    }
     end
 
-    it_configures 'openstack database nosql'
+    it { should contain_class('mongodb').with(
+        :bind_ip => '1.2.3.4'
+    )}
+  end
+
+  context 'with nojournal' do
+    let :params do {
+      :nojournal => true
+    }
+    end
+
+    it { should contain_class('mongodb').with(
+        :nojournal => true
+    )}
   end
 
 end
