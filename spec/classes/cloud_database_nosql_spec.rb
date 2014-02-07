@@ -22,9 +22,15 @@ describe 'cloud::database::nosql' do
 
   shared_examples_for 'openstack database nosql' do
 
+    let :params do
+      { :bind_ip => '10.0.0.1' }
+    end
+
     it 'configure mongodb server' do
       should contain_class('mongodb::globals').with( :manage_package_repo => true)
-      should contain_class('mongodb')
+      should contain_class('mongodb').with(
+        :bind_ip => ['10.0.0.1']
+      )
     end
 
   end
@@ -46,3 +52,4 @@ describe 'cloud::database::nosql' do
   end
 
 end
+
