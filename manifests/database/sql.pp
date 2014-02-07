@@ -52,7 +52,7 @@ class cloud::database::sql (
     $mysql_sys_maint_password       = $os_params::mysql_sys_maint_password,
     $galera_clustercheck_dbuser     = $os_params::galera_clustercheck_dbuser,
     $galera_clustercheck_dbpassword = $os_params::galera_clustercheck_dbuser,
-    $galera_clustercheck_ipaddress  = $os_params::internal_netif_ip,,
+    $galera_clustercheck_ipaddress  = $os_params::internal_netif_ip
 ) {
 
   include 'xinetd'
