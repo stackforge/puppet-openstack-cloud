@@ -25,7 +25,7 @@
 #
 
 class cloud::cache (
-  $listen_ip = $os_params::api_eth,
+  $listen_ip = $os_params::internal_netif_ip,
 ){
 
   class { 'memcached':
