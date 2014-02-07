@@ -70,8 +70,7 @@ class cloud::dashboard(
   $debug                     = $os_params::debug
 ) {
 
-  $supported = [ 'RedHat', 'Debian' ]
-  if grep($supported, $::osfamily) != [$::osfamily] {
+  if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
     fail("module puppet-horizon doesn't support ${::osfamily}")
   }
 
