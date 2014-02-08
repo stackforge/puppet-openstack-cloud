@@ -18,7 +18,11 @@
 # Install a nosql server (MongoDB)
 #
 class cloud::database::nosql(
-  $bind_ip = $os_params::api_eth,
+  # $bind_ip   = $os_params::api_eth,
+  # disabled for the moment
+  # See: https://github.com/enovance/puppet-cloud/issues/186
+  $bind_ip   = undef,
+  $nojournal = false,
 ) {
 
   # bind_ip should be an array
