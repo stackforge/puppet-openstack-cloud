@@ -20,6 +20,10 @@
 
 class cloud {
 
+  if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
+    fail("module puppet-cloud only support ${::osfamily}, only Red Hat or Debian")
+  }
+
 # motd
   file
   {
