@@ -70,11 +70,6 @@ class cloud::dashboard(
   $debug                     = $os_params::debug
 ) {
 
-  $supported = [ 'RedHat', 'Debian' ]
-  if grep($supported, $::osfamily) != [$::osfamily] {
-    fail("module puppet-horizon doesn't support ${::osfamily}")
-  }
-
   # We build the param needed for horizon class
   $keystone_url = "${keystone_proto}://${keystone_host}:${keystone_port}/v2.0"
 

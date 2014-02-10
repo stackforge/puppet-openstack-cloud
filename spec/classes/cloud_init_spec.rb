@@ -78,4 +78,16 @@ describe 'cloud' do
 #    it_configures 'private cloud node'
   end
 
+  context 'on other platforms' do
+    let :facts do
+      { :osfamily => 'Solaris' }
+    end
+
+    it 'should fail' do
+      expect { subject }.to  raise_error(/module puppet-cloud only support/)
+    end
+  end
+
+
+
 end
