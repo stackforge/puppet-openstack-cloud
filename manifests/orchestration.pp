@@ -72,7 +72,7 @@
 #   Default value in params
 #
 # [*rabbit_password*]
-#   (optional) Password to connect to nova queues.
+#   (optional) Password to connect to heat queues.
 #   Default value in params
 #
 # [*verbose*]

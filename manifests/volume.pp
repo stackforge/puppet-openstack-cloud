@@ -37,7 +37,7 @@
 #   Default value in params
 #
 # [*rabbit_password*]
-#   (optional) Password to connect to nova queues.
+#   (optional) Password to connect to cinder queues.
 #   Default value in params
 #
 # [*ks_keystone_internal_host*]
@@ -54,10 +54,6 @@
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
-#
-# [*tunnel_eth*]
-#   (optional) Which interface we connect to create overlay tunnels.
 #   Default value in params
 #
 # [*use_syslog*]
