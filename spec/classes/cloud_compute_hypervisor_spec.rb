@@ -32,7 +32,9 @@ describe 'cloud::compute::hypervisor' do
         ks_glance_internal_host => '10.0.0.1',
         glance_api_port         => '9292',
         verbose                 => true,
-        debug                   => true }"
+        debug                   => true,
+        use_syslog              => true,
+        log_facility            => 'LOG_LOCAL0' }"
     end
 
     let :params do
@@ -49,6 +51,8 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('nova').with(
           :verbose                 => true,
           :debug                   => true,
+          :use_syslog              => true,
+          :log_facility            => 'LOG_LOCAL0',
           :rabbit_userid           => 'nova',
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',

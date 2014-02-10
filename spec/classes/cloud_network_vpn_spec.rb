@@ -15,7 +15,6 @@
 #
 # Unit tests for cloud::network::vpnaas class
 #
-
 require 'spec_helper'
 
 describe 'cloud::network::vpn' do
@@ -31,7 +30,9 @@ describe 'cloud::network::vpn' do
         provider_vlan_ranges     => ['physnet1:1000:2999'],
         provider_bridge_mappings => ['physnet1:br-eth1'],
         verbose                  => true,
-        debug                    => true }"
+        debug                    => true,
+        use_syslog               => true,
+        log_facility             => 'LOG_LOCAL0' }"
     end
 
     it 'configure neutron common' do
@@ -40,6 +41,8 @@ describe 'cloud::network::vpn' do
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
           :debug                   => true,
+          :log_facility            => 'LOG_LOCAL0',
+          :use_syslog              => true,
           :rabbit_user             => 'neutron',
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',

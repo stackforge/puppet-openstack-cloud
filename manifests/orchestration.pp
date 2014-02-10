@@ -13,9 +13,84 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::orchestration
+#
 # Orchestration common node
 #
-
+# === Parameters:
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP port to connect to Keystone API from internal network
+#   Default value in params
+#
+# [*ks_keystone_admin_port*]
+#   (optional) TCP port to connect to Keystone API from admin network
+#   Default value in params
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_keystone_admin_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_heat_public_host*]
+#   (optional) Public Hostname or IP to connect to Heat API
+#   Default value in params
+#
+# [*ks_heat_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Default value in params
+#
+# [*ks_heat_password*]
+#   (optional) Password used by Heat to connect to Keystone API
+#   Default value in params
+#
+# [*heat_db_host*]
+#   (optional) Hostname or IP address to connect to heat database
+#   Default value in params
+#
+# [*heat_db_user*]
+#   (optional) Username to connect to heat database
+#   Default value in params
+#
+# [*heat_db_password*]
+#   (optional) Password to connect to heat database
+#   Default value in params
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to heat queues.
+#   Default value in params
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Default value in params
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Default value in params
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::orchestration(
   $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
   $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
@@ -33,6 +108,8 @@ class cloud::orchestration(
   $rabbit_password            = $os_params::rabbit_password,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
+  $use_syslog                 = $os_params::use_syslog,
+  $log_facility               = $os_params::log_facility
 ) {
 
   $encoded_user     = uriescape($heat_db_user)
@@ -50,6 +127,8 @@ class cloud::orchestration(
     rabbit_userid     => 'heat',
     verbose           => $verbose,
     debug             => $debug,
+    log_facility      => $log_facility,
+    use_syslog        => $use_syslog,
   }
 
   # Note(EmilienM):

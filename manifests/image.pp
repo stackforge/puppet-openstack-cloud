@@ -59,7 +59,14 @@
 #   (optional) Which interface we bind the Glance API server.
 #   Default value in params
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::image(
   $glance_db_host                   = $os_params::glance_db_host,
   $glance_db_user                   = $os_params::glance_db_user,
@@ -76,7 +83,9 @@ class cloud::image(
   $rbd_store_pool                   = $os_params::glance_rbd_pool,
   $rbd_store_user                   = $os_params::glance_rbd_user,
   $verbose                          = $os_params::verbose,
-  $debug                            = $os_params::debug
+  $debug                            = $os_params::debug,
+  $log_facility                     = $os_params::log_facility,
+  $use_syslog                       = $os_params::use_syslog
 ) {
 
   $encoded_glance_user     = uriescape($glance_db_user)
@@ -92,10 +101,10 @@ class cloud::image(
     keystone_password => $ks_glance_password,
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
-    log_facility      => 'LOG_LOCAL0',
+    log_facility      => $log_facility,
     bind_host         => $api_eth,
     bind_port         => $ks_glance_api_internal_port,
-    use_syslog        => true
+    use_syslog        => $use_syslog,
   }
 
   class { 'glance::registry':
@@ -106,10 +115,10 @@ class cloud::image(
     keystone_password => $ks_glance_password,
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
-    log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
     bind_port         => $ks_glance_registry_internal_port,
-    use_syslog        => true
+    use_syslog        => $use_syslog,
+    log_facility      => $log_facility,
   }
 
   class { 'glance::notify::rabbitmq':
