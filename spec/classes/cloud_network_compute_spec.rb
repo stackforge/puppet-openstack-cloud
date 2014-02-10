@@ -37,6 +37,7 @@ describe 'cloud::network::compute' do
     let :params do
       { :neutron_protocol         => 'http',
         :neutron_endpoint         => '10.0.0.1',
+        :neutron_region_name      => 'MyRegion',
         :neutron_password         => 'secrete' }
     end
 
@@ -75,6 +76,7 @@ describe 'cloud::network::compute' do
       should contain_class('nova::network::neutron').with(
           :neutron_admin_password => 'secrete',
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
+          :neutron_region_name    => 'MyRegion',
           :neutron_url            => 'http://10.0.0.1:9696'
         )
     end

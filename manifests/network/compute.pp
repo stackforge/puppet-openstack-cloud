@@ -17,9 +17,10 @@
 #
 
 class cloud::network::compute(
-  $neutron_endpoint = $os_params::ks_neutron_admin_host,
-  $neutron_protocol = $os_params::ks_neutron_public_proto,
-  $neutron_password = $os_params::ks_neutron_password,
+  $neutron_endpoint    = $os_params::ks_neutron_admin_host,
+  $neutron_protocol    = $os_params::ks_neutron_public_proto,
+  $neutron_password    = $os_params::ks_neutron_password,
+  $neutron_region_name = $os_params::region
 ) {
 
   include 'cloud::network'
@@ -27,7 +28,8 @@ class cloud::network::compute(
   class { 'nova::network::neutron':
       neutron_admin_password => $neutron_password,
       neutron_admin_auth_url => "${neutron_protocol}://${neutron_endpoint}:35357/v2.0",
-      neutron_url            => "${neutron_protocol}://${neutron_endpoint}:9696"
+      neutron_url            => "${neutron_protocol}://${neutron_endpoint}:9696",
+      neutron_region_name    => $neutron_region_name
   }
 
 }
