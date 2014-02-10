@@ -38,13 +38,17 @@ class cloud::database::nosql(
   # bind_ip should be an array
   $bind_ip_real = any2array($bind_ip)
 
-  # use mongo's own repo instead of the distro's
+  $manage_mongodb_package_repo = $::osfamily ? {
+    'RedHat' => false,
+    default  => true
+  }
+
   class { 'mongodb::globals':
-    manage_package_repo => true
+    manage_package_repo => $manage_mongodb_package_repo
   }->
   class { 'mongodb':
     bind_ip   => $bind_ip_real,
-    nojournal => $nojournal
+    nojournal => $nojournal,
   }
 
 }
