@@ -15,7 +15,6 @@
 #
 # Unit tests for cloud::image class
 #
-
 require 'spec_helper'
 
 describe 'cloud::image' do
@@ -38,6 +37,8 @@ describe 'cloud::image' do
         :rbd_store_pool                   => 'images',
         :debug                            => true,
         :verbose                          => true,
+        :use_syslog                       => true,
+        :log_facility                     => 'LOG_LOCAL0',
         :api_eth                          => '10.0.0.1' }
     end
 

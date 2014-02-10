@@ -39,6 +39,8 @@ describe 'cloud::orchestration::engine' do
         heat_db_user               => 'heat',
         heat_db_password           => 'secrete',
         verbose                    => true,
+        log_facility               => 'LOG_LOCAL0',
+        use_syslog                 => true,
         debug                      => true }"
     end
 
@@ -56,6 +58,8 @@ describe 'cloud::orchestration::engine' do
       should contain_class('heat').with(
           :verbose                 => true,
           :debug                   => true,
+          :log_facility            => 'LOG_LOCAL0',
+          :use_syslog              => true,
           :rabbit_userid           => 'heat',
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',

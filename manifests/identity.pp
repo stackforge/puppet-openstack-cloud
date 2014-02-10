@@ -315,7 +315,14 @@
 #   (optional) Set log output to debug output
 #   Default value in params
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::identity (
   $identity_roles_addons        = $os_params::identity_roles_addons,
   $keystone_db_host             = $os_params::keystone_db_host,
@@ -382,7 +389,9 @@ class cloud::identity (
   $api_eth                      = $os_params::api_eth,
   $region                       = $os_params::region,
   $verbose                      = $os_params::verbose,
-  $debug                        = $os_params::debug
+  $debug                        = $os_params::debug,
+  $log_facility                 = $os_params::log_facility,
+  $use_syslog                   = $os_params::use_syslog
 ){
 
   $encoded_user     = uriescape($keystone_db_user)
@@ -395,12 +404,12 @@ class cloud::identity (
     compute_port     => $ks_nova_public_port,
     debug            => $debug,
     idle_timeout     => 60,
-    log_facility     => 'LOG_LOCAL0',
+    log_facility     => $log_facility,
     memcache_servers => $memcache_servers,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
     token_driver     => 'keystone.token.backends.memcache.Token',
     token_provider   => 'keystone.token.providers.uuid.Provider',
-    use_syslog       => true,
+    use_syslog       => $use_syslog,
     verbose          => $verbose,
     bind_host        => $api_eth,
     public_port      => $ks_keystone_public_port,

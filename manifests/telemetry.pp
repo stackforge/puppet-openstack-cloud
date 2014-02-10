@@ -13,9 +13,57 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Used by Controller, Storage, Network and Compute nodes
+# == Class: cloud::telemetry
 #
-
+# Common telemetry class, used by Controller, Storage,
+# Network and Compute nodes
+#
+# === Parameters:
+#
+# [*ceilometer_secret*]
+#   Secret key for signing messages.
+#   Default value in params
+#
+# [*rabbit_hosts*]
+#   (optional) List of RabbitMQ servers. Should be an array.
+#   Default value in params
+#
+# [*rabbit_password*]
+#   (optional) Password to connect to nova queues.
+#   Default value in params
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_keystone_public_host*]
+#   (optional) Public Hostname or IP to connect to Keystone API
+#   Default value in params
+#
+# [*ks_ceilometer_password*]
+#   (optional) Password used by Ceilometer to connect to Keystone API
+#   Default value in params
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Default value in params
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Default value in params
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults value in params
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults value in params
+#
 class cloud::telemetry(
   $ceilometer_secret          = $os_params::ceilometer_secret,
   $rabbit_hosts               = $os_params::rabbit_hosts,
@@ -26,6 +74,8 @@ class cloud::telemetry(
   $ks_ceilometer_password     = $os_params::ks_ceilometer_password,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
+  $log_facility               = $os_params::log_facility,
+  $use_syslog                 = $os_params::use_syslog,
 ){
 
   class { 'ceilometer':
@@ -35,8 +85,8 @@ class cloud::telemetry(
     rabbit_userid   => 'ceilometer',
     verbose         => $verbose,
     debug           => $debug,
-    use_syslog      => true,
-    log_facility    => 'LOG_LOCAL0'
+    use_syslog      => $use_syslog,
+    log_facility    => $log_facility
   }
 
   class { 'ceilometer::agent::auth':
