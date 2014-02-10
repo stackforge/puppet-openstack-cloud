@@ -105,7 +105,18 @@ describe 'cloud::compute::hypervisor' do
     it 'configure nova compute with neutron' do
       should contain_class('nova::compute::neutron')
     end
-  end
+
+    it 'configure nova-conpute to support RBD backend' do
+      should contain_nova_config('DEFAULT/libvirt_images_type').with('value' => 'rbd')
+      should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'nova')
+      should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+      should contain_nova_config('DEFAULT/rbd_user').with('value' => 'nova')
+      should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
+      should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
+      should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
+      should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+    end
+ end
 
   context 'on Debian platforms' do
     let :facts do
