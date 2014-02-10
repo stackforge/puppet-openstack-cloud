@@ -71,16 +71,4 @@ describe 'cloud::dashboard' do
     it_configures 'openstack dashboard'
   end
 
-  context 'on other platforms' do
-    let :facts do
-      { :osfamily => 'Solaris',
-        :operatingsystemrelease => '10',
-        :concat_basedir         => '/var/lib/puppet/concat' }
-    end
-
-    it 'should fail' do
-      expect { subject }.to  raise_error(/module puppet-horizon doesn't support/)
-    end
-  end
-
 end

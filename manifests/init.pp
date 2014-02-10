@@ -20,6 +20,10 @@
 
 class cloud {
 
+  if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
+    fail("module puppet-horizon doesn't support ${::osfamily}")
+  }
+
 # motd
   file
   {
