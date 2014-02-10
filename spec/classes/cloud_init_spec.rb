@@ -84,7 +84,7 @@ describe 'cloud' do
     end
 
     it 'should fail' do
-      expect { subject }.to  raise_error(/module puppet-horizon doesn't support/)
+      expect { subject }.to  raise_error(/module puppet-cloud only support/)
     end
   end
 
