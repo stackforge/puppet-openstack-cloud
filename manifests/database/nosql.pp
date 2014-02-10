@@ -17,11 +17,21 @@
 #
 # Install a nosql server (MongoDB)
 #
+# === Parameters:
+#
+# [*bind_ip*]
+#   (optional) IP address on which mongod instance should listen
+#   Defaults in params
+#
+# [*nojournal*]
+#   (optional) Disable mongodb internal cache. This is not recommended for
+#   production but results in a much faster boot process.
+#   http://docs.mongodb.org/manual/reference/configuration-options/#nojournal
+#   Defaults to false
+#
+
 class cloud::database::nosql(
-  # $bind_ip   = $os_params::api_eth,
-  # disabled for the moment
-  # See: https://github.com/enovance/puppet-cloud/issues/186
-  $bind_ip   = undef,
+  $bind_ip   = $os_params::internal_netif_ip,
   $nojournal = false,
 ) {
 
@@ -33,7 +43,8 @@ class cloud::database::nosql(
     manage_package_repo => true
   }->
   class { 'mongodb':
-    bind_ip => $bind_ip_real,
+    bind_ip   => $bind_ip_real,
+    nojournal => $nojournal
   }
 
 }
