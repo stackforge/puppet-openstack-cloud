@@ -83,7 +83,7 @@ class cloud::image(
   $rbd_store_pool                   = $os_params::glance_rbd_pool,
   $rbd_store_user                   = $os_params::glance_rbd_user,
   $verbose                          = $os_params::verbose,
-  $debug                            = $os_params::debug
+  $debug                            = $os_params::debug,
   $log_facility                     = $os_params::log_facility,
   $use_syslog                       = $os_params::use_syslog
 ) {
@@ -103,9 +103,8 @@ class cloud::image(
     keystone_user     => 'glance',
     log_facility      => $log_facility,
     bind_host         => $api_eth,
-<<<<<<< HEAD
     bind_port         => $ks_glance_api_internal_port,
-    use_syslog        => true
+    use_syslog        => $use_syslog,
   }
 
   class { 'glance::registry':
@@ -116,15 +115,10 @@ class cloud::image(
     keystone_password => $ks_glance_password,
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
-    log_facility      => 'LOG_LOCAL0',
     bind_host         => $api_eth,
     bind_port         => $ks_glance_registry_internal_port,
-    use_syslog        => true
-||||||| merged common ancestors
-    use_syslog        => true
-=======
     use_syslog        => $use_syslog,
->>>>>>> [image] Export syslog mgmt and facility through params
+    log_facility      => $log_facility,
   }
 
   class { 'glance::notify::rabbitmq':
