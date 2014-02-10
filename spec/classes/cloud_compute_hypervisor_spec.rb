@@ -41,6 +41,8 @@ describe 'cloud::compute::hypervisor' do
       { :libvirt_type                         => 'kvm',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
+        :api_eth                              => '10.0.0.1',
+        :has_ceph                             => true,
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_internal_proto               => 'http',
@@ -115,6 +117,16 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
       should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+    end
+
+    context 'without RBD backend' do
+      before :each do
+        params.merge!( :has_ceph => false )
+      end
+
+      it 'should not configure nova-compute for RBD backend' do
+        should_not contain_nova_config('DEFAULT/rbd_user').with('value' => 'nova')
+      end
     end
  end
 
