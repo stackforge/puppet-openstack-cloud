@@ -39,6 +39,7 @@ describe 'cloud::network::metadata' do
       { :debug                                => true,
         :enabled                              => true,
         :neutron_metadata_proxy_shared_secret => 'secrete',
+        :auth_region                          => 'MyRegion',
         :ks_neutron_password                  => 'secrete',
         :ks_nova_internal_host                => '10.0.0.1',
         :ks_keystone_admin_proto              => 'http',
@@ -86,7 +87,8 @@ describe 'cloud::network::metadata' do
           :shared_secret => 'secrete',
           :metadata_ip   => '10.0.0.1',
           :auth_url      => 'http://10.0.0.1:35357/v2.0',
-          :auth_password => 'secrete'
+          :auth_password => 'secrete',
+          :auth_region   => 'MyRegion'
       )
     end
   end

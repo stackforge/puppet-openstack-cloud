@@ -25,7 +25,8 @@ class cloud::network::metadata(
   $ks_nova_internal_host                = $os_params::ks_nova_internal_host,
   $ks_keystone_admin_proto              = $os_params::ks_keystone_admin_proto,
   $ks_keystone_admin_port               = $os_params::ks_keystone_admin_port,
-  $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host
+  $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host,
+  $auth_region                          = $os_params::region
 ) {
 
   include 'cloud::network'
@@ -36,7 +37,8 @@ class cloud::network::metadata(
     debug         => $debug,
     metadata_ip   => $ks_nova_internal_host,
     auth_url      => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
-    auth_password => $ks_neutron_password
+    auth_password => $ks_neutron_password,
+    auth_region   => $auth_region
   }
 
 }
