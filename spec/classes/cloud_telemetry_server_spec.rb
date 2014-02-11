@@ -31,6 +31,7 @@ describe 'cloud::telemetry::server' do
         ks_keystone_internal_port  => '5000',
         ks_keystone_internal_proto => 'http',
         ks_ceilometer_password     => 'secrete',
+        region                     => 'MyRegion',
         log_facility               => 'LOG_LOCAL0',
         use_syslog                 => true,
         verbose                    => true,
@@ -59,7 +60,8 @@ describe 'cloud::telemetry::server' do
         )
       should contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
-          :auth_url      => 'http://10.0.0.1:5000/v2.0'
+          :auth_url      => 'http://10.0.0.1:5000/v2.0',
+          :auth_region   => 'MyRegion'
         )
     end
 

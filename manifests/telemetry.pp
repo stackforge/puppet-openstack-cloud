@@ -64,6 +64,11 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
+# [*region*]
+#   (optional) the keystone region of this node
+#   Defaults value in params
+#
+
 class cloud::telemetry(
   $ceilometer_secret          = $os_params::ceilometer_secret,
   $rabbit_hosts               = $os_params::rabbit_hosts,
@@ -72,6 +77,7 @@ class cloud::telemetry(
   $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
   $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
   $ks_ceilometer_password     = $os_params::ks_ceilometer_password,
+  $region                     = $os_params::region,
   $verbose                    = $os_params::verbose,
   $debug                      = $os_params::debug,
   $log_facility               = $os_params::log_facility,
@@ -92,6 +98,7 @@ class cloud::telemetry(
   class { 'ceilometer::agent::auth':
     auth_url      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
     auth_password => $ks_ceilometer_password,
+    auth_region   => $region
   }
 
 }
