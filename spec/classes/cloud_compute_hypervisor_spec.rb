@@ -115,6 +115,23 @@ describe 'cloud::compute::hypervisor' do
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
           :neutron_region_name    => 'MyRegion',
           :neutron_url            => 'http://10.0.0.1:9696'
+      )
+    end
+
+    it 'configure ceilometer common' do
+      should contain_class('ceilometer').with(
+          :verbose                 => true,
+          :debug                   => true,
+          :rabbit_userid           => 'ceilometer',
+          :rabbit_hosts            => ['10.0.0.1'],
+          :rabbit_password         => 'secrete',
+          :metering_secret         => 'secrete',
+          :use_syslog              => true,
+          :log_facility            => 'LOG_LOCAL0'
+        )
+      should contain_class('ceilometer::agent::auth').with(
+          :auth_password => 'secrete',
+          :auth_url      => 'http://10.0.0.1:5000/v2.0'
         )
     end
 
