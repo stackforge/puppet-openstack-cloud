@@ -89,11 +89,11 @@ class cloud::dashboard(
 
   if ($::osfamily == 'Debian') {
     # TODO(Gonéri): HACK to ensure Horizon can cache its files
-    $horizon_var_dir = [ "/var/lib/openstack-dashboard/static/js", "/var/lib/openstack-dashboard/static/css" ]
+    $horizon_var_dir = ['/var/lib/openstack-dashboard/static/js','/var/lib/openstack-dashboard/static/css']
     file {$horizon_var_dir:
+      ensure => directory,
       owner  => 'horizon',
       group  => 'horizon',
-      ensure => directory,
     }
   }
 
