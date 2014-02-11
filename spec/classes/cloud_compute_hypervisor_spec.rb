@@ -41,7 +41,6 @@ describe 'cloud::compute::hypervisor' do
       { :libvirt_type                         => 'kvm',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
-        :api_eth                              => '10.0.0.1',
         :has_ceph                             => true,
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
