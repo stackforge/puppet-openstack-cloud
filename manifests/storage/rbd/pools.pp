@@ -54,19 +54,13 @@ class cloud::storage::rbd::pools(
         require => Exec['create_cinder_volumes_pool'];
       }
 
-      concat::fragment { 'ceph-clients-os':
-        target  => '/etc/ceph/ceph.conf',
-        order   => '95',
-        content => template('cloud/storage/ceph/ceph-client.conf.erb')
-      }
-
       if $::ceph_keyring_glance {
         # NOTE(fc): Puppet needs to run a second time to enter this
         ceph::key { $glance_user:
           secret       => $::ceph_keyring_glance,
           keyring_path => "/etc/ceph/ceph.client.${glance_user}.keyring"
         } ->
-        file { '/etc/ceph/ceph.client.glance.keyring':
+        file { "/etc/ceph/ceph.client.${glance_user}.keyring":
           owner => 'glance',
           group => 'glance',
           mode  => '0400'
@@ -79,7 +73,7 @@ class cloud::storage::rbd::pools(
           secret       => $::ceph_keyring_cinder,
           keyring_path => "/etc/ceph/ceph.client.${cinder_user}.keyring"
         } ->
-        file { '/etc/ceph/ceph.client.cinder.keyring':
+        file { "/etc/ceph/ceph.client.${cinder_user}.keyring":
           owner => 'cinder',
           group => 'cinder',
           mode  => '0400'
@@ -91,22 +85,6 @@ class cloud::storage::rbd::pools(
         target  => '/etc/ceph/ceph.conf',
         order   => '95',
         content => template('cloud/storage/ceph/ceph-client.conf.erb')
-      }
-
-      if $::ceph_keyring_glance {
-        # NOTE(fc): Puppet needs to run a second time to enter this
-        @@ceph::key { $glance_user:
-          secret       => $::ceph_keyring_glance,
-          keyring_path => "/etc/ceph/ceph.client.${glance_user}.keyring"
-        }
-      }
-
-      if $::ceph_keyring_cinder {
-        # NOTE(fc): Puppet needs to run a second time to enter this
-        @@ceph::key { $cinder_user:
-          secret       => $::ceph_keyring_cinder,
-          keyring_path => "/etc/ceph/ceph.client.${cinder_user}.keyring"
-        }
       }
 
 #exec { "create cinder backup pool":
