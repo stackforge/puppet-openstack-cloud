@@ -16,6 +16,7 @@
 # HAproxy nodes
 #
 class cloud::loadbalancer(
+  $swift_api                        = $os_params::swift,
   $ceilometer_api                   = true,
   $cinder_api                       = true,
   $glance_api                       = true,
@@ -27,7 +28,6 @@ class cloud::loadbalancer(
   $nova_api                         = true,
   $ec2_api                          = true,
   $metadata_api                     = true,
-  $swift_api                        = true,
   $keystone_api_admin               = true,
   $keystone_api                     = true,
   $horizon                          = true,
