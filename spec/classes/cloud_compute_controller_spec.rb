@@ -97,6 +97,7 @@ describe 'cloud::compute::controller' do
           :auth_host                            => '10.0.0.1',
           :admin_password                       => 'secrete',
           :api_bind_address                     => '10.0.0.1',
+          :metadata_listen                      => '10.0.0.1',
           :neutron_metadata_proxy_shared_secret => 'secrete'
         )
     end
