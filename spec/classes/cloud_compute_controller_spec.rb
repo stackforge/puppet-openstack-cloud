@@ -75,6 +75,10 @@ describe 'cloud::compute::controller' do
       should contain_class('nova::scheduler').with(:enabled => true)
     end
 
+    it 'configure nova-spicehtml5proxy' do
+      should contain_class('nova::spicehtml5proxy').with(:enabled => true)
+    end
+
     it 'configure nova-cert' do
       should contain_class('nova::cert').with(:enabled => true)
     end
@@ -85,10 +89,6 @@ describe 'cloud::compute::controller' do
 
     it 'configure nova-conductor' do
       should contain_class('nova::conductor').with(:enabled => true)
-    end
-
-    it 'configure nova-vncproxy' do
-      should contain_class('nova::vncproxy').with(:enabled => true)
     end
 
     it 'configure nova-api' do

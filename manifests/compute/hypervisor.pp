@@ -27,14 +27,14 @@
 #
 
 class cloud::compute::hypervisor(
-  $api_eth                = $os_params::api_eth,
-  $libvirt_type           = $os_params::libvirt_type,
-  $ks_nova_internal_proto = $os_params::ks_nova_internal_proto,
-  $ks_nova_internal_host  = $os_params::ks_nova_internal_host,
-  $ks_nova_public_host    = $os_params::ks_nova_public_host,
-  $nova_ssh_private_key   = $os_params::nova_ssh_private_key,
-  $nova_ssh_public_key    = $os_params::nova_ssh_public_key,
-  $has_ceph               = false
+  $server_proxyclient_address = $os_params::internal_netif_ip,
+  $libvirt_type               = $os_params::libvirt_type,
+  $ks_nova_internal_proto     = $os_params::ks_nova_internal_proto,
+  $ks_nova_internal_host      = $os_params::ks_nova_internal_host,
+  $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
+  $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
+  $spice_port                 = $os_params::spice_port,
+  $has_ceph                   = false
 ) {
 
   include 'cloud::compute'
@@ -81,16 +81,25 @@ Host *
   }
 
   class { 'nova::compute':
-    enabled                       => true,
-    vncproxy_host                 => $ks_nova_public_host,
-    vncserver_proxyclient_address => $api_eth,
+    enabled     => true,
+    vnc_enabled => false,
     #TODO(EmilienM) Bug #1259545 currently WIP:
     virtio_nic                    => false,
     neutron_enabled               => true
   }
 
+  class { 'nova::compute::spice':
+    server_listen              => '0.0.0.0',
+    server_proxyclient_address => $server_proxyclient_address,
+    proxy_host                 => $ks_nova_internal_host,
+    proxy_protocol             => $ks_nova_internal_proto,
+    proxy_port                 => $spice_port
+
+  }
+
   class { 'nova::compute::libvirt':
     libvirt_type      => $libvirt_type,
+    # Needed to support migration but we still use Spice:
     vncserver_listen  => '0.0.0.0',
     migration_support => true,
   }
