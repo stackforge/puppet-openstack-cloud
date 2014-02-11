@@ -123,6 +123,17 @@ class cloud::image(
     rbd_store_pool => $rbd_store_pool
   }
 
+  Ceph::Key <<| title == $glance_user |>>
+  if defined(Ceph::Key[$glance_user]) {
+    file { '/etc/ceph/ceph.client.glance.keyring':
+      owner   => 'glance',
+      group   => 'glance',
+      mode    => '0400',
+      require => Ceph::Key[$glance_user]
+    }
+  }
+  Concat::Fragment <<| title == 'ceph-client-os' |>>
+
   class { 'glance::cache::cleaner': }
   class { 'glance::cache::pruner': }
 
