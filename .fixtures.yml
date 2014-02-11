@@ -29,6 +29,7 @@ fixtures:
       ref: 'origin/stable/havana'
     'apt': 'git://github.com/enovance/puppetlabs-apt.git'
     'apache': 'git://github.com/enovance/puppetlabs-apache.git'
+    'ceph': 'git://github.com/enovance/puppet-ceph.git'
     'concat': 'git://github.com/enovance/puppet-concat.git'
     'haproxy': 'git://github.com/enovance/puppetlabs-haproxy.git'
     'keepalived': 'git://github.com/enovance/puppet-module-keepalived.git'
