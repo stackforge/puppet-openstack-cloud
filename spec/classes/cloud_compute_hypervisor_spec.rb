@@ -34,6 +34,10 @@ describe 'cloud::compute::hypervisor' do
         verbose                 => true,
         debug                   => true,
         use_syslog              => true,
+        neutron_protocol        => 'http',
+        neutron_endpoint        => '10.0.0.1',
+        neutron_region_name     => 'MyRegion',
+        neutron_password        => 'secrete',
         log_facility            => 'LOG_LOCAL0' }"
     end
 
@@ -65,6 +69,15 @@ describe 'cloud::compute::hypervisor' do
           :glance_api_servers      => 'http://10.0.0.1:9292'
         )
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
+    end
+
+    it 'configure neutron on compute node' do
+      should contain_class('nova::network::neutron').with(
+          :neutron_admin_password => 'secrete',
+          :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
+          :neutron_region_name    => 'MyRegion',
+          :neutron_url            => 'http://10.0.0.1:9696'
+        )
     end
 
     it 'checks if Nova DB is populated' do
