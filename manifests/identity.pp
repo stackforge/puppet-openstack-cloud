@@ -324,6 +324,7 @@
 #   Defaults value in params
 #
 class cloud::identity (
+  $swift_enabled                = $os_params::swift,
   $identity_roles_addons        = $os_params::identity_roles_addons,
   $keystone_db_host             = $os_params::keystone_db_host,
   $keystone_db_user             = $os_params::keystone_db_user,
@@ -454,19 +455,21 @@ class cloud::identity (
   #   ssl         => false
   # }
 
-  class {'swift::keystone::auth':
-    address          => $ks_swift_internal_host,
-    password         => $ks_swift_password,
-    public_address   => $ks_swift_public_host,
-    public_port      => $ks_swift_public_port,
-    public_protocol  => $ks_swift_public_proto,
-    admin_address    => $ks_swift_admin_host,
-    internal_address => $ks_swift_internal_host,
-    region           => $region
-  }
+  if $swift_enabled {
+    class {'swift::keystone::auth':
+      address          => $ks_swift_internal_host,
+      password         => $ks_swift_password,
+      public_address   => $ks_swift_public_host,
+      public_port      => $ks_swift_public_port,
+      public_protocol  => $ks_swift_public_proto,
+      admin_address    => $ks_swift_admin_host,
+      internal_address => $ks_swift_internal_host,
+      region           => $region
+    }
 
-  class {'swift::keystone::dispersion':
-    auth_pass => $ks_swift_dispersion_password
+    class {'swift::keystone::dispersion':
+      auth_pass => $ks_swift_dispersion_password
+    }
   }
 
   class {'ceilometer::keystone::auth':

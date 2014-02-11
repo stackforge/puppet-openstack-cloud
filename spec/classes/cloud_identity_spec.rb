@@ -24,6 +24,7 @@ describe 'cloud::identity' do
 
     let :params do
       { :identity_roles_addons        => ['SwiftOperator', 'ResellerAdmin'],
+        :swift_enabled                => true,
         :keystone_db_host             => '10.0.0.1',
         :keystone_db_user             => 'keystone',
         :keystone_db_password         => 'secrete',
@@ -251,6 +252,16 @@ describe 'cloud::identity' do
         :port             => '8000',
         :region           => 'BigCloud'
       )
+    end
+
+    context 'without Swift' do
+      before :each do
+        params.merge!(:swift_enabled => false)
+      end
+      it 'should not configure swift endpoints and users' do
+        should_not contain_class('swift::keystone::auth')
+        should_not contain_class('swift::keystone::dispersion')
+      end
     end
 
   end
