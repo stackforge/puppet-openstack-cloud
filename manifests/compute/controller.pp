@@ -34,9 +34,7 @@ class cloud::compute::controller(
     'nova::cert',
     'nova::consoleauth',
     'nova::conductor',
-    # TODO(Emilien) Migrate to spice asap
-    #'nova::spicehtml5proxy',
-    'nova::vncproxy',
+    'nova::spicehtml5proxy'
   ]:
     enabled => true,
   }

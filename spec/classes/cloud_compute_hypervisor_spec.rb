@@ -39,11 +39,11 @@ describe 'cloud::compute::hypervisor' do
 
     let :params do
       { :libvirt_type                         => 'kvm',
-        :api_eth                              => '10.0.0.1',
+        :server_proxyclient_address           => '7.0.0.1',
+        :spice_port                           => '6082',
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_internal_proto               => 'http',
-        :ks_nova_public_host                  => '7.7.7.7',
         :ks_nova_internal_host                => '10.0.0.1' }
     end
 
@@ -78,10 +78,19 @@ describe 'cloud::compute::hypervisor' do
     it 'configure nova-compute' do
       should contain_class('nova::compute').with(
           :enabled                       => true,
-          :vncproxy_host                 => '7.7.7.7',
-          :vncserver_proxyclient_address => '10.0.0.1',
+          :vnc_enabled                   => false,
           :virtio_nic                    => false,
           :neutron_enabled               => true
+        )
+    end
+
+    it 'configure spice console' do
+      should contain_class('nova::compute::spice').with(
+          :server_listen              => '0.0.0.0',
+          :server_proxyclient_address => '7.0.0.1',
+          :proxy_host                 => '10.0.0.1',
+          :proxy_protocol             => 'http',
+          :proxy_port                 => '6082'
         )
     end
 
