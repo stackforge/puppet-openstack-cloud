@@ -41,6 +41,7 @@ class cloud::compute::hypervisor(
 ) {
 
   include 'cloud::compute'
+  include 'cloud::telemetry'
 
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',
@@ -130,5 +131,7 @@ Host *
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
   }
+
+  class { 'ceilometer::agent::compute': }
 
 }
