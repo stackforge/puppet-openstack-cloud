@@ -54,6 +54,9 @@ describe 'cloud::compute::hypervisor' do
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
         :has_ceph                             => true,
+        :rbd_user                             => 'cinder',
+        :rbd_pool                             => 'cinder',
+        :rbd_secret_uuid                      => 'secrete',
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_internal_proto               => 'http',
@@ -142,9 +145,9 @@ describe 'cloud::compute::hypervisor' do
 
     it 'configure nova-conpute to support RBD backend' do
       should contain_nova_config('DEFAULT/libvirt_images_type').with('value' => 'rbd')
-      should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'nova')
+      should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-      should contain_nova_config('DEFAULT/rbd_user').with('value' => 'nova')
+      should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
       should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
       should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
