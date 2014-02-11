@@ -34,6 +34,10 @@ describe 'cloud::compute::hypervisor' do
         verbose                 => true,
         debug                   => true,
         use_syslog              => true,
+        neutron_protocol        => 'http',
+        neutron_endpoint        => '10.0.0.1',
+        neutron_region_name     => 'MyRegion',
+        neutron_password        => 'secrete',
         log_facility            => 'LOG_LOCAL0' }
        class { 'cloud::telemetry':
         ceilometer_secret          => 'secrete',
@@ -93,6 +97,15 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
+      )
+    end
+
+    it 'configure neutron on compute node' do
+      should contain_class('nova::network::neutron').with(
+          :neutron_admin_password => 'secrete',
+          :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
+          :neutron_region_name    => 'MyRegion',
+          :neutron_url            => 'http://10.0.0.1:9696'
         )
     end
 
