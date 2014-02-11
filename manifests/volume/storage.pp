@@ -34,4 +34,15 @@ class cloud::volume::storage(
     rbd_secret_uuid    => $cinder_rbd_secret_uuid
   }
 
+  Ceph::Key <<| title == $cinder_user |>>
+  if defined(Ceph::Key[$cinder_user]) {
+    file { '/etc/ceph/ceph.client.cinder.keyring':
+      owner   => 'cinder',
+      group   => 'cinder',
+      mode    => '0400',
+      require => Ceph::Key[$cinder_user]
+    }
+  }
+  Concat::Fragment <<| title == 'ceph-client-os' |>>
+
 }
