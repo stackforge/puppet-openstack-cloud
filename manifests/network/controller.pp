@@ -35,14 +35,14 @@ class cloud::network::controller(
   $encoded_password = uriescape($neutron_db_password)
 
   class { 'neutron::server':
-    auth_password => $ks_neutron_password,
-    auth_host     => $ks_keystone_admin_host,
-    auth_port     => $ks_keystone_public_port,
+    auth_password  => $ks_neutron_password,
+    auth_host      => $ks_keystone_admin_host,
+    auth_port      => $ks_keystone_public_port,
     # TODO(EmilienM) This one should work, but it's the case now. Don't drop it.
-    connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    connection     => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     # TODO(EmilienM) Should be deprecated - bug GH#152
-    sql_connection    => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    api_workers   => $::processorcount
+    sql_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    api_workers    => $::processorcount
   }
 
   # Note(EmilienM):
