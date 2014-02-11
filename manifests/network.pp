@@ -100,4 +100,19 @@ class cloud::network(
     enable_security_group => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   }
 
+  # TODO(EmilienM) Temporary, need to be fixed upstream.
+  # There is an issue when using ML2 + OVS: neutron services don't read OVS
+  # config file, only ML2. I need to patch puppet-neutron.
+  # Follow-up: https://github.com/enovance/puppet-cloud/issues/199
+  neutron_plugin_ml2 {
+    'agent/tunnel_types':     value => ['gre'];
+    'agent/l2_population':    value => true;
+    'agent/polling_interval': value => '2';
+    'OVS/local_ip':           value => $tunnel_eth;
+    'OVS/enable_tunneling':   value => true;
+    'OVS/integration_bridge': value => 'br-int';
+    'OVS/tunnel_bridge':      value => 'br-tun';
+    'OVS/bridge_mappings':    value => $provider_bridge_mappings;
+  }
+
 }
