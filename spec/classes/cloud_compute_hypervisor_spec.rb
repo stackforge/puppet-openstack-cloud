@@ -48,7 +48,7 @@ describe 'cloud::compute::hypervisor' do
         :has_ceph                             => true,
         :rbd_user                             => 'cinder',
         :rbd_pool                             => 'cinder',
-        :rbd_secret_uuid                      => 'secrete',
+        :ceph_fsid                            => 'secrete',
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_internal_proto               => 'http',
