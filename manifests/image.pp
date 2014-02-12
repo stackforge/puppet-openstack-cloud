@@ -121,11 +121,14 @@ class cloud::image(
     log_facility      => $log_facility,
   }
 
-  class { 'glance::notify::rabbitmq':
-    rabbit_password => $rabbit_password,
-    rabbit_userid   => 'glance',
-    rabbit_host     => $rabbit_host,
-  }
+  # TODO(EmilienM) Disabled for now
+  # Follow-up: https://github.com/enovance/puppet-cloud/issues/160
+  #
+  # class { 'glance::notify::rabbitmq':
+  #   rabbit_password => $rabbit_password,
+  #   rabbit_userid   => 'glance',
+  #   rabbit_host     => $rabbit_host,
+  # }
 
   class { 'glance::backend::rbd':
     rbd_store_user => $rbd_store_user,
