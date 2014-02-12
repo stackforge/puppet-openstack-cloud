@@ -20,7 +20,7 @@ class cloud::volume::storage(
   $glance_api_version     = $os_params::glance_api_version,
   $cinder_rbd_pool        = $os_params::cinder_rbd_pool,
   $cinder_rbd_user        = $os_params::cinder_rbd_user,
-  $ceph_fsid              = $os_params::ceph_fsid,
+  $cinder_rbd_secret_uuid = $os_params::ceph_fsid,
 ) {
 
   include 'cloud::volume'
@@ -31,7 +31,7 @@ class cloud::volume::storage(
     rbd_pool           => $cinder_rbd_pool,
     glance_api_version => $glance_api_version,
     rbd_user           => $cinder_rbd_user,
-    rbd_secret_uuid    => $ceph_fsid
+    rbd_secret_uuid    => $cinder_rbd_secret_uuid
   }
 
   Ceph::Key <<| title == $cinder_user |>>
