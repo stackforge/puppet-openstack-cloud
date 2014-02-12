@@ -94,6 +94,7 @@ describe 'cloud::telemetry::server' do
           :keystone_password => 'secrete',
           :keystone_host     => '10.0.0.1',
           :keystone_protocol => 'http',
+          :host              => '10.0.0.1'
         )
     end
 
