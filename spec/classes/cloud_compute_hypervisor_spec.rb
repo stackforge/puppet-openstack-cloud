@@ -51,8 +51,8 @@ describe 'cloud::compute::hypervisor' do
         :rbd_secret_uuid                      => 'secrete',
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
-        :ks_nova_internal_proto               => 'http',
-        :ks_nova_internal_host                => '10.0.0.1' }
+        :ks_nova_public_proto                 => 'http',
+        :ks_nova_public_host                  => '10.0.0.1' }
     end
 
     it 'configure nova common' do
