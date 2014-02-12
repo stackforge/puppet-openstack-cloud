@@ -36,7 +36,7 @@ class cloud::compute::hypervisor(
   $spice_port                 = $os_params::spice_port,
   $rbd_user                   = $os_params::cinder_rbd_user,
   $rbd_pool                   = $os_params::cinder_rbd_pool,
-  $rbd_secret_uuid            = $os_params::cinder_rbd_secret_uuid,
+  $rbd_secret_uuid            = $os_params::ceph_fsid,
   $has_ceph                   = false
 ) {
 
