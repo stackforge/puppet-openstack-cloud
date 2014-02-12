@@ -323,6 +323,10 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
+# [*token_expiration*]
+#   (optional) Amount of time a token should remain valid (in seconds)
+#   Defaults value in params
+#
 class cloud::identity (
   $swift_enabled                = $os_params::swift,
   $identity_roles_addons        = $os_params::identity_roles_addons,
@@ -392,7 +396,8 @@ class cloud::identity (
   $verbose                      = $os_params::verbose,
   $debug                        = $os_params::debug,
   $log_facility                 = $os_params::log_facility,
-  $use_syslog                   = $os_params::use_syslog
+  $use_syslog                   = $os_params::use_syslog,
+  $ks_token_expiration          = $os_params::ks_token_expiration
 ){
 
   $encoded_user     = uriescape($keystone_db_user)
@@ -414,7 +419,8 @@ class cloud::identity (
     verbose          => $verbose,
     bind_host        => $api_eth,
     public_port      => $ks_keystone_public_port,
-    admin_port       => $ks_keystone_admin_port
+    admin_port       => $ks_keystone_admin_port,
+    token_expiration => $ks_token_expiration
   }
 
   keystone_config {

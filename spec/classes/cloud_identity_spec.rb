@@ -94,21 +94,22 @@ describe 'cloud::identity' do
 
     it 'configure keystone server' do
       should contain_class('keystone').with(
-        :enabled          => true,
-        :admin_token      => 'SECRETE',
-        :compute_port     => '8774',
-        :debug            => true,
-        :verbose          => true,
-        :idle_timeout     => '60',
-        :log_facility     => 'LOG_LOCAL0',
-        :memcache_servers => ['10.0.0.1','10.0.0.2'],
-        :sql_connection   => 'mysql://keystone:secrete@10.0.0.1/keystone',
-        :token_driver     => 'keystone.token.backends.memcache.Token',
-        :token_provider   => 'keystone.token.providers.uuid.Provider',
-        :use_syslog       => true,
-        :bind_host        => '10.0.0.1',
-        :public_port      => '5000',
-        :admin_port       => '35357'
+        :enabled             => true,
+        :admin_token         => 'SECRETE',
+        :compute_port        => '8774',
+        :debug               => true,
+        :verbose             => true,
+        :idle_timeout        => '60',
+        :log_facility        => 'LOG_LOCAL0',
+        :memcache_servers    => ['10.0.0.1','10.0.0.2'],
+        :sql_connection      => 'mysql://keystone:secrete@10.0.0.1/keystone',
+        :token_driver        => 'keystone.token.backends.memcache.Token',
+        :token_provider      => 'keystone.token.providers.uuid.Provider',
+        :use_syslog          => true,
+        :bind_host           => '10.0.0.1',
+        :public_port         => '5000',
+        :admin_port          => '35357',
+        :ks_token_expiration => '3600'
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
     end
