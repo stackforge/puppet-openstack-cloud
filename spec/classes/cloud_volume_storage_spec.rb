@@ -40,7 +40,7 @@ describe 'cloud::volume::storage' do
     let :params do
       { :cinder_rbd_pool         => 'ceph_cinder',
         :cinder_rbd_user         => 'cinder',
-        :ceph_fsid               => 'secrete',
+        :cinder_rbd_secret_uuid  => 'secrete',
         :glance_api_version      => '2' }
     end
 

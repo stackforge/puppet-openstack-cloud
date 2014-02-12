@@ -36,7 +36,7 @@ class cloud::compute::hypervisor(
   $spice_port                 = $os_params::spice_port,
   $rbd_user                   = $os_params::cinder_rbd_user,
   $rbd_pool                   = $os_params::cinder_rbd_pool,
-  $ceph_fsid                  = $os_params::ceph_fsid,
+  $rbd_secret_uuid            = $os_params::ceph_fsid,
   $has_ceph                   = false
 ) {
 
@@ -116,7 +116,7 @@ Host *
       'DEFAULT/libvirt_images_rbd_pool':      value => $rbd_pool;
       'DEFAULT/libvirt_images_rbd_ceph_conf': value => '/etc/ceph/ceph.conf';
       'DEFAULT/rbd_user':                     value => $rbd_user;
-      'DEFAULT/rbd_secret_uuid':              value => $ceph_fsid;
+      'DEFAULT/rbd_secret_uuid':              value => $rbd_secret_uuid;
     }
 
     # Extra config for nova-compute
