@@ -56,6 +56,7 @@ class cloud::telemetry::server(
     keystone_password => $ks_ceilometer_password,
     keystone_host     => $ks_keystone_internal_host,
     keystone_protocol => $ks_keystone_internal_proto,
+    host              => $api_eth
   }
 
 # Configure TTL for samples

@@ -33,8 +33,7 @@ class cloud::compute::controller(
     'nova::scheduler',
     'nova::cert',
     'nova::consoleauth',
-    'nova::conductor',
-    'nova::spicehtml5proxy'
+    'nova::conductor'
   ]:
     enabled => true,
   }
@@ -46,6 +45,11 @@ class cloud::compute::controller(
       api_bind_address                     => $api_eth,
       metadata_listen                      => $api_eth,
       neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
+    }
+
+    class { 'nova::spicehtml5proxy':
+      enabled => true,
+      host    => $api_eth
     }
 
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
