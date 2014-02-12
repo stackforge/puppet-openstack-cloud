@@ -89,7 +89,10 @@ describe 'cloud::compute::controller' do
     end
 
     it 'configure nova-spicehtml5proxy' do
-      should contain_class('nova::spicehtml5proxy').with(:enabled => true)
+      should contain_class('nova::spicehtml5proxy').with(
+        :enabled => true,
+        :host    => '10.0.0.1'
+      )
     end
 
     it 'configure nova-cert' do
