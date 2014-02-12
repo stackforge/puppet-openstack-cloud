@@ -29,8 +29,8 @@
 class cloud::compute::hypervisor(
   $server_proxyclient_address = $os_params::internal_netif_ip,
   $libvirt_type               = $os_params::libvirt_type,
-  $ks_nova_internal_proto     = $os_params::ks_nova_internal_proto,
-  $ks_nova_internal_host      = $os_params::ks_nova_internal_host,
+  $ks_nova_public_proto       = $os_params::ks_nova_public_proto,
+  $ks_nova_public_host        = $os_params::ks_nova_public_host,
   $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
   $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
   $spice_port                 = $os_params::spice_port,
@@ -94,8 +94,8 @@ Host *
   class { 'nova::compute::spice':
     server_listen              => '0.0.0.0',
     server_proxyclient_address => $server_proxyclient_address,
-    proxy_host                 => $ks_nova_internal_host,
-    proxy_protocol             => $ks_nova_internal_proto,
+    proxy_host                 => $ks_nova_public_host,
+    proxy_protocol             => $ks_nova_public_proto,
     proxy_port                 => $spice_port
 
   }
