@@ -76,13 +76,16 @@ describe 'cloud::image' do
         )
     end
 
-    it 'configure glance notifications with rabbitmq backend' do
-      should contain_class('glance::notify::rabbitmq').with(
-          :rabbit_password => 'secrete',
-          :rabbit_userid   => 'glance',
-          :rabbit_host     => '10.0.0.1'
-        )
-    end
+    # TODO(EmilienM) Disabled for now
+    # Follow-up https://github.com/enovance/puppet-cloud/issues/160
+    #
+    # it 'configure glance notifications with rabbitmq backend' do
+    #   should contain_class('glance::notify::rabbitmq').with(
+    #       :rabbit_password => 'secrete',
+    #       :rabbit_userid   => 'glance',
+    #       :rabbit_host     => '10.0.0.1'
+    #     )
+    # end
 
     it 'configure glance rbd backend' do
       should contain_class('glance::backend::rbd').with(
