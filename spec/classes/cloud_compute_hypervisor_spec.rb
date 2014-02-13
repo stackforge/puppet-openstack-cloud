@@ -43,6 +43,7 @@ describe 'cloud::compute::hypervisor' do
 
     let :params do
       { :libvirt_type                         => 'kvm',
+        :availability_zone                    => 'MyZone',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
         :has_ceph                             => true,
@@ -129,6 +130,10 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
       should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
+    end
+
+    it 'configure nova-conpute with extra parameters' do
+      should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
       should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
