@@ -37,6 +37,7 @@ class cloud::compute::hypervisor(
   $rbd_user                   = $os_params::cinder_rbd_user,
   $rbd_pool                   = $os_params::cinder_rbd_pool,
   $rbd_secret_uuid            = $os_params::ceph_fsid,
+  $availability_zone          = $os_params::region,
   $has_ceph                   = false
 ) {
 
@@ -121,9 +122,10 @@ Host *
 
     # Extra config for nova-compute
     nova_config {
-      'DEFAULT/libvirt_inject_key':       value => false;
-      'DEFAULT/libvirt_inject_partition': value => '-2';
-      'DEFAULT/live_migration_flag':      value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
+      'DEFAULT/libvirt_inject_key':        value => false;
+      'DEFAULT/libvirt_inject_partition':  value => '-2';
+      'DEFAULT/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
+      'DEFAULT/default_availability_zone': value => $availability_zone;
     }
 
     File <<| tag == 'ceph_compute_secret_file' |>>
