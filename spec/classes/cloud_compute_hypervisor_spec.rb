@@ -24,6 +24,7 @@ describe 'cloud::compute::hypervisor' do
 
     let :pre_condition do
       "class { 'cloud::compute':
+        availability_zone       => 'MyZone',
         nova_db_host            => '10.0.0.1',
         nova_db_user            => 'nova',
         nova_db_password        => 'secrete',
@@ -55,7 +56,6 @@ describe 'cloud::compute::hypervisor' do
 
     let :params do
       { :libvirt_type                         => 'kvm',
-        :availability_zone                    => 'MyZone',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
         :has_ceph                             => true,
@@ -82,6 +82,7 @@ describe 'cloud::compute::hypervisor' do
           :glance_api_servers      => 'http://10.0.0.1:9292'
         )
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
+      should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
     end
 
     it 'configure neutron on compute node' do
