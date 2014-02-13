@@ -37,7 +37,6 @@ class cloud::compute::hypervisor(
   $rbd_user                   = $os_params::cinder_rbd_user,
   $rbd_pool                   = $os_params::cinder_rbd_pool,
   $rbd_secret_uuid            = $os_params::ceph_fsid,
-  $availability_zone          = $os_params::region,
   $has_ceph                   = false
 ) {
 
@@ -86,11 +85,11 @@ Host *
   }
 
   class { 'nova::compute':
-    enabled     => true,
-    vnc_enabled => false,
+    enabled         => true,
+    vnc_enabled     => false,
     #TODO(EmilienM) Bug #1259545 currently WIP:
-    virtio_nic                    => false,
-    neutron_enabled               => true
+    virtio_nic      => false,
+    neutron_enabled => true
   }
 
   class { 'nova::compute::spice':
@@ -126,7 +125,6 @@ Host *
       'DEFAULT/libvirt_inject_key':        value => false;
       'DEFAULT/libvirt_inject_partition':  value => '-2';
       'DEFAULT/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
-      'DEFAULT/default_availability_zone': value => $availability_zone;
       'DEFAULT/disk_cachemodes':           value => 'network=writeback';
     }
 
