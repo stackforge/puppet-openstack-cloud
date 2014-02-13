@@ -89,6 +89,7 @@ describe 'cloud::identity' do
         :debug                        => true,
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
+        :ks_token_expiration          => '3600',
         :api_eth                      => '10.0.0.1' }
     end
 
@@ -109,7 +110,7 @@ describe 'cloud::identity' do
         :bind_host           => '10.0.0.1',
         :public_port         => '5000',
         :admin_port          => '35357',
-        :ks_token_expiration => '3600'
+        :token_expiration    => '3600'
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
     end
