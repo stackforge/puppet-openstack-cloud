@@ -33,8 +33,8 @@ class cloud::telemetry::server(
     logoutput => false,
     tries     => 60,
     try_sleep => 5,
-    require   => Service['mongodb'],
   }
+  Service <| title == 'mongodb' |> -> Exec['check_mongodb']
 
   # Install MongoDB database
   class { 'ceilometer::db':
