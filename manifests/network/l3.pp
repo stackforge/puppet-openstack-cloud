@@ -35,4 +35,8 @@ class cloud::network::l3(
     bridge => 'br-ex'
   }
 
+  class { 'neutron::agents::metering':
+    debug => $debug,
+  }
+
 }
