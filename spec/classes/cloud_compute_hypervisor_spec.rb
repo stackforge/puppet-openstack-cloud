@@ -38,7 +38,19 @@ describe 'cloud::compute::hypervisor' do
         neutron_endpoint        => '10.0.0.1',
         neutron_region_name     => 'MyRegion',
         neutron_password        => 'secrete',
-        log_facility            => 'LOG_LOCAL0' }"
+        log_facility            => 'LOG_LOCAL0' }
+       class { 'cloud::telemetry':
+        ceilometer_secret          => 'secrete',
+        rabbit_hosts               => ['10.0.0.1'],
+        rabbit_password            => 'secrete',
+        ks_keystone_internal_host  => '10.0.0.1',
+        ks_keystone_internal_port  => '5000',
+        ks_keystone_internal_proto => 'http',
+        ks_ceilometer_password     => 'secrete',
+        log_facility               => 'LOG_LOCAL0',
+        use_syslog                 => true,
+        verbose                    => true,
+        debug                      => true }"
     end
 
     let :params do
@@ -78,6 +90,49 @@ describe 'cloud::compute::hypervisor' do
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
           :neutron_region_name    => 'MyRegion',
           :neutron_url            => 'http://10.0.0.1:9696'
+      )
+    end
+
+    it 'configure ceilometer common' do
+      should contain_class('ceilometer').with(
+          :verbose                 => true,
+          :debug                   => true,
+          :rabbit_userid           => 'ceilometer',
+          :rabbit_hosts            => ['10.0.0.1'],
+          :rabbit_password         => 'secrete',
+          :metering_secret         => 'secrete',
+          :use_syslog              => true,
+          :log_facility            => 'LOG_LOCAL0'
+        )
+      should contain_class('ceilometer::agent::auth').with(
+          :auth_password => 'secrete',
+          :auth_url      => 'http://10.0.0.1:5000/v2.0'
+      )
+    end
+
+    it 'configure neutron on compute node' do
+      should contain_class('nova::network::neutron').with(
+          :neutron_admin_password => 'secrete',
+          :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
+          :neutron_region_name    => 'MyRegion',
+          :neutron_url            => 'http://10.0.0.1:9696'
+      )
+    end
+
+    it 'configure ceilometer common' do
+      should contain_class('ceilometer').with(
+          :verbose                 => true,
+          :debug                   => true,
+          :rabbit_userid           => 'ceilometer',
+          :rabbit_hosts            => ['10.0.0.1'],
+          :rabbit_password         => 'secrete',
+          :metering_secret         => 'secrete',
+          :use_syslog              => true,
+          :log_facility            => 'LOG_LOCAL0'
+        )
+      should contain_class('ceilometer::agent::auth').with(
+          :auth_password => 'secrete',
+          :auth_url      => 'http://10.0.0.1:5000/v2.0'
         )
     end
 
@@ -122,6 +177,10 @@ describe 'cloud::compute::hypervisor' do
 
     it 'configure nova compute with neutron' do
       should contain_class('nova::compute::neutron')
+    end
+
+    it 'configure ceilometer agent compute' do
+      should contain_class('ceilometer::agent::compute')
     end
 
     it 'configure nova-conpute to support RBD backend' do
