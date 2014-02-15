@@ -191,11 +191,12 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
     end
 
-    it 'configure nova-conpute with extra parameters' do
+    it 'configure nova-compute with extra parameters' do
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
       should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+      should contain_nova_config('DEFAULT/disk_cachemodes').with('value' => 'network=writeback')
     end
 
     context 'without RBD backend' do
