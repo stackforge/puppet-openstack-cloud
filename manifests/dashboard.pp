@@ -57,10 +57,6 @@
 #   (optional) Enable debug or not.
 #   Defaults to params.
 #
-# [*cache_server_ip*]
-#   (optionnal) Memcached IP address
-#   Defaults in params
-#
 
 class cloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
@@ -71,7 +67,6 @@ class cloud::dashboard(
   $keystone_host             = $os_params::ks_keystone_internal_host,
   $keystone_proto            = $os_params::ks_keystone_internal_proto,
   $keystone_port             = $os_params::ks_keystone_internal_port,
-  $cache_server_ip           = $os_params::internal_netif_ip,
   $debug                     = $os_params::debug
 ) {
 
@@ -88,7 +83,7 @@ class cloud::dashboard(
     bind_address    => $api_eth,
     swift           => true,
     keystone_url    => $keystone_url,
-    cache_server_ip => $cache_server_ip,
+    cache_server_ip => false,
     django_debug    => $debug
 
   }
