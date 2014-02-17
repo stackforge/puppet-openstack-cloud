@@ -63,6 +63,11 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
+# [*memcache_servers*]
+#   (optionnal) Memcached servers used by Keystone. Should be an array.
+#   Default value in params
+#
+
 class cloud::compute(
   $nova_db_host            = $os_params::nova_db_host,
   $nova_db_user            = $os_params::nova_db_user,
@@ -79,6 +84,7 @@ class cloud::compute(
   $neutron_protocol        = $os_params::ks_neutron_public_proto,
   $neutron_password        = $os_params::ks_neutron_password,
   $neutron_region_name     = $os_params::region,
+  $memcache_servers        = $os_params::memcache_servers,
   $availability_zone       = $os_params::region
 ) {
 
@@ -97,6 +103,7 @@ class cloud::compute(
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,
     glance_api_servers  => "http://${ks_glance_internal_host}:${glance_api_port}",
+    memcached_servers   => $memcache_servers,
     verbose             => $verbose,
     debug               => $debug,
     log_facility        => $log_facility,
@@ -113,6 +120,7 @@ class cloud::compute(
   nova_config {
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
     'DEFAULT/default_availability_zone':        value => $availability_zone;
+    'DEFAULT/servicegroup_driver':              value => 'mc';
   }
 
   # Note(EmilienM):

@@ -39,6 +39,7 @@ describe 'cloud::compute::hypervisor' do
         neutron_endpoint        => '10.0.0.1',
         neutron_region_name     => 'MyRegion',
         neutron_password        => 'secrete',
+        memcache_servers        => ['10.0.0.1','10.0.0.2'],
         log_facility            => 'LOG_LOCAL0' }
        class { 'cloud::telemetry':
         ceilometer_secret          => 'secrete',
@@ -78,11 +79,13 @@ describe 'cloud::compute::hypervisor' do
           :rabbit_hosts            => ['10.0.0.1'],
           :rabbit_password         => 'secrete',
           :rabbit_virtual_host     => '/',
+          :memcached_servers       => ['10.0.0.1','10.0.0.2'],
           :database_connection     => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
           :glance_api_servers      => 'http://10.0.0.1:9292'
         )
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
+      should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
     end
 
     it 'configure neutron on compute node' do

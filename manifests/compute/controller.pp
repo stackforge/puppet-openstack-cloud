@@ -52,11 +52,6 @@ class cloud::compute::controller(
       host    => $api_eth
     }
 
-  # Extra configuration for compute controllers:
-  nova_config {
-    'DEFAULT/servicegroup_driver': value => 'mc';
-  }
-
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
     listening_service => 'ec2_api_cluster',
     server_names      => $::hostname,
