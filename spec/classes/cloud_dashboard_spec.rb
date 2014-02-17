@@ -42,6 +42,7 @@ describe 'cloud::dashboard' do
           :fqdn                => '10.0.0.1',
           :bind_address        => '10.0.0.1',
           :swift               => true,
+          :cache_server_ip     => false,
           :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug        => true
         )
