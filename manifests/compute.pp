@@ -78,7 +78,8 @@ class cloud::compute(
   $neutron_endpoint        = $os_params::ks_neutron_admin_host,
   $neutron_protocol        = $os_params::ks_neutron_public_proto,
   $neutron_password        = $os_params::ks_neutron_password,
-  $neutron_region_name     = $os_params::region
+  $neutron_region_name     = $os_params::region,
+  $availability_zone       = $os_params::region
 ) {
 
   if !defined(Resource['nova_config']) {
@@ -111,6 +112,7 @@ class cloud::compute(
 
   nova_config {
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
+    'DEFAULT/default_availability_zone':        value => $availability_zone;
   }
 
   # Note(EmilienM):
