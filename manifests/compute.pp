@@ -81,7 +81,7 @@ class cloud::compute(
   $use_syslog              = $os_params::use_syslog,
   $log_facility            = $os_params::log_facility,
   $neutron_endpoint        = $os_params::ks_neutron_admin_host,
-  $neutron_protocol        = $os_params::ks_neutron_public_proto,
+  $neutron_protocol        = $os_params::ks_neutron_admin_proto,
   $neutron_password        = $os_params::ks_neutron_password,
   $neutron_region_name     = $os_params::region,
   $memcache_servers        = $os_params::memcache_servers,
