@@ -31,7 +31,6 @@ describe 'cloud::dashboard' do
         :keystone_proto             => 'http',
         :keystone_port              => '5000',
         :debug                      => true,
-        :cache_server_ip            => '10.0.0.1',
         :api_eth                    => '10.0.0.1' }
     end
 
@@ -43,7 +42,7 @@ describe 'cloud::dashboard' do
           :fqdn                => '10.0.0.1',
           :bind_address        => '10.0.0.1',
           :swift               => true,
-          :cache_server_ip     => '10.0.0.1',
+          :cache_server_ip     => false,
           :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug        => true
         )
