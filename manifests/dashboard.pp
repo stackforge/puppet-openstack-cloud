@@ -79,12 +79,12 @@ class cloud::dashboard(
     # fqdn can can be ambiguous since we use reverse DNS here,
     # e.g: 127.0.0.1 instead of a public IP address.
     # We force $api_eth to avoid this situation
-    fqdn            => $api_eth,
-    bind_address    => $api_eth,
-    swift           => true,
-    keystone_url    => $keystone_url,
-    cache_server_ip => false,
-    django_debug    => $debug
+    fqdn                => $api_eth,
+    bind_address        => $api_eth,
+    swift               => true,
+    keystone_url        => $keystone_url,
+    cache_server_ip     => false,
+    django_debug        => $debug
 
   }
 
