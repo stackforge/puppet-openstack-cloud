@@ -117,6 +117,11 @@ describe 'cloud::compute::controller' do
           :neutron_metadata_proxy_shared_secret => 'secrete'
         )
     end
+
+    it 'configure extra parameters' do
+      should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
+    end
+
   end
 
   context 'on Debian platforms' do
