@@ -17,11 +17,12 @@
 #
 
 class cloud::volume::controller(
-  $ks_cinder_internal_port   = $os_params::ks_cinder_internal_port,
-  $ks_cinder_password        = $os_params::ks_cinder_password,
-  $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_host   = $os_params::ks_glance_internal_host,
-  $api_eth                   = $os_params::api_eth,
+  $ks_cinder_internal_port     = $os_params::ks_cinder_internal_port,
+  $ks_cinder_password          = $os_params::ks_cinder_password,
+  $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
+  $ks_glance_internal_host     = $os_params::ks_glance_internal_host,
+  $ks_glance_api_internal_port = $os_params::ks_glance_api_internal_port,
+  $api_eth                     = $os_params::api_eth,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
   # $backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
   # $backup_ceph_user          = $os_params::cinder_rbd_backup_user
@@ -52,7 +53,7 @@ class cloud::volume::controller(
   # }
   # Replaced by:
   cinder_config {
-    'DEFAULT/glance_api_servers':     value => $ks_glance_internal_host;
+    'DEFAULT/glance_api_servers':     value => "${ks_glance_internal_host}:${ks_glance_api_internal_port}";
     'DEFAULT/glance_request_timeout': value => '10';
   }
 
