@@ -80,6 +80,12 @@ describe 'cloud::network::l3' do
           :handle_internal_only_routers => false
       )
     end
+
+    it 'configure neutron metering agent' do
+      should contain_class('neutron::agents::metering').with(
+          :debug => true
+      )
+    end
   end
 
   context 'on Debian platforms' do
