@@ -74,28 +74,6 @@ class cloud::spof(
       }
     }
   } ->
-  file { '/usr/lib/ocf/resource.d/heartbeat/neutron-metadata-agent':
-    source  => 'puppet:///modules/cloud/heartbeat/neutron-metadata-agent',
-    mode    => '0755',
-    owner   => 'root',
-    group   => 'root',
-  } ->
-  cs_primitive { 'neutron-metadata-agent':
-    primitive_class => 'ocf',
-    primitive_type  => 'neutron-metadata-agent',
-    provided_by     => 'heartbeat',
-    operations      => {
-      'monitor' => {
-        interval  => '10s',
-        timeout   => '30s'
-      },
-      'start'   => {
-        interval  => '0',
-        timeout   => '30s',
-        on-fail   => 'restart'
-      }
-    }
-  } ->
   file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
     source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
     mode    => '0755',
@@ -120,10 +98,6 @@ class cloud::spof(
   }
 
   # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
-  class { 'cloud::network::metadata':
-    enabled => false,
-  }
-
   class { 'cloud::orchestration::engine':
     enabled => false,
   }
