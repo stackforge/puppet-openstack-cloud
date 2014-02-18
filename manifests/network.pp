@@ -114,7 +114,7 @@ class cloud::network(
     'agent/tunnel_types':     value => ['gre'];
     'agent/l2_population':    value => true;
     'agent/polling_interval': value => '2';
-    'OVS/veth_mtu':           value => $veth_mtu;
+    'agent/veth_mtu':         value => $veth_mtu;
     'OVS/local_ip':           value => $tunnel_eth;
     'OVS/enable_tunneling':   value => true;
     'OVS/integration_bridge': value => 'br-int';
