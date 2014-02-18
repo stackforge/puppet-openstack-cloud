@@ -521,6 +521,7 @@ class cloud::loadbalancer(
       cloud::loadbalancer::listen_http{
         'horizon_cluster':
           ports     => $horizon_port,
+          httpchk   => "httpchk GET  /  HTTP/1.0\r\nUser-Agent:\ ${::hostname}",
           listen_ip => $vip_public_ip;
       }
     }
