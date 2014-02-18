@@ -52,7 +52,18 @@ describe 'cloud::compute::hypervisor' do
         log_facility               => 'LOG_LOCAL0',
         use_syslog                 => true,
         verbose                    => true,
-        debug                      => true }"
+        debug                      => true }
+       class { 'cloud::network':
+        rabbit_hosts             => ['10.0.0.1'],
+        rabbit_password          => 'secrete',
+        tunnel_eth               => '10.0.1.1',
+        api_eth                  => '10.0.0.1',
+        provider_vlan_ranges     => ['physnet1:1000:2999'],
+        provider_bridge_mappings => ['physnet1:br-eth1'],
+        verbose                  => true,
+        debug                    => true,
+        use_syslog               => true,
+        log_facility             => 'LOG_LOCAL0' }"
     end
 
     let :params do
@@ -111,6 +122,39 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
+      )
+    end
+
+    it 'configure neutron common' do
+      should contain_class('neutron').with(
+          :allow_overlapping_ips   => true,
+          :dhcp_agents_per_network => '2',
+          :verbose                 => true,
+          :debug                   => true,
+          :log_facility            => 'LOG_LOCAL0',
+          :use_syslog              => true,
+          :rabbit_user             => 'neutron',
+          :rabbit_hosts            => ['10.0.0.1'],
+          :rabbit_password         => 'secrete',
+          :rabbit_virtual_host     => '/',
+          :bind_host               => '10.0.0.1',
+          :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
+          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
+
+      )
+      should contain_class('neutron::agents::ovs').with(
+          :enable_tunneling => true,
+          :tunnel_types     => ['gre'],
+          :bridge_mappings  => ['physnet1:br-eth1'],
+          :local_ip         => '10.0.1.1'
+      )
+      should contain_class('neutron::plugins::ml2').with(
+          :type_drivers           => ['gre','vlan'],
+          :tenant_network_types   => ['gre'],
+          :mechanism_drivers      => ['openvswitch','l2population'],
+          :tunnel_id_ranges       => ['1:10000'],
+          :network_vlan_ranges    => ['physnet1:1000:2999'],
+          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
     end
 
