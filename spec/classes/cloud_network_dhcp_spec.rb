@@ -37,7 +37,8 @@ describe 'cloud::network::dhcp' do
     end
 
     let :params do
-      { :debug => true }
+      { :veth_mtu => '1400',
+        :debug    => true }
     end
 
     it 'configure neutron common' do
@@ -77,6 +78,15 @@ describe 'cloud::network::dhcp' do
       should contain_class('neutron::agents::dhcp').with(
           :debug => true
       )
+
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
+
+      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
+        :mode => '0755',
+        :owner => 'root',
+        :group => 'root'
+      )
+      verify_contents(subject, '/etc/neutron/dnsmasq-neutron.conf', ["dhcp-options-force=26,1400"])
     end
   end
 
