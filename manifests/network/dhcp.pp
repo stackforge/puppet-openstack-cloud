@@ -17,13 +17,26 @@
 #
 
 class cloud::network::dhcp(
-  $debug   = $os_params::debug
+  $veth_mtu = $os_params::veth_mtu,
+  $debug    = $os_params::debug
 ) {
 
   include 'cloud::network'
 
   class { 'neutron::agents::dhcp':
     debug   => $debug
+  }
+
+  neutron_dhcp_agent_config {
+    'DEFAULT/dnsmasq_config_file': value => '/etc/neutron/dnsmasq-neutron.conf';
+  }
+
+  file { '/etc/neutron/dnsmasq-neutron.conf':
+    content => template('cloud/network/dnsmasq-neutron.conf.erb'),
+    owner   => 'root',
+    mode    => '0755',
+    group   => 'root',
+    notify  => Service['neutron-dhcp-agent']
   }
 
 }
