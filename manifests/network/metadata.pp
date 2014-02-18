@@ -22,7 +22,7 @@ class cloud::network::metadata(
   $debug                                = $os_params::debug,
   $ks_neutron_password                  = $os_params::ks_neutron_password,
   $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
-  $nova_metadata_server                 = $os_params::vip_public_ip,
+  $nova_metadata_server                 = $os_params::vip_internal_ip,
   $ks_keystone_admin_proto              = $os_params::ks_keystone_admin_proto,
   $ks_keystone_admin_port               = $os_params::ks_keystone_admin_port,
   $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host,
