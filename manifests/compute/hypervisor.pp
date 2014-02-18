@@ -42,6 +42,7 @@ class cloud::compute::hypervisor(
 
   include 'cloud::compute'
   include 'cloud::telemetry'
+  include 'cloud::network'
 
   exec { 'insert_module_nbd':
     command => '/bin/echo "nbd" > /etc/modules',
