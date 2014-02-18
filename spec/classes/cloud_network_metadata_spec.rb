@@ -41,7 +41,7 @@ describe 'cloud::network::metadata' do
         :neutron_metadata_proxy_shared_secret => 'secrete',
         :auth_region                          => 'MyRegion',
         :ks_neutron_password                  => 'secrete',
-        :ks_nova_internal_host                => '10.0.0.1',
+        :nova_metadata_server                 => '10.0.0.1',
         :ks_keystone_admin_proto              => 'http',
         :ks_keystone_admin_port               => '35357',
         :ks_keystone_admin_host               => '10.0.0.1' }
