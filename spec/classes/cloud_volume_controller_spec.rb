@@ -38,14 +38,15 @@ describe 'cloud::volume::controller' do
     end
 
     let :params do
-      { :ks_cinder_password        => 'secrete',
-        :ks_cinder_internal_port   => '8776',
-        :ks_keystone_internal_host => '10.0.0.1',
-        :ks_glance_internal_host   => '10.0.0.1',
+      { :ks_cinder_password          => 'secrete',
+        :ks_cinder_internal_port     => '8776',
+        :ks_keystone_internal_host   => '10.0.0.1',
+        :ks_glance_internal_host     => '10.0.0.1',
+        :ks_glance_api_internal_port => '9292',
         # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
-        #:backup_ceph_user          => 'cinder',
-        #:backup_ceph_pool          => 'ceph_backup_cinder',
-        :api_eth                   => '10.0.0.1' }
+        #:backup_ceph_user            => 'cinder',
+        #:backup_ceph_pool            => 'ceph_backup_cinder',
+        :api_eth                     => '10.0.0.1' }
     end
 
     it 'configure cinder common' do
@@ -82,7 +83,7 @@ describe 'cloud::volume::controller' do
     # end
     # Replaced by:
     it 'configure cinder glance backend' do
-      should contain_cinder_config('DEFAULT/glance_api_servers').with('value' => '10.0.0.1')
+      should contain_cinder_config('DEFAULT/glance_api_servers').with('value' => '10.0.0.1:9292')
       should contain_cinder_config('DEFAULT/glance_request_timeout').with('value' => '10')
     end
 
