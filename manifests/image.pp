@@ -107,6 +107,12 @@ class cloud::image(
     use_syslog        => $use_syslog,
   }
 
+  #TODO(sbadia): Wait https://review.openstack.org/69688
+  #See branch bug/81/sbadia and https://github.com/enovance/puppet-cloud/issues/81
+  glance_api_config {
+    'DEFAULT/show_image_direct_url': value => true;
+  }
+
   class { 'glance::registry':
     sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     verbose           => $verbose,
