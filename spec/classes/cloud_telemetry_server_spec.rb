@@ -102,7 +102,7 @@ describe 'cloud::telemetry::server' do
       should contain_class('ceilometer::expirer').with(
           :time_to_live => '2592000',
           :minute       => '0',
-          :hour         => '0',
+          :hour         => '0'
         )
     end
 

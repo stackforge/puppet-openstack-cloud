@@ -29,7 +29,7 @@ describe 'cloud::cache' do
     it 'configure memcached with some params' do
       should contain_class('memcached').with(
           :listen_ip           => '10.0.0.1',
-          :max_memory          => '60%',
+          :max_memory          => '60%'
         )
     end
   end

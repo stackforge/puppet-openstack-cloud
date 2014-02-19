@@ -69,7 +69,7 @@ describe 'cloud::volume::storage' do
 
     it 'configure cinder volume with rbd backend' do
 
-      should include_class('cinder::volume')
+      should contain_class('cinder::volume')
 
       should contain_class('cinder::volume::rbd').with(
           :rbd_pool           => 'ceph_cinder',
