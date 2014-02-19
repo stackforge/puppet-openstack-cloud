@@ -65,8 +65,8 @@ class cloud::network(
   $api_eth                  = $os_params::api_eth,
   $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
   $provider_bridge_mappings = $os_params::provider_bridge_mappings,
-  $use_syslog               = $os_params::neutron_use_syslog,
-  $log_facility             = $os_params::neutron_log_facility
+  $use_syslog               = $os_params::use_syslog,
+  $log_facility             = $os_params::log_facility
 ) {
 
   class { 'neutron':
