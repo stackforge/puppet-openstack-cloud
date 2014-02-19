@@ -55,10 +55,6 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
-# [*veth_mtu*]
-#   (optional) MTU for VM virtual network cards.
-#   Defaults value in params
-#
 
 class cloud::network(
   $verbose                  = $os_params::verbose,
@@ -70,8 +66,7 @@ class cloud::network(
   $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
   $provider_bridge_mappings = $os_params::provider_bridge_mappings,
   $use_syslog               = $os_params::neutron_use_syslog,
-  $log_facility             = $os_params::neutron_log_facility,
-  $veth_mtu                 = $os_params::veth_mtu
+  $log_facility             = $os_params::neutron_log_facility
 ) {
 
   class { 'neutron':
@@ -114,7 +109,6 @@ class cloud::network(
     'agent/tunnel_types':     value => ['gre'];
     'agent/l2_population':    value => true;
     'agent/polling_interval': value => '2';
-    'agent/veth_mtu':         value => $veth_mtu;
     'OVS/local_ip':           value => $tunnel_eth;
     'OVS/enable_tunneling':   value => true;
     'OVS/integration_bridge': value => 'br-int';

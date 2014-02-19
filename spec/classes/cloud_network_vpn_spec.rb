@@ -32,7 +32,6 @@ describe 'cloud::network::vpn' do
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
-        veth_mtu                => '1500',
         log_facility             => 'LOG_LOCAL0' }"
     end
 
