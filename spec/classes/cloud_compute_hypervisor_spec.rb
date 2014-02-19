@@ -219,7 +219,7 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('nova::compute::libvirt').with(
           :libvirt_type      => 'kvm',
           :vncserver_listen  => '0.0.0.0',
-          :migration_support => true,
+          :migration_support => true
         )
     end
 
