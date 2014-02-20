@@ -400,6 +400,13 @@ class cloud::identity (
   $ks_token_expiration          = $os_params::ks_token_expiration
 ){
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/keystone'
+  }
+
   $encoded_user     = uriescape($keystone_db_user)
   $encoded_password = uriescape($keystone_db_password)
 
@@ -418,6 +425,7 @@ class cloud::identity (
     use_syslog       => $use_syslog,
     verbose          => $verbose,
     bind_host        => $api_eth,
+    log_dir          => $log_dir,
     public_port      => $ks_keystone_public_port,
     admin_port       => $ks_keystone_admin_port,
     token_expiration => $ks_token_expiration
