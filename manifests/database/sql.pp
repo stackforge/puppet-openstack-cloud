@@ -115,25 +115,24 @@ class cloud::database::sql (
     }
   }
 
+  # This is due to this bug: https://bugs.launchpad.net/codership-mysql/+bug/1087368
+  # The backport to API 23 requires a command line option --wsrep-new-cluster:
+  # http://bazaar.launchpad.net/~codership/codership-mysql/wsrep-5.5/revision/3844?start_revid=3844
+  # and the mysql init script cannot have arguments passed to the daemon
+  # using /etc/default/mysql standart mechanism.
+  # To check that the mysqld support the options you can :
+  # strings `which mysqld` | grep wsrep-new-cluster
+  # TODO: to be remove as soon as the API 25 is packaged, ie galera 3 ...
+  file { '/etc/init.d/mysql-bootstrap':
+    content => template("cloud/database/etc_initd_mysql_${::osfamily}"),
+    owner   => 'root',
+    mode    => '0755',
+    group   => 'root',
+    notify  => Service['mysqld'],
+    before  => Package['mysql-server'],
+  }
+
   if($::osfamily == 'Debian'){
-
-    # This is due to this bug: https://bugs.launchpad.net/codership-mysql/+bug/1087368
-    # The backport to API 23 requires a command line option --wsrep-new-cluster:
-    # http://bazaar.launchpad.net/~codership/codership-mysql/wsrep-5.5/revision/3844?start_revid=3844
-    # and the mysql init script cannot have arguments passed to the daemon
-    # using /etc/default/mysql standart mechanism.
-    # To check that the mysqld support the options you can :
-    # strings `which mysqld` | grep wsrep-new-cluster
-    # TODO: to be remove as soon as the API 25 is packaged, ie galera 3 ...
-    file { '/etc/init.d/mysql-bootstrap':
-      content => template('cloud/database/etc_initd_mysql_debian'),
-      owner   => 'root',
-      mode    => '0755',
-      group   => 'root',
-      notify  => Service['mysqld'],
-      before  => Package['mysql-server'],
-    }
-
     # The startup time can be longer than the default 30s so we take
     # care of it there.  Until this bug is not resolved
     # https://mariadb.atlassian.net/browse/MDEV-5540, we have to do it
