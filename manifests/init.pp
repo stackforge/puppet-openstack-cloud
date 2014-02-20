@@ -55,7 +55,7 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # NTP
-  class { 'ntp': }
+  class { 'ntp': servers => $::os_params::ntp_servers }
 
 # Strong root password for all servers
   user { 'root':
