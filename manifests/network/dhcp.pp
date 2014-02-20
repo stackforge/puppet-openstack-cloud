@@ -24,11 +24,12 @@ class cloud::network::dhcp(
   include 'cloud::network'
 
   class { 'neutron::agents::dhcp':
-    debug   => $debug
+    debug => $debug
   }
 
   neutron_dhcp_agent_config {
-    'DEFAULT/dnsmasq_config_file': value => '/etc/neutron/dnsmasq-neutron.conf';
+    'DEFAULT/dnsmasq_config_file':      value => '/etc/neutron/dnsmasq-neutron.conf';
+    'DEFAULT/enable_isolated_metadata': value => true;
   }
 
   file { '/etc/neutron/dnsmasq-neutron.conf':

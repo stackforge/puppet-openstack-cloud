@@ -25,7 +25,6 @@ class cloud::network::l3(
 
   class { 'neutron::agents::l3':
     debug                        => $debug,
-    handle_internal_only_routers => false,
   } ->
   vs_bridge{'br-ex':
     external_ids => 'bridge-id=br-ex',

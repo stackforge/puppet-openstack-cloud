@@ -76,7 +76,6 @@ describe 'cloud::network::l3' do
     it 'configure neutron l3' do
       should contain_class('neutron::agents::l3').with(
           :debug                        => true,
-          :handle_internal_only_routers => false
       )
     end
 
