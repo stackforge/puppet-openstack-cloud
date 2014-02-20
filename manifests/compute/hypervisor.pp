@@ -109,6 +109,9 @@ Host *
     migration_support => true,
   }
 
+  Service<| title == 'dbus' |> { enable => true }
+  Service<| title == 'libvirt-bin' |> { enable => true }
+
   class { 'nova::compute::neutron': }
 
   if $has_ceph {
