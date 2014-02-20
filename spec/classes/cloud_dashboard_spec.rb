@@ -44,7 +44,8 @@ describe 'cloud::dashboard' do
           :swift               => true,
           :cache_server_ip     => false,
           :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
-          :django_debug        => true
+          :django_debug        => true,
+          :neutron_options     => { 'enable_lb' => true }
         )
     end
   end
