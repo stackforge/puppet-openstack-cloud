@@ -19,61 +19,77 @@ require 'spec_helper'
 
 describe 'cloud::image' do
 
-  shared_examples_for 'openstack image' do
+  let :params do
+    { :glance_db_host                   => '10.0.0.1',
+      :glance_db_user                   => 'glance',
+      :glance_db_password               => 'secrete',
+      :ks_keystone_internal_host        => '10.0.0.1',
+      :ks_glance_internal_host          => '10.0.0.1',
+      :openstack_vip                    => '10.0.0.42',
+      :ks_glance_api_internal_port      => '9292',
+      :ks_glance_registry_internal_port => '9191',
+      :ks_glance_password               => 'secrete',
+      :rabbit_host                      => '10.0.0.1',
+      :rabbit_password                  => 'secrete',
+      :rbd_store_user                   => 'glance',
+      :rbd_store_pool                   => 'images',
+      :debug                            => true,
+      :verbose                          => true,
+      :use_syslog                       => true,
+      :log_facility                     => 'LOG_LOCAL0',
+      :api_eth                          => '10.0.0.1'
+    }
+  end
 
-    let :params do
-      { :glance_db_host                   => '10.0.0.1',
-        :glance_db_user                   => 'glance',
-        :glance_db_password               => 'secrete',
-        :ks_keystone_internal_host        => '10.0.0.1',
-        :ks_glance_internal_host          => '10.0.0.1',
-        :openstack_vip                    => '10.0.0.42',
-        :ks_glance_api_internal_port      => '9292',
-        :ks_glance_registry_internal_port => '9191',
-        :ks_glance_password               => 'secrete',
-        :rabbit_host                      => '10.0.0.1',
-        :rabbit_password                  => 'secrete',
-        :rbd_store_user                   => 'glance',
-        :rbd_store_pool                   => 'images',
-        :debug                            => true,
-        :verbose                          => true,
-        :use_syslog                       => true,
-        :log_facility                     => 'LOG_LOCAL0',
-        :api_eth                          => '10.0.0.1' }
-    end
-
+  shared_examples_for 'a glance api server' do
     it 'configure glance-api' do
       should contain_class('glance::api').with(
-          :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
-          :keystone_password     => 'secrete',
-          :registry_host         => '10.0.0.42',
-          :registry_port         => '9191',
-          :keystone_tenant       => 'services',
-          :keystone_user         => 'glance',
-          :verbose               => true,
-          :debug                 => true,
-          :auth_host             => '10.0.0.1',
-          :log_facility          => 'LOG_LOCAL0',
-          :bind_host             => '10.0.0.1',
-          :bind_port             => '9292',
-          :use_syslog            => true
-        )
+        :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+        :keystone_password     => 'secrete',
+        :registry_host         => '10.0.0.42',
+        :registry_port         => '9191',
+        :keystone_tenant       => 'services',
+        :keystone_user         => 'glance',
+        :show_image_direct_url => true,
+        :verbose               => true,
+        :debug                 => true,
+        :auth_host             => '10.0.0.1',
+        :log_facility          => 'LOG_LOCAL0',
+        :bind_host             => '10.0.0.1',
+        :bind_port             => '9292',
+        :use_syslog            => true
+      )
     end
+  end
 
+  shared_examples_for 'a glance registry server' do
     it 'configure glance-registry' do
       should contain_class('glance::registry').with(
-          :sql_connection    => 'mysql://glance:secrete@10.0.0.1/glance',
-          :keystone_password => 'secrete',
-          :keystone_tenant   => 'services',
-          :keystone_user     => 'glance',
-          :verbose           => true,
-          :debug             => true,
-          :auth_host         => '10.0.0.1',
-          :log_facility      => 'LOG_LOCAL0',
-          :bind_host         => '10.0.0.1',
-          :bind_port         => '9191',
-          :use_syslog        => true
-        )
+        :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+        :keystone_password     => 'secrete',
+        :keystone_tenant       => 'services',
+        :keystone_user         => 'glance',
+        :verbose               => true,
+        :debug                 => true,
+        :auth_host             => '10.0.0.1',
+        :log_facility          => 'LOG_LOCAL0',
+        :bind_host             => '10.0.0.1',
+        :bind_port             => '9191',
+        :use_syslog            => true
+      )
+    end
+  end
+
+  shared_examples_for 'openstack image' do
+
+    context 'configure glance-api' do
+      before { params.merge!(:show_image_direct_url => true)}
+      it_configures 'a glance api server'
+    end
+
+    context 'configure glance-registry' do
+      before { params.delete(:show_image_direct_url) }
+      it_configures 'a glance registry server'
     end
 
     # TODO(EmilienM) Disabled for now

@@ -92,25 +92,20 @@ class cloud::image(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { 'glance::api':
-    sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
-    registry_host     => $openstack_vip,
-    registry_port     => $ks_glance_registry_internal_port,
-    verbose           => $verbose,
-    debug             => $debug,
-    auth_host         => $ks_keystone_internal_host,
-    keystone_password => $ks_glance_password,
-    keystone_tenant   => 'services',
-    keystone_user     => 'glance',
-    log_facility      => $log_facility,
-    bind_host         => $api_eth,
-    bind_port         => $ks_glance_api_internal_port,
-    use_syslog        => $use_syslog,
-  }
-
-  #TODO(sbadia): Wait https://review.openstack.org/69688
-  #See branch bug/81/sbadia and https://github.com/enovance/puppet-cloud/issues/81
-  glance_api_config {
-    'DEFAULT/show_image_direct_url': value => true;
+    sql_connection        => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
+    registry_host         => $openstack_vip,
+    registry_port         => $ks_glance_registry_internal_port,
+    verbose               => $verbose,
+    debug                 => $debug,
+    auth_host             => $ks_keystone_internal_host,
+    keystone_password     => $ks_glance_password,
+    keystone_tenant       => 'services',
+    keystone_user         => 'glance',
+    show_image_direct_url => true,
+    log_facility          => $log_facility,
+    bind_host             => $api_eth,
+    bind_port             => $ks_glance_api_internal_port,
+    use_syslog            => $use_syslog,
   }
 
   class { 'glance::registry':
