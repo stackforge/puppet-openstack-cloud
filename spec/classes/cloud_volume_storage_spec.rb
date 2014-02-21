@@ -72,10 +72,13 @@ describe 'cloud::volume::storage' do
       should contain_class('cinder::volume')
 
       should contain_class('cinder::volume::rbd').with(
-          :rbd_pool           => 'ceph_cinder',
-          :glance_api_version => '2',
-          :rbd_user           => 'cinder',
-          :rbd_secret_uuid    => 'secrete'
+          :rbd_pool                         => 'ceph_cinder',
+          :glance_api_version               => '2',
+          :rbd_user                         => 'cinder',
+          :rbd_secret_uuid                  => 'secrete',
+          :rbd_ceph_conf                    => '/etc/ceph/ceph.conf',
+          :rbd_flatten_volume_from_snapshot => false,
+          :rbd_max_clone_depth              => '5'
         )
     end
 
