@@ -41,7 +41,8 @@ describe 'cloud::image' do
     }
   end
 
-  shared_examples_for 'a glance api server' do
+  shared_examples_for 'openstack image' do
+
     it 'configure glance-api' do
       should contain_class('glance::api').with(
         :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
@@ -60,9 +61,7 @@ describe 'cloud::image' do
         :use_syslog            => true
       )
     end
-  end
 
-  shared_examples_for 'a glance registry server' do
     it 'configure glance-registry' do
       should contain_class('glance::registry').with(
         :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
@@ -77,19 +76,6 @@ describe 'cloud::image' do
         :bind_port             => '9191',
         :use_syslog            => true
       )
-    end
-  end
-
-  shared_examples_for 'openstack image' do
-
-    context 'configure glance-api' do
-      before { params.merge!(:show_image_direct_url => true)}
-      it_configures 'a glance api server'
-    end
-
-    context 'configure glance-registry' do
-      before { params.delete(:show_image_direct_url) }
-      it_configures 'a glance registry server'
     end
 
     # TODO(EmilienM) Disabled for now
