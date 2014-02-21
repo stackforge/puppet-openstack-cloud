@@ -87,12 +87,11 @@ cache = swift.cache')
   }
 
   class { 'swift::dispersion':
-    auth_url  => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
-    swift_dir => '/etc/swift',
-    auth_pass => $ks_swift_dispersion_password
+    auth_url      => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
+    swift_dir     => '/etc/swift',
+    auth_pass     => $ks_swift_dispersion_password,
+    endpoint_type => 'internalURL'
   }
-  #TODO(EmilienM): While https://review.openstack.org/#/c/69472/ got merged:
-  swift_dispersion_config { 'dispersion/endpoint_type': value => 'internalURL'; }
 
   # Note(sileht): log file should exists to swift proxy to write to
   # the ceilometer directory
