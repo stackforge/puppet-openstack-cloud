@@ -73,7 +73,7 @@ class cloud::dashboard(
   # We build the param needed for horizon class
   $keystone_url = "${keystone_proto}://${keystone_host}:${keystone_port}/v2.0"
 
-  class {'horizon':
+  class { 'horizon':
     secret_key          => $secret_key,
     can_set_mount_point => 'False',
     # fqdn can can be ambiguous since we use reverse DNS here,
@@ -84,8 +84,8 @@ class cloud::dashboard(
     swift               => true,
     keystone_url        => $keystone_url,
     cache_server_ip     => false,
-    django_debug        => $debug
-
+    django_debug        => $debug,
+    neutron_options     => { 'enable_lb' => true }
   }
 
   if ($::osfamily == 'Debian') {
