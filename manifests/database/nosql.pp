@@ -30,19 +30,15 @@
 #   Defaults to false
 #
 # [*replset_members*]
-#   (optional) Ceilometer Replica set members
-#   Default value in params
-#
-# [*mongo_primary*]
-#   (optional) MongoDB replicaset primary hostname
+#   (optional) Ceilometer Replica set members hostnames
+#   Should be an array. Example: ['node1', 'node2', node3']
 #   Default value in params
 #
 
 class cloud::database::nosql(
   $bind_ip         = $os_params::internal_netif_ip,
   $nojournal       = false,
-  $replset_members = $os_params::mongo_nodes,
-  $mongo_primary   = $os_params::mongo_primary
+  $replset_members = $os_params::mongo_nodes
 ) {
 
   # bind_ip should be an array
@@ -70,13 +66,9 @@ class cloud::database::nosql(
     require   => Service['mongodb'],
   }
 
-  if $::hostname == $mongo_primary and !empty($replset_members) {
-
-    mongodb_replset{'ceilometer':
-      members => $replset_members,
-      before  => Anchor['mongodb setup done'],
-    }
-
+  mongodb_replset{'ceilometer':
+    members => $replset_members,
+    before  => Anchor['mongodb setup done'],
   }
 
   anchor {'mongodb setup done' :

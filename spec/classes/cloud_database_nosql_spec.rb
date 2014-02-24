@@ -23,8 +23,9 @@ describe 'cloud::database::nosql' do
   shared_examples_for 'openstack database nosql' do
 
     let :params do
-      { :bind_ip   => '10.0.0.1',
-        :nojournal => false }
+      { :bind_ip         => '10.0.0.1',
+        :nojournal       => false,
+        :replset_members => ['node1', 'node2', 'node3'] }
     end
 
     it 'configure mongodb server' do
@@ -35,6 +36,18 @@ describe 'cloud::database::nosql' do
       )
     end
 
+    it 'configure mongodb replicasets' do
+      should contain_exec('check_mongodb').with(
+        :command => "/usr/bin/mongo 10.0.0.1:27017",
+        :logoutput => false,
+        :tries => 60,
+        :try_sleep => 5
+      )
+      should contain_mongodb_replset('ceilometer').with(
+        :members => ['node1', 'node2', 'node3']
+      )
+      should contain_anchor('mongodb setup done')
+    end
   end
 
   context 'on Debian platforms' do
