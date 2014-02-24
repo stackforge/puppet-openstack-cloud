@@ -56,6 +56,11 @@ describe 'cloud' do
       )
     end
 
+    it { shoud contain_service('cron').with({
+      :ensure => 'running',
+      :enable => true
+    }) }
+
   end
 
   context 'on Debian platforms' do
