@@ -25,6 +25,7 @@ class cloud::storage::rbd (
     auth_type       => 'cephx',
     cluster_network => $cluster_network,
     public_network  => $public_network,
+    enable_service  => true
   }
 
   Exec {
