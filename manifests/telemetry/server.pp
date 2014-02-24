@@ -21,25 +21,27 @@ class cloud::telemetry::server(
   $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
   $ks_ceilometer_internal_port    = $os_params::ks_ceilometer_internal_port,
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
-  $ceilometer_database_connection = $os_params::ceilometer_database_connection,
   $api_eth                        = $os_params::api_eth,
+  $mongo_nodes                    = $os_params::mongo_nodes,
+  $mongo_primary                  = $os_params::mongo_primary,
 ){
 
   include 'cloud::telemetry'
 
-  $db_conn = regsubst($ceilometer_database_connection, 'mongodb:\/\/(\.*)', '\2')
-  exec {'check_mongodb' :
-    command   => "/usr/bin/mongo ${db_conn}",
-    logoutput => false,
-    tries     => 60,
-    try_sleep => 5,
+  $s_mongo_nodes = join($mongo_nodes, ',')
+  $db_conn = "mongodb://${s_mongo_nodes}/ceilometer?replicaSet=ceilometer"
+
+  if $::hostname == $mongo_primary {
+    $sync_db = true
+  } else {
+    $sync_db = false
   }
-  Service <| title == 'mongodb' |> -> Exec['check_mongodb']
 
   # Install MongoDB database
   class { 'ceilometer::db':
-    database_connection => $ceilometer_database_connection,
-    require             => Exec['check_mongodb'],
+    database_connection => $db_conn,
+    sync_db             => $sync_db,
+    require             => Anchor['mongodb setup done'],
   }
 
 # Install Ceilometer-collector

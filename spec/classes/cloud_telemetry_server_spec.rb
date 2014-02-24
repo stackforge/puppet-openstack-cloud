@@ -44,7 +44,8 @@ describe 'cloud::telemetry::server' do
         :ks_ceilometer_internal_port          => '8777',
         :ks_ceilometer_password               => 'secrete',
         :api_eth                              => '10.0.0.1',
-        :ceilometer_database_connection       => 'mongodb://10.0.0.2/ceilometer' }
+        :mongo_nodes                          => ['node1', 'node2', 'node3'],
+        :mongo_primary                        => 'node1' }
     end
 
     it 'configure ceilometer common' do
@@ -62,18 +63,6 @@ describe 'cloud::telemetry::server' do
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
-        )
-    end
-
-    it 'check mongodb is started' do
-      should contain_exec('check_mongodb').with({
-        :command => '/usr/bin/mongo 10.0.0.2/ceilometer',
-      })
-    end
-
-    it 'configure ceilometer db' do
-      should contain_class('ceilometer::db').with(
-          :database_connection => 'mongodb://10.0.0.2/ceilometer'
         )
     end
 
@@ -106,11 +95,32 @@ describe 'cloud::telemetry::server' do
         )
     end
 
+    context 'configure ceilometer db on primary mongodb node' do
+      it 'configure ceilometer db' do
+        should contain_class('ceilometer::db').with(
+          :sync_db             => true,
+          :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
+          )
+      end
+    end
+
+    context 'configure ceilometer db on secondary mongodb node' do
+      before :each do
+        facts.merge!( :hostname => 'node2' )
+      end
+      it 'configure ceilometer db' do
+        should contain_class('ceilometer::db').with(
+          :sync_db             => false,
+          :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
+          )
+      end
+    end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily => 'Debian',
+        :hostname => 'node1' }
     end
 
     it_configures 'openstack telemetry server'
@@ -118,7 +128,8 @@ describe 'cloud::telemetry::server' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :hostname => 'node1' }
     end
 
     it_configures 'openstack telemetry server'

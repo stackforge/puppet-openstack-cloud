@@ -29,10 +29,16 @@
 #   http://docs.mongodb.org/manual/reference/configuration-options/#nojournal
 #   Defaults to false
 #
+# [*replset_members*]
+#   (optional) Ceilometer Replica set members hostnames
+#   Should be an array. Example: ['node1', 'node2', node3']
+#   Default value in params
+#
 
 class cloud::database::nosql(
-  $bind_ip   = $os_params::internal_netif_ip,
-  $nojournal = false,
+  $bind_ip         = $os_params::internal_netif_ip,
+  $nojournal       = false,
+  $replset_members = $os_params::mongo_nodes
 ) {
 
   # bind_ip should be an array
@@ -49,6 +55,24 @@ class cloud::database::nosql(
   class { 'mongodb':
     bind_ip   => $bind_ip_real,
     nojournal => $nojournal,
+    replset   => 'ceilometer',
+  }
+
+  exec {'check_mongodb' :
+    command   => "/usr/bin/mongo ${bind_ip}:27017",
+    logoutput => false,
+    tries     => 60,
+    try_sleep => 5,
+    require   => Service['mongodb'],
+  }
+
+  mongodb_replset{'ceilometer':
+    members => $replset_members,
+    before  => Anchor['mongodb setup done'],
+  }
+
+  anchor {'mongodb setup done' :
+    require => Exec['check_mongodb'],
   }
 
 }
