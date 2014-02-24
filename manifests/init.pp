@@ -65,4 +65,9 @@ This node is under the control of Puppet ${::puppetversion}.
     uid              => '0',
   }
 
+  service { 'cron':
+    ensure => running,
+    enable => true
+  }
+
 }
