@@ -17,10 +17,10 @@
 #
 
 class cloud::orchestration::api(
-  $ks_heat_internal_port            = $os_params::ks_heat_internal_port,
-  $ks_heat_cfn_internal_port        = $os_params::ks_heat_cfn_internal_port,
-  $ks_heat_cloudwatch_internal_port = $os_params::ks_heat_cloudwatch_internal_port,
-  $api_eth                          = $os_params::api_eth,
+  $ks_heat_internal_port            = 8004,
+  $ks_heat_cfn_internal_port        = 8000,
+  $ks_heat_cloudwatch_internal_port = 8003,
+  $api_eth                          = '127.0.0.1',
 ) {
 
   include 'cloud::orchestration'

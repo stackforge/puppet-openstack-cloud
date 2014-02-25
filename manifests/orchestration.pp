@@ -92,24 +92,24 @@
 #   Defaults value in params
 #
 class cloud::orchestration(
-  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
-  $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
-  $ks_keystone_admin_host     = $os_params::ks_keystone_admin_host,
-  $ks_keystone_admin_port     = $os_params::ks_keystone_admin_port,
-  $ks_keystone_admin_proto    = $os_params::ks_keystone_admin_proto,
-  $ks_heat_public_host        = $os_params::ks_heat_public_host,
-  $ks_heat_public_proto       = $os_params::ks_heat_public_proto,
-  $ks_heat_password           = $os_params::ks_heat_password,
-  $heat_db_host               = $os_params::heat_db_host,
-  $heat_db_user               = $os_params::heat_db_user,
-  $heat_db_password           = $os_params::heat_db_password,
-  $rabbit_hosts               = $os_params::rabbit_hosts,
-  $rabbit_password            = $os_params::rabbit_password,
-  $verbose                    = $os_params::verbose,
-  $debug                      = $os_params::debug,
-  $use_syslog                 = $os_params::use_syslog,
-  $log_facility               = $os_params::log_facility
+  $ks_keystone_internal_host  = '127.0.0.1',
+  $ks_keystone_internal_port  = '5000',
+  $ks_keystone_internal_proto = 'http',
+  $ks_keystone_admin_host     = '127.0.0.1',
+  $ks_keystone_admin_port     = '35357',
+  $ks_keystone_admin_proto    = 'http',
+  $ks_heat_public_host        = '127.0.0.1',
+  $ks_heat_public_proto       = 'http',
+  $ks_heat_password           = 'heatpassword',
+  $heat_db_host               = '127.0.0.1',
+  $heat_db_user               = 'heat',
+  $heat_db_password           = 'heatpassword',
+  $rabbit_hosts               = ['127.0.0.1:5672'],
+  $rabbit_password            = 'rabbitpassword',
+  $verbose                    = true,
+  $debug                      = true,
+  $use_syslog                 = true,
+  $log_facility               = 'LOG_LOCAL0'
 ) {
 
   # Disable twice logging if syslog is enabled

@@ -19,12 +19,12 @@
 
 class cloud::orchestration::engine(
   $enabled                        = true,
-  $ks_heat_public_host            = $os_params::ks_heat_public_host,
-  $ks_heat_public_proto           = $os_params::ks_heat_public_proto,
-  $ks_heat_password               = $os_params::ks_heat_password,
-  $ks_heat_cfn_public_port        = $os_params::ks_heat_cfn_public_port,
-  $ks_heat_cloudwatch_public_port = $os_params::ks_heat_cloudwatch_public_port,
-  $auth_encryption_key            = $os_params::heat_auth_encryption_key
+  $ks_heat_public_host            = '127.0.0.1',
+  $ks_heat_public_proto           = 'http',
+  $ks_heat_password               = 'heatpassword',
+  $ks_heat_cfn_public_port        = 8000,
+  $ks_heat_cloudwatch_public_port = 8003,
+  $auth_encryption_key            = 'secrete'
 ) {
 
   include 'cloud::orchestration'
