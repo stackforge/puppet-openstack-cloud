@@ -71,9 +71,9 @@ class os_params {
   $lb_internal_netif  = $internal_netif
 
   $swift_zone         = {
-    'swiftstore9'  => 1,
-    'swiftstore10' => 2,
-    'swiftstore11' => 3,
+    'swiftstore1'  => 1,
+    'swiftstore2' => 2,
+    'swiftstore3' => 3,
   }
 
   $galera_master_name  = $mgmt_names[0]
@@ -88,7 +88,7 @@ class os_params {
 
   $ceph_version       = 'cuttlefish'
 
-  $ceph_names         = ['cephstore9', 'cephstore10', 'cephstore11']
+  $ceph_names         = ['cephstore1', 'cephstore2', 'cephstore3']
 
   $ceph_osd_devices   = ['sdb','sdc','sdd']
 
