@@ -17,17 +17,17 @@
 #
 
 class cloud::object::controller(
-  $ks_keystone_admin_host       = $os_params::ks_keystone_admin_host,
-  $ks_keystone_admin_port       = $os_params::ks_keystone_admin_port,
-  $ks_keystone_internal_host    = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port    = $os_params::ks_keystone_internal_port,
-  $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
-  $ks_swift_internal_port       = $os_params::ks_swift_internal_port,
-  $ks_swift_password            = $os_params::ks_swift_password,
-  $statsd_host                  = $os_params::statsd_host,
-  $statsd_port                  = $os_params::statsd_port,
-  $memcache_servers             = $os_params::memcache_servers,
-  $api_eth                      = $os_params::api_eth,
+  $ks_keystone_admin_host       = '127.0.0.1',
+  $ks_keystone_admin_port       = 35357,
+  $ks_keystone_internal_host    = '127.0.0.1',
+  $ks_keystone_internal_port    = 5000,
+  $ks_swift_dispersion_password = 'dispersion',
+  $ks_swift_internal_port       = 8080,
+  $ks_swift_password            = 'swiftpassword',
+  $statsd_host                  = '127.0.0.1',
+  $statsd_port                  = 4125,
+  $memcache_servers             = ['127.0.0.1:11211'],
+  $api_eth                      = '127.0.0.1',
 ) {
 
   include 'cloud::object'
