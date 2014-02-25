@@ -113,6 +113,8 @@ class cloud::image(
     keystone_tenant       => 'services',
     keystone_user         => 'glance',
     show_image_direct_url => true,
+    log_dir               => $log_dir,
+    log_file              => $log_file_api,
     log_facility          => $log_facility,
     bind_host             => $api_eth,
     bind_port             => $ks_glance_api_internal_port,
