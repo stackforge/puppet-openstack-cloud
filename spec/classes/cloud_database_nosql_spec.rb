@@ -52,7 +52,10 @@ describe 'cloud::database::nosql' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { 
+        :osfamily  => 'Debian',
+        :lsbdistid => 'Debian'
+      }
     end
 
     it { should contain_class('mongodb::globals').with( :manage_package_repo => true) }
