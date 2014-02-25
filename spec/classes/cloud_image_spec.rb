@@ -60,7 +60,7 @@ describe 'cloud::image' do
         :bind_port             => '9292',
         :use_syslog            => true,
         :log_dir               => false,
-        :log_file              => false,
+        :log_file              => false
       )
     end
 
