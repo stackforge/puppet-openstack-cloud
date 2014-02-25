@@ -84,6 +84,13 @@ class cloud::telemetry(
   $use_syslog                 = $os_params::use_syslog,
 ){
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/ceilometer'
+  }
+
   class { 'ceilometer':
     metering_secret => $ceilometer_secret,
     rabbit_hosts    => $rabbit_hosts,
