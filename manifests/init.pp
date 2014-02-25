@@ -50,20 +50,20 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # DNS
   class { 'dnsclient':
-    nameservers => $os_params::dns_ips,
+    nameservers => ['8.8.8.8'],
     options     => 'UNSET',
-    search      => $os_params::site_domain,
-    domain      => $os_params::site_domain,
+    search      => 'example.com',
+    domain      => 'example.com',
   }
 
 # NTP
-  class { 'ntp': servers => $::os_params::ntp_servers }
+  class { 'ntp': servers => undef }
 
 # Strong root password for all servers
   user { 'root':
     ensure           => 'present',
     gid              => '0',
-    password         => $os_params::root_password,
+    password         => 'root',
     uid              => '0',
   }
 
