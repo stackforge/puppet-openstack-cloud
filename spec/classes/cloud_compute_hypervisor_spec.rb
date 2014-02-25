@@ -92,7 +92,8 @@ describe 'cloud::compute::hypervisor' do
           :rabbit_virtual_host     => '/',
           :memcached_servers       => ['10.0.0.1','10.0.0.2'],
           :database_connection     => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
-          :glance_api_servers      => 'http://10.0.0.1:9292'
+          :glance_api_servers      => 'http://10.0.0.1:9292',
+          :log_dir                 => false
         )
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')

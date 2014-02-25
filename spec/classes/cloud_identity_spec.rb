@@ -110,7 +110,8 @@ describe 'cloud::identity' do
         :bind_host           => '10.0.0.1',
         :public_port         => '5000',
         :admin_port          => '35357',
-        :token_expiration    => '3600'
+        :token_expiration    => '3600',
+        :log_dir             => false
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
     end
