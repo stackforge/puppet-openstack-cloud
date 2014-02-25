@@ -17,8 +17,8 @@
 #
 
 class cloud::network::dhcp(
-  $veth_mtu = $os_params::veth_mtu,
-  $debug    = $os_params::debug
+  $veth_mtu = 1500,
+  $debug    = true
 ) {
 
   include 'cloud::network'

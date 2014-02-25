@@ -17,7 +17,7 @@
 #
 
 class cloud::network::lbaas(
-  $debug              = $os_params::debug,
+  $debug              = true,
   $manage_haproxy_pkg = true
 ) {
 

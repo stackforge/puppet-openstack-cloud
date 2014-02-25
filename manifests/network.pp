@@ -60,17 +60,17 @@
 #   Defauls to '120'
 
 class cloud::network(
-  $verbose                  = $os_params::verbose,
-  $debug                    = $os_params::debug,
-  $rabbit_hosts             = $os_params::rabbit_hosts,
-  $rabbit_password          = $os_params::rabbit_password,
-  $tunnel_eth               = $os_params::tunnel_eth,
-  $api_eth                  = $os_params::api_eth,
-  $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
-  $provider_bridge_mappings = $os_params::provider_bridge_mappings,
-  $use_syslog               = $os_params::use_syslog,
-  $log_facility             = $os_params::log_facility,
-  $dhcp_lease_duration      = '120',
+  $verbose                  = true,
+  $debug                    = true,
+  $rabbit_hosts             = ['127.0.0.1:5672'],
+  $rabbit_password          = 'rabbitpassword',
+  $tunnel_eth               = '127.0.0.1',
+  $api_eth                  = '127.0.0.1',
+  $provider_vlan_ranges     = ['physnet1:1000:2999'],
+  $provider_bridge_mappings = ['physnet1:br-eth1'],
+  $use_syslog               = true,
+  $log_facility             = 'LOG_LOCAL0',
+  $dhcp_lease_duration      = '120'
 ) {
 
   # Disable twice logging if syslog is enabled

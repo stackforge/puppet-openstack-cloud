@@ -19,14 +19,14 @@
 
 class cloud::network::metadata(
   $enabled                              = true,
-  $debug                                = $os_params::debug,
-  $ks_neutron_password                  = $os_params::ks_neutron_password,
-  $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
-  $nova_metadata_server                 = $os_params::vip_internal_ip,
-  $ks_keystone_admin_proto              = $os_params::ks_keystone_admin_proto,
-  $ks_keystone_admin_port               = $os_params::ks_keystone_admin_port,
-  $ks_keystone_admin_host               = $os_params::ks_keystone_admin_host,
-  $auth_region                          = $os_params::region
+  $debug                                = true,
+  $ks_neutron_password                  = 'neutronpassword',
+  $neutron_metadata_proxy_shared_secret = 'asecreteaboutneutron',
+  $nova_metadata_server                 = '127.0.0.1',
+  $ks_keystone_admin_proto              = 'http',
+  $ks_keystone_admin_port               = 35357,
+  $ks_keystone_admin_host               = '127.0.0.1',
+  $auth_region                          = 'planet42',
 ) {
 
   include 'cloud::network'

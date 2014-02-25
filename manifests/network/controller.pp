@@ -17,16 +17,16 @@
 #
 
 class cloud::network::controller(
-  $neutron_db_host         = $os_params::neutron_db_host,
-  $neutron_db_user         = $os_params::neutron_db_user,
-  $neutron_db_password     = $os_params::neutron_db_password,
-  $ks_neutron_password     = $os_params::ks_neutron_password,
-  $ks_keystone_admin_host  = $os_params::ks_keystone_admin_host,
-  $ks_keystone_public_port = $os_params::ks_keystone_public_port,
-  $ks_neutron_public_port  = $os_params::ks_neutron_public_port,
-  $api_eth                 = $os_params::api_eth,
-  $ks_admin_tenant         = $os_params::ks_admin_tenant,
-  $public_cidr             = $os_params::public_cidr
+  $neutron_db_host         = '127.0.0.1',
+  $neutron_db_user         = 'neutron',
+  $neutron_db_password     = 'neutronpassword',
+  $ks_neutron_password     = 'neutronpassword',
+  $ks_keystone_admin_host  = '127.0.0.1',
+  $ks_keystone_public_port = 5000,
+  $ks_neutron_public_port  = 9696,
+  $api_eth                 = '127.0.0.1',
+  $ks_admin_tenant         = 'admin',
+  $public_cidr             = '173.24.4.224/28'
 ) {
 
   include 'cloud::network'
