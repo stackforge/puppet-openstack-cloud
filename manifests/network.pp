@@ -87,10 +87,10 @@ class cloud::network(
     bind_host               => $api_eth,
     log_facility            => $log_facility,
     use_syslog              => $use_syslog,
-    log_dir                 => $log_dir,
     dhcp_agents_per_network => '2',
     core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
-    service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
+    service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
+    log_dir                 => $log_dir,
   }
 
   class { 'neutron::agents::ovs':

@@ -61,7 +61,6 @@ describe 'cloud::network::controller' do
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
           :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
           :log_dir                 => false
-
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
@@ -85,7 +84,8 @@ describe 'cloud::network::controller' do
           :auth_host           => '10.0.0.1',
           :auth_port           => '5000',
           :database_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
-          :api_workers         => '2'
+          :api_workers         => '2',
+          :log_dir             => false,
         )
     end
 
