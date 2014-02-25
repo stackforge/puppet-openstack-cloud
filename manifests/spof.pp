@@ -29,7 +29,7 @@
 #
 
 class cloud::spof(
-  $cluster_ip        = $os_params::cluster_ip,
+  $cluster_ip        = '127.0.0.1',
   $multicast_address = '239.1.1.2'
 ) {
 
