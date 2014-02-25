@@ -98,6 +98,7 @@ class cloud::telemetry(
     rabbit_userid   => 'ceilometer',
     verbose         => $verbose,
     debug           => $debug,
+    log_dir         => $log_dir,
     use_syslog      => $use_syslog,
     log_facility    => $log_facility
   }
