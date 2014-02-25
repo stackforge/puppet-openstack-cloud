@@ -70,18 +70,18 @@
 #
 
 class cloud::telemetry(
-  $ceilometer_secret          = $os_params::ceilometer_secret,
-  $rabbit_hosts               = $os_params::rabbit_hosts,
-  $rabbit_password            = $os_params::rabbit_password,
-  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
-  $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
-  $ks_ceilometer_password     = $os_params::ks_ceilometer_password,
-  $region                     = $os_params::region,
-  $verbose                    = $os_params::verbose,
-  $debug                      = $os_params::debug,
-  $log_facility               = $os_params::log_facility,
-  $use_syslog                 = $os_params::use_syslog,
+  $ceilometer_secret          = 'ceilometersecret',
+  $rabbit_hosts               = ['127.0.0.1:5672'],
+  $rabbit_password            = 'rabbitpassword' ,
+  $ks_keystone_internal_host  = '127.0.0.1',
+  $ks_keystone_internal_port  = '5000',
+  $ks_keystone_internal_proto = 'http',
+  $ks_ceilometer_password     = 'ceilometerpassword',
+  $region                     = 'planet42',
+  $verbose                    = true,
+  $debug                      = true,
+  $log_facility               = 'LOG_LOCAL0',
+  $use_syslog                 = true,
 ){
 
   # Disable twice logging if syslog is enabled
