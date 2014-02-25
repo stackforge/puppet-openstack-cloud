@@ -16,8 +16,8 @@
 
 class cloud::storage::rbd::monitor (
   $id             = $::uniqueid,
-  $mon_addr       = $os_params::internal_netif_ip,
-  $monitor_secret = $os_params::ceph_mon_secret
+  $mon_addr       = '127.0.0.1',
+  $monitor_secret = 'cephmonsecret'
 ) {
 
   include 'cloud::storage::rbd'
