@@ -33,9 +33,9 @@
 #   Defaults to 'disc'
 
 class cloud::messaging(
-  $rabbit_names      = $os_params::rabbit_names,
-  $rabbit_password   = $os_params::rabbit_password,
-  $cluster_node_type = 'disc'
+  $cluster_node_type = 'disc',
+  $rabbit_names    = ['mgmt001'],
+  $rabbit_password = 'rabbitpassword'
 ){
 
   # Packaging issue: https://bugzilla.redhat.com/show_bug.cgi?id=1033305
