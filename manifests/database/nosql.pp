@@ -36,9 +36,9 @@
 #
 
 class cloud::database::nosql(
-  $bind_ip         = $os_params::internal_netif_ip,
+  $bind_ip         = '127.0.0.1',
   $nojournal       = false,
-  $replset_members = $os_params::mongo_nodes
+  $replset_members = ['mgmt001']
 ) {
 
   # bind_ip should be an array
