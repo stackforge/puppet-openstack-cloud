@@ -39,7 +39,7 @@ class cloud::network::controller(
     auth_host           => $ks_keystone_admin_host,
     auth_port           => $ks_keystone_public_port,
     database_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    api_workers         => $::processorcount
+    api_workers         => $::processorcount,
   }
 
   # Note(EmilienM):
