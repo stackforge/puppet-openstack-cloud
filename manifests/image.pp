@@ -68,24 +68,24 @@
 #   Defaults value in params
 #
 class cloud::image(
-  $glance_db_host                   = $os_params::glance_db_host,
-  $glance_db_user                   = $os_params::glance_db_user,
-  $glance_db_password               = $os_params::glance_db_password,
-  $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_host          = $os_params::ks_glance_internal_host,
-  $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
-  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
-  $ks_glance_password               = $os_params::ks_glance_password,
-  $rabbit_password                  = $os_params::rabbit_password,
-  $rabbit_host                      = $os_params::rabbit_host,
-  $api_eth                          = $os_params::api_eth,
-  $openstack_vip                    = $os_params::vip_public_ip,
-  $glance_rbd_pool                  = $os_params::glance_rbd_pool,
-  $glance_rbd_user                  = $os_params::glance_rbd_user,
-  $verbose                          = $os_params::verbose,
-  $debug                            = $os_params::debug,
-  $log_facility                     = $os_params::log_facility,
-  $use_syslog                       = $os_params::use_syslog
+  $glance_db_host                   = '127.0.0.1',
+  $glance_db_user                   = 'glance',
+  $glance_db_password               = 'glancepassword',
+  $ks_keystone_internal_host        = '127.0.0.1',
+  $ks_glance_internal_host          = '127.0.0.1',
+  $ks_glance_api_internal_port      = 9292,
+  $ks_glance_registry_internal_port = 9191,
+  $ks_glance_password               = 'glancepassword',
+  $rabbit_password                  = 'rabbitpassword',
+  $rabbit_host                      = '127.0.0.1',
+  $api_eth                          = '127.0.0.1',
+  $openstack_vip                    = '127.0.0.2',
+  $glance_rbd_pool                   = 'images',
+  $glance_rbd_user                   = 'glance',
+  $verbose                          = true,
+  $debug                            = true,
+  $log_facility                     = 'LOG_LOCAL0',
+  $use_syslog                       = true
 ) {
 
   # Disable twice logging if syslog is enabled
