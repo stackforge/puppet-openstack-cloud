@@ -17,14 +17,14 @@
 #
 
 class cloud::compute::controller(
-  $ks_keystone_internal_host            = $os_params::ks_keystone_internal_host,
-  $ks_nova_password                     = $os_params::ks_nova_password,
-  $neutron_metadata_proxy_shared_secret = $os_params::neutron_metadata_proxy_shared_secret,
-  $api_eth                              = $os_params::api_eth,
-  $spice_port                           = $os_params::spice_port,
-  $ks_nova_public_port                  = $os_params::ks_nova_public_port,
-  $ks_ec2_public_port                   = $os_params::ks_ec2_public_port,
-  $ks_metadata_public_port              = $os_params::ks_metadata_public_port
+  $ks_keystone_internal_host            = '127.0.0.1',
+  $ks_nova_password                     = 'novapassword',
+  $neutron_metadata_proxy_shared_secret = 'asecreteaboutneutron',
+  $api_eth                              = '127.0.0.1',
+  $spice_port                           = 6082,
+  $ks_nova_public_port                  = 8774,
+  $ks_ec2_public_port                   = 8773,
+  $ks_metadata_public_port              = 8775
 ){
 
   include 'cloud::compute'

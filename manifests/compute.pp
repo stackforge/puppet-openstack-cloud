@@ -69,23 +69,23 @@
 #
 
 class cloud::compute(
-  $nova_db_host            = $os_params::nova_db_host,
-  $nova_db_user            = $os_params::nova_db_user,
-  $nova_db_password        = $os_params::nova_db_password,
-  $rabbit_hosts            = $os_params::rabbit_hosts,
-  $rabbit_password         = $os_params::rabbit_password,
-  $ks_glance_internal_host = $os_params::ks_glance_internal_host,
-  $glance_api_port         = $os_params::ks_glance_api_internal_port,
-  $verbose                 = $os_params::verbose,
-  $debug                   = $os_params::debug,
-  $use_syslog              = $os_params::use_syslog,
-  $log_facility            = $os_params::log_facility,
-  $neutron_endpoint        = $os_params::ks_neutron_admin_host,
-  $neutron_protocol        = $os_params::ks_neutron_admin_proto,
-  $neutron_password        = $os_params::ks_neutron_password,
-  $neutron_region_name     = $os_params::region,
-  $memcache_servers        = $os_params::memcache_servers,
-  $availability_zone       = $os_params::region
+  $nova_db_host            = '127.0.0.1',
+  $nova_db_user            = 'nova',
+  $nova_db_password        = 'novapassword',
+  $rabbit_hosts            = ['127.0.0.1:5672'],
+  $rabbit_password         = 'rabbitpassword',
+  $ks_glance_internal_host = '127.0.0.1',
+  $glance_api_port         = 9292,
+  $verbose                 = true,
+  $debug                   = true,
+  $use_syslog              = true,
+  $log_facility            = 'LOG_LOCAL0',
+  $neutron_endpoint        = '127.0.0.1',
+  $neutron_protocol        = 'http',
+  $neutron_password        = 'neutronpassword',
+  $neutron_region_name     = 'planet42',
+  $memcache_servers        = ['127.0.0.1:11211'],
+  $availability_zone       = 'planet42'
 ) {
 
   if !defined(Resource['nova_config']) {
