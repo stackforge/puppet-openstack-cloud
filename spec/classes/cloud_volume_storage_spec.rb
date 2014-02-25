@@ -53,7 +53,8 @@ describe 'cloud::volume::storage' do
           :rabbit_password         => 'secrete',
           :rabbit_virtual_host     => '/',
           :log_facility            => 'LOG_LOCAL0',
-          :use_syslog              => true
+          :use_syslog              => true,
+          :log_dir                 => false
         )
 
       should contain_cinder_config('DEFAULT/notification_driver').with('value' => 'cinder.openstack.common.notifier.rpc_notifier')
