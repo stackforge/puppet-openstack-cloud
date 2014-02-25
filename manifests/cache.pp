@@ -25,7 +25,7 @@
 #
 
 class cloud::cache (
-  $listen_ip = $os_params::internal_netif_ip,
+  $listen_ip = '127.0.0.1',
 ){
 
   class { 'memcached':
