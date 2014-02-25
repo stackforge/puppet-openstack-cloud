@@ -55,14 +55,14 @@ class cloud::volume::storage(
   $ks_keystone_internal_port               = '5000',
   $ks_keystone_internal_host               = '127.0.0.1',
   $ks_cinder_password                      = 'secrete',
-  # Deprecated parameters
-  $glance_api_version                      = '2',
-  $cinder_rbd_pool                         = $os_params::cinder_rbd_pool,
-  $cinder_rbd_user                         = $os_params::cinder_rbd_user,
-  $cinder_rbd_secret_uuid                  = $os_params::ceph_fsid,
+  $cinder_rbd_pool                         = 'volumes',
+  $cinder_rbd_user                         = 'cinder',
+  $cinder_rbd_secret_uuid                  = '4a158d27-f750-41d5-9e7f-26ce4c9d2d45',
   $cinder_rbd_conf                         = '/etc/ceph/ceph.conf',
   $cinder_rbd_flatten_volume_from_snapshot = false,
-  $cinder_rbd_max_clone_depth              = '5'
+  $cinder_rbd_max_clone_depth              = '5',
+  # Deprecated parameters
+  $glance_api_version                      = '2',
 ) {
 
   include 'cloud::volume'
