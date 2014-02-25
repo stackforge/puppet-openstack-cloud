@@ -18,15 +18,15 @@ Overview
 
 The OpenStack Puppet Modules are a flexible Puppet implementation capable of configuring the core [OpenStack](http://docs.openstack.org/) services:
 
-* Nova (compute)
-* Glance (image)
-* Keystone (identity)
-* Cinder (volume)
-* Horizon (dashboard)
-* Heat (orchestration)
-* Ceilometer (telemetry)
-* Neutron (networking)
-* Swift (object storage)
+* [Nova](https://github.com/stackforge/puppet-nova) (compute)
+* [Glance](https://github.com/stackforge/puppet-glance) (image)
+* [Keystone](https://github.com/stackforge/puppet-keystone) (identity)
+* [Cinder](https://github.com/stackforge/puppet-cinder) (volume)
+* [Horizon](https://github.com/stackforge/puppet-horizon) (dashboard)
+* [Heat](https://github.com/stackforge/puppet-heat) (orchestration)
+* [Ceilometer](https://github.com/stackforge/puppet-ceilometer) (telemetry)
+* [Neutron](https://github.com/stackforge/puppet-neutron) (networking)
+* [Swift](https://github.com/stackforge/puppet-swift) (object storage)
 
 Cinder, Glance and Nova can use Ceph as backend storage, using [puppet-ceph](https://github.com/enovance/puppet-ceph).
 
@@ -76,8 +76,9 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
     cd /etc/puppet/modules
     git clone git@github.com:enovance/puppet-cloud.git cloud
     cd cloud
-    gem install librarian-puppet
-    librarian-puppet install --path ../
+    gem install --no-ri --no-rdoc r10k
+    # a debian package is available in jessie
+    PUPPETFILE=./Puppetfile PUPPETFILE_DIR=../ r10k puppetfile install
 
 **Pre-puppet setup**
 
@@ -115,7 +116,6 @@ The best way to get help with this set of modules is to email the group associat
 Issues should be opened here:
 
   https://github.com/enovance/puppet-cloud/issues
-
 
 
 Contributors
