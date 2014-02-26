@@ -97,7 +97,7 @@ class cloud::storage::rbd::pools(
 
       if $::ceph_keyring_nova {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $cinder_user:
+        ceph::key { $nova_user:
           secret       => $::ceph_keyring_nova,
           keyring_path => "/etc/ceph/ceph.client.${nova_user}.keyring"
         } ->
