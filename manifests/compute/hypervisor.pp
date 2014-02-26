@@ -34,8 +34,8 @@ class cloud::compute::hypervisor(
   $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
   $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
   $spice_port                 = $os_params::spice_port,
-  $rbd_user                   = $os_params::cinder_rbd_user,
-  $rbd_pool                   = $os_params::cinder_rbd_pool,
+  $rbd_user                   = $os_params::nova_rbd_user,
+  $rbd_pool                   = $os_params::nova_rbd_pool,
   $rbd_secret_uuid            = $os_params::ceph_fsid,
   $has_ceph                   = false
 ) {
@@ -137,8 +137,8 @@ Host *
     Exec <<| tag == 'set_secret_value_virsh' |>>
 
     Ceph::Key <<| title == $nova_user |>>
-    if defined(Ceph::Key[$cinder_user]) {
-      file { '/etc/ceph/ceph.client.cinder.keyring':
+    if defined(Ceph::Key[$nova_user]) {
+      file { '/etc/ceph/ceph.client.nova.keyring':
         owner   => 'nova',
         group   => 'nova',
         mode    => '0400',
