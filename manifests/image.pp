@@ -80,8 +80,8 @@ class cloud::image(
   $rabbit_host                      = $os_params::rabbit_host,
   $api_eth                          = $os_params::api_eth,
   $openstack_vip                    = $os_params::vip_public_ip,
-  $rbd_store_pool                   = $os_params::glance_rbd_pool,
-  $rbd_store_user                   = $os_params::glance_rbd_user,
+  $glance_rbd_pool                  = $os_params::glance_rbd_pool,
+  $glance_rbd_user                  = $os_params::glance_rbd_user,
   $verbose                          = $os_params::verbose,
   $debug                            = $os_params::debug,
   $log_facility                     = $os_params::log_facility,
@@ -132,8 +132,8 @@ class cloud::image(
   # }
 
   class { 'glance::backend::rbd':
-    rbd_store_user => $rbd_store_user,
-    rbd_store_pool => $rbd_store_pool
+    rbd_store_user => $glance_rbd_user,
+    rbd_store_pool => $glance_rbd_pool
   }
 
   Ceph::Key <<| title == $glance_user |>>

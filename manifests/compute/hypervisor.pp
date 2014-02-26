@@ -34,9 +34,9 @@ class cloud::compute::hypervisor(
   $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
   $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
   $spice_port                 = $os_params::spice_port,
-  $rbd_user                   = $os_params::nova_rbd_user,
-  $rbd_pool                   = $os_params::nova_rbd_pool,
-  $rbd_secret_uuid            = $os_params::ceph_fsid,
+  $nova_rbd_user              = $os_params::nova_rbd_user,
+  $nova_rbd_pool              = $os_params::nova_rbd_pool,
+  $nova_rbd_secret_uuid       = $os_params::ceph_fsid,
   $has_ceph                   = false
 ) {
 
@@ -118,10 +118,10 @@ Host *
     # TODO(EmilienM) Temporary, while https://review.openstack.org/#/c/72440 got merged
     nova_config {
       'DEFAULT/libvirt_images_type':          value => 'rbd';
-      'DEFAULT/libvirt_images_rbd_pool':      value => $rbd_pool;
+      'DEFAULT/libvirt_images_rbd_pool':      value => $nova_rbd_pool;
       'DEFAULT/libvirt_images_rbd_ceph_conf': value => '/etc/ceph/ceph.conf';
-      'DEFAULT/rbd_user':                     value => $rbd_user;
-      'DEFAULT/rbd_secret_uuid':              value => $rbd_secret_uuid;
+      'DEFAULT/rbd_user':                     value => $nova_rbd_pool;
+      'DEFAULT/rbd_secret_uuid':              value => $nova_rbd_secret_uuid;
     }
 
     # Extra config for nova-compute
