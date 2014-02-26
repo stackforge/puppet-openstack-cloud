@@ -25,7 +25,6 @@ describe 'cloud::messaging' do
     let :params do
       {
         :rabbit_names    => ['foo','boo','zoo'],
-        :rabbit_hosts    => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :rabbit_password => 'secrete'
       }
     end
