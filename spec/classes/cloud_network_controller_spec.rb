@@ -59,8 +59,8 @@ describe 'cloud::network::controller' do
           :rabbit_virtual_host     => '/',
           :bind_host               => '10.0.0.1',
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
-          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
-
+          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
+          :log_dir                 => false
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,

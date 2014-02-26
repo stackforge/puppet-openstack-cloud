@@ -112,6 +112,13 @@ class cloud::orchestration(
   $log_facility               = $os_params::log_facility
 ) {
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/heat'
+  }
+
   $encoded_user     = uriescape($heat_db_user)
   $encoded_password = uriescape($heat_db_password)
 
@@ -129,6 +136,7 @@ class cloud::orchestration(
     debug             => $debug,
     log_facility      => $log_facility,
     use_syslog        => $use_syslog,
+    log_dir           => $log_dir,
   }
 
   # Note(EmilienM):

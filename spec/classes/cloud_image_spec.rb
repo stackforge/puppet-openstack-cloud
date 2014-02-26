@@ -58,7 +58,9 @@ describe 'cloud::image' do
         :log_facility          => 'LOG_LOCAL0',
         :bind_host             => '10.0.0.1',
         :bind_port             => '9292',
-        :use_syslog            => true
+        :use_syslog            => true,
+        :log_dir               => false,
+        :log_file              => false
       )
     end
 
@@ -74,7 +76,9 @@ describe 'cloud::image' do
         :log_facility          => 'LOG_LOCAL0',
         :bind_host             => '10.0.0.1',
         :bind_port             => '9191',
-        :use_syslog            => true
+        :use_syslog            => true,
+        :log_dir               => false,
+        :log_file              => false
       )
     end
 

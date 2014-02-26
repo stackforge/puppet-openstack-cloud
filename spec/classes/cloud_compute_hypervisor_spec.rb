@@ -92,7 +92,8 @@ describe 'cloud::compute::hypervisor' do
           :rabbit_virtual_host     => '/',
           :memcached_servers       => ['10.0.0.1','10.0.0.2'],
           :database_connection     => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
-          :glance_api_servers      => 'http://10.0.0.1:9292'
+          :glance_api_servers      => 'http://10.0.0.1:9292',
+          :log_dir                 => false
         )
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
@@ -139,8 +140,8 @@ describe 'cloud::compute::hypervisor' do
           :rabbit_virtual_host     => '/',
           :bind_host               => '10.0.0.1',
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
-          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
-
+          :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
+          :log_dir                 => false
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,

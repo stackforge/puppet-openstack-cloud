@@ -58,7 +58,8 @@ describe 'cloud::volume::controller' do
           :rabbit_password         => 'secrete',
           :rabbit_virtual_host     => '/',
           :log_facility            => 'LOG_LOCAL0',
-          :use_syslog              => true
+          :use_syslog              => true,
+          :log_dir                 => false
         )
       should contain_class('cinder::ceilometer')
     end

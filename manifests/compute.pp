@@ -94,6 +94,13 @@ class cloud::compute(
     }
   }
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/nova'
+  }
+
   $encoded_user     = uriescape($nova_db_user)
   $encoded_password = uriescape($nova_db_password)
 
@@ -106,8 +113,9 @@ class cloud::compute(
     memcached_servers   => $memcache_servers,
     verbose             => $verbose,
     debug               => $debug,
+    log_dir             => $log_dir,
     log_facility        => $log_facility,
-    use_syslog          => $use_syslog
+    use_syslog          => $use_syslog,
   }
 
   class { 'nova::network::neutron':
