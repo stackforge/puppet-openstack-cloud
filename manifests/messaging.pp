@@ -19,7 +19,7 @@
 #
 # === Parameters:
 #
-# [*rabbit_hosts*]
+# [*rabbit_names*]
 #   (optional) List of RabbitMQ servers. Should be an array.
 #   Default value in params
 #
@@ -29,7 +29,6 @@
 #
 
 class cloud::messaging(
-  $rabbit_hosts    = $os_params::rabbit_hosts,
   $rabbit_names    = $os_params::rabbit_names,
   $rabbit_password = $os_params::rabbit_password
 ){
