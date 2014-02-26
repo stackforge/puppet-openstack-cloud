@@ -85,7 +85,6 @@ describe 'cloud::network::controller' do
           :auth_port           => '5000',
           :database_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
           :api_workers         => '2',
-          :log_dir             => false,
         )
     end
 

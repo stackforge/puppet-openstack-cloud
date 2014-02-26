@@ -63,7 +63,6 @@ describe 'cloud::compute::hypervisor' do
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
-        log_dir                  => false,
         log_facility             => 'LOG_LOCAL0' }"
     end
 
@@ -142,7 +141,7 @@ describe 'cloud::compute::hypervisor' do
           :bind_host               => '10.0.0.1',
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
           :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
-          :log_dir                 => false
+          :log_dir                 => false,
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
