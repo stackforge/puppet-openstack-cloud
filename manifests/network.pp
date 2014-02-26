@@ -65,9 +65,16 @@ class cloud::network(
   $api_eth                  = $os_params::api_eth,
   $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
   $provider_bridge_mappings = $os_params::provider_bridge_mappings,
-  $use_syslog               = $os_params::neutron_use_syslog,
-  $log_facility             = $os_params::neutron_log_facility
+  $use_syslog               = $os_params::use_syslog,
+  $log_facility             = $os_params::log_facility
 ) {
+
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/neutron'
+  }
 
   class { 'neutron':
     allow_overlapping_ips   => true,
@@ -82,7 +89,8 @@ class cloud::network(
     use_syslog              => $use_syslog,
     dhcp_agents_per_network => '2',
     core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
-    service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
+    service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
+    log_dir                 => $log_dir,
   }
 
   class { 'neutron::agents::ovs':

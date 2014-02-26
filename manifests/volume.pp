@@ -78,6 +78,13 @@ class cloud::volume(
   $use_syslog                 = $os_params::use_syslog
 ) {
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir = false
+  } else {
+    $log_dir = '/var/log/cinder'
+  }
+
   $encoded_user = uriescape($cinder_db_user)
   $encoded_password = uriescape($cinder_db_password)
 
@@ -90,6 +97,7 @@ class cloud::volume(
     rabbit_virtual_host => '/',
     verbose             => $verbose,
     debug               => $debug,
+    log_dir             => $log_dir,
     log_facility        => $log_facility,
     use_syslog          => $use_syslog
   }

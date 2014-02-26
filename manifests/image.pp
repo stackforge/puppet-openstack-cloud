@@ -88,6 +88,17 @@ class cloud::image(
   $use_syslog                       = $os_params::use_syslog
 ) {
 
+  # Disable twice logging if syslog is enabled
+  if $use_syslog {
+    $log_dir           = false
+    $log_file_api      = false
+    $log_file_registry = false
+  } else {
+    $log_dir           = '/var/log/glance'
+    $log_file_api      = '/var/log/glance/api.log'
+    $log_file_registry = '/var/log/glance/registry.log'
+  }
+
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)
 
@@ -102,6 +113,8 @@ class cloud::image(
     keystone_tenant       => 'services',
     keystone_user         => 'glance',
     show_image_direct_url => true,
+    log_dir               => $log_dir,
+    log_file              => $log_file_api,
     log_facility          => $log_facility,
     bind_host             => $api_eth,
     bind_port             => $ks_glance_api_internal_port,
@@ -117,6 +130,8 @@ class cloud::image(
     keystone_tenant   => 'services',
     keystone_user     => 'glance',
     bind_host         => $api_eth,
+    log_dir           => $log_dir,
+    log_file          => $log_file_registry,
     bind_port         => $ks_glance_registry_internal_port,
     use_syslog        => $use_syslog,
     log_facility      => $log_facility,

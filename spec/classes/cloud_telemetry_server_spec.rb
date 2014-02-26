@@ -57,7 +57,8 @@ describe 'cloud::telemetry::server' do
           :rabbit_password         => 'secrete',
           :metering_secret         => 'secrete',
           :use_syslog              => true,
-          :log_facility            => 'LOG_LOCAL0'
+          :log_facility            => 'LOG_LOCAL0',
+          :log_dir                 => false
         )
       should contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
