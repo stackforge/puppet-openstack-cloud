@@ -44,8 +44,7 @@ describe 'cloud::telemetry::server' do
         :ks_ceilometer_internal_port          => '8777',
         :ks_ceilometer_password               => 'secrete',
         :api_eth                              => '10.0.0.1',
-        :mongo_nodes                          => ['node1', 'node2', 'node3'],
-        :mongo_primary                        => 'node1' }
+        :mongo_nodes                          => ['node1', 'node2', 'node3'] }
     end
 
     it 'configure ceilometer common' do
@@ -95,25 +94,11 @@ describe 'cloud::telemetry::server' do
         )
     end
 
-    context 'configure ceilometer db on primary mongodb node' do
-      it 'configure ceilometer db' do
-        should contain_class('ceilometer::db').with(
-          :sync_db             => true,
-          :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
-          )
-      end
-    end
-
-    context 'configure ceilometer db on secondary mongodb node' do
-      before :each do
-        facts.merge!( :hostname => 'node2' )
-      end
-      it 'configure ceilometer db' do
-        should contain_class('ceilometer::db').with(
-          :sync_db             => false,
-          :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
-          )
-      end
+    it 'synchronize ceilometer db indexes' do
+      should contain_class('ceilometer::db').with(
+        :sync_db             => true,
+        :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
+        )
     end
   end
 
