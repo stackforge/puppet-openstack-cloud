@@ -437,6 +437,8 @@ class os_params {
   $ks_nova_public_proto = 'http'
   $neutron_metadata_proxy_shared_secret = 'secrete'
   $spice_port = '6082'
+  $nova_rbd_user = 'nova'
+  $nova_rbd_pool = 'vm'
   $nova_ssh_public_key='ssh-rsa XXX nova@openstack'
   $nova_ssh_private_key='
 -----BEGIN RSA PRIVATE KEY-----
@@ -476,7 +478,6 @@ XXX
   $ks_ceilometer_public_port = '8777'
   $ks_ceilometer_public_proto = 'http'
   $replset_members = $mgmt_internal_ips
-  $mongo_nodes = $mgmt_internal_ips
   $mongo_primary = $mgmt_internal_ips[0]
 
   # Cinder
