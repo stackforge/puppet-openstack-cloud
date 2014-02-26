@@ -135,6 +135,17 @@ Host *
     File <<| tag == 'ceph_compute_secret_file' |>>
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
+
+    Ceph::Key <<| title == $nova_user |>>
+    if defined(Ceph::Key[$cinder_user]) {
+      file { '/etc/ceph/ceph.client.cinder.keyring':
+        owner   => 'nova',
+        group   => 'nova',
+        mode    => '0400',
+        require => Ceph::Key[$nova_user]
+      }
+    }
+    Concat::Fragment <<| title == 'ceph-client-os' |>>
   }
 
   class { 'ceilometer::agent::compute': }

@@ -19,6 +19,8 @@ class cloud::storage::rbd::pools(
   $glance_pool          = $os_params::glance_rbd_pool,
   $cinder_user          = $os_params::cinder_rbd_user,
   $cinder_pool          = $os_params::cinder_rbd_pool,
+  $nova_user            = $os_params::nova_rbd_user,
+  $nova_pool            = $os_params::nova_rbd_pool,
   $pool_default_pg_num  = $::ceph::conf::pool_default_pg_num,
   $pool_default_pgp_num = $::ceph::conf::pool_default_pgp_num,
   $cinder_backup_user   = $os_params::cinder_rbd_backup_user,
@@ -54,6 +56,19 @@ class cloud::storage::rbd::pools(
         require => Exec['create_cinder_volumes_pool'];
       }
 
+      # ceph osd pool create poolname 128 128
+      exec { 'create_nova_vm_pool':
+        command => "rados mkpool ${nova_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        unless  => "/usr/bin/rados lspools | grep -sq ${nova_pool}",
+      }
+
+      exec { 'create_nova_vm_user_and_key':
+        # TODO: point PG num with a cluster variable
+        command => "ceph auth get-or-create client.${nova_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_pool}, allow rwx pool=${cinder_pool}, allow rwx pool=${nova_pool}'",
+        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${nova_user}$'",
+        require => Exec['create_nova_vm_pool'];
+      }
+
       if $::ceph_keyring_glance {
         # NOTE(fc): Puppet needs to run a second time to enter this
         ceph::key { $glance_user:
@@ -80,7 +95,20 @@ class cloud::storage::rbd::pools(
         }
       }
 
-      $clients = ['glance', 'cinder']
+      if $::ceph_keyring_nova {
+        # NOTE(fc): Puppet needs to run a second time to enter this
+        ceph::key { $cinder_user:
+          secret       => $::ceph_keyring_nova,
+          keyring_path => "/etc/ceph/ceph.client.${nova_user}.keyring"
+        } ->
+        file { "/etc/ceph/ceph.client.${nova_user}.keyring":
+          owner => 'nova',
+          group => 'nova',
+          mode  => '0400'
+        }
+      }
+
+      $clients = ['glance', 'cinder', 'nova']
       @@concat::fragment { 'ceph-clients-os':
         target  => '/etc/ceph/ceph.conf',
         order   => '95',
@@ -110,7 +138,7 @@ class cloud::storage::rbd::pools(
       }
 
       @@exec { 'set_secret_value_virsh':
-        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder}",
+        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_nova}",
         tag          => 'ceph_compute_set_secret',
         refreshonly  =>  true,
       }
