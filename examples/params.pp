@@ -478,7 +478,7 @@ XXX
   $ks_ceilometer_public_port = '8777'
   $ks_ceilometer_public_proto = 'http'
   $replset_members = $mgmt_internal_ips
-  $mongo_primary = $mgmt_internal_ips[0]
+  $mongo_nodes     = $mgmt_internal_ips
 
   # Cinder
   $cinder_db_allowed_hosts = $db_allowed_hosts
