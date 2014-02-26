@@ -115,7 +115,7 @@ class cloud::compute(
     debug               => $debug,
     log_dir             => $log_dir,
     log_facility        => $log_facility,
-    use_syslog          => $use_syslog
+    use_syslog          => $use_syslog,
   }
 
   class { 'nova::network::neutron':
