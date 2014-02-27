@@ -120,7 +120,7 @@ Host *
       'DEFAULT/libvirt_images_type':          value => 'rbd';
       'DEFAULT/libvirt_images_rbd_pool':      value => $nova_rbd_pool;
       'DEFAULT/libvirt_images_rbd_ceph_conf': value => '/etc/ceph/ceph.conf';
-      'DEFAULT/rbd_user':                     value => $nova_rbd_pool;
+      'DEFAULT/rbd_user':                     value => $nova_rbd_user;
       'DEFAULT/rbd_secret_uuid':              value => $nova_rbd_secret_uuid;
     }
 
