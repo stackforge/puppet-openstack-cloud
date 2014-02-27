@@ -108,7 +108,7 @@ class cloud::storage::rbd::pools(
         }
       }
 
-      $clients = ["${glance_rbd_user}", "${cinder_rbd_user}", "${nova_rbd_user}"]
+      $clients = [$glance_rbd_user, $cinder_rbd_user, $nova_rbd_user]
       @@concat::fragment { 'ceph-clients-os':
         target  => '/etc/ceph/ceph.conf',
         order   => '95',
