@@ -136,13 +136,13 @@ Host *
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
 
-    Ceph::Key <<| title == $nova_user |>>
-    if defined(Ceph::Key[$nova_user]) {
+    Ceph::Key <<| title == $nova_rbd_user |>>
+    if defined(Ceph::Key[$nova_rbd_user]) {
       file { '/etc/ceph/ceph.client.nova.keyring':
         owner   => 'nova',
         group   => 'nova',
         mode    => '0400',
-        require => Ceph::Key[$nova_user]
+        require => Ceph::Key[$nova_rbd_user]
       }
     }
     Concat::Fragment <<| title == 'ceph-client-os' |>>
