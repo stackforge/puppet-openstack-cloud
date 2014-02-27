@@ -15,12 +15,12 @@
 #
 class cloud::storage::rbd::pools(
   $setup_pools          = false,
-  $glance_user          = $os_params::glance_rbd_user,
-  $glance_pool          = $os_params::glance_rbd_pool,
-  $cinder_user          = $os_params::cinder_rbd_user,
-  $cinder_pool          = $os_params::cinder_rbd_pool,
-  $nova_user            = $os_params::nova_rbd_user,
-  $nova_pool            = $os_params::nova_rbd_pool,
+  $glance_rbd_user      = $os_params::glance_rbd_user,
+  $glance_rbd_pool          = $os_params::glance_rbd_pool,
+  $cinder_rbd_user      = $os_params::cinder_rbd_user,
+  $cinder_rbd_pool          = $os_params::cinder_rbd_pool,
+  $nova_rbd_user        = $os_params::nova_rbd_user,
+  $nova_rbd_pool            = $os_params::nova_rbd_pool,
   $pool_default_pg_num  = $::ceph::conf::pool_default_pg_num,
   $pool_default_pgp_num = $::ceph::conf::pool_default_pgp_num,
   $cinder_backup_user   = $os_params::cinder_rbd_backup_user,
@@ -33,49 +33,49 @@ class cloud::storage::rbd::pools(
 
       # ceph osd pool create poolname 128 128
       exec { 'create_glance_images_pool':
-        command => "rados mkpool ${glance_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
-        unless  => "rados lspools | grep -sq ${glance_pool}",
+        command => "rados mkpool ${glance_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        unless  => "rados lspools | grep -sq ${glance_rbd_pool}",
       }
 
       exec { 'create_glance_images_user_and_key':
-        command => "ceph auth get-or-create client.${glance_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_pool}'",
-        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${glance_user}$'",
+        command => "ceph auth get-or-create client.${glance_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_rbd_pool}'",
+        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${glance_rbd_user}$'",
         require => Exec['create_glance_images_pool'];
       }
 
       # ceph osd pool create poolname 128 128
       exec { 'create_cinder_volumes_pool':
-        command => "rados mkpool ${cinder_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
-        unless  => "/usr/bin/rados lspools | grep -sq ${cinder_pool}",
+        command => "rados mkpool ${cinder_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        unless  => "/usr/bin/rados lspools | grep -sq ${cinder_rbd_pool}",
       }
 
       exec { 'create_cinder_volumes_user_and_key':
         # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${cinder_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_pool}, allow rwx pool=${cinder_pool}'",
-        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_user}$'",
+        command => "ceph auth get-or-create client.${cinder_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}'",
+        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_rbd_user}$'",
         require => Exec['create_cinder_volumes_pool'];
       }
 
       # ceph osd pool create poolname 128 128
       exec { 'create_nova_vm_pool':
-        command => "rados mkpool ${nova_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
-        unless  => "/usr/bin/rados lspools | grep -sq ${nova_pool}",
+        command => "rados mkpool ${nova_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        unless  => "/usr/bin/rados lspools | grep -sq ${nova_rbd_pool}",
       }
 
       exec { 'create_nova_vm_user_and_key':
         # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${nova_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_pool}, allow rwx pool=${cinder_pool}, allow rwx pool=${nova_pool}'",
-        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${nova_user}$'",
+        command => "ceph auth get-or-create client.${nova_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
+        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${nova_rbd_user}$'",
         require => Exec['create_nova_vm_pool'];
       }
 
       if $::ceph_keyring_glance {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $glance_user:
+        ceph::key { $glance_rbd_user:
           secret       => $::ceph_keyring_glance,
-          keyring_path => "/etc/ceph/ceph.client.${glance_user}.keyring"
+          keyring_path => "/etc/ceph/ceph.client.${glance_rbd_user}.keyring"
         } ->
-        file { "/etc/ceph/ceph.client.${glance_user}.keyring":
+        file { "/etc/ceph/ceph.client.${glance_rbd_user}.keyring":
           owner => 'glance',
           group => 'glance',
           mode  => '0400'
@@ -84,11 +84,11 @@ class cloud::storage::rbd::pools(
 
       if $::ceph_keyring_cinder {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $cinder_user:
+        ceph::key { $cinder_rbd_user:
           secret       => $::ceph_keyring_cinder,
-          keyring_path => "/etc/ceph/ceph.client.${cinder_user}.keyring"
+          keyring_path => "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring"
         } ->
-        file { "/etc/ceph/ceph.client.${cinder_user}.keyring":
+        file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
           owner => 'cinder',
           group => 'cinder',
           mode  => '0400'
@@ -97,11 +97,11 @@ class cloud::storage::rbd::pools(
 
       if $::ceph_keyring_nova {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $nova_user:
+        ceph::key { $nova_rbd_user:
           secret       => $::ceph_keyring_nova,
-          keyring_path => "/etc/ceph/ceph.client.${nova_user}.keyring"
+          keyring_path => "/etc/ceph/ceph.client.${nova_rbd_user}.keyring"
         } ->
-        file { "/etc/ceph/ceph.client.${nova_user}.keyring":
+        file { "/etc/ceph/ceph.client.${nova_rbd_user}.keyring":
           owner => 'nova',
           group => 'nova',
           mode  => '0400'
