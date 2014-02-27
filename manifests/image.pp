@@ -136,13 +136,13 @@ class cloud::image(
     rbd_store_pool => $glance_rbd_pool
   }
 
-  Ceph::Key <<| title == $glance_user |>>
-  if defined(Ceph::Key[$glance_user]) {
+  Ceph::Key <<| title == $glance_rbd_user |>>
+  if defined(Ceph::Key[$glance_rbd_user]) {
     file { '/etc/ceph/ceph.client.glance.keyring':
       owner   => 'glance',
       group   => 'glance',
       mode    => '0400',
-      require => Ceph::Key[$glance_user]
+      require => Ceph::Key[$glance_rbd_user]
     }
   }
   Concat::Fragment <<| title == 'ceph-client-os' |>>
