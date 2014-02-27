@@ -138,7 +138,7 @@ Host *
 
     Ceph::Key <<| title == $nova_rbd_user |>>
     if defined(Ceph::Key[$nova_rbd_user]) {
-      file { '/etc/ceph/ceph.client.nova.keyring':
+      file { "/etc/ceph/ceph.client.${nova_rbd_user}.keyring":
         owner   => 'nova',
         group   => 'nova',
         mode    => '0400',

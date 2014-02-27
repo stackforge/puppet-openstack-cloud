@@ -32,7 +32,7 @@ class cloud::storage::rbd::pools(
     if !empty($::ceph_admin_key) {
 
       # ceph osd pool create poolname 128 128
-      exec { 'create_glance_images_pool':
+      exec { "create_${glance_rbd_pool}_pool":
         command => "rados mkpool ${glance_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
         unless  => "rados lspools | grep -sq ${glance_rbd_pool}",
       }
@@ -40,7 +40,7 @@ class cloud::storage::rbd::pools(
       exec { 'create_glance_images_user_and_key':
         command => "ceph auth get-or-create client.${glance_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=${glance_rbd_pool}'",
         unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${glance_rbd_user}$'",
-        require => Exec['create_glance_images_pool'];
+        require => Exec["create_${glance_rbd_pool}_pool"];
       }
 
       # ceph osd pool create poolname 128 128
