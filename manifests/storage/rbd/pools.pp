@@ -64,7 +64,7 @@ class cloud::storage::rbd::pools(
 
       exec { "create_${nova_rbd_pool}_user_and_key":
         # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${nova_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
+        command => "ceph auth get-or-create client.${nova_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
         unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${nova_rbd_user}$'",
         require => Exec["create_${nova_rbd_pool}_pool"];
       }
@@ -138,7 +138,7 @@ class cloud::storage::rbd::pools(
       }
 
       @@exec { 'set_secret_value_virsh':
-        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_nova}",
+        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder};virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_nova}",
         tag          => 'ceph_compute_set_secret',
         refreshonly  =>  true,
       }
