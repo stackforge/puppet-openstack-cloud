@@ -20,8 +20,6 @@ class cloud::storage::rbd::pools(
   $cinder_rbd_user      = $os_params::cinder_rbd_user,
   $cinder_rbd_pool      = $os_params::cinder_rbd_pool,
   $nova_rbd_pool        = $os_params::nova_rbd_pool,
-  $pool_default_pg_num  = $::ceph::conf::pool_default_pg_num,
-  $pool_default_pgp_num = $::ceph::conf::pool_default_pgp_num,
   $cinder_backup_user   = $os_params::cinder_rbd_backup_user,
   $cinder_backup_pool   = $os_params::cinder_rbd_backup_pool,
   $ceph_fsid            = $os_params::ceph_fsid,
@@ -30,9 +28,8 @@ class cloud::storage::rbd::pools(
   if $setup_pools {
     if !empty($::ceph_admin_key) {
 
-      # ceph osd pool create poolname 128 128
       exec { "create_${glance_rbd_pool}_pool":
-        command => "rados mkpool ${glance_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        command => "rados mkpool ${glance_rbd_pool}",
         unless  => "rados lspools | grep -sq ${glance_rbd_pool}",
       }
 
@@ -42,9 +39,8 @@ class cloud::storage::rbd::pools(
         require => Exec["create_${glance_rbd_pool}_pool"];
       }
 
-      # ceph osd pool create poolname 128 128
       exec { "create_${cinder_rbd_pool}_pool":
-        command => "rados mkpool ${cinder_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        command => "rados mkpool ${cinder_rbd_pool}",
         unless  => "/usr/bin/rados lspools | grep -sq ${cinder_rbd_pool}",
       }
 
@@ -55,10 +51,9 @@ class cloud::storage::rbd::pools(
         require => Exec["create_${cinder_rbd_pool}_pool"];
       }
 
-      # ceph osd pool create poolname 128 128
       # Note(EmilienM): We use the same keyring for Nova and Cinder.
       exec { "create_${nova_rbd_pool}_pool":
-        command => "rados mkpool ${nova_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
+        command => "rados mkpool ${nova_rbd_pool}",
         unless  => "/usr/bin/rados lspools | grep -sq ${nova_rbd_pool}",
       }
 
