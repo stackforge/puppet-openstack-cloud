@@ -34,7 +34,7 @@ class cloud::compute::hypervisor(
   $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
   $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
   $spice_port                 = $os_params::spice_port,
-  $nova_rbd_user              = $os_params::nova_rbd_user,
+  $cinder_rbd_user            = $os_params::cinder_rbd_user,
   $nova_rbd_pool              = $os_params::nova_rbd_pool,
   $nova_rbd_secret_uuid       = $os_params::ceph_fsid,
   $has_ceph                   = false
@@ -120,7 +120,7 @@ Host *
       'DEFAULT/libvirt_images_type':          value => 'rbd';
       'DEFAULT/libvirt_images_rbd_pool':      value => $nova_rbd_pool;
       'DEFAULT/libvirt_images_rbd_ceph_conf': value => '/etc/ceph/ceph.conf';
-      'DEFAULT/rbd_user':                     value => $nova_rbd_user;
+      'DEFAULT/rbd_user':                     value => $cinder_rbd_user;
       'DEFAULT/rbd_secret_uuid':              value => $nova_rbd_secret_uuid;
     }
 
@@ -136,13 +136,13 @@ Host *
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
 
-    Ceph::Key <<| title == $nova_rbd_user |>>
-    if defined(Ceph::Key[$nova_rbd_user]) {
-      file { "/etc/ceph/ceph.client.${nova_rbd_user}.keyring":
+    Ceph::Key <<| title == $cinder_rbd_user |>>
+    if defined(Ceph::Key[$cinder_rbd_user]) {
+      file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
         owner   => 'nova',
         group   => 'nova',
         mode    => '0400',
-        require => Ceph::Key[$nova_rbd_user]
+        require => Ceph::Key[$cinder_rbd_user]
       }
     }
     Concat::Fragment <<| title == 'ceph-client-os' |>>
