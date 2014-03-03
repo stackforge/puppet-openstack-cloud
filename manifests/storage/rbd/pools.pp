@@ -51,7 +51,7 @@ class cloud::storage::rbd::pools(
 
       exec { "create_${cinder_rbd_pool}_user_and_key":
         # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${cinder_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}'",
+        command => "ceph auth get-or-create client.${cinder_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
         unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_rbd_user}$'",
         require => Exec["create_${cinder_rbd_pool}_pool"];
       }
@@ -60,13 +60,6 @@ class cloud::storage::rbd::pools(
       exec { "create_${nova_rbd_pool}_pool":
         command => "rados mkpool ${nova_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
         unless  => "/usr/bin/rados lspools | grep -sq ${nova_rbd_pool}",
-      }
-
-      exec { "create_${nova_rbd_pool}_user_and_key":
-        # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${nova_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
-        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${nova_rbd_user}$'",
-        require => Exec["create_${nova_rbd_pool}_pool"];
       }
 
       if $::ceph_keyring_glance {
@@ -91,19 +84,6 @@ class cloud::storage::rbd::pools(
         file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
           owner => 'cinder',
           group => 'cinder',
-          mode  => '0400'
-        }
-      }
-
-      if $::ceph_keyring_nova {
-        # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $nova_rbd_user:
-          secret       => $::ceph_keyring_nova,
-          keyring_path => "/etc/ceph/ceph.client.${nova_rbd_user}.keyring"
-        } ->
-        file { "/etc/ceph/ceph.client.${nova_rbd_user}.keyring":
-          owner => 'nova',
-          group => 'nova',
           mode  => '0400'
         }
       }
@@ -138,7 +118,7 @@ class cloud::storage::rbd::pools(
       }
 
       @@exec { 'set_secret_value_virsh':
-        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder};virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_nova}",
+        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder}",
         tag          => 'ceph_compute_set_secret',
         refreshonly  =>  true,
       }
