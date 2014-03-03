@@ -73,13 +73,13 @@ class cloud::volume::storage(
     rbd_max_clone_depth              => $cinder_rbd_max_clone_depth,
   }
 
-  Ceph::Key <<| title == $cinder_user |>>
-  if defined(Ceph::Key[$cinder_user]) {
-    file { '/etc/ceph/ceph.client.cinder.keyring':
+  Ceph::Key <<| title == $cinder_rbd_user |>>
+  if defined(Ceph::Key[$cinder_rbd_user]) {
+    file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
       owner   => 'cinder',
       group   => 'cinder',
       mode    => '0400',
-      require => Ceph::Key[$cinder_user]
+      require => Ceph::Key[$cinder_rbd_user]
     }
   }
   Concat::Fragment <<| title == 'ceph-client-os' |>>
