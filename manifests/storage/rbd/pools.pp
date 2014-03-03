@@ -19,7 +19,6 @@ class cloud::storage::rbd::pools(
   $glance_rbd_pool      = $os_params::glance_rbd_pool,
   $cinder_rbd_user      = $os_params::cinder_rbd_user,
   $cinder_rbd_pool      = $os_params::cinder_rbd_pool,
-  $nova_rbd_user        = $os_params::nova_rbd_user,
   $nova_rbd_pool        = $os_params::nova_rbd_pool,
   $pool_default_pg_num  = $::ceph::conf::pool_default_pg_num,
   $pool_default_pgp_num = $::ceph::conf::pool_default_pgp_num,
@@ -88,7 +87,7 @@ class cloud::storage::rbd::pools(
         }
       }
 
-      $clients = [$glance_rbd_user, $cinder_rbd_user, $nova_rbd_user]
+      $clients = [$glance_rbd_user, $cinder_rbd_user]
       @@concat::fragment { 'ceph-clients-os':
         target  => '/etc/ceph/ceph.conf',
         order   => '95',
