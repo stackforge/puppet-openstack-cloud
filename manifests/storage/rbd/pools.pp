@@ -56,6 +56,7 @@ class cloud::storage::rbd::pools(
       }
 
       # ceph osd pool create poolname 128 128
+      # Note(EmilienM): We use the same keyring for Nova and Cinder.
       exec { "create_${nova_rbd_pool}_pool":
         command => "rados mkpool ${nova_rbd_pool} ${pool_default_pg_num} ${pool_default_pgp_num}",
         unless  => "/usr/bin/rados lspools | grep -sq ${nova_rbd_pool}",
