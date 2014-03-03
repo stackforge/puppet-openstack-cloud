@@ -23,7 +23,6 @@ class cloud::telemetry::server(
   $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
   $api_eth                        = $os_params::api_eth,
   $mongo_nodes                    = $os_params::mongo_nodes,
-  $mongo_primary                  = $os_params::mongo_primary,
 ){
 
   include 'cloud::telemetry'
@@ -31,16 +30,10 @@ class cloud::telemetry::server(
   $s_mongo_nodes = join($mongo_nodes, ',')
   $db_conn = "mongodb://${s_mongo_nodes}/ceilometer?replicaSet=ceilometer"
 
-  if $::hostname == $mongo_primary {
-    $sync_db = true
-  } else {
-    $sync_db = false
-  }
-
   # Install MongoDB database
   class { 'ceilometer::db':
     database_connection => $db_conn,
-    sync_db             => $sync_db,
+    sync_db             => true,
     require             => Anchor['mongodb setup done'],
   }
 
