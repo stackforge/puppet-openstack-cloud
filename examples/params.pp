@@ -84,7 +84,7 @@ class os_params {
     "${galera_master_name}" => $mgmt_internal_ips[0],
     "${mgmt_names[1]}"      => $mgmt_internal_ips[1],
     "${mgmt_names[2]}"      => $mgmt_internal_ips[2],
-   }
+  }
 
   $ceph_version       = 'cuttlefish'
 
