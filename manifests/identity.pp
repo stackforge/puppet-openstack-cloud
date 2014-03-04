@@ -456,8 +456,6 @@ class cloud::identity (
     region           => $region,
   }
 
-  keystone_config { 'ssl/enable': ensure => absent }
-
   # TODO(EmilienM) Disable WSGI - bug #98
   #include 'apache'
   # class {'keystone::wsgi::apache':
