@@ -248,6 +248,22 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
     end
 
+    context 'with dbus on Ubuntu' do
+      let :facts do
+        { :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :concat_basedir  => '/var/lib/puppet/concat'
+        }
+      end
+
+      it 'ensure dbus is running and started at boot' do
+        should contain_service('dbus').with(
+          :ensure => 'running',
+          :enable => 'true'
+        )
+      end
+    end
+
     context 'without RBD backend' do
       before :each do
         params.merge!( :has_ceph => false )
@@ -269,8 +285,9 @@ describe 'cloud::compute::hypervisor' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat'
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian',
+        :concat_basedir  => '/var/lib/puppet/concat'
       }
     end
 
