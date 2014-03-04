@@ -57,6 +57,18 @@
 #   (optional) Enable debug or not.
 #   Defaults to params.
 #
+# [*listen_ssl*]
+#   (optional) Enable SSL support in Apache. (Defaults to false)
+#
+# [*horizon_cert*]
+#   (required with listen_ssl) Certificate to use for SSL support.
+#
+# [*horizon_key*]
+#   (required with listen_ssl) Private key to use for SSL support.
+#
+# [*horizon_ca*]
+#   (required with listen_ssl) CA certificate to use for SSL support.
+#
 
 class cloud::dashboard(
   $ks_keystone_internal_host = $os_params::ks_keystone_internal_host,
@@ -67,7 +79,11 @@ class cloud::dashboard(
   $keystone_host             = $os_params::ks_keystone_internal_host,
   $keystone_proto            = $os_params::ks_keystone_internal_proto,
   $keystone_port             = $os_params::ks_keystone_internal_port,
-  $debug                     = $os_params::debug
+  $debug                     = $os_params::debug,
+  $listen_ssl                = false,
+  $horizon_cert              = undef,
+  $horizon_key               = undef,
+  $horizon_ca                = undef,
 ) {
 
   # We build the param needed for horizon class
@@ -85,7 +101,11 @@ class cloud::dashboard(
     keystone_url        => $keystone_url,
     cache_server_ip     => false,
     django_debug        => $debug,
-    neutron_options     => { 'enable_lb' => true }
+    neutron_options     => { 'enable_lb'  => true },
+    listen_ssl          => $listen_ssl,
+    horizon_cert        => $horizon_cert,
+    horizon_key         => $horizon_key,
+    horizon_ca          => $horizon_ca
   }
 
   if ($::osfamily == 'Debian') {
