@@ -261,7 +261,9 @@ describe 'cloud::compute::hypervisor' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily       => 'Debian',
+        :concat_basedir => '/var/lib/puppet/concat'
+      }
     end
 
     it_configures 'openstack compute hypervisor'
@@ -269,7 +271,9 @@ describe 'cloud::compute::hypervisor' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :concat_basedir => '/var/lib/puppet/concat'
+      }
     end
 
     it_configures 'openstack compute hypervisor'
