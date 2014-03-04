@@ -63,12 +63,7 @@ class cloud::storage::rbd::pools(
           secret       => $::ceph_keyring_glance,
           keyring_path => "/etc/ceph/ceph.client.${glance_rbd_user}.keyring"
         }
-        Ceph::Key <<| title == $cinder_rbd_user |>> ->
-        file { "/etc/ceph/ceph.client.${glance_rbd_user}.keyring":
-          owner => 'glance',
-          group => 'glance',
-          mode  => '0400'
-        }
+        Ceph::Key <<| title == $cinder_rbd_user |>>
       }
 
       if $::ceph_keyring_cinder {
@@ -77,12 +72,7 @@ class cloud::storage::rbd::pools(
           secret       => $::ceph_keyring_cinder,
           keyring_path => "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring"
         }
-        Ceph::Key <<| title == $cinder_rbd_user |>> ->
-        file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
-          owner => 'cinder',
-          group => 'cinder',
-          mode  => '0400'
-        }
+        Ceph::Key <<| title == $cinder_rbd_user |>>
       }
 
       $clients = [$glance_rbd_user, $cinder_rbd_user]
