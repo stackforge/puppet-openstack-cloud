@@ -115,6 +115,9 @@ Host *
   class { 'nova::compute::neutron': }
 
   if $has_ceph {
+
+    include 'cloud::storage::rbd'
+
     # TODO(EmilienM) Temporary, while https://review.openstack.org/#/c/72440 got merged
     nova_config {
       'DEFAULT/libvirt_images_type':          value => 'rbd';

@@ -59,10 +59,11 @@ class cloud::storage::rbd::pools(
 
       if $::ceph_keyring_glance {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $glance_rbd_user:
+        @@ceph::key { $glance_rbd_user:
           secret       => $::ceph_keyring_glance,
           keyring_path => "/etc/ceph/ceph.client.${glance_rbd_user}.keyring"
-        } ->
+        }
+        Ceph::Key <<| title == $cinder_rbd_user |>> ->
         file { "/etc/ceph/ceph.client.${glance_rbd_user}.keyring":
           owner => 'glance',
           group => 'glance',
@@ -72,10 +73,11 @@ class cloud::storage::rbd::pools(
 
       if $::ceph_keyring_cinder {
         # NOTE(fc): Puppet needs to run a second time to enter this
-        ceph::key { $cinder_rbd_user:
+        @@ceph::key { $cinder_rbd_user:
           secret       => $::ceph_keyring_cinder,
           keyring_path => "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring"
-        } ->
+        }
+        Ceph::Key <<| title == $cinder_rbd_user |>> ->
         file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
           owner => 'cinder',
           group => 'cinder',
@@ -89,15 +91,6 @@ class cloud::storage::rbd::pools(
         order   => '95',
         content => template('cloud/storage/ceph/ceph-client.conf.erb')
       }
-
-#exec { "create cinder backup pool":
-#TODO: point PG num with a cluster variable + keyring
-#  command => "/usr/bin/ceph osd pool create ${::cinder_backup_pool} 128 128",
-#  command => "ceph auth get-or-create client.${::cinder_backup_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=${::cinder_backup_pool}'",
-#  unless  => "/usr/bin/rados lspools | grep -sq ${::cinder_backup_pool}",
-#  unless  => "ceph auth list | egrep '^${::cinder_backup_pool}$'",
-#  require => Ceph::Key['admin'],
-#}
 
       @@file { '/etc/ceph/secret.xml':
         content => template('cloud/storage/ceph/secret-compute.xml.erb'),
