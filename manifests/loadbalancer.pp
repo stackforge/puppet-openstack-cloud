@@ -59,6 +59,7 @@ class cloud::loadbalancer(
   $galera_ip                        = $os_params::galera_ip
 ){
 
+  # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
   class { 'haproxy': }
 
