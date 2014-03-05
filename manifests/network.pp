@@ -124,4 +124,12 @@ class cloud::network(
     'OVS/bridge_mappings':    value => $provider_bridge_mappings;
   }
 
+  # TODO(EmilienM), Temporary, it's a bug in Debian packages. GH#342
+  file { "/var/lib/neutron":
+      ensure => "directory",
+      owner  => "neutron",
+      group  => "neutron",
+      mode   => 755,
+  }
+
 }
