@@ -31,6 +31,7 @@ class cloud::loadbalancer(
   $keystone_api_admin               = true,
   $keystone_api                     = true,
   $horizon                          = true,
+  $horizon_ssl                      = false,
   $spice                            = true,
   $haproxy_auth                     = $os_params::haproxy_auth,
   $keepalived_state                 = 'BACKUP',
@@ -199,10 +200,18 @@ class cloud::loadbalancer(
     }
   }
   if $horizon {
-    cloud::loadbalancer::listen_http{
-      'horizon_cluster':
-        ports     => $horizon_port,
-        listen_ip => $vip_public_ip;
+    if $horizon_ssl {
+      cloud::loadbalancer::listen_https{
+        'horizon_cluster':
+          ports     => $horizon_port,
+          listen_ip => $vip_public_ip;
+      }
+    } else {
+      cloud::loadbalancer::listen_http{
+        'horizon_cluster':
+          ports     => $horizon_port,
+          listen_ip => $vip_public_ip;
+      }
     }
   }
 

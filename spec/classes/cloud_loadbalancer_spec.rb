@@ -37,6 +37,7 @@ describe 'cloud::loadbalancer' do
         :keystone_api_admin                => true,
         :keystone_api                      => true,
         :horizon                           => true,
+        :horizon_ssl                       => false,
         :spice                             => true,
         :haproxy_auth                      => 'root:secrete',
         :keepalived_state                  => 'BACKUP',
