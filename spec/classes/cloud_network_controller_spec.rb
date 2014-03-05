@@ -90,7 +90,7 @@ describe 'cloud::network::controller' do
 
     it 'checks if Neutron DB is populated' do
       should contain_exec('neutron_db_sync').with(
-        :command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+        :command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade havana',
         :unless  => '/usr/bin/mysql neutron -h 10.0.0.1 -u neutron -psecrete -e "show tables" | /bin/grep Tables'
       )
     end
