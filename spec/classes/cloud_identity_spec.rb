@@ -90,7 +90,8 @@ describe 'cloud::identity' do
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
         :ks_token_expiration          => '3600',
-        :api_eth                      => '10.0.0.1' }
+        :api_eth                      => '10.0.0.1',
+        :ks_token_driver              => 'keystone.token.backends.memcache.Token' }
     end
 
     it 'configure keystone server' do

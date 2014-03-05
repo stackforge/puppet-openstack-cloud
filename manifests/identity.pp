@@ -397,7 +397,8 @@ class cloud::identity (
   $debug                        = $os_params::debug,
   $log_facility                 = $os_params::log_facility,
   $use_syslog                   = $os_params::use_syslog,
-  $ks_token_expiration          = $os_params::ks_token_expiration
+  $ks_token_expiration          = $os_params::ks_token_expiration,
+  $ks_token_driver              = 'keystone.token.backends.memcache.Token'
 ){
 
   # Disable twice logging if syslog is enabled
@@ -420,7 +421,7 @@ class cloud::identity (
     log_facility     => $log_facility,
     memcache_servers => $memcache_servers,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
-    token_driver     => 'keystone.token.backends.memcache.Token',
+    token_driver     => $ks_token_driver,
     token_provider   => 'keystone.token.providers.uuid.Provider',
     use_syslog       => $use_syslog,
     verbose          => $verbose,
