@@ -1,6 +1,6 @@
 mod 'apache',
   :git => 'git://github.com/enovance/puppetlabs-apache.git',
-  :ref => 'b49f6187c4f72aaa86a7e5745a1f71a457e29eba'
+  :ref => '58682faf74cdfc6c8d921d2be9322368c8a96cf9'
 
 mod 'apt',
   :git => 'git://github.com/enovance/puppetlabs-apt.git',
@@ -24,7 +24,7 @@ mod 'cinder',
 
 mod 'cloud',
   :git => 'git@github.com:enovance/puppet-cloud.git',
-  :ref => 'a0aa5c6f8fd7e594d6640c5c02230e9ef4cda0d4'
+  :ref => '6e57a94f025fd2ea28f851c930bb02bad1c0d47d'
 
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
@@ -56,7 +56,7 @@ mod 'heat',
 
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
-  :ref => 'a1be46ee642c2bd9a273685f9a83a4d4b98c822d'
+  :ref => '30c84080999e71da9e7e1a1af330465c6d7a2560'
 
 mod 'inifile',
   :git => 'git://github.com/enovance/puppetlabs-inifile.git',
