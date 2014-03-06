@@ -220,7 +220,8 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('nova::compute::libvirt').with(
           :libvirt_type      => 'kvm',
           :vncserver_listen  => '0.0.0.0',
-          :migration_support => true
+          :migration_support => true,
+          :libvirt_disk_cachemodes => ['network=writeback']
         )
     end
 
@@ -245,7 +246,6 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
       should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
-      should contain_nova_config('DEFAULT/disk_cachemodes').with('value' => 'network=writeback')
     end
 
     context 'without RBD backend' do
@@ -255,6 +255,14 @@ describe 'cloud::compute::hypervisor' do
 
       it 'should not configure nova-compute for RBD backend' do
         should_not contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
+      end
+      it 'configure libvirt driver without disk cachemodes' do
+        should contain_class('nova::compute::libvirt').with(
+            :libvirt_type      => 'kvm',
+            :vncserver_listen  => '0.0.0.0',
+            :migration_support => true,
+            :libvirt_disk_cachemodes => []
+          )
       end
     end
  end
