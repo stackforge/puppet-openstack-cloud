@@ -102,6 +102,14 @@ Host *
 
   }
 
+  if $::operatingsystem == 'Ubuntu' {
+    service { 'dbus':
+      ensure => running,
+      enable => true,
+      before => Class['nova::compute::libvirt'],
+    }
+  }
+
   Service<| title == 'dbus' |> { enable => true }
   Service<| title == 'libvirt-bin' |> { enable => true }
 
