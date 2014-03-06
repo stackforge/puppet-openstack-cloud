@@ -145,7 +145,7 @@ Host *
   }
 
   class { 'nova::compute::libvirt':
-    libvirt_type      => $libvirt_type,
+    libvirt_type            => $libvirt_type,
     # Needed to support migration but we still use Spice:
     vncserver_listen        => '0.0.0.0',
     migration_support       => true,
