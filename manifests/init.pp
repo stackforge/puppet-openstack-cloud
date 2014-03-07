@@ -18,7 +18,9 @@
 # Installs the private cloud system requirements
 #
 
-class cloud {
+class cloud(
+  $rhn_registration = $os_params::rhn_registration,
+) {
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
     fail("module puppet-cloud only support ${::osfamily}, only Red Hat or Debian")
@@ -70,4 +72,9 @@ This node is under the control of Puppet ${::puppetversion}.
     enable => true
   }
 
+  if $::osfamily == 'RedHat' and $rhn_registration {
+    create_resources('rhn_register', {
+      "${::hostname}" => $rhn_registration
+    } )
+  }
 }
