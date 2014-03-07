@@ -50,5 +50,6 @@ fixtures:
     'stdlib': 'git://github.com/enovance/puppetlabs-stdlib.git'
     'xinetd': 'git://github.com/enovance/puppetlabs-xinetd.git'
     'rhnreg_ks': 'git://github.com/enovance/puppet-rhnreg_ks.git'
+    'dnsclient': 'git://github.com/enovance/puppet-module-dnsclient.git'
   symlinks:
     'cloud': '#{source_dir}'
