@@ -77,10 +77,17 @@ describe 'cloud' do
     let :facts do
       { :osfamily       => 'RedHat',
         :concat_basedir => '/var/lib/puppet/concat',
-        :puppetversion  => '3.3' }
+        :puppetversion  => '3.3',
+        :hostname       => 'redhat1' }
+    end
+
+    let :params do
+      { :rhn_registration => { "username" => "rhn", "password" => "pass" } }
     end
 
 #    it_configures 'private cloud node'
+
+    it { should contain_rhn_register('redhat1') }
   end
 
   context 'on other platforms' do
