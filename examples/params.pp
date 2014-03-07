@@ -322,6 +322,14 @@ class os_params {
   $api_eth = $internal_netif_ip
   $storage_eth = $storage_netif_ip
 
+  # Red Hat Network registration
+  $rhn_registration = {
+      username => 'rhn',
+      password => 'pass',
+      server_url => 'https://rhn.redhat.com/rpc/api',
+      force => true,
+  }
+
   # OpenStack Identity
   $identity_roles_addons = ['SwiftOperator', 'ResellerAdmin']
   $keystone_db_allowed_hosts = $db_allowed_hosts
