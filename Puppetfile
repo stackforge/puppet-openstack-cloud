@@ -8,7 +8,7 @@ mod 'apt',
 
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => '951050814aafd28bd3b16f3bd46eb2371e79684d'
+  :ref => 'fa5a6ee45f973bc73e8a7e662b4b31a41f81ce5a'
 
 mod 'ceph',
   :git => 'git://github.com/enovance/puppet-ceph.git',
@@ -24,7 +24,7 @@ mod 'cinder',
 
 mod 'cloud',
   :git => 'git@github.com:enovance/puppet-cloud.git',
-  :ref => '6e57a94f025fd2ea28f851c930bb02bad1c0d47d'
+  :ref => '73d5ec40f36ba29a4d4e0a1ffe5f7940e73310eb'
 
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
@@ -44,7 +44,7 @@ mod 'git',
 
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => '11c2c91fb192ce0811f8fffa5219f0d104b172f2'
+  :ref => '1d5a298f4110842d71860c8f9fda722914dbba73'
 
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
@@ -52,7 +52,7 @@ mod 'haproxy',
 
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => '1bf94efd42cf282b01dae55308353ac25e4f2955'
+  :ref => '768a4e593e6db8b7948623b9eb3ae840a9ef4ab4'
 
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
@@ -68,7 +68,7 @@ mod 'keepalived',
 
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => '688ff4379ed7437747ff8fdcd464096e24b4ebc6'
+  :ref => '9802add6566646dc1e4a2812d19c2ab4724ff594'
 
 mod 'kwalify',
   :git => 'git://github.com/puppetlabs/puppetlabs-kwalify.git',
@@ -104,11 +104,11 @@ mod 'mysql',
 
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => 'e8e450f5d6a07b047a5772b2d4e136464d5e4fb4'
+  :ref => 'cfedc81cb60cabdbb31f3809e9d56a54d771458b'
 
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => '22519846c2fc2b4ee6b6f33b9bad22ecc54ca00d'
+  :ref => '7f92da6e5897f7facc8d0b6505f129d77353439e'
 
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
@@ -117,10 +117,6 @@ mod 'ntp',
 mod 'numeter',
   :git => 'gitolite@git.labs.enovance.com:/puppet-numeter.git',
   :ref => '815469c668cd2ab6fd867255320d4bf6d67c7204'
-
-mod 'openstack',
-  :git => 'git://github.com/enovance/puppet-openstack.git',
-  :ref => 'd3accf21a5490820cd5627f67b1613e8e2a4d0f4'
 
 mod 'postfix',
   :git => 'gitolite@git.labs.enovance.com:puppet-postfix.git',
@@ -137,10 +133,6 @@ mod 'rsync',
 mod 'rsyslog',
   :git => 'git://github.com/saz/puppet-rsyslog.git',
   :ref => 'f8a05e0e6dd7a40fe53329a20ff81227b23bb398'
-
-mod 'sensu',
-  :git => 'git://github.com/sensu/sensu-puppet.git',
-  :ref => 'f765af738d48030bd1b03febc53374cff8f823ad'
 
 mod 'snmp',
   :git => 'gitolite@git.labs.enovance.com:puppet-snmp.git',
@@ -160,7 +152,7 @@ mod 'sudo',
 
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
-  :ref => '8a7c88d8ac3d795f6c2bc65918256995e3a6e603'
+  :ref => '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
 
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
