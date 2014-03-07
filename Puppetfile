@@ -12,7 +12,7 @@ mod 'ceilometer',
 
 mod 'ceph',
   :git => 'git://github.com/enovance/puppet-ceph.git',
-  :ref => '17b74f905de8b0221417cf6b20312f45e8f36135'
+  :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
 
 mod 'checkmulti',
   :git => 'gitolite@git.labs.enovance.com:puppet-checkmulti.git',
