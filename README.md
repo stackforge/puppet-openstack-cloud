@@ -78,7 +78,7 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
     cd cloud
     gem install --no-ri --no-rdoc r10k
     # a debian package is available in jessie
-    PUPPETFILE=./Puppetfile PUPPETFILE_DIR=../ r10k puppetfile install
+    PUPPETFILE=./Puppetfile PUPPETFILE_DIR=../ r10k --verbose 3 puppetfile install
 
 **Pre-puppet setup**
 
