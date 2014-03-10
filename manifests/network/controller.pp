@@ -45,10 +45,12 @@ class cloud::network::controller(
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Neutron DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
-  Neutron_config <| |> ->
+  Neutron_config<| |> ->
   exec {'neutron_db_sync':
     command => '/usr/bin/neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
-    unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
+    unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables",
+    require => 'Neutron_config[DEFAULT/service_plugins]',
+    notify  => Service['neutron-server']
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":
