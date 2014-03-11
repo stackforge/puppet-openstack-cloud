@@ -87,7 +87,7 @@ describe 'cloud' do
 
 #    it_configures 'private cloud node'
 
-    it { should contain_rhn_register('redhat1') }
+    it { should contain_rhn_register('rhn-redhat1') }
   end
 
   context 'on other platforms' do
