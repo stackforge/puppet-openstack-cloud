@@ -74,7 +74,7 @@ This node is under the control of Puppet ${::puppetversion}.
 
   if $::osfamily == 'RedHat' and $rhn_registration {
     create_resources('rhn_register', {
-      "${::hostname}" => $rhn_registration
+      "rhn-${::hostname}" => $rhn_registration
     } )
   }
 }
