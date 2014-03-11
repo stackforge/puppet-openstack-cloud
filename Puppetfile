@@ -56,9 +56,6 @@ mod 'apt',
 mod 'ceph',
   :git => 'git://github.com/enovance/puppet-ceph.git',
   :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
-mod 'checkmulti',
-  :git => 'gitolite@git.labs.enovance.com:puppet-checkmulti.git',
-  :ref => 'c94ea083f0585e8ad361304a78ad750eb3423029'
 #FIXME
 mod 'cloud',
   :git => 'git@github.com:enovance/puppet-cloud.git',
@@ -73,9 +70,6 @@ mod 'corosync',
 mod 'dnsclient',
   :git => 'git://github.com/enovance/puppet-module-dnsclient.git',
   :ref => '4158b30f4660623f98dcdbd1ce9b482556180b57'
-mod 'git',
-  :git => 'git://github.com/enovance/puppetlabs-git.git',
-  :ref => '469b6c4c4f5a020975180de6eb64e8078ee5249b'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
   :ref => '0d4c50ed56f4fce06b66c04611cebec29f7a37a8'
@@ -97,27 +91,12 @@ mod 'memcached',
 mod 'mongodb',
   :git => 'git://github.com/enovance/puppetlabs-mongodb.git',
   :ref => 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
-mod 'monitor',
-  :git => 'gitolite@git.labs.enovance.com:enovance-monitor.git',
-  :ref => 'db52bc4dad34f94f9490c4d2077fa70ecf526e01'
-mod 'munin',
-  :git => 'git://github.com/fcharlier/puppet-munin.git',
-  :ref => 'e315048cea291c49007077e92b3c4837df37bef9'
-mod 'muninnode',
-  :git => 'gitolite@git.labs.enovance.com:puppet-muninnode.git',
-  :ref => '1664ccd3208ba87421d82e1492ad538ca60e9390'
 mod 'mysql',
   :git => 'git://github.com/enovance/puppetlabs-mysql.git',
   :ref => '11ab036fed3b252492f5400bf8fd69698d510482'
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
-mod 'numeter',
-  :git => 'gitolite@git.labs.enovance.com:/puppet-numeter.git',
-  :ref => '815469c668cd2ab6fd867255320d4bf6d67c7204'
-mod 'postfix',
-  :git => 'gitolite@git.labs.enovance.com:puppet-postfix.git',
-  :ref => 'c576b2c9416f8a58ca45d576f85f61d8c0b12ad1'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
   :ref => 'ea039dd917e17a1c2f5cf7699fdd9f40b72f0d91'
@@ -127,12 +106,6 @@ mod 'rhnreg_ks',
 mod 'rsync',
   :git => 'git://github.com/enovance/puppetlabs-rsync.git',
   :ref => '7122983d89bf68bc4170415cc03212f6a8a4636e'
-mod 'rsyslog',
-  :git => 'git://github.com/saz/puppet-rsyslog.git',
-  :ref => 'f8a05e0e6dd7a40fe53329a20ff81227b23bb398'
-mod 'snmp',
-  :git => 'gitolite@git.labs.enovance.com:puppet-snmp.git',
-  :ref => 'a70bd30e4720bfbe0c369a1070762dc87436fdcd'
 mod 'ssh',
   :git => 'git://github.com/enovance/puppet-ssh.git',
   :ref => '10675c0d80511a8cdd514af67b695887fa97ec40'
@@ -145,9 +118,6 @@ mod 'sudo',
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'
-mod 'vcsrepo',
-  :git => 'git://github.com/enovance/puppetlabs-vcsrepo.git',
-  :ref => 'b0f655163696aea40813db54fd830387bfc7e499'
 mod 'vswitch',
   :git => 'git://github.com/enovance/puppet-vswitch.git',
   :ref => '065fadb2d33857cd31f293677de56d18793e1412'
