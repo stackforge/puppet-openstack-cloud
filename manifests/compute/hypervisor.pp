@@ -111,6 +111,7 @@ Host *
   }
 
   Service<| title == 'dbus' |> { enable => true }
+
   Service<| title == 'libvirt-bin' |> { enable => true }
 
   class { 'nova::compute::neutron': }
