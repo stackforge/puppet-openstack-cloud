@@ -115,6 +115,7 @@ describe 'cloud::identity' do
         :log_dir             => false
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
+      should contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
     end
 
     it 'checks if Keystone DB is populated' do
