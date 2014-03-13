@@ -19,32 +19,32 @@ forge 'http://forge.puppetlabs.com'
 # Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => 'stable/havana'
+  :ref => 'f71f935a3e41dcd11f8f5986a1fe0708b124e589'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'stable/havana'
+  :ref => '164163a7a267ae4139e2d97bab1a385a6da2ac5f'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => 'stable/havana'
+  :ref => '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => 'stable/havana'
+  :ref => 'bdf094da21161ec6f78530775a0c41fc76fd3339'
 #FIXME
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
   :ref => 'backport_of_I39b52b2b_I813b5f60'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => 'stable/havana'
+  :ref => '9802add6566646dc1e4a2812d19c2ab4724ff594'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => 'stable/havana'
+  :ref => 'e4e8c6292150585796ebe89788b1597ec7920b37'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => 'stable/havana'
+  :ref => '7f92da6e5897f7facc8d0b6505f129d77353439e'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
-  :ref => 'stable/havana'
+  :ref => '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
 
 # Dependency
 mod 'apache',
@@ -112,9 +112,6 @@ mod 'ssh',
 mod 'stdlib',
   :git => 'git://github.com/enovance/puppetlabs-stdlib.git',
   :ref => '224b8f9a191f635b03ee900a9bf87bfdb0f1a6ed'
-mod 'sudo',
-  :git => 'gitolite@git.labs.enovance.com:puppet-sudo.git',
-  :ref => '83cdfb39b6f5630c9c56339d88beea066ef1cdd1'
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'

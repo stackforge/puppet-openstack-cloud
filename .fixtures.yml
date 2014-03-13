@@ -2,52 +2,84 @@ fixtures:
   repositories:
     'cinder':
       repo: 'git://github.com/enovance/puppet-cinder'
-      ref: 'origin/stable/havana'
+      ref: '164163a7a267ae4139e2d97bab1a385a6da2ac5f'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
-      ref: 'origin/stable/havana'
+      ref: '9802add6566646dc1e4a2812d19c2ab4724ff594'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: 'origin/stable/havana'
+      ref: '7f92da6e5897f7facc8d0b6505f129d77353439e'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
-      ref: 'origin/stable/havana'
+      ref: '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
-      ref: 'origin/stable/havana'
+      ref: 'origin/backport_of_I39b52b2b_I813b5f60'
     'swift':
       repo: 'git://github.com/enovance/puppet-swift'
-      ref: 'origin/stable/havana'
+      ref: '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
     'neutron':
       repo: 'git://github.com/enovance/puppet-neutron'
-      ref: 'origin/stable/havana'
+      ref: 'e4e8c6292150585796ebe89788b1597ec7920b37'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
-      ref: 'origin/stable/havana'
+      ref: 'f71f935a3e41dcd11f8f5986a1fe0708b124e589'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
-      ref: 'origin/stable/havana'
-    'apt': 'git://github.com/enovance/puppetlabs-apt.git'
-    'apache': 'git://github.com/enovance/puppetlabs-apache.git'
-    'ceph': 'git://github.com/enovance/puppet-ceph.git'
-    'concat': 'git://github.com/enovance/puppet-concat.git'
-    'haproxy': 'git://github.com/enovance/puppetlabs-haproxy.git'
-    'keepalived': 'git://github.com/enovance/puppet-module-keepalived.git'
-    'mongodb': 'git://github.com/enovance/puppetlabs-mongodb.git'
+      ref: 'bdf094da21161ec6f78530775a0c41fc76fd3339'
+    'apt':
+      repo: 'git://github.com/enovance/puppetlabs-apt.git'
+      ref: '9b001af8775c7231ea2656b7eb43d6141b536f49'
+    'apache':
+      repo: 'git://github.com/enovance/puppetlabs-apache.git'
+      ref: '58682faf74cdfc6c8d921d2be9322368c8a96cf9'
+    'ceph':
+      repo: 'git://github.com/enovance/puppet-ceph.git'
+      ref: 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
+    'concat':
+      repo: 'git://github.com/enovance/puppet-concat.git'
+      ref: '04356974f72b90a1d0f57346a00e95a717924e43'
+    'haproxy':
+      repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
+      ref: '0d4c50ed56f4fce06b66c04611cebec29f7a37a8'
+    'keepalived':
+      repo: 'git://github.com/enovance/puppet-module-keepalived.git'
+      ref: 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
+    'mongodb':
+      repo: 'git://github.com/enovance/puppetlabs-mongodb.git'
+      ref: 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
     'mysql':
       repo: 'git://github.com/enovance/puppetlabs-mysql.git'
-      ref: 'origin/0.x'
+      ref: '11ab036fed3b252492f5400bf8fd69698d510482'
     'rabbitmq':
       repo: 'git://github.com/enovance/puppetlabs-rabbitmq'
-      ref: 'origin/2.x'
-    'memcached': 'git://github.com/enovance/puppet-memcached'
-    'ntp': 'git://github.com/enovance/puppetlabs-ntp.git'
-    'sysctl': 'git://github.com/enovance/puppet-sysctl.git'
-    'inifile':  'git://github.com/enovance/puppetlabs-inifile'
-    'vswitch': 'git://github.com/enovance/puppet-vswitch'
-    'stdlib': 'git://github.com/enovance/puppetlabs-stdlib.git'
-    'xinetd': 'git://github.com/enovance/puppetlabs-xinetd.git'
-    'rhnreg_ks': 'git://github.com/enovance/puppet-rhnreg_ks.git'
-    'dnsclient': 'git://github.com/enovance/puppet-module-dnsclient.git'
+      ref: 'ea039dd917e17a1c2f5cf7699fdd9f40b72f0d91'
+    'memcached':
+      repo: 'git://github.com/enovance/puppet-memcached'
+      ref: 'd009260de3c7623003318555ec5ca61217ea3ca1'
+    'ntp':
+      repo: 'git://github.com/enovance/puppetlabs-ntp.git'
+      ref: 'eb02ba2937ce86fb609ae41499767244b78ec58d'
+    'sysctl':
+      repo: 'git://github.com/enovance/puppet-sysctl.git'
+      ref: '4a463384e844f51b270428643a5b8beb3628e854'
+    'inifile':
+      repo: 'git://github.com/enovance/puppetlabs-inifile'
+      ref: 'ae23a4db97d2815ec305d0529912685f07746d3c'
+    'vswitch':
+      repo: 'git://github.com/enovance/puppet-vswitch'
+      ref: '065fadb2d33857cd31f293677de56d18793e1412'
+    'stdlib':
+      repo: 'git://github.com/enovance/puppetlabs-stdlib.git'
+      ref: '224b8f9a191f635b03ee900a9bf87bfdb0f1a6ed'
+    'xinetd':
+      repo: 'git://github.com/enovance/puppetlabs-xinetd.git'
+      ref: '7557af0e418d1a587df04fe7d01322ff2473c32e'
+    'rhnreg_ks':
+      repo: 'git://github.com/enovance/puppet-rhnreg_ks.git'
+      ref: '8fdc051992b44a09f39d3b510d7cd6db5ed5ff66'
+    'dnsclient':
+      repo: 'git://github.com/enovance/puppet-module-dnsclient.git'
+      ref: '4158b30f4660623f98dcdbd1ce9b482556180b57'
   symlinks:
     'cloud': '#{source_dir}'
