@@ -112,9 +112,6 @@ mod 'ssh',
 mod 'stdlib',
   :git => 'git://github.com/enovance/puppetlabs-stdlib.git',
   :ref => '224b8f9a191f635b03ee900a9bf87bfdb0f1a6ed'
-mod 'sudo',
-  :git => 'gitolite@git.labs.enovance.com:puppet-sudo.git',
-  :ref => '83cdfb39b6f5630c9c56339d88beea066ef1cdd1'
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'
