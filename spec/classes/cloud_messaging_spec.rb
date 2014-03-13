@@ -42,7 +42,8 @@ describe 'cloud::messaging' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily      => 'Debian',
+        :puppetversion => '3.3' }
     end
 
     it_configures 'openstack messaging'
@@ -50,7 +51,8 @@ describe 'cloud::messaging' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily      => 'RedHat',
+        :puppetversion => '3.3' }
     end
 
     it_configures 'openstack messaging'
