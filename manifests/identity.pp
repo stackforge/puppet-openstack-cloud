@@ -404,6 +404,9 @@ class cloud::identity (
   # Disable twice logging if syslog is enabled
   if $use_syslog {
     $log_dir = false
+    keystone_config {
+      'DEFAULT/log_file': ensure => absent;
+    }
   } else {
     $log_dir = '/var/log/keystone'
   }
