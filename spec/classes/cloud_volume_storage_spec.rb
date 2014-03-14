@@ -38,10 +38,17 @@ describe 'cloud::volume::storage' do
     end
 
     let :params do
-      { :cinder_rbd_pool         => 'ceph_cinder',
-        :cinder_rbd_user         => 'cinder',
-        :cinder_rbd_secret_uuid  => 'secrete',
-        :glance_api_version      => '2' }
+      { :volume_multi_backend       => true,
+        :cinder_rbd_pool            => 'ceph_cinder',
+        :cinder_rbd_user            => 'cinder',
+        :cinder_rbd_secret_uuid     => 'secrete',
+        :rbd_backend                => true,
+        :rbd_backend_name           => 'lowcost',
+        :ks_keystone_internal_proto => 'http',
+        :ks_keystone_internal_port  => '5000',
+        :ks_keystone_internal_host  => 'keystone.host',
+        :ks_cinder_password         => 'secrete',
+        :netapp_backend             => false }
     end
 
     it 'configure cinder common' do
@@ -68,21 +75,93 @@ describe 'cloud::volume::storage' do
       )
     end
 
-    it 'configure cinder volume with rbd backend' do
-
+    it 'configure cinder volume service' do
       should contain_class('cinder::volume')
-
-      should contain_class('cinder::volume::rbd').with(
-          :rbd_pool                         => 'ceph_cinder',
-          :glance_api_version               => '2',
-          :rbd_user                         => 'cinder',
-          :rbd_secret_uuid                  => 'secrete',
-          :rbd_ceph_conf                    => '/etc/ceph/ceph.conf',
-          :rbd_flatten_volume_from_snapshot => false,
-          :rbd_max_clone_depth              => '5'
-        )
     end
 
+    context 'with RBD backend' do
+      before :each do
+        params.merge!( :rbd_backend => true )
+      end
+
+      it 'configures rbd volume driver' do
+        should contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
+        should contain_cinder_config('lowcost/rbd_pool').with_value('ceph_cinder')
+        should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
+        should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secrete')
+        should contain_cinder__type('rbd').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'lowcost'
+        )
+      end
+    end
+
+    context 'with NetApp backend' do
+      before :each do
+        params.merge!(
+          :netapp_backend         => true,
+          :netapp_backend_name    => 'premium',
+          :netapp_server_hostname => 'netapp-server.host',
+          :netapp_login           => 'joe',
+          :netapp_password        => 'secrete'
+        )
+      end
+      it 'configures netapp volume driver' do
+        should contain_cinder_config('premium/volume_backend_name').with_value('premium')
+        should contain_cinder_config('premium/netapp_login').with_value('joe')
+        should contain_cinder_config('premium/netapp_password').with_value('secrete')
+        should contain_cinder_config('premium/netapp_server_hostname').with_value('netapp-server.host')
+        should contain_cinder__type('netapp').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'premium'
+        )
+      end
+    end
+
+    context 'without any backend' do
+      before :each do
+        params.merge!(
+          :netapp_backend => false,
+          :rbd_backend    => false
+        )
+      end
+      it 'should fail to configure cinder-volume'do
+        expect { subject }.to raise_error(/no cinder backend has been enabled on storage nodes./)
+      end
+    end
+
+    context 'with all backends enabled' do
+      before :each do
+        params.merge!(
+          :netapp_backend => true,
+          :rbd_backend    => true
+        )
+      end
+      it 'configure all cinder backends' do
+        should contain_class('cinder::backends').with(
+          :enabled_backends => ['netapp', 'rbd']
+        )
+      end
+    end
+
+    context 'with backward compatiblity (without multi-backend)' do
+      before :each do
+        params.merge!(
+          :volume_multi_backend => false,
+        )
+      end
+      it 'configure rbd volume driver without multi-backend' do
+        should contain_class('cinder::volume::rbd').with(
+        :rbd_pool                         => 'ceph_cinder',
+        :rbd_user                         => 'cinder',
+        :rbd_secret_uuid                  => 'secrete',
+        :rbd_ceph_conf                    => '/etc/ceph/ceph.conf',
+        :rbd_flatten_volume_from_snapshot => false,
+        :rbd_max_clone_depth              => '5',
+        :glance_api_version               => '2'
+        )
+      end
+    end
   end
 
   context 'on Debian platforms' do

@@ -43,6 +43,7 @@ describe 'cloud::volume::controller' do
         :ks_keystone_internal_host   => '10.0.0.1',
         :ks_glance_internal_host     => '10.0.0.1',
         :ks_glance_api_internal_port => '9292',
+        :volume_multi_backend        => false,
         # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
         #:backup_ceph_user            => 'cinder',
         #:backup_ceph_pool            => 'ceph_backup_cinder',
@@ -71,8 +72,21 @@ describe 'cloud::volume::controller' do
       )
     end
 
-    it 'configure cinder scheduler' do
-      should contain_class('cinder::scheduler')
+    it 'configure cinder scheduler without multi-backend' do
+      should contain_class('cinder::scheduler').with(
+        :scheduler_driver => false
+      )
+    end
+
+    context 'with multi-backend' do
+      before :each do
+        params.merge!( :volume_multi_backend => true )
+      end
+      it 'configure cinder scheduler with multi-backend' do
+        should contain_class('cinder::scheduler').with(
+          :scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler'
+        )
+      end
     end
 
     # TODO(Emilien) Disabled for now: http://git.io/uM5sgg
