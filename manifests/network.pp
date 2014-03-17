@@ -55,6 +55,9 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
+# [*dhcp_lease_duration*]
+#   (optionnal) DHCP Lease duration (in seconds)
+#   Defauls to '120'
 
 class cloud::network(
   $verbose                  = $os_params::verbose,
@@ -66,7 +69,8 @@ class cloud::network(
   $provider_vlan_ranges     = $os_params::provider_vlan_ranges,
   $provider_bridge_mappings = $os_params::provider_bridge_mappings,
   $use_syslog               = $os_params::use_syslog,
-  $log_facility             = $os_params::log_facility
+  $log_facility             = $os_params::log_facility,
+  $dhcp_lease_duration      = '120',
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -91,6 +95,7 @@ class cloud::network(
     core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
     service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
     log_dir                 => $log_dir,
+    dhcp_lease_duration     => $dhcp_lease_duration,
   }
 
   class { 'neutron::agents::ovs':
