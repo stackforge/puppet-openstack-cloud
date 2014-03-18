@@ -17,29 +17,6 @@
 #
 # === Parameters
 #
-# [*cinder_rbd_pool*]
-#   (optional) Specifies the pool name for the block device driver.
-#
-# [*cinder_rbd_user*]
-#   (optional) A required parameter to configure OS init scripts and cephx.
-#
-# [*cinder_rbd_secret_uuid*]
-#   (optional) A required parameter to use cephx.
-#
-# [*cinder_rbd_conf*]
-#   (optional) Path to the ceph configuration file to use
-#   Defaults to '/etc/ceph/ceph.conf'
-#
-# [*cinder_rbd_flatten_volume_from_snapshot*]
-#   (optional) Enalbe flatten volumes created from snapshots.
-#   Defaults to false
-#
-# [*cinder_rbd_max_clone_depth*]
-#   (optional) Maximum number of nested clones that can be taken of a
-#   volume before enforcing a flatten prior to next clone.
-#   A value of zero disables cloning
-#   Defaults to '5'
-#
 # [*ks_keystone_internal_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
@@ -58,7 +35,17 @@
 #
 # [*cinder_backends*]
 #   (optionnal) Hash of the Cinder backends to enable
-#   Defaults to undef
+#   Example:
+#   cinder_backends = {
+#     'rbd' => {
+#        'lowcost'  => { 'rbd_pool' => 'slow', 'rbd_user' => 'cinder', 'rbd_secret_uuid' => '123' },
+#        'standard' => { 'rbd_pool' => 'normal', 'rbd_user' => 'cinder', 'rbd_secret_uuid' => '123' }
+#     }
+#     'netapp' => {
+#        'premium' => { 'netapp_server_hostname' => 'netapp.host', 'netapp_login' => 'joe', 'netapp_password' => 'secret' }
+#     }
+#   }
+#   Defaults to undef to maintain backward compatibility.
 #
 
 
@@ -90,22 +77,19 @@ class cloud::volume::storage(
 
     if has_key($cinder_backends, 'netapp') {
       $netapp_backends = $cinder_backends['netapp']
-      create_resources('cloud::volume::storage::netapp',
-                       $netapp_backends)
+      create_resources('cloud::volume::backend::netapp', $netapp_backends)
     }
     else {
       $netapp_backends = { }
     }
 
     class { 'cinder::backends':
-      enabled_backends => keys(merge($rbd_backends,
-                                     $netapp_backends))
+      enabled_backends => keys(merge($rbd_backends, $netapp_backends))
     }
 
     # Manage Volume types.
     # It allows to the end-user to choose from which backend he would like to provision a volume.
     # Cinder::Type requires keystone credentials
-
     Cinder::Type <| |> {
       os_tenant_name => 'services',
       os_username    => 'cinder',
@@ -113,21 +97,18 @@ class cloud::volume::storage(
       os_auth_url    => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0"
     }
   }
+  # For backward compatibility when not using multi-backend
   else {
     $rbd_backends = { 'DEFAULT' => { } }
   }
 
   if ! empty($rbd_backends) {
-    create_resources("cloud::volume::storage::rbd",
-                     $rbd_backends,
-                     {
-                       rbd_pool                         => $cinder_rbd_pool,
-                       rbd_user                         => $cinder_rbd_user,
-                       rbd_secret_uuid                  => $cinder_rbd_secret_uuid,
-                       rbd_ceph_conf                    => $cinder_rbd_conf,
-                       rbd_flatten_volume_from_snapshot => $cinder_rbd_flatten_volume_from_snapshot,
-                       rbd_max_clone_depth              => $cinder_rbd_max_clone_depth,
-                       glance_api_version               => $glance_api_version,
-                     })
+    create_resources('cloud::volume::backend::rbd', $rbd_backends,
+      { rbd_pool                         => $cinder_rbd_pool,
+        rbd_user                         => $cinder_rbd_user,
+        rbd_secret_uuid                  => $cinder_rbd_secret_uuid,
+        rbd_ceph_conf                    => $cinder_rbd_conf,
+        rbd_flatten_volume_from_snapshot => $cinder_rbd_flatten_volume_from_snapshot,
+        rbd_max_clone_depth              => $cinder_rbd_max_clone_depth })
   }
 }
