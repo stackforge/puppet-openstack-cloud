@@ -23,6 +23,8 @@ class cloud::volume::controller(
   $ks_glance_internal_host     = $os_params::ks_glance_internal_host,
   $ks_glance_api_internal_port = $os_params::ks_glance_api_internal_port,
   $api_eth                     = $os_params::api_eth,
+  # Maintain backward compatibility for multi-backend
+  $volume_multi_backend        = false,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
   # $backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
   # $backup_ceph_user          = $os_params::cinder_rbd_backup_user
@@ -30,7 +32,15 @@ class cloud::volume::controller(
 
   include 'cloud::volume'
 
-  class { 'cinder::scheduler': }
+  if ! $volume_multi_backend {
+    $scheduler_driver_real = false
+  } else {
+    $scheduler_driver_real = 'cinder.scheduler.filter_scheduler.FilterScheduler'
+  }
+
+  class { 'cinder::scheduler':
+    scheduler_driver => $scheduler_driver_real
+  }
 
   class { 'cinder::api':
     keystone_password  => $ks_cinder_password,
