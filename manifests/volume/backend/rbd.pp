@@ -73,7 +73,12 @@ define cloud::volume::backend::rbd (
 
   # Configure Ceph keyring
   Ceph::Key <<| title == $rbd_user |>>
-  ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {'owner' => 'cinder', 'group' => 'cinder', 'mode' => '0400', 'require' => "Ceph::Key[$rbd_user]" })
+  ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {
+    owner   => 'cinder',
+    group   => 'cinder',
+    mode    => '0400',
+    require => "Ceph::Key[${rbd_user}]",
+  })
   Concat::Fragment <<| title == 'ceph-client-os' |>>
 
   @cinder::type { $volume_backend_name:

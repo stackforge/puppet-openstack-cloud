@@ -111,39 +111,6 @@
 #   (optional) File with the list of available NFS shares
 #   Defaults to ''
 #
-# [*netapp_copyoffload_tool_path*]
-#   (optional) This option specifies the path of the NetApp Copy Offload tool
-#   binary. Ensure that the binary has execute permissions set which allow the
-#   effective user of the cinder-volume process to execute the file.
-#   Defaults to ''
-#
-# [*netapp_controller_ips*]
-#   (optional) This option is only utilized when the storage family is
-#   configured to eseries. This option is used to restrict provisioning to the
-#   specified controllers. Specify the value of this option to be a comma
-#   separated list of controller hostnames or IP addresses to be used for
-#   provisioning.
-#   Defaults to ''
-#
-# [*netapp_sa_password*]
-#   (optional) Password for the NetApp E-Series storage array.
-#   Defaults to ''
-#
-# [*netapp_storage_pools*]
-#   (optional) This option is used to restrict provisioning to the specified
-#   storage pools. Only dynamic disk pools are currently supported. Specify the
-#   value of this option to be a comma separated list of disk pool names to be
-#   used for provisioning.
-#   Defaults to ''
-#
-# [*netapp_webservice_path*]
-#   (optional) This option is used to specify the path to the E-Series proxy
-#   application on a proxy server. The value is combined with the value of the
-#   netapp_transport_type, netapp_server_hostname, and netapp_server_port
-#   options to create the URL used by the driver to connect to the proxy
-#   application.
-#   Defaults to '/devmgr/v2'
-#
 
 define cloud::volume::backend::netapp (
   $netapp_login,
@@ -162,11 +129,6 @@ define cloud::volume::backend::netapp (
   $thres_avl_size_perc_start    = '20',
   $thres_avl_size_perc_stop     = '60',
   $nfs_shares_config            = '',
-  $netapp_copyoffload_tool_path = '',
-  $netapp_controller_ips        = '',
-  $netapp_sa_password           = '',
-  $netapp_storage_pools         = '',
-  $netapp_webservice_path       = '/devmgr/v2',
 ) {
 
 
@@ -186,11 +148,6 @@ define cloud::volume::backend::netapp (
     thres_avl_size_perc_start    => $thres_avl_size_perc_start,
     thres_avl_size_perc_stop     => $thres_avl_size_perc_stop,
     nfs_shares_config            => $nfs_shares_config,
-    netapp_copyoffload_tool_path => $netapp_copyoffload_tool_path,
-    netapp_controller_ips        => $netapp_controller_ips,
-    netapp_sa_password           => $netapp_sa_password,
-    netapp_storage_pools         => $netapp_storage_pools,
-    netapp_webservice_path       => $netapp_webservice_path,
   }
 
   @cinder::type { $volume_backend_name:
