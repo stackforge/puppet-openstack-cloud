@@ -337,7 +337,7 @@ class cloud::identity (
   $ks_admin_email               = 'no-reply@keystone.openstack',
   $ks_admin_password            = 'adminpassword',
   $ks_admin_tenant              = 'admin',
-  $ks_admin_token               = 'iw3feche3JeeYo9mejoohaugai3thohahwo9tiuyoe5Thier8Eiwah8K',
+  $ks_admin_token               = undef,
   $ks_ceilometer_admin_host     = '127.0.0.1',
   $ks_ceilometer_internal_host  = '127.0.0.1',
   $ks_ceilometer_password       = 'ceilometerpassword',

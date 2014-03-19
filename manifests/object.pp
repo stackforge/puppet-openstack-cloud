@@ -25,7 +25,7 @@
 #
 
 class cloud::object(
-  $swift_hash_suffix = 'ni2aseiWi8ich3oo'
+  $swift_hash_suffix = undef
 ) {
 
   class { 'ssh::server::install': }

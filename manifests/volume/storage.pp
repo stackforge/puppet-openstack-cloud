@@ -57,7 +57,7 @@ class cloud::volume::storage(
   $ks_cinder_password                      = 'secrete',
   $cinder_rbd_pool                         = 'volumes',
   $cinder_rbd_user                         = 'cinder',
-  $cinder_rbd_secret_uuid                  = '4a158d27-f750-41d5-9e7f-26ce4c9d2d45',
+  $cinder_rbd_secret_uuid                  = undef,
   $cinder_rbd_conf                         = '/etc/ceph/ceph.conf',
   $cinder_rbd_flatten_volume_from_snapshot = false,
   $cinder_rbd_max_clone_depth              = '5',

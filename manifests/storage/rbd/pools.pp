@@ -22,7 +22,7 @@ class cloud::storage::rbd::pools(
   $nova_rbd_pool        = 'vms',
   $cinder_backup_user   = 'cinder',
   $cinder_backup_pool   = 'cinder_backup',
-  $ceph_fsid            = '4a158d27-f750-41d5-9e7f-26ce4c9d2d45'
+  $ceph_fsid            = undef
 ) {
 
   if $setup_pools {

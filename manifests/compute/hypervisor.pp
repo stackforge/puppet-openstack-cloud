@@ -31,40 +31,12 @@ class cloud::compute::hypervisor(
   $libvirt_type               = 'kvm',
   $ks_nova_public_proto       = 'http',
   $ks_nova_public_host        = '127.0.0.1',
-  $nova_ssh_private_key       = '
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEpAIBAAKCAQEAy0QCW1bYo1jLDrkqRp2qIi4HcY2ZThG/D0zR4I2eWSkEXRnX
-  F/cOerM8BLYoCOa2BAXunSIEaCuL8kfLD1hk8LS1Pmn/1q+byJyYODAzWHhHQ6Hj
-  lrv/tXeyrQzva84u+kK5eBvrQ61cc0GknACa9E4iRO05BMn4mNb8CgY8/8UzMItw
-  lyHkA4MguI2l3qO98PBYqhT06+CQC7ZsbtDJdfkBCBMrGWfpSXgfV/moJQWR3nO9
-  iSr1Rg1fLsDTSw0XDQIINcdlyArUraWFTzG5GI/ulaxgDqaZMBeD3Ms4bV54O/kU
-  sjwKEJKjy8jfiDorrPw4uIfC7yq+NbPZoPEzJQIDAQABAoIBAQCIo2wOKIAytiKy
-  AAkKNTxEA7sfOzd+AnH0AAjpsWlruCXly9QKmRpTox7KcATTjvt2EuLHIDHkMLm/
-  oUFATIR2RpO7pBfGIoBPR+0PgF9Trm8BaNcL4c7QFum2aIadapmrw6TXt7Tb5rLK
-  C6ty7vk7Fzb0LJ9yt650V7hPqMfiimPXaEK5ar9AdONdsCdozBzvLGse4kfcUuLA
-  rpIWe5UasbInqv1Gnan7yry6DogQOON0WYtXb6VWmINGW04l0Cr68YhrB9N9XRIG
-  QpjFdnoL8tJ7bc6PISnHh14J2xIrN95DguZBDM0VDSyv/LhP8e4GSfOezLqVr1KG
-  kbf3T+V1AoGBAOfSSSwLPJKPegbnwrwh4KNUt3J1x3RJAtniNYZ3T69aO3jC4Z7q
-  0ZKZE6Nwhb6pogaqi1cizeGzSxbFNmYGHLuL/DkkBKYcha1KMJwliZ5R45SLS63Y
-  DTyRcqEJ1Hu3fJa/Onst87c5fPfs//4WrGPXy3XdIfzQnxuP0FHQ7A5zAoGBAOB3
-  RjZthPUoQqc4j5yvUwHQOlmqXdyYpWi9bh/jxbg+vZ1SNYu7JGCSHQqjjnec17M4
-  ntdkrbFQp5+EyOWnRPiu0Mg6Be54VBiIrAhxSs6t+8Fi4dORfT/FMV+Q1b4b9mhx
-  kzMEqyqiokGlTnjO7ZXbjDm8/KtqbkcBMEK1fnoHAoGAFHopxn8zmYqc79E3DWE8
-  s5C/J5gpxybP3qkxqzAM1ON2j2M/hMcfPgDRkEVXOxFG46na5xaG8yHgRyGifX6a
-  uSJTZES/OGEamcUM6C4Uqux22t83DyMfgDMk2f7BSzBZDAPWSZ00gwHL/SZtMmeU
-  ULl2GnIvF2LiOxAICcIXp+sCgYEAlGcnO5ri+bbZgndJs5zSs3M48MlLbypYycvc
-  ACd2NF7+vAF7N1vOLC7OFpeV/Izsqyg3FE8S6xVZDYUb0YHqfsQNcyOxgj151BKg
-  MqC8hbLPrMa0aU1aUowMHZPDTQJtwhW87VEb3X9S6TXikMq2l4pkxlOldatTJ4yo
-  nKIj8YcCgYA7WQEKryuZ2XPbdgVxP53diBrA7nmBoAos0T6c6BiAdMjy0M/G6Mm0
-  8DQzqT/bEvqADKsabFu341euma7UOWFnf8MM1uWGp1PiDf0B6mO6z3kbE0XW1QpF
-  2Y7b3faqSiFnbeaDtPUl+aAFB00uvc3NyRSB1cKghScWw3REjlqMRg==
-  -----END RSA PRIVATE KEY-----
-  ',
-  $nova_ssh_public_key        = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLRAJbVtijWMsOuSpGnaoiLgdxjZlOEb8PTNHgjZ5ZKQRdGdcX9w56szwEtigI5rYEBe6dIgRoK4vyR8sPWGTwtLU+af/Wr5vInJg4MDNYeEdDoeOWu/+1d7KtDO9rzi76Qrl4G+tDrVxzQaScAJr0TiJE7TkEyfiY1vwKBjz/xTMwi3CXIeQDgyC4jaXeo73w8FiqFPTr4JALtmxu0Ml1+QEIEysZZ+lJeB9X+aglBZHec72JKvVGDV8uwNNLDRcNAgg1x2XICtStpYVPMbkYj+6VrGAOppkwF4PcyzhtXng7+RSyPAoQkqPLyN+IOius/Di4h8LvKr41s9mg8TMl nova@openstack',
+  $nova_ssh_private_key       = undef,
+  $nova_ssh_public_key        = undef,
   $spice_port                 = 6082,
   $cinder_rbd_user            = 'cinder',
   $nova_rbd_pool              = 'volumes',
-  $nova_rbd_secret_uuid       = '4a158d27-f750-41d5-9e7f-26ce4c9d2d45',
+  $nova_rbd_secret_uuid       = undef,
   $has_ceph                   = false
 ) {
 

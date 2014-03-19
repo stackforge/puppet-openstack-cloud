@@ -15,7 +15,7 @@
 #
 
 class cloud::storage::rbd (
-  $fsid            = '4a158d27-f750-41d5-9e7f-26ce4c9d2d45',
+  $fsid            = undef,
   $cluster_network = '127.0.0.1/24',
   $public_network  = '127.0.0.1/24'
 ) {
