@@ -56,15 +56,9 @@ class cloud::volume::controller(
   #   backup_ceph_pool => $backup_ceph_pool
   # }
 
-  # TODO(EmilienM) Disabled for now: http://git.io/uM5sgg
-  # class { 'cinder::glance':
-  #   glance_api_servers     => $ks_glance_internal_host,
-  #   glance_request_timeout => '10'
-  # }
-  # Replaced by:
-  cinder_config {
-    'DEFAULT/glance_api_servers':     value => "${ks_glance_internal_host}:${ks_glance_api_internal_port}";
-    'DEFAULT/glance_request_timeout': value => '10';
+  class { 'cinder::glance':
+    glance_api_servers     => "${ks_glance_internal_host}:${ks_glance_api_internal_port}",
+    glance_request_timeout => '10'
   }
 
   @@haproxy::balancermember{"${::fqdn}-cinder_api":

@@ -41,7 +41,7 @@ describe 'cloud::volume::controller' do
       { :ks_cinder_password          => 'secrete',
         :ks_cinder_internal_port     => '8776',
         :ks_keystone_internal_host   => '10.0.0.1',
-        :ks_glance_internal_host     => '10.0.0.1',
+        :ks_glance_internal_host     => '10.0.0.2',
         :ks_glance_api_internal_port => '9292',
         :volume_multi_backend        => false,
         # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
@@ -89,17 +89,11 @@ describe 'cloud::volume::controller' do
       end
     end
 
-    # TODO(Emilien) Disabled for now: http://git.io/uM5sgg
-    # it 'configure cinder glance backend' do
-    #   should contain_class('cinder::glance').with(
-    #       :glance_api_servers     => '10.0.0.1',
-    #       :glance_request_timeout => '10'
-    #     )
-    # end
-    # Replaced by:
     it 'configure cinder glance backend' do
-      should contain_cinder_config('DEFAULT/glance_api_servers').with('value' => '10.0.0.1:9292')
-      should contain_cinder_config('DEFAULT/glance_request_timeout').with('value' => '10')
+      should contain_class('cinder::glance').with(
+          :glance_api_servers     => '10.0.0.2:9292',
+          :glance_request_timeout => '10'
+        )
     end
 
     it 'configure cinder api' do
