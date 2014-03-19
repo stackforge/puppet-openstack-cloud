@@ -121,7 +121,7 @@ class cloud::network(
   neutron_plugin_ml2 {
     'agent/tunnel_types':     value => ['gre'];
     'agent/l2_population':    value => true;
-    'agent/polling_interval': value => '2';
+    'agent/polling_interval': value => '15';
     'OVS/local_ip':           value => $tunnel_eth;
     'OVS/enable_tunneling':   value => true;
     'OVS/integration_bridge': value => 'br-int';
