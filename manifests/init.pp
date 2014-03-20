@@ -23,7 +23,7 @@ class cloud(
 ) {
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
-    fail("OS family unsuppored ye (${::osfamily}), module puppet-cloud only support RedHat or Debian")
+    fail("OS family unsuppored yet (${::osfamily}), module puppet-cloud only support RedHat or Debian")
   }
 
 # motd
