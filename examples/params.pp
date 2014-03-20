@@ -71,9 +71,9 @@ class os_params {
   $lb_internal_netif  = $internal_netif
 
   $swift_zone         = {
-    'swiftstore1'  => 1,
+    'swiftstore1' => 1,
     'swiftstore2' => 2,
-    'swiftstore3' => 3,
+    'swiftstore3' => 3
   }
 
   $galera_master_name  = $mgmt_names[0]
@@ -83,12 +83,12 @@ class os_params {
   $galera_nextserver  = {
     "${galera_master_name}" => $mgmt_internal_ips[0],
     "${mgmt_names[1]}"      => $mgmt_internal_ips[1],
-    "${mgmt_names[2]}"      => $mgmt_internal_ips[2],
+    "${mgmt_names[2]}"      => $mgmt_internal_ips[2]
   }
 
   $ceph_version       = 'cuttlefish'
 
-  $ceph_names         = ['cephstore1', 'cephstore2', 'cephstore3']
+  $ceph_names         = ['cephstore1','cephstore2','cephstore3']
 
   $ceph_osd_devices   = ['sdb','sdc','sdd']
 
@@ -99,9 +99,11 @@ class os_params {
 
   $args = get_scope_args()
   $schema = {
-      'ntp_servers'  => {
-        'type'     => 'any',
-        'required' => true,
+    'type' => 'map',
+    'mapping' => {
+      'ntp_servers' => {
+        'type'      => 'any',
+        'required'  => true,
       },
       'compute' => {
         'type'     => 'bool',
@@ -324,10 +326,10 @@ class os_params {
 
   # Red Hat Network registration
   $rhn_registration = {
-      username => 'rhn',
-      password => 'pass',
-      server_url => 'https://rhn.redhat.com/rpc/api',
-      force => true,
+      username    => 'rhn',
+      password    => 'pass',
+      server_url  => 'https://rhn.redhat.com/rpc/api',
+      force       => true
   }
 
   # OpenStack Identity
@@ -389,17 +391,17 @@ class os_params {
   $keepalived_email = ["dev@${site_domain}"]
   $keepalived_smtp = "${smtp_name}.${site_domain}"
   $keepalived_localhost_ip = $lb_internal_netif_ip
-  $haproxy_auth   = 'root:secrete'
+  $haproxy_auth = 'root:secrete'
 
   # Horizon
   $horizon_port = '80'
-  $secret_key   = 'secrete'
+  $secret_key = 'secrete'
 
   # RabbitMQ
   #FIXME: https://github.com/enovance/puppet-cloud/issues/14
   $rabbit_names = $mgmt_names
   $rabbit_host = $mgmt_internal_ips[0]
-  $rabbit_hosts = suffix($mgmt_internal_ips, ':5672')
+  $rabbit_hosts = suffix($mgmt_internal_ips,':5672')
   $rabbit_password = 'secrete'
   # Useful when we need a single Rabbit host (like Sensu needs)
   $rabbit_main_host = $mgmt_internal_ips[0]
@@ -447,8 +449,8 @@ class os_params {
   $spice_port = '6082'
   $nova_rbd_user = 'nova'
   $nova_rbd_pool = 'vm'
-  $nova_ssh_public_key='ssh-rsa XXX nova@openstack'
-  $nova_ssh_private_key='
+  $nova_ssh_public_key = 'ssh-rsa XXX nova@openstack'
+  $nova_ssh_private_key = '
 -----BEGIN RSA PRIVATE KEY-----
 XXX
 -----END RSA PRIVATE KEY-----
@@ -486,7 +488,7 @@ XXX
   $ks_ceilometer_public_port = '8777'
   $ks_ceilometer_public_proto = 'http'
   $replset_members = $mgmt_internal_ips
-  $mongo_nodes     = $mgmt_internal_ips
+  $mongo_nodes = $mgmt_internal_ips
 
   # Cinder
   $cinder_db_allowed_hosts = $db_allowed_hosts
