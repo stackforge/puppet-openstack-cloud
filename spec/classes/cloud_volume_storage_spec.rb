@@ -47,7 +47,7 @@ describe 'cloud::volume::storage' do
             'lowcost' => {
               'rbd_pool'               => 'ceph_cinder',
               'rbd_user'               => 'cinder',
-              'rbd_secret_uuid'        => 'secret',
+              'rbd_secret_uuid'        => 'secret'
             }
           },
           'netapp' => {
@@ -182,9 +182,7 @@ describe 'cloud::volume::storage' do
 
     context 'with backward compatiblity (without multi-backend)' do
       before :each do
-        params.merge!(
-          :cinder_backends => false,
-        )
+        params.merge!(:cinder_backends => false)
       end
       it 'configure rbd volume driver without multi-backend' do
         should contain_cinder__backend__rbd('DEFAULT').with(
