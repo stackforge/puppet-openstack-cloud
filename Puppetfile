@@ -53,6 +53,9 @@ mod 'apache',
 mod 'apt',
   :git => 'git://github.com/enovance/puppetlabs-apt.git',
   :ref => '9b001af8775c7231ea2656b7eb43d6141b536f49'
+mod 'boolean',
+  :git => 'git://github.com/enovance/puppet-boolean.git',
+  :ref => '157011a4eaa27f1202a9d94335ee4876b26d377e'
 mod 'ceph',
   :git => 'git://github.com/enovance/puppet-ceph.git',
   :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'

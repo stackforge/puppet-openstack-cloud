@@ -81,5 +81,8 @@ fixtures:
     'dnsclient':
       repo: 'git://github.com/enovance/puppet-module-dnsclient.git'
       ref: '4158b30f4660623f98dcdbd1ce9b482556180b57'
+    'boolean':
+      repo: 'git://github.com/enovance/puppet-boolean.git'
+      ref: '157011a4eaa27f1202a9d94335ee4876b26d377e'
   symlinks:
     'cloud': '#{source_dir}'
