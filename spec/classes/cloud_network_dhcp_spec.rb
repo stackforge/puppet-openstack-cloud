@@ -88,7 +88,7 @@ describe 'cloud::network::dhcp' do
         :owner => 'root',
         :group => 'root'
       )
-      verify_contents(subject, '/etc/neutron/dnsmasq-neutron.conf', ["dhcp-option-force=26,1400"])
+      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
     end
   end
 
