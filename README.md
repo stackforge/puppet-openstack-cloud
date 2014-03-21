@@ -1,6 +1,9 @@
 puppet-openstack-cloud
 ======================
 
+[![Build
+Status](https://travis-ci.org/enovance/puppet-openstack-cloud.svg)](https://travis-ci.org/enovance/puppet-openstack-cloud)
+
 #### Table of Contents
 
 1. [Overview - What is the cloud module?](#overview)
