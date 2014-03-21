@@ -106,7 +106,7 @@ Limitations
 Getting Involved
 ----------------
 
-Need a feature? Found a bug? Let me know!
+Need a feature? Found a bug? Let us know!
 
 We are extremely interested in growing a community of OpenStack experts and users around these modules so they can serve as an example of consolidated best practices of how to deploy openstack.
 
