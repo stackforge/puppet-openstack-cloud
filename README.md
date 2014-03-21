@@ -129,4 +129,4 @@ Release Notes
 
 **1.0.0**
 
-* First stable version in progress
+* First stable version.
