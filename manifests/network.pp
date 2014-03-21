@@ -117,7 +117,7 @@ class cloud::network(
   # TODO(EmilienM) Temporary, need to be fixed upstream.
   # There is an issue when using ML2 + OVS: neutron services don't read OVS
   # config file, only ML2. I need to patch puppet-neutron.
-  # Follow-up: https://github.com/enovance/puppet-cloud/issues/199
+  # Follow-up: https://github.com/enovance/puppet-openstack-cloud/issues/199
   neutron_plugin_ml2 {
     'agent/tunnel_types':     value => ['gre'];
     'agent/l2_population':    value => true;

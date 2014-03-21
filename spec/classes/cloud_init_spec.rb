@@ -95,7 +95,7 @@ describe 'cloud' do
       { :osfamily => 'Solaris' }
     end
 
-    it { should compile.and_raise_error(/module puppet-cloud only support/) }
+    it { should compile.and_raise_error(/module puppet-openstack-cloud only support/) }
 
   end
 end

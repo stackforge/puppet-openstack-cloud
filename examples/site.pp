@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# This is an example of site.pp to deploy OpenStack using puppet-cloud.
+# This is an example of site.pp to deploy OpenStack using puppet-openstack-cloud.
 #
 # It follow our reference archiecture where we have:
 #   - 2 load-balancers
@@ -79,7 +79,7 @@ node controller1, controller2, controller3 inherits common {
   class {'cloud::object::controller': }
 
   # Ring build must be activated only on one mgmt
-  # please see https://github.com/enovance/puppet-cloud/issues/29
+  # please see https://github.com/enovance/puppet-openstack-cloud/issues/29
   if $::hostname == $os_params::mgmt_names[0] {
     class {'cloud::object::ringbuilder':
       rsyncd_ipaddress => $internal_netif_ip,

@@ -1,11 +1,11 @@
-puppet-cloud
-============
+puppet-openstack-cloud
+======================
 
 #### Table of Contents
 
 1. [Overview - What is the cloud module?](#overview)
 2. [Module Description - What does the module do?](#module-description)
-3. [Setup - The basics of getting started with puppet-cloud](#setup)
+3. [Setup - The basics of getting started with puppet-openstack-cloud](#setup)
 4. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Getting Involved - How to go deaper](#involved)
@@ -75,7 +75,7 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
 ### Installing latest unstable cloud module from source
 
     cd /etc/puppet/modules
-    git clone git@github.com:enovance/puppet-cloud.git cloud
+    git clone git@github.com:enovance/puppet-openstack-cloud.git cloud
     cd cloud
     gem install --no-ri --no-rdoc r10k
     # a debian package is available in jessie
@@ -86,7 +86,7 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
 The things that follow can be handled by Puppet but are out of scope of this document and are not included in the cloud module.
 
 
-### Beginning with puppet-cloud
+### Beginning with puppet-openstack-cloud
 
 Utlization of this module can come in many forms.  It was designed to be capable of deploying all services to a single node or distributed across several.  This is not an exhaustive list, we recommend you consult and understand all the manifests included in this module and the [core openstack](http://docs.openstack.org) documentation.
 
@@ -116,13 +116,13 @@ The best way to get help with this set of modules is to email the group associat
 
 Issues should be opened here:
 
-  https://github.com/enovance/puppet-cloud/issues
+  https://github.com/enovance/puppet-openstack-cloud/issues
 
 
 Contributors
 ------------
 
-* https://github.com/enovance/puppet-cloud/graphs/contributors
+* https://github.com/enovance/puppet-openstack-cloud/graphs/contributors
 
 Release Notes
 -------------
