@@ -17,7 +17,15 @@ PuppetSyntax.exclude_paths = exclude_paths
 
 
 task(:default).clear
-task :default => [:spec_prep, :spec_standalone, :lint]
+task :default => :test
 
 desc 'Run syntax, lint and spec tests'
 task :test => [:syntax,:lint,:spec]
+
+desc 'Run syntax, lint and spec tests (without fixture purge = train/airplane)'
+task :test_keep => [:syntax,:lint,:spec_prep,:spec_standalone]
+
+if ENV['COV']
+  desc 'Run syntax, lint, spec tests and coverage'
+  task :cov => [:syntax,:lint,:spec_prep,:spec_standalone]
+end
