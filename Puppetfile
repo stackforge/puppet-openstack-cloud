@@ -61,7 +61,7 @@ mod 'ceph',
   :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
 #FIXME
 mod 'cloud',
-  :git => 'git@github.com:enovance/puppet-cloud.git',
+  :git => 'git@github.com:enovance/puppet-openstack-cloud.git',
   #:ref => 'stable/havana'
   :ref => 'master'
 mod 'concat',

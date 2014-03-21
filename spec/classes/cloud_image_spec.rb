@@ -83,7 +83,7 @@ describe 'cloud::image' do
     end
 
     # TODO(EmilienM) Disabled for now
-    # Follow-up https://github.com/enovance/puppet-cloud/issues/160
+    # Follow-up https://github.com/enovance/puppet-openstack-cloud/issues/160
     #
     # it 'configure glance notifications with rabbitmq backend' do
     #   should contain_class('glance::notify::rabbitmq').with(

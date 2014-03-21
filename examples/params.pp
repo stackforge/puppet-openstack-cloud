@@ -398,7 +398,7 @@ class os_params {
   $secret_key = 'secrete'
 
   # RabbitMQ
-  #FIXME: https://github.com/enovance/puppet-cloud/issues/14
+  #FIXME: https://github.com/enovance/puppet-openstack-cloud/issues/14
   $rabbit_names = $mgmt_names
   $rabbit_host = $mgmt_internal_ips[0]
   $rabbit_hosts = suffix($mgmt_internal_ips,':5672')

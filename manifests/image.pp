@@ -138,7 +138,7 @@ class cloud::image(
   }
 
   # TODO(EmilienM) Disabled for now
-  # Follow-up: https://github.com/enovance/puppet-cloud/issues/160
+  # Follow-up: https://github.com/enovance/puppet-openstack-cloud/issues/160
   #
   # class { 'glance::notify::rabbitmq':
   #   rabbit_password => $rabbit_password,
@@ -168,7 +168,7 @@ class cloud::image(
   # It's a hack to fit with our setup where we run MySQL/Galera
   # TODO(Gonéri)
   # We have to do this only on the primary node of the galera cluster to avoid race condition
-  # https://github.com/enovance/puppet-cloud/issues/156
+  # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'glance_db_sync':
     command => '/usr/bin/glance-manage db_sync',
     unless  => "/usr/bin/mysql glance -h ${glance_db_host} -u ${encoded_glance_user} -p${encoded_glance_password} -e \"show tables\" | /bin/grep Tables"
