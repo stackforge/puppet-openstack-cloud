@@ -38,7 +38,7 @@
 #
 # [*servername*]
 #   (optional) DNS name used to connect to Openstack Dashboard.
-#   Default value in params.
+#   Default value fqdn.
 #
 # [*listen_ssl*]
 #   (optional) Enable SSL on OpenStack Dashboard vhost
@@ -79,7 +79,7 @@ class cloud::dashboard(
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
   $api_eth                   = $os_params::api_eth,
-  $servername                = $os_params::servername,
+  $servername                = $::fqdn,
   $listen_ssl                = false,
   $keystone_host             = $os_params::ks_keystone_internal_host,
   $keystone_proto            = $os_params::ks_keystone_internal_proto,
