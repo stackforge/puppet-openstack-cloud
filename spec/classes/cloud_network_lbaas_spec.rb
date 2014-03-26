@@ -37,7 +37,8 @@ describe 'cloud::network::lbaas' do
     end
 
     let :params do
-      { :debug => 'true' }
+      { :debug              => true,
+        :manage_haproxy_pkg => true }
     end
 
     it 'configure neutron common' do
@@ -76,9 +77,36 @@ describe 'cloud::network::lbaas' do
 
     it 'configure neutron lbaas' do
       should contain_class('neutron::agents::lbaas').with(
-          :debug => true
+          :debug                  => true,
+          :manage_haproxy_package => true
       )
     end
+
+    context 'when not managing HAproxy package' do
+      let :pre_condition do
+        "package {'haproxy': ensure => 'present'}
+         class { 'cloud::network':
+           rabbit_hosts             => ['10.0.0.1'],
+           rabbit_password          => 'secrete',
+           tunnel_eth               => '10.0.1.1',
+           api_eth                  => '10.0.0.1',
+           provider_vlan_ranges     => ['physnet1:1000:2999'],
+           provider_bridge_mappings => ['physnet1:br-eth1'],
+           verbose                  => true,
+           debug                    => true,
+           use_syslog               => true,
+           dhcp_lease_duration      => '10',
+           log_facility             => 'LOG_LOCAL0' }"
+      end
+      before :each do
+        params.merge!(:manage_haproxy_pkg => false)
+      end
+      it 'configure neutron lbaas agent without managing haproxy package' do
+        should contain_class('neutron::agents::lbaas').with(:manage_haproxy_package => false)
+        should contain_package('haproxy').with(:ensure => 'present')
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

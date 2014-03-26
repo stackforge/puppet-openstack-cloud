@@ -20,7 +20,7 @@ fixtures:
       ref: '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
     'neutron':
       repo: 'git://github.com/enovance/puppet-neutron'
-      ref: 'e4e8c6292150585796ebe89788b1597ec7920b37'
+      ref: '39b7efdbc83c65966b7a961df98561c5550c2d23'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
       ref: 'f71f935a3e41dcd11f8f5986a1fe0708b124e589'

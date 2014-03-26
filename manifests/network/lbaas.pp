@@ -17,13 +17,15 @@
 #
 
 class cloud::network::lbaas(
-  $debug                 = $os_params::debug
+  $debug              = $os_params::debug,
+  $manage_haproxy_pkg = true
 ) {
 
   include 'cloud::network'
 
   class { 'neutron::agents::lbaas':
-    debug         => $debug,
+    manage_haproxy_package => $manage_haproxy_pkg,
+    debug                  => $debug,
   }
 
 }
