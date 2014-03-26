@@ -111,7 +111,8 @@ class cloud::dashboard(
     listen_ssl          => $listen_ssl,
     horizon_cert        => $horizon_cert,
     horizon_key         => $horizon_key,
-    horizon_ca          => $horizon_ca
+    horizon_ca          => $horizon_ca,
+    vhost_extra_params  => { 'add_listen' => false }
   }
 
   if ($::osfamily == 'Debian') {

@@ -29,10 +29,9 @@ mod 'glance',
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
   :ref => 'bdf094da21161ec6f78530775a0c41fc76fd3339'
-#FIXME
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
-  :ref => 'backport_of_I39b52b2b_I813b5f60'
+  :ref => '20e8cfdb082edd938d957406ac85cabe227f0cbe'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
   :ref => '9802add6566646dc1e4a2812d19c2ab4724ff594'
