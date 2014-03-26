@@ -48,7 +48,7 @@ There are a lot of moving pieces in OpenStack, consequently there are several Pu
 
 **Pre-module Dependencies**
 
-* [Puppet](http://docs.puppetlabs.com/puppet/) 2.7.12 or greater
+* [Puppet](http://docs.puppetlabs.com/puppet/) 3 or greater
 * [Facter](http://www.puppetlabs.com/puppet/related-projects/facter/) 1.6.1 or greater (versions that support the osfamily fact)
 
 **Platforms**
