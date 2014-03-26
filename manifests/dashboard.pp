@@ -100,18 +100,19 @@ class cloud::dashboard(
     # fqdn can can be ambiguous since we use reverse DNS here,
     # e.g: 127.0.0.1 instead of a public IP address.
     # We force $api_eth to avoid this situation
-    fqdn                => $api_eth,
-    servername          => $servername,
-    bind_address        => $api_eth,
-    swift               => true,
-    keystone_url        => $keystone_url,
-    cache_server_ip     => false,
-    django_debug        => $debug,
-    neutron_options     => { 'enable_lb'  => true },
-    listen_ssl          => $listen_ssl,
-    horizon_cert        => $horizon_cert,
-    horizon_key         => $horizon_key,
-    horizon_ca          => $horizon_ca
+    fqdn               => $api_eth,
+    servername         => $servername,
+    bind_address       => $api_eth,
+    swift              => true,
+    keystone_url       => $keystone_url,
+    cache_server_ip    => false,
+    django_debug       => $debug,
+    neutron_options    => { 'enable_lb'  => true },
+    listen_ssl         => $listen_ssl,
+    horizon_cert       => $horizon_cert,
+    horizon_key        => $horizon_key,
+    horizon_ca         => $horizon_ca,
+    vhost_extra_params => { 'add_listen' => false }
   }
 
   if ($::osfamily == 'Debian') {
