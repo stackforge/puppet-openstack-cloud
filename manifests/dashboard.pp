@@ -36,6 +36,10 @@
 #   (optional) Which interface we bind the Horizon server.
 #   Default value in params
 #
+# [*servername*]
+#   (optional) DNS name used to connect to Openstack Dashboard.
+#   Default value fqdn.
+#
 # [*listen_ssl*]
 #   (optional) Enable SSL on OpenStack Dashboard vhost
 #   It requires SSL files (keys and certificates)
@@ -75,6 +79,7 @@ class cloud::dashboard(
   $secret_key                = $os_params::secret_key,
   $horizon_port              = $os_params::horizon_port,
   $api_eth                   = $os_params::api_eth,
+  $servername                = $::fqdn,
   $listen_ssl                = false,
   $keystone_host             = $os_params::ks_keystone_internal_host,
   $keystone_proto            = $os_params::ks_keystone_internal_proto,
@@ -96,6 +101,7 @@ class cloud::dashboard(
     # e.g: 127.0.0.1 instead of a public IP address.
     # We force $api_eth to avoid this situation
     fqdn                => $api_eth,
+    servername          => $servername,
     bind_address        => $api_eth,
     swift               => true,
     keystone_url        => $keystone_url,
