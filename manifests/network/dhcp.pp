@@ -17,8 +17,9 @@
 #
 
 class cloud::network::dhcp(
-  $veth_mtu = 1500,
-  $debug    = true
+  $veth_mtu            = 1500,
+  $debug               = true
+  $dnsmasq_dns_servers = false
 ) {
 
   include 'cloud::network'
@@ -30,6 +31,7 @@ class cloud::network::dhcp(
   neutron_dhcp_agent_config {
     'DEFAULT/dnsmasq_config_file':      value => '/etc/neutron/dnsmasq-neutron.conf';
     'DEFAULT/enable_isolated_metadata': value => true;
+    'DEFAULT/dnsmasq_dns_servers':      value => $dnsmasq_dns_servers;
   }
 
   file { '/etc/neutron/dnsmasq-neutron.conf':
