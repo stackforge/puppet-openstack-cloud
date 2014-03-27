@@ -35,10 +35,6 @@
 #   (optional) Password to connect to keystone database
 #   Default value in params
 #
-# [*memcache_servers*]
-#   (optional) Memcached servers used by Keystone. Should be an array.
-#   Default value in params
-#
 # [*ks_admin_email*]
 #   (optional) Email address of admin user in Keystone
 #   Default value in params
@@ -333,7 +329,6 @@ class cloud::identity (
   $keystone_db_host             = $os_params::keystone_db_host,
   $keystone_db_user             = $os_params::keystone_db_user,
   $keystone_db_password         = $os_params::keystone_db_password,
-  $memcache_servers             = $os_params::memcache_servers,
   $ks_admin_email               = $os_params::ks_admin_email,
   $ks_admin_password            = $os_params::ks_admin_password,
   $ks_admin_tenant              = $os_params::ks_admin_tenant,
@@ -398,7 +393,6 @@ class cloud::identity (
   $log_facility                 = $os_params::log_facility,
   $use_syslog                   = $os_params::use_syslog,
   $ks_token_expiration          = $os_params::ks_token_expiration,
-  $ks_token_driver              = 'keystone.token.backends.memcache.Token'
 ){
 
   # Disable twice logging if syslog is enabled
@@ -422,9 +416,7 @@ class cloud::identity (
     debug            => $debug,
     idle_timeout     => 60,
     log_facility     => $log_facility,
-    memcache_servers => $memcache_servers,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
-    token_driver     => $ks_token_driver,
     token_provider   => 'keystone.token.providers.uuid.Provider',
     use_syslog       => $use_syslog,
     verbose          => $verbose,
