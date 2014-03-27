@@ -30,10 +30,10 @@ describe 'cloud::messaging' do
     end
 
     it 'configure rabbitmq-server' do
-      should contain_class('rabbitmq::server').with(
+      should contain_class('rabbitmq').with(
           :delete_guest_user        => true,
           :config_cluster           => true,
-          :cluster_disk_nodes       => params[:rabbit_names],
+          :cluster_nodes            => params[:rabbit_names],
           :wipe_db_on_cookie_change => true
         )
     end

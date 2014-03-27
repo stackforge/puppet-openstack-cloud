@@ -33,22 +33,22 @@ class cloud::messaging(
   $rabbit_password = $os_params::rabbit_password
 ){
 
-  class { 'rabbitmq::server':
+  class { 'rabbitmq':
     delete_guest_user        => true,
     config_cluster           => true,
-    cluster_disk_nodes       => $rabbit_names,
+    cluster_nodes            => $rabbit_names,
     wipe_db_on_cookie_change => true,
   }
 
   rabbitmq_vhost { '/':
     provider => 'rabbitmqctl',
-    require  => Class['rabbitmq::server'],
+    require  => Class['rabbitmq'],
   }
   rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat']:
     admin    => true,
     password => $rabbit_password,
     provider => 'rabbitmqctl',
-    require  => Class['rabbitmq::server']
+    require  => Class['rabbitmq']
   }
   rabbitmq_user_permissions {[
     'nova@/',

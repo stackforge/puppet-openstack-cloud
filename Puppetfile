@@ -102,7 +102,7 @@ mod 'ntp',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
-  :ref => 'ea039dd917e17a1c2f5cf7699fdd9f40b72f0d91'
+  :ref => '25420cb3c26c9a8432ab519d43c094d614d4fec4'
 mod 'rhnreg_ks',
   :git => 'git://github.com/enovance/puppet-rhnreg_ks.git',
   :ref => '8fdc051992b44a09f39d3b510d7cd6db5ed5ff66'

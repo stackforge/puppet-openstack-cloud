@@ -53,7 +53,7 @@ fixtures:
       ref: '11ab036fed3b252492f5400bf8fd69698d510482'
     'rabbitmq':
       repo: 'git://github.com/enovance/puppetlabs-rabbitmq'
-      ref: 'ea039dd917e17a1c2f5cf7699fdd9f40b72f0d91'
+      ref: '25420cb3c26c9a8432ab519d43c094d614d4fec4'
     'memcached':
       repo: 'git://github.com/enovance/puppet-memcached'
       ref: 'd009260de3c7623003318555ec5ca61217ea3ca1'
