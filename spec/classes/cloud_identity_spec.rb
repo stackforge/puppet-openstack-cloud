@@ -28,7 +28,6 @@ describe 'cloud::identity' do
         :keystone_db_host             => '10.0.0.1',
         :keystone_db_user             => 'keystone',
         :keystone_db_password         => 'secrete',
-        :memcache_servers             => ['10.0.0.1','10.0.0.2'],
         :ks_admin_email               => 'admin@openstack.org',
         :ks_admin_password            => 'secrete',
         :ks_admin_tenant              => 'admin',
@@ -89,9 +88,9 @@ describe 'cloud::identity' do
         :debug                        => true,
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
+        :token_driver                 => 'keystone.token.backends.sql.Token',
         :ks_token_expiration          => '3600',
-        :api_eth                      => '10.0.0.1',
-        :ks_token_driver              => 'keystone.token.backends.memcache.Token' }
+        :api_eth                      => '10.0.0.1' }
     end
 
     it 'configure keystone server' do
@@ -103,9 +102,8 @@ describe 'cloud::identity' do
         :verbose             => true,
         :idle_timeout        => '60',
         :log_facility        => 'LOG_LOCAL0',
-        :memcache_servers    => ['10.0.0.1','10.0.0.2'],
         :sql_connection      => 'mysql://keystone:secrete@10.0.0.1/keystone',
-        :token_driver        => 'keystone.token.backends.memcache.Token',
+        :token_driver        => 'keystone.token.backends.sql.Token',
         :token_provider      => 'keystone.token.providers.uuid.Provider',
         :use_syslog          => true,
         :bind_host           => '10.0.0.1',
