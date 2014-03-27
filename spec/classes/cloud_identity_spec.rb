@@ -88,6 +88,7 @@ describe 'cloud::identity' do
         :debug                        => true,
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
+        :token_driver                 => 'keystone.token.backends.sql.Token',
         :ks_token_expiration          => '3600',
         :api_eth                      => '10.0.0.1' }
     end

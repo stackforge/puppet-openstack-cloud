@@ -319,6 +319,10 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults value in params
 #
+# [*token_driver*]
+#   (optional) Driver to store tokens
+#   Defaults to 'keystone.token.backends.sql.Token'
+#
 # [*token_expiration*]
 #   (optional) Amount of time a token should remain valid (in seconds)
 #   Defaults value in params
@@ -392,6 +396,7 @@ class cloud::identity (
   $debug                        = $os_params::debug,
   $log_facility                 = $os_params::log_facility,
   $use_syslog                   = $os_params::use_syslog,
+  $token_driver                 = 'keystone.token.backends.sql.Token',
   $ks_token_expiration          = $os_params::ks_token_expiration,
 ){
 
@@ -424,6 +429,7 @@ class cloud::identity (
     log_dir          => $log_dir,
     public_port      => $ks_keystone_public_port,
     admin_port       => $ks_keystone_admin_port,
+    token_driver     => $token_driver,
     token_expiration => $ks_token_expiration
   }
 
