@@ -102,6 +102,7 @@ describe 'cloud::identity' do
         :idle_timeout        => '60',
         :log_facility        => 'LOG_LOCAL0',
         :sql_connection      => 'mysql://keystone:secrete@10.0.0.1/keystone',
+        :token_driver        => 'keystone.token.backends.sql.Token',
         :token_provider      => 'keystone.token.providers.uuid.Provider',
         :use_syslog          => true,
         :bind_host           => '10.0.0.1',
