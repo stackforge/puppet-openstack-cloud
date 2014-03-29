@@ -80,12 +80,28 @@ describe 'cloud::volume::controller' do
 
     context 'with multi-backend' do
       before :each do
-        params.merge!( :volume_multi_backend => true )
+        params.merge!(
+          :volume_multi_backend => true,
+          :default_volume_type  => 'ceph'
+        )
       end
       it 'configure cinder scheduler with multi-backend' do
         should contain_class('cinder::scheduler').with(
           :scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler'
         )
+        should contain_class('cinder::api').with(:default_volume_type => 'ceph')
+      end
+    end
+
+    context 'with multi-backend without default volume type' do
+      before :each do
+        params.merge!(
+          :volume_multi_backend => true,
+          :default_volume_type  => nil
+        )
+      end
+      it 'should raise an error and fail' do
+        should compile.and_raise_error(/when using multi-backend, you should define a default_volume_type value in cloud::volume::controller/)
       end
     end
 
@@ -98,10 +114,11 @@ describe 'cloud::volume::controller' do
 
     it 'configure cinder api' do
       should contain_class('cinder::api').with(
-          :keystone_password  => 'secrete',
-          :keystone_auth_host => '10.0.0.1',
-          :bind_host          => '10.0.0.1'
+          :keystone_password   => 'secrete',
+          :keystone_auth_host  => '10.0.0.1',
+          :bind_host           => '10.0.0.1',
         )
+      should contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
     end
 
     # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
