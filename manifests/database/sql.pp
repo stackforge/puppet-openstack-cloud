@@ -110,9 +110,6 @@ class cloud::database::sql (
           require => Exec['clean-mysql-binlog'],
         }
     }
-    default: {
-      err "${::osfamily} not supported yet"
-    }
   }
 
   # This is due to this bug: https://bugs.launchpad.net/codership-mysql/+bug/1087368
