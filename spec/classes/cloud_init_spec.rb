@@ -20,6 +20,10 @@ require 'spec_helper'
 
 describe 'cloud' do
 
+  let :params do
+    { }
+  end
+
   shared_examples_for 'private cloud node' do
 
     let :pre_condition do
@@ -37,26 +41,8 @@ describe 'cloud' do
       {:ensure => 'file'}.merge(file_defaults)
     )}
 
-    it 'should build motd file with correct message' do
-        verify_contents(subject, '/etc/motd',
-        [
-          "############################################################################",
-          "#                           eNovance IT Operations                         #",
-          "############################################################################",
-          "#                                                                          #",
-          "#                         *** RESTRICTED ACCESS ***                        #",
-          "#  Only the authorized users may access this system.                       #",
-          "#  Any attempted unauthorized access or any action affecting the computer  #",
-          "#  system of eNovance is punishable under articles 323-1 to 323-7 of       #",
-          "#  French criminal law.                                                    #",
-          "#                                                                          #",
-          "############################################################################",
-          "This node is under the control of Puppet ${::puppetversion}."
-        ]
-      )
-    end
-
-    it { shoud contain_service('cron').with({
+    it { should contain_service('cron').with({
+      :name   => platform_params[:cron_service_name],
       :ensure => 'running',
       :enable => true
     }) }
@@ -70,7 +56,11 @@ describe 'cloud' do
         :puppetversion  => '3.3' }
     end
 
-#    it_configures 'private cloud node'
+    let :platform_params do
+      { :cron_service_name => 'cron'}
+    end
+
+    it_configures 'private cloud node'
   end
 
   context 'on RedHat platforms' do
@@ -81,11 +71,15 @@ describe 'cloud' do
         :hostname       => 'redhat1' }
     end
 
+    let :platform_params do
+      { :cron_service_name => 'crond'}
+    end
+
     let :params do
       { :rhn_registration => { "username" => "rhn", "password" => "pass" } }
     end
 
-#    it_configures 'private cloud node'
+    it_configures 'private cloud node'
 
     it { should contain_rhn_register('rhn-redhat1') }
   end
