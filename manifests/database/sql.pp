@@ -73,12 +73,12 @@ class cloud::database::sql (
             client_package_name => 'MariaDB-client',
             service_name        => $mysql_service_name,
         }
-        # galera-23.2.7-1.rhel6.x86_64
+
+        # Specific to Red Hat
         $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
 
-        # TODO(Gonéri)
-        # MariaDB-Galera-server-5.5.34-1.x86_64 doesn't create this
         $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
+
         file { $dirs:
             ensure => directory,
             mode   => '0750',
@@ -93,6 +93,8 @@ class cloud::database::sql (
             client_package_name => 'mariadb-client',
             service_name        => $mysql_service_name,
         }
+
+        # Specific to Debian / Ubuntu
         $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
 
         database_user { 'debian-sys-maint@localhost':
@@ -101,6 +103,7 @@ class cloud::database::sql (
           provider      => 'mysql',
           require       => File['/root/.my.cnf']
         }
+
         file{'/etc/mysql/debian.cnf':
           ensure  => file,
           content => template('cloud/database/debian.cnf.erb'),
@@ -113,7 +116,7 @@ class cloud::database::sql (
   }
 
   file { '/etc/init.d/mysql-bootstrap':
-    content => template("cloud/database/etc_initd_mysql"),
+    content => template('cloud/database/etc_initd_mysql'),
     owner   => 'root',
     mode    => '0755',
     group   => 'root',
@@ -213,11 +216,6 @@ class cloud::database::sql (
       privileges => ['all']
     }
 
-
-    # TODO(Gonéri):
-    # Here we should do the db_sync.
-    # https://github.com/enovance/puppet-openstack-cloud/issues/156
-
     Database_user<<| |>>
   } # if $::hostname == $galera_master
 
@@ -245,7 +243,7 @@ class cloud::database::sql (
       group   => 'root';
   }
 
-  # Hack for Debian. The puppet-xinetd module do not correctly reload
+  # The puppet-xinetd module do not correctly reload
   # the configuration on “notify”
   # TODO(Gonéri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
   # get merged
