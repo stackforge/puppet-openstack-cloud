@@ -67,7 +67,13 @@ This node is under the control of Puppet ${::puppetversion}.
     uid              => '0',
   }
 
+  $cron_service_name = $::osfamily ? {
+    'RedHat' => 'crond',
+    default  => 'cron',
+  }
+
   service { 'cron':
+    name   => $cron_service_name,
     ensure => running,
     enable => true
   }
