@@ -25,6 +25,7 @@ class cloud::volume::controller(
   $api_eth                     = $os_params::api_eth,
   # Maintain backward compatibility for multi-backend
   $volume_multi_backend        = false,
+  $default_volume_type         = undef,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
   # $backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
   # $backup_ceph_user          = $os_params::cinder_rbd_backup_user
@@ -33,9 +34,16 @@ class cloud::volume::controller(
   include 'cloud::volume'
 
   if ! $volume_multi_backend {
-    $scheduler_driver_real = false
+    $scheduler_driver_real    = false
+    $default_volume_type_real = undef
   } else {
     $scheduler_driver_real = 'cinder.scheduler.filter_scheduler.FilterScheduler'
+
+    if ! $default_volume_type {
+      fail('when using multi-backend, you should define a default_volume_type value in cloud::volume::controller')
+    } else {
+      $default_volume_type_real = $default_volume_type
+    }
   }
 
   class { 'cinder::scheduler':
@@ -43,9 +51,10 @@ class cloud::volume::controller(
   }
 
   class { 'cinder::api':
-    keystone_password  => $ks_cinder_password,
-    keystone_auth_host => $ks_keystone_internal_host,
-    bind_host          => $api_eth
+    keystone_password   => $ks_cinder_password,
+    keystone_auth_host  => $ks_keystone_internal_host,
+    bind_host           => $api_eth,
+    default_volume_type => $default_volume_type_real
   }
 
   class { 'cinder::backup': }
