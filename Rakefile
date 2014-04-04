@@ -1,3 +1,9 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+NAME = 'eNovance-cloud'
+TDIR = File.expand_path(File.dirname(__FILE__))
+
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
@@ -28,4 +34,11 @@ task :test_keep => [:syntax,:lint,:spec_prep,:spec_standalone]
 if ENV['COV']
   desc 'Run syntax, lint, spec tests and coverage'
   task :cov => [:syntax,:lint,:spec_prep,:spec_standalone]
+end
+
+namespace :module do
+  desc "Build #{NAME} module (in a clean env) Please use this for puppetforge"
+  task :build do
+    exec "rsync -rv --exclude-from=#{TDIR}/.forgeignore . /tmp/#{NAME};cd /tmp/#{NAME};puppet module build"
+  end
 end

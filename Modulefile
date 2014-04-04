@@ -1,5 +1,5 @@
-name    'enovance-openstack-cloud'
-version '1.0.0'
+name    'eNovance-cloud'
+version '1.1.0'
 source  'https://github.com/enovance/puppet-openstack-cloud'
 author  'eNovance'
 license 'Apache License 2.0'

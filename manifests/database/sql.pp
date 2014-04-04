@@ -68,50 +68,52 @@ class cloud::database::sql (
   # TODO(Gonéri): OS/values detection should be moved in a params.pp
   case $::osfamily {
     'RedHat': {
-        class { 'mysql':
-            server_package_name => 'MariaDB-Galera-server',
-            client_package_name => 'MariaDB-client',
-            service_name        => $mysql_service_name,
-        }
+      class { 'mysql':
+        server_package_name => 'MariaDB-Galera-server',
+        client_package_name => 'MariaDB-client',
+        service_name        => $mysql_service_name,
+      }
 
-        # Specific to Red Hat
-        $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
+      # Specific to Red Hat
+      $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
 
-        $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
+      $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
 
-        file { $dirs:
-            ensure => directory,
-            mode   => '0750',
-            before => Service['mysqld'],
-            owner  => 'mysql'
-        }
-
-    }
+      file { $dirs:
+        ensure => directory,
+        mode   => '0750',
+        before => Service['mysqld'],
+        owner  => 'mysql'
+      }
+    } # RedHat
     'Debian': {
-        class { 'mysql':
-            server_package_name => 'mariadb-galera-server',
-            client_package_name => 'mariadb-client',
-            service_name        => $mysql_service_name,
-        }
+      class { 'mysql':
+        server_package_name => 'mariadb-galera-server',
+        client_package_name => 'mariadb-client',
+        service_name        => $mysql_service_name,
+      }
 
-        # Specific to Debian / Ubuntu
-        $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
+      # Specific to Debian / Ubuntu
+      $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
 
-        database_user { 'debian-sys-maint@localhost':
-          ensure        => 'present',
-          password_hash => mysql_password($mysql_sys_maint_password),
-          provider      => 'mysql',
-          require       => File['/root/.my.cnf']
-        }
+      database_user { 'debian-sys-maint@localhost':
+        ensure        => 'present',
+        password_hash => mysql_password($mysql_sys_maint_password),
+        provider      => 'mysql',
+        require       => File['/root/.my.cnf']
+      }
 
-        file{'/etc/mysql/debian.cnf':
-          ensure  => file,
-          content => template('cloud/database/debian.cnf.erb'),
-          owner   => 'root',
-          group   => 'root',
-          mode    => '0600',
-          require => Exec['clean-mysql-binlog'],
-        }
+      file{'/etc/mysql/debian.cnf':
+        ensure  => file,
+        content => template('cloud/database/debian.cnf.erb'),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0600',
+        require => Exec['clean-mysql-binlog'],
+      }
+    } # Debian
+    default: {
+      err "${::osfamily} not supported yet"
     }
   }
 

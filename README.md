@@ -1,8 +1,6 @@
-puppet-openstack-cloud
-======================
+# puppet-openstack-cloud
 
-[![Build
-Status](https://travis-ci.org/enovance/puppet-openstack-cloud.svg)](https://travis-ci.org/enovance/puppet-openstack-cloud)
+[![Build Status](https://travis-ci.org/enovance/puppet-openstack-cloud.svg)](https://travis-ci.org/enovance/puppet-openstack-cloud)
 
 #### Table of Contents
 
@@ -11,13 +9,12 @@ Status](https://travis-ci.org/enovance/puppet-openstack-cloud.svg)](https://trav
 3. [Setup - The basics of getting started with puppet-openstack-cloud](#setup)
 4. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
 5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Getting Involved - How to go deaper](#involved)
+6. [Getting Involved - How to go deeper](#involved)
 7. [Development - Guide for contributing to the module](#development)
 8. [Contributors - Those with commits](#contributors)
 9. [Release Notes - Notes on the most recent updates to the module](#release-notes)
 
-Overview
---------
+## Overview
 
 The OpenStack Puppet Modules are a flexible Puppet implementation capable of configuring the core [OpenStack](http://docs.openstack.org/) services:
 
@@ -41,22 +38,24 @@ Cinder has multi-backend support with Ceph used by default and NetApp as an opti
 
 These Puppet modules are based on the [openstack documentation](http://docs.openstack.org/).
 
-Module Description
-------------------
+## Module Description
 
 There are a lot of moving pieces in OpenStack, consequently there are several Puppet modules needed to cover all these pieces.  Each module is then made up of several class definitions, resource declarations, defined resources, and custom types/providers.  A common pattern to reduce this complexity in Puppet is to create a composite module that bundles all these component type modules into a common set of configurations.  The cloud module is doing this compositing and exposing a set of variables needed to be successful in getting a functional stack up and running.
 
-**Pre-module Dependencies**
+### Pre-module Dependencies
 
-* [Puppet](http://docs.puppetlabs.com/puppet/) 2.7.12 or greater
+* [Puppet](http://docs.puppetlabs.com/puppet/) 3 or greater
 * [Facter](http://www.puppetlabs.com/puppet/related-projects/facter/) 1.6.1 or greater (versions that support the osfamily fact)
+
+### Notes about Puppet3
+
+Puppet 3.x isn't yet available on Debian/RedHat stable osfamily, but hopefully puppet provides a Official repository, please see [this page](http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html) for the setup.
 
 **Platforms**
 
 These modules have been fully tested on Ubuntu Precise and Debian Wheezy and RHEL 6.
 
-Setup
------
+## Setup
 
 **What the cloud module affects**
 
@@ -88,26 +87,21 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
 
 The things that follow can be handled by Puppet but are out of scope of this document and are not included in the cloud module.
 
-
 ### Beginning with puppet-openstack-cloud
 
-Utlization of this module can come in many forms.  It was designed to be capable of deploying all services to a single node or distributed across several.  This is not an exhaustive list, we recommend you consult and understand all the manifests included in this module and the [core openstack](http://docs.openstack.org) documentation.
+Utilization of this module can come in many forms.  It was designed to be capable of deploying all services to a single node or distributed across several.  This is not an exhaustive list, we recommend you consult and understand all the manifests included in this module and the [core openstack](http://docs.openstack.org) documentation.
 
 
-Implementation
---------------
+## Implementation
 
 (more doc should be written here)
 
-Limitations
------------
+## Limitations
 
 * Deploys only with rabbitmq and mysql RPC/data backends.
 * Not backwards compatible with pre-2.x release of the cloud modules.
 
-
-Getting Involved
-----------------
+## Getting Involved
 
 Need a feature? Found a bug? Let us know!
 
@@ -115,20 +109,30 @@ We are extremely interested in growing a community of OpenStack experts and user
 
 The best way to get help with this set of modules is to email the group associated with this project:
 
-  dev@enovance.com
+  dev [at] enovance [dot] com
 
 Issues should be opened here:
 
   https://github.com/enovance/puppet-openstack-cloud/issues
 
 
-Contributors
-------------
+## Contributors
 
 * https://github.com/enovance/puppet-openstack-cloud/graphs/contributors
 
-Release Notes
--------------
+## Release Notes
+
+**1.1.0**
+
+* Updated puppetlabs-rabbitmq to 3.1.0 (RabbitMQ to 3.2.4)
+* Add Cinder Muli-backend support
+* NetApp support for Cinder as a backend
+* Keystone uses now MySQL for tokens storage (due to several issues with Memcache backend)
+* Back to upstream puppet-horizon from stackforge
+* Servername parameter support in Horizon configuration to allow SSL redirections
+* puppet-openstack-cloud module QA is done by Travis
+* neutron: increase agent polling interval
+* network: add dhcp\_lease\_duration parameter support
 
 **1.0.0**
 
