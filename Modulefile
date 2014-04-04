@@ -1,4 +1,4 @@
-name    'enovance-cloud'
+name    'eNovance-cloud'
 version '1.1.0'
 source  'https://github.com/enovance/puppet-openstack-cloud'
 author  'eNovance'
