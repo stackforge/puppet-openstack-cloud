@@ -24,8 +24,6 @@
 #   - 2 compute nodes
 #
 
-import 'params.pp'
-
 node common {
 
 ## Params
