@@ -42,10 +42,14 @@ These Puppet modules are based on the [openstack documentation](http://docs.open
 
 There are a lot of moving pieces in OpenStack, consequently there are several Puppet modules needed to cover all these pieces.  Each module is then made up of several class definitions, resource declarations, defined resources, and custom types/providers.  A common pattern to reduce this complexity in Puppet is to create a composite module that bundles all these component type modules into a common set of configurations.  The cloud module is doing this compositing and exposing a set of variables needed to be successful in getting a functional stack up and running.
 
-**Pre-module Dependencies**
+### Pre-module Dependencies
 
 * [Puppet](http://docs.puppetlabs.com/puppet/) 3 or greater
 * [Facter](http://www.puppetlabs.com/puppet/related-projects/facter/) 1.6.1 or greater (versions that support the osfamily fact)
+
+### Notes about Puppet3
+
+Puppet 3.x isn't yet available on Debian/RedHat stable osfamily, but hopefully puppet provides a Official repository, please see [this page](http://docs.puppetlabs.com/guides/puppetlabs_package_repositories.html) for the setup.
 
 **Platforms**
 
