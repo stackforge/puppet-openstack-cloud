@@ -116,7 +116,7 @@ describe 'cloud::volume::controller' do
       should contain_class('cinder::api').with(
           :keystone_password   => 'secrete',
           :keystone_auth_host  => '10.0.0.1',
-          :bind_host           => '10.0.0.1',
+          :bind_host           => '10.0.0.1'
         )
       should contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
     end
