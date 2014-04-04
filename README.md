@@ -122,18 +122,4 @@ Issues should be opened here:
 
 ## Release Notes
 
-**1.1.0**
-
-* Updated puppetlabs-rabbitmq to 3.1.0 (RabbitMQ to 3.2.4)
-* Add Cinder Muli-backend support
-* NetApp support for Cinder as a backend
-* Keystone uses now MySQL for tokens storage (due to several issues with Memcache backend)
-* Back to upstream puppet-horizon from stackforge
-* Servername parameter support in Horizon configuration to allow SSL redirections
-* puppet-openstack-cloud module QA is done by Travis
-* neutron: increase agent polling interval
-* network: add dhcp\_lease\_duration parameter support
-
-**1.0.0**
-
-* First stable version.
+See [CHANGELOG](https://github.com/enovance/puppet-openstack-cloud/blob/master/CHANGELOG.md) file.
