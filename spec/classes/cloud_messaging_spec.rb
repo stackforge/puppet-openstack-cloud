@@ -24,18 +24,30 @@ describe 'cloud::messaging' do
 
     let :params do
       {
-        :rabbit_names    => ['foo','boo','zoo'],
-        :rabbit_password => 'secrete'
+        :rabbit_names      => ['foo','boo','zoo'],
+        :rabbit_password   => 'secrete',
+        :cluster_node_type => 'disc'
       }
     end
 
-    it 'configure rabbitmq-server' do
+    it 'configure rabbitmq-server with default values' do
       should contain_class('rabbitmq').with(
           :delete_guest_user        => true,
           :config_cluster           => true,
           :cluster_nodes            => params[:rabbit_names],
-          :wipe_db_on_cookie_change => true
+          :wipe_db_on_cookie_change => true,
+          :cluster_node_type        => 'disc'
         )
+    end
+
+    context 'with RAM mode' do
+      before :each do
+        params.merge!( :cluster_node_type => 'ram')
+      end
+
+      it 'configure rabbitmq-server in RAM mode' do
+       should contain_class('rabbitmq').with( :cluster_node_type => 'ram' )
+      end
     end
 
   end
