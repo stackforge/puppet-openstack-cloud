@@ -27,10 +27,15 @@
 #   (optional) Password to connect to OpenStack queues.
 #   Default value in params
 #
+# [*cluster_node_type*]
+#   (optionnal) Store the queues on the disc or in the RAM.
+#   Could be set to 'disk' or 'ram'.
+#   Defaults to 'disc'
 
 class cloud::messaging(
-  $rabbit_names    = $os_params::rabbit_names,
-  $rabbit_password = $os_params::rabbit_password
+  $rabbit_names      = $os_params::rabbit_names,
+  $rabbit_password   = $os_params::rabbit_password,
+  $cluster_node_type = 'disc'
 ){
 
   class { 'rabbitmq':
@@ -38,6 +43,7 @@ class cloud::messaging(
     config_cluster           => true,
     cluster_nodes            => $rabbit_names,
     wipe_db_on_cookie_change => true,
+    cluster_node_type        => $cluster_node_type
   }
 
   rabbitmq_vhost { '/':
