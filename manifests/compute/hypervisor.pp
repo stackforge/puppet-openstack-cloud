@@ -144,9 +144,9 @@ Host *
     Ceph::Key <<| title == $cinder_rbd_user |>>
 
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
-      owner   => 'nova',
-      group   => 'nova',
-      mode    => '0400',
+      owner   => 'cinder',
+      group   => 'cinder',
+      mode    => '0444',
       require => "Ceph::Key[${cinder_rbd_user}]",
     })
     Concat::Fragment <<| title == 'ceph-client-os' |>>
