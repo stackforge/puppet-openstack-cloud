@@ -48,8 +48,9 @@ describe 'cloud::dashboard' do
           :keystone_url        => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug        => true,
           :neutron_options     => { 'enable_lb' => true },
-          :vhost_extra_params  => { 'add_listen' => false }
+          :vhost_extra_params  => { 'add_listen' => true }
         )
+      should contain_class('apache').with(:default_vhost => false)
     end
   end
 
