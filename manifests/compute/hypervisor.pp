@@ -149,12 +149,7 @@ Host *
     ensure_resource('group', 'cephkeyring', {
       ensure => 'present'
     })
-
-    # puppet-nova already manages 'nova' user
-    # we just want to ensure nova is part of the group.
-    ensure_resource('exec', 'add-nova-to-cephkeyring-group', {
-      command => 'useradd -G cephkeyring nova || true'
-    })
+    User<<| title == 'nova' |>> { groups +> 'cephkeyring' }
 
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
       owner   => 'cephkeyring',

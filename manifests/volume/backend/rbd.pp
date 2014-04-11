@@ -79,12 +79,7 @@ define cloud::volume::backend::rbd (
   ensure_resource('group', 'cephkeyring', {
     ensure => 'present'
   })
-
-  # puppet-nova already manages 'cinder' user
-  # we just want to ensure cinder is part of the group.
-  ensure_resource('exec', 'add-cinder-to-cephkeyring-group', {
-    command => 'useradd -G cephkeyring cinder || true'
-  })
+  User<<| title == 'cinder' |>> { groups +> 'cephkeyring' }
 
   ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {
     owner   => 'cephkeyring',

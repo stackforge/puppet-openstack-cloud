@@ -106,7 +106,6 @@ describe 'cloud::volume::storage' do
           :os_password    => 'secret',
           :os_auth_url    => 'http://keystone.host:5000/v2.0'
         )
-        should contain_exec('add-cinder-to-cephkeyring-group').with( :command => 'useradd -G cephkeyring cinder || true')
         should contain_group('cephkeyring').with(:ensure => 'present')
       end
     end

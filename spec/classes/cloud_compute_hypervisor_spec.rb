@@ -239,7 +239,6 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
       should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
-      should contain_exec('add-nova-to-cephkeyring-group').with( :command => 'useradd -G cephkeyring nova || true')
       should contain_group('cephkeyring').with(:ensure => 'present')
     end
 
