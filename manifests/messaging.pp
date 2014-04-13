@@ -38,6 +38,19 @@ class cloud::messaging(
   $cluster_node_type = 'disc'
 ){
 
+  # Packaging issue: https://bugzilla.redhat.com/show_bug.cgi?id=1033305
+  if $::osfamily == 'RedHat' {
+    file {'/usr/sbin/rabbitmq-plugins':
+      ensure => link,
+      target => '/usr/lib/rabbitmq/bin/rabbitmq-plugins'
+    }
+
+    file {'/usr/sbin/rabbitmq-env':
+      ensure => link,
+      target => '/usr/lib/rabbitmq/bin/rabbitmq-env'
+    }
+  }
+
   class { 'rabbitmq':
     delete_guest_user        => true,
     config_cluster           => true,
