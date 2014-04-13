@@ -44,13 +44,8 @@ class cloud::database::nosql(
   # bind_ip should be an array
   $bind_ip_real = any2array($bind_ip)
 
-  $manage_mongodb_package_repo = $::osfamily ? {
-    'RedHat' => false,
-    default  => true
-  }
-
   class { 'mongodb::globals':
-    manage_package_repo => $manage_mongodb_package_repo
+    manage_package_repo => true
   }->
   class { 'mongodb':
     bind_ip   => $bind_ip_real,
