@@ -80,6 +80,12 @@ class cloud::network(
     $log_dir = '/var/log/neutron'
   }
 
+  if $::osfamily == 'RedHat' {
+    exec { '/sbin/modprobe ip_gre':
+      unless => '/bin/grep -q "^ip_gre " "/proc/modules"'
+    }
+  }
+
   class { 'neutron':
     allow_overlapping_ips   => true,
     verbose                 => $verbose,
