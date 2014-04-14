@@ -14,7 +14,7 @@ fixtures:
       ref: '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
-      ref: '20e8cfdb082edd938d957406ac85cabe227f0cbe'
+      ref: 'd9e93ff61574660fa26f88e3a72d4ce9322b424a'
     'swift':
       repo: 'git://github.com/enovance/puppet-swift'
       ref: '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
