@@ -81,9 +81,15 @@ class cloud::network(
   }
 
   if $::osfamily == 'RedHat' {
-    exec { '/sbin/modprobe ip_gre':
-      unless => '/bin/grep -q "^ip_gre " "/proc/modules"'
-    }
+    $gre_module_name = 'ip_gre'
+  } else {
+    $gre_module_name = 'gre'
+  }
+
+  kmod::generic {'install_gre':
+    type   => 'install',
+    module => $gre_module_name,
+    file   => '/etc/modprobe.d/neutron.conf'
   }
 
   class { 'neutron':

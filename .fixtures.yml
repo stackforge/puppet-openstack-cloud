@@ -84,5 +84,8 @@ fixtures:
     'boolean':
       repo: 'git://github.com/enovance/puppet-boolean.git'
       ref: '157011a4eaa27f1202a9d94335ee4876b26d377e'
+    'kmod':
+      repo: 'git://github.com/enovance/puppet-kmod.git'
+      ref: 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
   symlinks:
     'cloud': '#{source_dir}'
