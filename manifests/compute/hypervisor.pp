@@ -151,14 +151,14 @@ Host *
     })
 
     @user { 'nova': groups => 'cephkeyring' }
-    User <| title == nvoa |>
+    User <| title == nova |>
     realize User[nova]
 
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
       owner   => 'root',
       group   => 'cephkeyring',
       mode    => '0400',
-      require => "Ceph::Key[${cinder_rbd_user}]",
+      require => Ceph::Key[$cinder_rbd_user],
     })
 
     Concat::Fragment <<| title == 'ceph-client-os' |>>

@@ -88,7 +88,7 @@ define cloud::volume::backend::rbd (
     owner   => 'root',
     group   => 'cephkeyring',
     mode    => '0400',
-    require => "Ceph::Key[${rbd_user}]",
+    require => Ceph::Key[$rbd_user],
   })
 
   Concat::Fragment <<| title == 'ceph-client-os' |>>
