@@ -80,6 +80,18 @@ class cloud::network(
     $log_dir = '/var/log/neutron'
   }
 
+  if $::osfamily == 'RedHat' {
+    $gre_module_name = 'ip_gre'
+  } else {
+    $gre_module_name = 'gre'
+  }
+
+  kmod::generic {'install_gre':
+    type   => 'install',
+    module => $gre_module_name,
+    file   => '/etc/modprobe.d/neutron.conf'
+  }
+
   class { 'neutron':
     allow_overlapping_ips   => true,
     verbose                 => $verbose,

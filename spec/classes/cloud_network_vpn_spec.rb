@@ -68,6 +68,11 @@ describe 'cloud::network::vpn' do
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
+      should contain_kmod__generic('install_gre').with(
+        :type   => 'install',
+        :module => platform_params[:gre_module_name],
+        :file   => '/etc/modprobe.d/neutron.conf'
+      )
     end
 
     it 'configure neutron vpnaas' do
@@ -80,12 +85,20 @@ describe 'cloud::network::vpn' do
       { :osfamily => 'Debian' }
     end
 
+    let :platform_params do
+      { :gre_module_name => 'gre' }
+    end
+
     it_configures 'openstack network vpnaas'
   end
 
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+    let :platform_params do
+      { :gre_module_name => 'ip_gre' }
     end
 
     it_configures 'openstack network vpnaas'
