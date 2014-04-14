@@ -80,9 +80,9 @@ define cloud::volume::backend::rbd (
     ensure => 'present'
   })
 
-  exec {'add-cinder-to-group':
-    command => 'usermod -a -G cephkeyring cinder'
-  }
+  @user { 'cinder': groups => 'cephkeyring' }
+  User <| title == cinder |>
+  realize User[cinder]
 
   ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {
     owner   => 'root',
