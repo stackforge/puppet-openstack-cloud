@@ -94,6 +94,14 @@ class cloud::dashboard(
   # We build the param needed for horizon class
   $keystone_url = "${keystone_proto}://${keystone_host}:${keystone_port}/v2.0"
 
+  # Apache2 specific configuration
+  $vhost_extra_params = {
+    'add_listen'    => true
+  }
+  ensure_resource('class', 'apache', {
+    default_vhost => false
+  })
+
   class { 'horizon':
     secret_key          => $secret_key,
     can_set_mount_point => 'False',
@@ -112,7 +120,7 @@ class cloud::dashboard(
     horizon_cert        => $horizon_cert,
     horizon_key         => $horizon_key,
     horizon_ca          => $horizon_ca,
-    vhost_extra_params  => { 'add_listen' => false }
+    vhost_extra_params  => $vhost_extra_params
   }
 
   if ($::osfamily == 'Debian') {
