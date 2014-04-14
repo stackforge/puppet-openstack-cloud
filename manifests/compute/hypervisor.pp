@@ -141,13 +141,26 @@ Host *
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
 
+    # Configure Ceph keyring
     Ceph::Key <<| title == $cinder_rbd_user |>>
-    file { "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring":
-      owner   => 'nova',
-      group   => 'nova',
-      mode    => '0400',
-      require => Ceph::Key[$cinder_rbd_user]
-    }
+
+    # If Cinder & Nova reside on the same node, we need a group
+    # where nova & cinder users have read permissions.
+    ensure_resource('group', 'cephkeyring', {
+      ensure => 'present'
+    })
+
+    @user { 'nova': groups => 'cephkeyring' }
+    User <| title == nova |>
+    realize User[nova]
+
+    ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
+      owner   => 'root',
+      group   => 'cephkeyring',
+      mode    => '0440',
+      require => Ceph::Key[$cinder_rbd_user],
+    })
+
     Concat::Fragment <<| title == 'ceph-client-os' |>>
   } else {
     $libvirt_disk_cachemodes_real = []

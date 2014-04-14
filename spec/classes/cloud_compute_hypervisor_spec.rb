@@ -233,12 +233,13 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('ceilometer::agent::compute')
     end
 
-    it 'configure nova-conpute to support RBD backend' do
+    it 'configure nova-compute to support RBD backend' do
       should contain_nova_config('DEFAULT/libvirt_images_type').with('value' => 'rbd')
       should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'nova')
       should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
       should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
+      should contain_group('cephkeyring').with(:ensure => 'present')
     end
 
     it 'configure nova-compute with extra parameters' do
