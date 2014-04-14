@@ -81,7 +81,7 @@ mod 'inifile',
 mod 'keepalived',
   :git => 'git://github.com/enovance/puppet-module-keepalived.git',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
-mod 'keepalived',
+mod 'kmod',
   :git => 'git://github.com/enovance/puppet-kmod.git',
   :ref => 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
 mod 'kwalify',
