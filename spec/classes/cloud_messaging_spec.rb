@@ -68,6 +68,17 @@ describe 'cloud::messaging' do
     end
 
     it_configures 'openstack messaging'
+
+    it 'should create rabbitmq binaries symbolic links' do
+      should contain_file('/usr/sbin/rabbitmq-plugins').with(
+        :ensure => 'link',
+        :target => '/usr/lib/rabbitmq/bin/rabbitmq-plugins'
+      )
+      should contain_file('/usr/sbin/rabbitmq-env').with(
+        :ensure => 'link',
+        :target => '/usr/lib/rabbitmq/bin/rabbitmq-env'
+      )
+    end
   end
 
 end
