@@ -31,7 +31,7 @@ mod 'heat',
   :ref => 'bdf094da21161ec6f78530775a0c41fc76fd3339'
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
-  :ref => '20e8cfdb082edd938d957406ac85cabe227f0cbe'
+  :ref => 'd9e93ff61574660fa26f88e3a72d4ce9322b424a'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
   :ref => '9802add6566646dc1e4a2812d19c2ab4724ff594'
