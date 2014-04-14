@@ -157,7 +157,7 @@ Host *
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
       owner   => 'root',
       group   => 'cephkeyring',
-      mode    => '0400',
+      mode    => '0440',
       require => Ceph::Key[$cinder_rbd_user],
     })
 
