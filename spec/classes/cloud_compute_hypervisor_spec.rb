@@ -157,6 +157,7 @@ describe 'cloud::compute::hypervisor' do
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
+      should contain_kmod__install(platform_params[:gre_module_name])
     end
 
     it 'configure neutron on compute node' do
@@ -204,14 +205,6 @@ describe 'cloud::compute::hypervisor' do
           :virtio_nic                    => false,
           :neutron_enabled               => true
         )
-    end
-
-    it 'should create neutron modprobe configuration file' do
-      should contain_file('/etc/modprobe.d/neutron.conf').with(
-        :owner => 'root',
-        :group => 'root',
-        :mode  => '0644'
-      )
     end
 
     it 'configure spice console' do
@@ -304,6 +297,10 @@ describe 'cloud::compute::hypervisor' do
       }
     end
 
+    let :platform_params do
+      { :gre_module_name => 'gre' }
+    end
+
     it_configures 'openstack compute hypervisor'
   end
 
@@ -312,6 +309,10 @@ describe 'cloud::compute::hypervisor' do
       { :osfamily => 'RedHat',
         :concat_basedir => '/var/lib/puppet/concat'
       }
+    end
+
+    let :platform_params do
+      { :gre_module_name => 'ip_gre' }
     end
 
     it_configures 'openstack compute hypervisor'
