@@ -107,6 +107,10 @@ describe 'cloud::volume::storage' do
           :os_auth_url    => 'http://keystone.host:5000/v2.0'
         )
         should contain_group('cephkeyring').with(:ensure => 'present')
+        should contain_exec('add-cinder-to-group').with(
+          :command => 'usermod -a -G cephkeyring cinder',
+          :unless  => 'groups cinder | grep cephkeyring'
+        )
       end
     end
 
@@ -123,55 +127,53 @@ describe 'cloud::volume::storage' do
       end
     end
 
-# This context can't work now, because of https://bugs.launchpad.net/puppet-cinder/+bug/1294138
-#    context 'with two RBD backends' do
-#      before :each do
-#        params.merge!(
-#          :cinder_backends => {
-#            'rbd' => {
-#              'lowcost' => {
-#                'rbd_pool'        => 'low',
-#                'rbd_user'        => 'cinder',
-#                'rbd_secret_uuid' => 'secret',
-#              },
-#              'normal' => {
-#                'rbd_pool'         => 'normal',
-#                'rbd_user'         => 'cinder',
-#                'rbd_secret_uuid'  => 'secret',
-#              }
-#            }
-#          }
-#        )
-#      end
-#
-#
-#      it 'configures two rbd volume backends' do
-#        should contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
-#        should contain_cinder_config('lowcost/rbd_pool').with_value('low')
-#        should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
-#        should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
-#        should contain_cinder__type('lowcost').with(
-#          :set_key        => 'volume_backend_name',
-#          :set_value      => 'lowcost',
-#          :os_tenant_name => 'services',
-#          :os_username    => 'cinder',
-#          :os_password    => 'secret',
-#          :os_auth_url    => 'http://keystone.host:5000/v2.0'
-#        )
-#        should contain_cinder_config('normal/volume_backend_name').with_value('normal')
-#        should contain_cinder_config('normal/rbd_pool').with_value('normal')
-#        should contain_cinder_config('normal/rbd_user').with_value('cinder')
-#        should contain_cinder_config('normal/rbd_secret_uuid').with_value('secret')
-#        should contain_cinder__type('normal').with(
-#          :set_key        => 'volume_backend_name',
-#          :set_value      => 'normal',
-#          :os_tenant_name => 'services',
-#          :os_username    => 'cinder',
-#          :os_password    => 'secret',
-#          :os_auth_url    => 'http://keystone.host:5000/v2.0'
-#        )
-#      end
-#    end
+    context 'with two RBD backends' do
+      before :each do
+        params.merge!(
+          :cinder_backends => {
+            'rbd' => {
+              'lowcost' => {
+                'rbd_pool'        => 'low',
+                'rbd_user'        => 'cinder',
+                'rbd_secret_uuid' => 'secret',
+              },
+              'normal' => {
+                'rbd_pool'         => 'normal',
+                'rbd_user'         => 'cinder',
+                'rbd_secret_uuid'  => 'secret',
+              }
+            }
+          }
+        )
+      end
+
+      it 'configures two rbd volume backends' do
+        should contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
+        should contain_cinder_config('lowcost/rbd_pool').with_value('low')
+        should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
+        should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
+        should contain_cinder__type('lowcost').with(
+          :set_key        => 'volume_backend_name',
+          :set_value      => 'lowcost',
+          :os_tenant_name => 'services',
+          :os_username    => 'cinder',
+          :os_password    => 'secret',
+          :os_auth_url    => 'http://keystone.host:5000/v2.0'
+        )
+        should contain_cinder_config('normal/volume_backend_name').with_value('normal')
+        should contain_cinder_config('normal/rbd_pool').with_value('normal')
+        should contain_cinder_config('normal/rbd_user').with_value('cinder')
+        should contain_cinder_config('normal/rbd_secret_uuid').with_value('secret')
+        should contain_cinder__type('normal').with(
+          :set_key        => 'volume_backend_name',
+          :set_value      => 'normal',
+          :os_tenant_name => 'services',
+          :os_username    => 'cinder',
+          :os_password    => 'secret',
+          :os_auth_url    => 'http://keystone.host:5000/v2.0'
+        )
+      end
+    end
 
     context 'with all backends enabled' do
       it 'configure all cinder backends' do

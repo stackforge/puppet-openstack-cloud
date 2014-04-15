@@ -248,6 +248,10 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
       should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
       should contain_group('cephkeyring').with(:ensure => 'present')
+      should contain_exec('add-nova-to-group').with(
+        :command => 'usermod -a -G cephkeyring nova',
+        :unless  => 'groups nova | grep cephkeyring'
+      )
     end
 
     it 'configure nova-compute with extra parameters' do

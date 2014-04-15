@@ -150,9 +150,10 @@ Host *
       ensure => 'present'
     })
 
-    @user { 'nova': groups => 'cephkeyring' }
-    User <| title == nova |>
-    realize User[nova]
+    ensure_resource ('exec','add-nova-to-group', {
+      'command' => 'usermod -a -G cephkeyring nova',
+      'unless'  => 'groups nova | grep cephkeyring'
+    })
 
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
       owner   => 'root',
