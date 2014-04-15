@@ -138,7 +138,9 @@ class cloud::compute(
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'nova_db_sync':
-    command => '/usr/bin/nova-manage db sync',
+    command => 'nova-manage db sync',
+    user    => 'nova',
+    path    => '/usr/bin',
     unless  => "/usr/bin/mysql nova -h ${nova_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 

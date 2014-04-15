@@ -111,7 +111,9 @@ class cloud::volume(
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'cinder_db_sync':
-    command => '/usr/bin/cinder-manage db sync',
+    command => 'cinder-manage db sync',
+    path    => '/usr/bin',
+    user    => 'cinder',
     unless  => "/usr/bin/mysql cinder -h ${cinder_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 

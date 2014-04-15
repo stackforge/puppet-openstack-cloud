@@ -146,7 +146,9 @@ class cloud::orchestration(
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'heat_db_sync':
-    command => '/usr/bin/heat-manage --config-file /etc/heat/heat.conf db_sync',
+    command => 'heat-manage --config-file /etc/heat/heat.conf db_sync',
+    path    => '/usr/bin',
+    user    => 'heat',
     unless  => "/usr/bin/mysql heat -h ${heat_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 

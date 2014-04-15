@@ -170,7 +170,9 @@ class cloud::image(
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'glance_db_sync':
-    command => '/usr/bin/glance-manage db_sync',
+    command => 'glance-manage db_sync',
+    user    => 'glance',
+    path    => '/usr/bin',
     unless  => "/usr/bin/mysql glance -h ${glance_db_host} -u ${encoded_glance_user} -p${encoded_glance_password} -e \"show tables\" | /bin/grep Tables"
   }
 
