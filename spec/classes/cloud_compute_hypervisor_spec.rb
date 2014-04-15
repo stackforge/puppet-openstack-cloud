@@ -188,7 +188,9 @@ describe 'cloud::compute::hypervisor' do
 
     it 'checks if Nova DB is populated' do
       should contain_exec('nova_db_sync').with(
-        :command => '/usr/bin/nova-manage db sync',
+        :command => 'nova-manage db sync',
+        :path    => '/usr/bin',
+        :user    => 'nova',
         :unless  => '/usr/bin/mysql nova -h 10.0.0.1 -u nova -psecrete -e "show tables" | /bin/grep Tables'
       )
     end

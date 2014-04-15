@@ -87,7 +87,9 @@ describe 'cloud::orchestration::api' do
 
     it 'checks if Heat DB is populated' do
       should contain_exec('heat_db_sync').with(
-        :command => '/usr/bin/heat-manage --config-file /etc/heat/heat.conf db_sync',
+        :command => 'heat-manage --config-file /etc/heat/heat.conf db_sync',
+        :user    => 'heat',
+        :path    => '/usr/bin',
         :unless  => '/usr/bin/mysql heat -h 10.0.0.1 -u heat -psecrete -e "show tables" | /bin/grep Tables'
       )
     end

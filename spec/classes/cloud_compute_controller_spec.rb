@@ -85,7 +85,9 @@ describe 'cloud::compute::controller' do
 
     it 'checks if Nova DB is populated' do
       should contain_exec('nova_db_sync').with(
-        :command => '/usr/bin/nova-manage db sync',
+        :command => 'nova-manage db sync',
+        :user    => 'nova',
+        :path    => '/usr/bin',
         :unless  => '/usr/bin/mysql nova -h 10.0.0.1 -u nova -psecrete -e "show tables" | /bin/grep Tables'
       )
     end

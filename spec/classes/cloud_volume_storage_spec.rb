@@ -83,7 +83,9 @@ describe 'cloud::volume::storage' do
 
     it 'checks if Cinder DB is populated' do
       should contain_exec('cinder_db_sync').with(
-        :command => '/usr/bin/cinder-manage db sync',
+        :command => 'cinder-manage db sync',
+        :user    => 'cinder',
+        :path    => '/usr/bin',
         :unless  => '/usr/bin/mysql cinder -h 10.0.0.1 -u cinder -psecret -e "show tables" | /bin/grep Tables'
       )
     end
