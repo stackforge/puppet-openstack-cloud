@@ -118,7 +118,9 @@ describe 'cloud::identity' do
 
     it 'checks if Keystone DB is populated' do
       should contain_exec('keystone_db_sync').with(
-        :command => '/usr/bin/keystone-manage db_sync',
+        :command => 'keystone-manage db_sync',
+        :path    => '/usr/bin',
+        :user    => 'keystone',
         :unless  => '/usr/bin/mysql keystone -h 10.0.0.1 -u keystone -psecrete -e "show tables" | /bin/grep Tables'
       )
     end
