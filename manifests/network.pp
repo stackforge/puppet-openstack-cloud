@@ -86,11 +86,7 @@ class cloud::network(
     $gre_module_name = 'gre'
   }
 
-  kmod::generic {'install_gre':
-    type   => 'install',
-    module => $gre_module_name,
-    file   => '/etc/modprobe.d/neutron.conf'
-  }
+  kmod::install { $gre_module_name: }
 
   class { 'neutron':
     allow_overlapping_ips   => true,

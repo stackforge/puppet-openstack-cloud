@@ -206,6 +206,14 @@ describe 'cloud::compute::hypervisor' do
         )
     end
 
+    it 'should create neutron modprobe configuration file' do
+      should contain_file('/etc/modprobe.d/neutron.conf').with(
+        :owner => 'root',
+        :group => 'root',
+        :mode  => '0644'
+      )
+    end
+
     it 'configure spice console' do
       should contain_class('nova::compute::spice').with(
           :server_listen              => '0.0.0.0',
