@@ -34,13 +34,13 @@ mod 'horizon',
   :ref => 'd9e93ff61574660fa26f88e3a72d4ce9322b424a'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => '9802add6566646dc1e4a2812d19c2ab4724ff594'
+  :ref => 'ce49f6b6d9bb0e89e3e1e63a88a1d63d5a930851'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
   :ref => '39b7efdbc83c65966b7a961df98561c5550c2d23'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => '7f92da6e5897f7facc8d0b6505f129d77353439e'
+  :ref => 'b7811392062b649572f470f5f3ddca1882997210'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'

@@ -5,10 +5,10 @@ fixtures:
       ref: 'bd1536626f2b5d66f9ea77bcd69ba7d1f5f33961'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
-      ref: '9802add6566646dc1e4a2812d19c2ab4724ff594'
+      ref: 'ce49f6b6d9bb0e89e3e1e63a88a1d63d5a930851'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: '7f92da6e5897f7facc8d0b6505f129d77353439e'
+      ref: 'b7811392062b649572f470f5f3ddca1882997210'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
       ref: '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'

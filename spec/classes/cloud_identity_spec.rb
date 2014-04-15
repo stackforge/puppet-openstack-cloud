@@ -110,10 +110,12 @@ describe 'cloud::identity' do
         :public_port         => '5000',
         :admin_port          => '35357',
         :token_expiration    => '3600',
-        :log_dir             => false
+        :log_dir             => false,
+        :log_file            => false
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
       should contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
+      should contain_keystone_config('DEFAULT/log_dir').with_ensure('absent')
     end
 
     it 'checks if Keystone DB is populated' do
@@ -257,6 +259,19 @@ describe 'cloud::identity' do
         :port             => '8000',
         :region           => 'BigCloud'
       )
+    end
+
+    context 'without syslog' do
+      before :each do
+        params.merge!(:use_syslog => false)
+      end
+      it 'configure keystone server' do
+        should contain_class('keystone').with(
+          :use_syslog          => false,
+          :log_dir             => '/var/log/keystone',
+          :log_file            => 'keystone.log'
+        )
+      end
     end
 
     context 'without Swift' do
