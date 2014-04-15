@@ -193,11 +193,6 @@ describe 'cloud::compute::hypervisor' do
       )
     end
 
-    it 'insert and activate nbd module' do
-      should contain_exec('insert_module_nbd').with('command' => '/bin/echo "nbd" > /etc/modules', 'unless' => '/bin/grep "nbd" /etc/modules')
-      should contain_exec('/sbin/modprobe nbd').with('unless' => '/bin/grep -q "^nbd " "/proc/modules"')
-    end
-
     it 'configure nova-compute' do
       should contain_class('nova::compute').with(
           :enabled                       => true,
