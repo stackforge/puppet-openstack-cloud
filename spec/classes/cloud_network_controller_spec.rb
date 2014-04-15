@@ -78,7 +78,6 @@ describe 'cloud::network::controller' do
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
-      should contain_kmod__install(platform_params[:gre_module_name])
     end
 
     it 'configure neutron server' do
