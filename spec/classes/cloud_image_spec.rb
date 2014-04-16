@@ -92,6 +92,7 @@ describe 'cloud::image' do
     #       :rabbit_host     => '10.0.0.1'
     #     )
     # end
+    it { should contain_glance_api_config('DEFAULT/notifier_strategy').with_value('noop') }
 
     it 'configure glance rbd backend' do
       should contain_class('glance::backend::rbd').with(
