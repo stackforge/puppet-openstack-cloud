@@ -81,9 +81,7 @@ class cloud::network(
   }
 
   if $::osfamily == 'RedHat' {
-    kmod::install { 'ip_gre':
-      command => 'install ip_gre /sbin/modprobe ip_gre'
-    }
+    kmod::load { 'ip_gre': }
   }
 
   class { 'neutron':
