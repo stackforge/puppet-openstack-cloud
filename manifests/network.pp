@@ -81,12 +81,8 @@ class cloud::network(
   }
 
   if $::osfamily == 'RedHat' {
-    $gre_module_name = 'ip_gre'
-  } else {
-    $gre_module_name = 'gre'
+    kmod::load { 'ip_gre': }
   }
-
-  kmod::install { $gre_module_name: }
 
   class { 'neutron':
     allow_overlapping_ips   => true,
