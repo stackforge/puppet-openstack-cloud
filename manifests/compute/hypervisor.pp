@@ -93,6 +93,17 @@ Host *
 
   }
 
+  if $::operatingsystem == 'RedHat' {
+    file { '/etc/libvirt/qemu.conf':
+      ensure => file,
+      source => 'puppet:///modules/cloud/qemu/qemu.conf',
+      owner  => root,
+      group  => root,
+      mode   => '0644',
+      notify => Service['libvirtd']
+    }
+  }
+
   if $::operatingsystem == 'Ubuntu' {
     service { 'dbus':
       ensure => running,
