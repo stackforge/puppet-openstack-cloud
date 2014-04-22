@@ -25,8 +25,7 @@ class cloud::network::controller(
   $ks_keystone_public_port = 5000,
   $ks_neutron_public_port  = 9696,
   $api_eth                 = '127.0.0.1',
-  $ks_admin_tenant         = 'admin',
-  $public_cidr             = '173.24.4.224/28'
+  $ks_admin_tenant         = 'admin'
 ) {
 
   include 'cloud::network'
