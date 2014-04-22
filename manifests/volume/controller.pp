@@ -27,8 +27,8 @@ class cloud::volume::controller(
   $volume_multi_backend        = false,
   $default_volume_type         = undef,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
-  # $backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
-  # $backup_ceph_user          = $os_params::cinder_rbd_backup_user
+  # $backup_ceph_pool          = 'backup',
+  # $backup_ceph_user          = 'cinder'
 ) {
 
   include 'cloud::volume'

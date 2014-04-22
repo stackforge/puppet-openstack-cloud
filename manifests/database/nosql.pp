@@ -21,7 +21,7 @@
 #
 # [*bind_ip*]
 #   (optional) IP address on which mongod instance should listen
-#   Defaults in params
+#   Defaults to '127.0.0.1'
 #
 # [*nojournal*]
 #   (optional) Disable mongodb internal cache. This is not recommended for
@@ -32,23 +32,24 @@
 # [*replset_members*]
 #   (optional) Ceilometer Replica set members hostnames
 #   Should be an array. Example: ['node1', 'node2', node3']
-#   Default value in params
+#   Defaults to hostname
 #
 
 class cloud::database::nosql(
   $bind_ip         = '127.0.0.1',
   $nojournal       = false,
-  $replset_members = ['mgmt001']
+  $replset_members = $::hostname
 ) {
 
-  # bind_ip should be an array
-  $bind_ip_real = any2array($bind_ip)
+  # should be an array
+  $array_bind_ip         = any2array($bind_ip)
+  $array_replset_members = any2array($replset_members)
 
   class { 'mongodb::globals':
     manage_package_repo => true
   }->
   class { 'mongodb':
-    bind_ip   => $bind_ip_real,
+    bind_ip   => $array_bind_ip,
     nojournal => $nojournal,
     replset   => 'ceilometer',
   }
@@ -62,7 +63,7 @@ class cloud::database::nosql(
   }
 
   mongodb_replset{'ceilometer':
-    members => $replset_members,
+    members => $array_replset_members,
     before  => Anchor['mongodb setup done'],
   }
 

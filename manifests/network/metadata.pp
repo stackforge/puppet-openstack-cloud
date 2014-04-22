@@ -26,7 +26,7 @@ class cloud::network::metadata(
   $ks_keystone_admin_proto              = 'http',
   $ks_keystone_admin_port               = 35357,
   $ks_keystone_admin_host               = '127.0.0.1',
-  $auth_region                          = 'planet42',
+  $auth_region                          = 'RegionOne',
 ) {
 
   include 'cloud::network'

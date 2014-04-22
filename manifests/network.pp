@@ -21,43 +21,44 @@
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to nova queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*tunnel_eth*]
 #   (optional) Which interface we connect to create overlay tunnels.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*provider_vlan_ranges*]
 #   (optionnal) VLAN range for provider networks
-#   Default value in params
+#   Defaults to ['physnet1:1000:2999']
 #
 # [*provider_bridge_mappings*]
 #   (optionnal) Bridge mapping for provider networks
-#   Default value in params
+#   Defaults to ['physnet1:br-eth1']
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 # [*dhcp_lease_duration*]
 #   (optionnal) DHCP Lease duration (in seconds)
 #   Defauls to '120'
+#
 
 class cloud::network(
   $verbose                  = true,

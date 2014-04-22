@@ -21,20 +21,20 @@
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal address for endpoint.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*secret_key*]
 #   (optional) Secret key. This is used by Django to provide cryptographic
 #   signing, and should be set to a unique, unpredictable value.
-#   Default value in params
+#   Defaults to 'secrete'
 #
 # [*horizon_port*]
 #   (optional) Port used to connect to OpenStack Dashboard
-#   Default value in params
+#   Defaults to '80'
 #
 # [*api_eth*]
 #   (optional) Which interface we bind the Horizon server.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*servername*]
 #   (optional) DNS name used to connect to Openstack Dashboard.
@@ -47,19 +47,19 @@
 #
 # [*keystone_proto*]
 #   (optional) Protocol (http or https) of keystone endpoint.
-#   Defaults to params.
+#   Defaults to 'http'
 #
 # [*keystone_host*]
 #   (optional) IP / Host of keystone endpoint.
-#   Defaults to params.
+#   Defaults '127.0.0.1'
 #
 # [*keystone_port*]
 #   (optional) TCP port of keystone endpoint.
-#   Defaults to params.
+#   Defaults to '5000'
 #
 # [*debug*]
 #   (optional) Enable debug or not.
-#   Defaults to params.
+#   Defaults to true
 #
 # [*listen_ssl*]
 #   (optional) Enable SSL support in Apache. (Defaults to false)

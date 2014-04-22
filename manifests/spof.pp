@@ -21,11 +21,11 @@
 #
 # [*cluster_ip*]
 #   (optional) Interface used by Corosync to send multicast traffic
-#   Default to params.
+#   Defaults to '127.0.0.1'
 #
 # [*multicast_address*]
 #   (optionnal) IP address used to send multicast traffic
-#   Default to '239.1.1.2'.
+#   Defaults to '239.1.1.2'
 #
 
 class cloud::spof(

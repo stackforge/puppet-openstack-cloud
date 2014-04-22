@@ -21,51 +21,51 @@
 #
 # [*nova_db_host*]
 #   (optional) Hostname or IP address to connect to nova database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*nova_db_user*]
 #   (optional) Username to connect to nova database
-#   Default value in params
+#   Defaults to 'nova'
 #
 # [*nova_db_password*]
 #   (optional) Password to connect to nova database
-#   Default value in params
+#   Defaults to 'novapassword'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to nova queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*ks_glance_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Glance API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*glance_api_port*]
 #   (optional) TCP port to connect to Glance API
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 # [*memcache_servers*]
 #   (optionnal) Memcached servers used by Keystone. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:11211']
 #
 
 class cloud::compute(
@@ -83,9 +83,9 @@ class cloud::compute(
   $neutron_endpoint        = '127.0.0.1',
   $neutron_protocol        = 'http',
   $neutron_password        = 'neutronpassword',
-  $neutron_region_name     = 'planet42',
+  $neutron_region_name     = 'RegionOne',
   $memcache_servers        = ['127.0.0.1:11211'],
-  $availability_zone       = 'planet42'
+  $availability_zone       = 'RegionOne'
 ) {
 
   if !defined(Resource['nova_config']) {

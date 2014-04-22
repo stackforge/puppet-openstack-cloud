@@ -21,52 +21,53 @@
 #
 # [*glance_db_host*]
 #   (optional) Hostname or IP address to connect to glance database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*glance_db_user*]
 #   (optional) Username to connect to glance database
-#   Default value in params
+#   Defaults to 'glance'
 #
 # [*glance_db_password*]
 #   (optional) Password to connect to glance database
-#   Default value in params
+#   Defaults to 'glancepassword'
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_glance_api_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*ks_glance_registry_internal_port*]
 #   (optional) TCP port to connect to Glance Registry from internal network
-#   Default value in params
+#   Defaults to '9191'
 #
 # [*ks_glance_password*]
 #   (optional) Password used by Glance to connect to Keystone API
-#   Default value in params
+#   Defaults to 'glancepassword'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to nova queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*api_eth*]
 #   (optional) Which interface we bind the Glance API server.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
+
 class cloud::image(
   $glance_db_host                   = '127.0.0.1',
   $glance_db_user                   = 'glance',
@@ -79,9 +80,9 @@ class cloud::image(
   $rabbit_password                  = 'rabbitpassword',
   $rabbit_host                      = '127.0.0.1',
   $api_eth                          = '127.0.0.1',
-  $openstack_vip                    = '127.0.0.2',
-  $glance_rbd_pool                   = 'images',
-  $glance_rbd_user                   = 'glance',
+  $openstack_vip                    = undef,
+  $glance_rbd_pool                  = 'images',
+  $glance_rbd_user                  = 'glance',
   $verbose                          = true,
   $debug                            = true,
   $log_facility                     = 'LOG_LOCAL0',

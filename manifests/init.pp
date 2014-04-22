@@ -19,7 +19,7 @@
 #
 
 class cloud(
-  $rhn_registration = $os_params::rhn_registration,
+  $rhn_registration = undef,
 ) {
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {

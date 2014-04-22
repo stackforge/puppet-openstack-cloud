@@ -20,8 +20,7 @@
 # === Parameters:
 #
 # [*swift_hash_suffix*]
-#   (optional) String of text to be used as a salt when hashing to determine mappings in the ring.
-#   Default value in params
+#   (required) String of text to be used as a salt when hashing to determine mappings in the ring.
 #
 
 class cloud::object(

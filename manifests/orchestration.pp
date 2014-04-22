@@ -21,76 +21,77 @@
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_internal_port*]
 #   (optional) TCP port to connect to Keystone API from internal network
-#   Default value in params
+#   Defaults to '5000'
 #
 # [*ks_keystone_admin_port*]
 #   (optional) TCP port to connect to Keystone API from admin network
-#   Default value in params
+#   Defaults to '35357'
 #
 # [*ks_keystone_internal_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_keystone_admin_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_heat_public_host*]
 #   (optional) Public Hostname or IP to connect to Heat API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_heat_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_heat_password*]
 #   (optional) Password used by Heat to connect to Keystone API
-#   Default value in params
+#   Defaults to 'heatpassword'
 #
 # [*heat_db_host*]
 #   (optional) Hostname or IP address to connect to heat database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*heat_db_user*]
 #   (optional) Username to connect to heat database
-#   Default value in params
+#   Defaults to 'heat'
 #
 # [*heat_db_password*]
 #   (optional) Password to connect to heat database
-#   Default value in params
+#   Defaults to 'heatpassword'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to heat queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
+
 class cloud::orchestration(
   $ks_keystone_internal_host  = '127.0.0.1',
   $ks_keystone_internal_port  = '5000',

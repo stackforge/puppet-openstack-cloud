@@ -21,7 +21,7 @@
 #
 # [*listen_ip*]
 #   (optional) IP address on which memcached instance should listen
-#   Default in params.
+#   Defaults to '127.0.0.1'
 #
 
 class cloud::cache (

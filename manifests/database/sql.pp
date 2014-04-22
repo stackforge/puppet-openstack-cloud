@@ -19,6 +19,9 @@
 #
 #  [*galera_internal_ips*]
 #    Array of internal ip of the galera nodes.
+#    Defaults to ['127.0.0.1']
+#
+
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
     $service_provider               = 'sysv',
@@ -65,7 +68,6 @@ class cloud::database::sql (
     $mysql_service_name = 'mysql'
   }
 
-  # TODO(Gonéri): OS/values detection should be moved in a params.pp
   case $::osfamily {
     'RedHat': {
       class { 'mysql':
