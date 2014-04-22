@@ -397,7 +397,7 @@ class cloud::identity (
   $log_facility                 = 'LOG_LOCAL0',
   $use_syslog                   = true,
   $ks_token_expiration          = 3600,
-  $ks_token_driver              = 'keystone.token.backends.sql.Token'
+  $token_driver                 = 'keystone.token.backends.sql.Token'
 ){
 
   $encoded_user     = uriescape($keystone_db_user)
