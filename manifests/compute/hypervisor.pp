@@ -102,6 +102,13 @@ Host *
       mode   => '0644',
       notify => Service['libvirtd']
     }
+    # Nova support for RBD backend is not supported in Red Hat packages
+    if $has_ceph {
+      warning('Red Hat does not support RBD backend for VMs.')
+    }
+    $has_ceph_real = false
+  } else {
+    $has_ceph_real = $has_ceph
   }
 
   if $::operatingsystem == 'Ubuntu' {
@@ -118,7 +125,7 @@ Host *
 
   class { 'nova::compute::neutron': }
 
-  if $has_ceph {
+  if $has_ceph_real {
 
     $libvirt_disk_cachemodes_real = ['network=writeback']
     include 'cloud::storage::rbd'
