@@ -17,18 +17,18 @@
 #
 
 class cloud::volume::controller(
-  $ks_cinder_internal_port     = $os_params::ks_cinder_internal_port,
-  $ks_cinder_password          = $os_params::ks_cinder_password,
-  $ks_keystone_internal_host   = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_host     = $os_params::ks_glance_internal_host,
-  $ks_glance_api_internal_port = $os_params::ks_glance_api_internal_port,
-  $api_eth                     = $os_params::api_eth,
+  $ks_cinder_internal_port     = 8776,
+  $ks_cinder_password          = 'cinderpassword',
+  $ks_keystone_internal_host   = '127.0.0.1',
+  $ks_glance_internal_host     = '127.0.0.1',
+  $ks_glance_api_internal_port = 9292,
+  $api_eth                     = '127.0.0.1',
   # Maintain backward compatibility for multi-backend
   $volume_multi_backend        = false,
   $default_volume_type         = undef,
   # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
-  # $backup_ceph_pool          = $os_params::cinder_rbd_backup_pool,
-  # $backup_ceph_user          = $os_params::cinder_rbd_backup_user
+  # $backup_ceph_pool          = 'backup',
+  # $backup_ceph_user          = 'cinder'
 ) {
 
   include 'cloud::volume'

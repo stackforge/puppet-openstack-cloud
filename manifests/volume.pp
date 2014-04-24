@@ -22,60 +22,61 @@
 #
 # [*cinder_db_host*]
 #   (optional) Cinder database host
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*cinder_db_user*]
 #   (optional) Cinder database user
-#   Default value in params
+#   Defaults to 'cinder'
 #
 # [*cinder_db_password*]
 #   (optional) Cinder database password
-#   Default value in params
+#   Defaults to 'cinderpassword'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to cinder queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Keystone host (authentication)
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_cinder_password*]
 #   (optional) Keystone password for cinder user.
-#   Default value in params
+#   Defaults to 'cinderpassword'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
+
 class cloud::volume(
-  $cinder_db_host             = $os_params::cinder_db_host,
-  $cinder_db_user             = $os_params::cinder_db_user,
-  $cinder_db_password         = $os_params::cinder_db_password,
-  $rabbit_hosts               = $os_params::rabbit_hosts,
-  $rabbit_password            = $os_params::rabbit_password,
-  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
-  $ks_cinder_password         = $os_params::ks_cinder_password,
-  $verbose                    = $os_params::verbose,
-  $debug                      = $os_params::debug,
-  $log_facility               = $os_params::log_facility,
-  $use_syslog                 = $os_params::use_syslog
+  $cinder_db_host             = '127.0.0.1',
+  $cinder_db_user             = 'cinder',
+  $cinder_db_password         = 'cinderpassword',
+  $rabbit_hosts               = ['127.0.0.1:5672'],
+  $rabbit_password            = 'rabbitpassword',
+  $ks_keystone_internal_host  = '127.0.0.1',
+  $ks_cinder_password         = 'cinderpassword',
+  $verbose                    = true,
+  $debug                      = true,
+  $log_facility               = 'LOG_LOCAL0',
+  $use_syslog                 = true
 ) {
 
   # Disable twice logging if syslog is enabled

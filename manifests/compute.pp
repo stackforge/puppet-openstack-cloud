@@ -21,71 +21,71 @@
 #
 # [*nova_db_host*]
 #   (optional) Hostname or IP address to connect to nova database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*nova_db_user*]
 #   (optional) Username to connect to nova database
-#   Default value in params
+#   Defaults to 'nova'
 #
 # [*nova_db_password*]
 #   (optional) Password to connect to nova database
-#   Default value in params
+#   Defaults to 'novapassword'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to nova queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*ks_glance_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Glance API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*glance_api_port*]
 #   (optional) TCP port to connect to Glance API
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 # [*memcache_servers*]
 #   (optionnal) Memcached servers used by Keystone. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:11211']
 #
 
 class cloud::compute(
-  $nova_db_host            = $os_params::nova_db_host,
-  $nova_db_user            = $os_params::nova_db_user,
-  $nova_db_password        = $os_params::nova_db_password,
-  $rabbit_hosts            = $os_params::rabbit_hosts,
-  $rabbit_password         = $os_params::rabbit_password,
-  $ks_glance_internal_host = $os_params::ks_glance_internal_host,
-  $glance_api_port         = $os_params::ks_glance_api_internal_port,
-  $verbose                 = $os_params::verbose,
-  $debug                   = $os_params::debug,
-  $use_syslog              = $os_params::use_syslog,
-  $log_facility            = $os_params::log_facility,
-  $neutron_endpoint        = $os_params::ks_neutron_admin_host,
-  $neutron_protocol        = $os_params::ks_neutron_admin_proto,
-  $neutron_password        = $os_params::ks_neutron_password,
-  $neutron_region_name     = $os_params::region,
-  $memcache_servers        = $os_params::memcache_servers,
-  $availability_zone       = $os_params::region
+  $nova_db_host            = '127.0.0.1',
+  $nova_db_user            = 'nova',
+  $nova_db_password        = 'novapassword',
+  $rabbit_hosts            = ['127.0.0.1:5672'],
+  $rabbit_password         = 'rabbitpassword',
+  $ks_glance_internal_host = '127.0.0.1',
+  $glance_api_port         = 9292,
+  $verbose                 = true,
+  $debug                   = true,
+  $use_syslog              = true,
+  $log_facility            = 'LOG_LOCAL0',
+  $neutron_endpoint        = '127.0.0.1',
+  $neutron_protocol        = 'http',
+  $neutron_password        = 'neutronpassword',
+  $neutron_region_name     = 'RegionOne',
+  $memcache_servers        = ['127.0.0.1:11211'],
+  $availability_zone       = 'RegionOne'
 ) {
 
   if !defined(Resource['nova_config']) {

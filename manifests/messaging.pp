@@ -21,11 +21,11 @@
 #
 # [*rabbit_names*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to $::hostname
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to OpenStack queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*cluster_node_type*]
 #   (optionnal) Store the queues on the disc or in the RAM.
@@ -33,10 +33,13 @@
 #   Defaults to 'disc'
 
 class cloud::messaging(
-  $rabbit_names      = $os_params::rabbit_names,
-  $rabbit_password   = $os_params::rabbit_password,
-  $cluster_node_type = 'disc'
+  $cluster_node_type = 'disc',
+  $rabbit_names      = $::hostname,
+  $rabbit_password   = 'rabbitpassword'
 ){
+
+  # we ensure having an array
+  $array_rabbit_names = any2array($rabbit_names)
 
   # Packaging issue: https://bugzilla.redhat.com/show_bug.cgi?id=1033305
   if $::osfamily == 'RedHat' {
@@ -54,7 +57,7 @@ class cloud::messaging(
   class { 'rabbitmq':
     delete_guest_user        => true,
     config_cluster           => true,
-    cluster_nodes            => $rabbit_names,
+    cluster_nodes            => $array_rabbit_names,
     wipe_db_on_cookie_change => true,
     cluster_node_type        => $cluster_node_type
   }

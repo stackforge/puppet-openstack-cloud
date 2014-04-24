@@ -27,16 +27,16 @@
 #
 
 class cloud::compute::hypervisor(
-  $server_proxyclient_address = $os_params::internal_netif_ip,
-  $libvirt_type               = $os_params::libvirt_type,
-  $ks_nova_public_proto       = $os_params::ks_nova_public_proto,
-  $ks_nova_public_host        = $os_params::ks_nova_public_host,
-  $nova_ssh_private_key       = $os_params::nova_ssh_private_key,
-  $nova_ssh_public_key        = $os_params::nova_ssh_public_key,
-  $spice_port                 = $os_params::spice_port,
-  $cinder_rbd_user            = $os_params::cinder_rbd_user,
-  $nova_rbd_pool              = $os_params::nova_rbd_pool,
-  $nova_rbd_secret_uuid       = $os_params::ceph_fsid,
+  $server_proxyclient_address = '127.0.0.1',
+  $libvirt_type               = 'kvm',
+  $ks_nova_public_proto       = 'http',
+  $ks_nova_public_host        = '127.0.0.1',
+  $nova_ssh_private_key       = undef,
+  $nova_ssh_public_key        = undef,
+  $spice_port                 = 6082,
+  $cinder_rbd_user            = 'cinder',
+  $nova_rbd_pool              = 'volumes',
+  $nova_rbd_secret_uuid       = undef,
   $has_ceph                   = false
 ) {
 

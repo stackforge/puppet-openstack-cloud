@@ -14,8 +14,8 @@
 # under the License.
 #
 class cloud::storage::rbd::osd (
-  $public_address  = $os_params::api_eth,
-  $cluster_address = $os_params::storage_eth,
+  $public_address  = '127.0.0.1',
+  $cluster_address = '127.0.0.1',
   $devices         = ['sdb','sdc'],
 ) {
 

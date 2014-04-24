@@ -17,9 +17,9 @@
 #
 
 class cloud::object::ringbuilder(
-    $rsyncd_ipaddress            = $os_params::internal_netif_ip,
-    $replicas                    = $os_params::replicas,
-    $swift_rsync_max_connections = $os_params::swift_rsync_max_connections,
+    $rsyncd_ipaddress            = '127.0.0.1',
+    $replicas                    = 3,
+    $swift_rsync_max_connections = 5,
 ) {
 
   Ring_object_device <<| |>>

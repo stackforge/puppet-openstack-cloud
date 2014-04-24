@@ -15,9 +15,9 @@
 #
 
 class cloud::storage::rbd (
-  $fsid            = $os_params::ceph_fsid,
-  $cluster_network = $os_params::ceph_cluster_network,
-  $public_network  = $os_params::ceph_public_network
+  $fsid            = undef,
+  $cluster_network = '127.0.0.1/24',
+  $public_network  = '127.0.0.1/24'
 ) {
 
   class { 'ceph::conf':

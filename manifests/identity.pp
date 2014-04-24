@@ -21,303 +21,294 @@
 #
 # [*identity_roles_addons*]
 #   (optional) Extra keystone roles to create
-#   Default value in params
+#   Defaults to ['SwiftOperator', 'ResellerAdmin']
 #
 # [*keystone_db_host*]
 #   (optional) Hostname or IP address to connect to keystone database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*keystone_db_user*]
 #   (optional) Username to connect to keystone database
-#   Default value in params
+#   Defaults to 'keystone'
 #
 # [*keystone_db_password*]
 #   (optional) Password to connect to keystone database
-#   Default value in params
+#   Defaults to 'keystonepassword'
 #
 # [*ks_admin_email*]
 #   (optional) Email address of admin user in Keystone
-#   Default value in params
+#   Defaults to 'no-reply@keystone.openstack'
 #
 # [*ks_admin_password*]
 #   (optional) Password of admin user in Keystone
-#   Default value in params
+#   Defaults to 'adminpassword'
 #
 # [*ks_admin_tenant*]
 #   (optional) Admin tenant name in Keystone
-#   Default value in params
+#   Defaults to 'admin'
 #
 # [*ks_admin_token*]
-#   (optional) Admin token used by Keystone.
-#   Default value in params
+#   (required) Admin token used by Keystone.
 #
 # [*ks_glance_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Glance API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_glance_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Glance API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_glance_public_host*]
 #   (optional) Public Hostname or IP to connect to Glance API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_ceilometer_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Ceilometer API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_ceilometer_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Ceilometer API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_ceilometer_public_host*]
 #   (optional) Public Hostname or IP to connect to Ceilometer API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_public_host*]
 #   (optional) Public Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_nova_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Nova API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_nova_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Nova API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_nova_public_host*]
 #   (optional) Public Hostname or IP to connect to Nova API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_cinder_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Cinder API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_cinder_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Cinder API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_cinder_public_host*]
 #   (optional) Public Hostname or IP to connect to Cinder API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_neutron_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Neutron API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_neutron_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Neutron API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_neutron_public_host*]
 #   (optional) Public Hostname or IP to connect to Neutron API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_heat_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Heat API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_heat_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Heat API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_heat_public_host*]
 #   (optional) Public Hostname or IP to connect to Heat API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_swift_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Swift API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_swift_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Swift API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_swift_public_host*]
 #   (optional) Public Hostname or IP to connect to Swift API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_ceilometer_password*]
 #   (optional) Password used by Ceilometer to connect to Keystone API
-#   Default value in params
+#   Defaults to 'ceilometerpassword'
 #
 # [*ks_swift_password*]
 #   (optional) Password used by Swift to connect to Keystone API
-#   Default value in params
+#   Defaults to 'swiftpassword'
 #
 # [*ks_nova_password*]
 #   (optional) Password used by Nova to connect to Keystone API
-#   Default value in params
+#   Defaults to 'novapassword'
 #
 # [*ks_neutron_password*]
 #   (optional) Password used by Neutron to connect to Keystone API
-#   Default value in params
+#   Defaults to 'neutronpassword'
 #
 # [*ks_heat_password*]
 #   (optional) Password used by Heat to connect to Keystone API
-#   Default value in params
+#   Defaults to 'heatpassword'
 #
 # [*ks_glance_password*]
 #   (optional) Password used by Glance to connect to Keystone API
-#   Default value in params
+#   Defaults to 'glancepassword'
 #
 # [*ks_cinder_password*]
 #   (optional) Password used by Cinder to connect to Keystone API
-#   Default value in params
+#   Defaults to 'cinderpassword'
 #
 # [*ks_swift_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_ceilometer_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_heat_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_nova_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_neutron_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_glance_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_cinder_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
-#   Default value in params
+#   Defaults to 'http'
 #
 # [*ks_ceilometer_public_port*]
 #   (optional) TCP port to connect to Ceilometer API from public network
-#   Default value in params
+#   Defaults to '8777'
 #
 # [*ks_ceilometer_admin_port*]
 #   (optional) TCP port to connect to Ceilometer API from admin network
-#   Default value in params
+#   Defaults to '8777'
 #
 # [*ks_ceilometer_internal_port*]
 #   (optional) TCP port to connect to Ceilometer API from internal network
-#   Default value in params
+#   Defaults to '8777'
 #
 # [*ks_keystone_internal_port*]
 #   (optional) TCP port to connect to Keystone API from internal network
-#   Default value in params
+#   Defaults to '5000'
 #
 # [*ks_keystone_public_port*]
 #   (optional) TCP port to connect to Keystone API from public network
-#   Default value in params
+#   Defaults to '5000'
 #
 # [*ks_keystone_admin_port*]
 #   (optional) TCP port to connect to Keystone API from admin network
-#   Default value in params
+#   Defaults to '35357'
 #
 # [*ks_swift_public_port*]
 #   (optional) TCP port to connect to Swift API from public network
-#   Default value in params
+#   Defaults to '8080'
 #
 # [*ks_nova_internal_port*]
 #   (optional) TCP port to connect to Nova API from internal network
-#   Default value in params
+#   Defaults to '8774'
 #
 # [*ks_nova_public_port*]
 #   (optional) TCP port to connect to Nova API from public network
-#   Default value in params
+#   Defaults to '8774'
 #
 # [*ks_ec2_public_port*]
 #   (optional) TCP port to connect to EC2 API from public network
-#   Default value in params
+#   Defaults to '8773'
 #
 # [*ks_nova_admin_port*]
 #   (optional) TCP port to connect to Nova API from admin network
-#   Default value in params
+#   Defaults to '8774'
 #
 # [*ks_cinder_internal_port*]
 #   (optional) TCP port to connect to Cinder API from internal network
-#   Default value in params
+#   Defaults to '8776'
 #
 # [*ks_cinder_public_port*]
 #   (optional) TCP port to connect to Cinder API from public network
-#   Default value in params
+#   Defaults to '8776'
 #
 # [*ks_cinder_admin_port*]
 #   (optional) TCP port to connect to Cinder API from admin network
-#   Default value in params
+#   Defaults to '8776'
 #
 # [*ks_neutron_internal_port*]
 #   (optional) TCP port to connect to Neutron API from internal network
-#   Default value in params
+#   Defaults to '9696'
 #
 # [*ks_neutron_public_port*]
 #   (optional) TCP port to connect to Neutron API from public network
-#   Default value in params
+#   Defaults to '9696'
 #
 # [*ks_neutron_admin_port*]
 #   (optional) TCP port to connect to Neutron API from admin network
-#   Default value in params
-#
-# [*ks_heat_internal_port*]
-#   (optional) TCP port to connect to Heat API from internal network
-#   Default value in params
+#   Defaults to '9696'
 #
 # [*ks_heat_public_port*]
 #   (optional) TCP port to connect to Heat API from public network
-#   Default value in params
-#
-# [*ks_heat_admin_port*]
-#   (optional) TCP port to connect to Heat API from admin network
-#   Default value in params
+#   Defaults to '8000'
 #
 # [*ks_glance_api_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*ks_glance_api_public_port*]
 #   (optional) TCP port to connect to Glance API from public network
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*ks_glance_api_admin_port*]
 #   (optional) TCP port to connect to Glance API from admin network
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*api_eth*]
 #   (optional) Which interface we bind the Keystone server.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*region*]
 #   (optional) OpenStack Region Name
-#   Default value in params
+#   Defaults to 'RegionOne'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 # [*token_driver*]
 #   (optional) Driver to store tokens
@@ -325,79 +316,80 @@
 #
 # [*token_expiration*]
 #   (optional) Amount of time a token should remain valid (in seconds)
-#   Defaults value in params
+#   Defaults to '3600' (1 hour)
 #
+
 class cloud::identity (
-  $swift_enabled                = $os_params::swift,
-  $identity_roles_addons        = $os_params::identity_roles_addons,
-  $keystone_db_host             = $os_params::keystone_db_host,
-  $keystone_db_user             = $os_params::keystone_db_user,
-  $keystone_db_password         = $os_params::keystone_db_password,
-  $ks_admin_email               = $os_params::ks_admin_email,
-  $ks_admin_password            = $os_params::ks_admin_password,
-  $ks_admin_tenant              = $os_params::ks_admin_tenant,
-  $ks_admin_token               = $os_params::ks_admin_token,
-  $ks_ceilometer_admin_host     = $os_params::ks_ceilometer_admin_host,
-  $ks_ceilometer_internal_host  = $os_params::ks_ceilometer_internal_host,
-  $ks_ceilometer_password       = $os_params::ks_ceilometer_password,
-  $ks_ceilometer_public_host    = $os_params::ks_ceilometer_public_host,
-  $ks_ceilometer_public_port    = $os_params::ks_ceilometer_public_port,
-  $ks_ceilometer_public_proto   = $os_params::ks_ceilometer_public_proto,
-  $ks_cinder_admin_host         = $os_params::ks_cinder_admin_host,
-  $ks_cinder_internal_host      = $os_params::ks_cinder_internal_host,
-  $ks_cinder_password           = $os_params::ks_cinder_password,
-  $ks_cinder_public_host        = $os_params::ks_cinder_public_host,
-  $ks_cinder_public_proto       = $os_params::ks_cinder_public_proto,
-  $ks_cinder_public_port        = $os_params::ks_cinder_public_port,
-  $ks_glance_admin_host         = $os_params::ks_glance_admin_host,
-  $ks_glance_internal_host      = $os_params::ks_glance_internal_host,
-  $ks_glance_password           = $os_params::ks_glance_password,
-  $ks_glance_public_host        = $os_params::ks_glance_public_host,
-  $ks_glance_public_proto       = $os_params::ks_glance_public_proto,
-  $ks_glance_api_public_port    = $os_params::ks_glance_api_public_port,
-  $ks_heat_admin_host           = $os_params::ks_heat_admin_host,
-  $ks_heat_internal_host        = $os_params::ks_heat_internal_host,
-  $ks_heat_password             = $os_params::ks_heat_password,
-  $ks_heat_public_host          = $os_params::ks_heat_public_host,
-  $ks_heat_public_proto         = $os_params::ks_heat_public_proto,
-  $ks_heat_public_port          = $os_params::ks_heat_public_port,
-  $ks_heat_cfn_public_port      = $os_params::ks_heat_cfn_public_port,
-  $ks_ceilometer_public_port    = $os_params::ks_ceilometer_public_port,
-  $ks_keystone_admin_host       = $os_params::ks_keystone_admin_host,
-  $ks_keystone_admin_port       = $os_params::ks_keystone_admin_port,
-  $ks_keystone_internal_host    = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port    = $os_params::ks_keystone_internal_port,
-  $ks_keystone_public_host      = $os_params::ks_keystone_public_host,
-  $ks_keystone_public_port      = $os_params::ks_keystone_public_port,
-  $ks_keystone_public_proto     = $os_params::ks_keystone_public_proto,
-  $ks_neutron_admin_host        = $os_params::ks_neutron_admin_host,
-  $ks_neutron_internal_host     = $os_params::ks_neutron_internal_host,
-  $ks_neutron_password          = $os_params::ks_neutron_password,
-  $ks_neutron_public_host       = $os_params::ks_neutron_public_host,
-  $ks_neutron_public_proto      = $os_params::ks_neutron_public_proto,
-  $ks_neutron_public_port       = $os_params::ks_neutron_public_port,
-  $ks_nova_admin_host           = $os_params::ks_nova_admin_host,
-  $ks_nova_internal_host        = $os_params::ks_nova_internal_host,
-  $ks_nova_password             = $os_params::ks_nova_password,
-  $ks_nova_public_host          = $os_params::ks_nova_public_host,
-  $ks_nova_public_proto         = $os_params::ks_nova_public_proto,
-  $ks_nova_public_port          = $os_params::ks_nova_public_port,
-  $ks_ec2_public_port           = $os_params::ks_ec2_public_port,
-  $ks_swift_dispersion_password = $os_params::ks_swift_dispersion_password,
-  $ks_swift_internal_host       = $os_params::ks_swift_internal_host,
-  $ks_swift_admin_host          = $os_params::ks_swift_admin_host,
-  $ks_swift_password            = $os_params::ks_swift_password,
-  $ks_swift_public_host         = $os_params::ks_swift_public_host,
-  $ks_swift_public_port         = $os_params::ks_swift_public_port,
-  $ks_swift_public_proto        = $os_params::ks_swift_public_proto,
-  $api_eth                      = $os_params::api_eth,
-  $region                       = $os_params::region,
-  $verbose                      = $os_params::verbose,
-  $debug                        = $os_params::debug,
-  $log_facility                 = $os_params::log_facility,
-  $use_syslog                   = $os_params::use_syslog,
-  $token_driver                 = 'keystone.token.backends.sql.Token',
-  $ks_token_expiration          = $os_params::ks_token_expiration,
+  $swift_enabled                = true,
+  $identity_roles_addons        = ['SwiftOperator', 'ResellerAdmin'],
+  $keystone_db_host             = '127.0.0.1',
+  $keystone_db_user             = 'keystone',
+  $keystone_db_password         = 'keystonepassword',
+  $memcache_servers             = ['127.0.0.1:11211'],
+  $ks_admin_email               = 'no-reply@keystone.openstack',
+  $ks_admin_password            = 'adminpassword',
+  $ks_admin_tenant              = 'admin',
+  $ks_admin_token               = undef,
+  $ks_ceilometer_admin_host     = '127.0.0.1',
+  $ks_ceilometer_internal_host  = '127.0.0.1',
+  $ks_ceilometer_password       = 'ceilometerpassword',
+  $ks_ceilometer_public_host    = '127.0.0.1',
+  $ks_ceilometer_public_port    = 8777,
+  $ks_ceilometer_public_proto   = 'http',
+  $ks_cinder_admin_host         = '127.0.0.1',
+  $ks_cinder_internal_host      = '127.0.0.1',
+  $ks_cinder_password           = 'cinderpassword',
+  $ks_cinder_public_host        = '127.0.0.1',
+  $ks_cinder_public_proto       = 'http',
+  $ks_cinder_public_port        = 8776,
+  $ks_glance_admin_host         = '127.0.0.1',
+  $ks_glance_internal_host      = '127.0.0.1',
+  $ks_glance_password           = 'glancepassword',
+  $ks_glance_public_host        = '127.0.0.1',
+  $ks_glance_public_proto       = 'http',
+  $ks_glance_api_public_port    = 9292,
+  $ks_heat_admin_host           = '127.0.0.1',
+  $ks_heat_internal_host        = '127.0.0.1',
+  $ks_heat_password             = 'heatpassword',
+  $ks_heat_public_host          = '127.0.0.1',
+  $ks_heat_public_proto         = 'http',
+  $ks_heat_public_port          = 8004,
+  $ks_heat_cfn_public_port      = 8000,
+  $ks_keystone_admin_host       = '127.0.0.1',
+  $ks_keystone_admin_port       = 35357,
+  $ks_keystone_internal_host    = '127.0.0.1',
+  $ks_keystone_internal_port    = 5000,
+  $ks_keystone_public_host      = '127.0.0.1',
+  $ks_keystone_public_port      = 5000,
+  $ks_keystone_public_proto     = 'http',
+  $ks_neutron_admin_host        = '127.0.0.1',
+  $ks_neutron_internal_host     = '127.0.0.1',
+  $ks_neutron_password          = 'neutronpassword',
+  $ks_neutron_public_host       = '127.0.0.1',
+  $ks_neutron_public_proto      = 'http',
+  $ks_neutron_public_port       = 9696,
+  $ks_nova_admin_host           = '127.0.0.1',
+  $ks_nova_internal_host        = '127.0.0.1',
+  $ks_nova_password             = 'novapassword',
+  $ks_nova_public_host          = '127.0.0.1',
+  $ks_nova_public_proto         = 'http',
+  $ks_nova_public_port          = 8774,
+  $ks_ec2_public_port           = 8773,
+  $ks_swift_dispersion_password = 'dispersion',
+  $ks_swift_internal_host       = '127.0.0.1',
+  $ks_swift_admin_host          = '127.0.0.1',
+  $ks_swift_password            = 'swiftpassword',
+  $ks_swift_public_host         = '127.0.0.1',
+  $ks_swift_public_port         = 8080,
+  $ks_swift_public_proto        = 'http',
+  $api_eth                      = '127.0.0.1',
+  $region                       = 'RegionOne',
+  $verbose                      = true,
+  $debug                        = true,
+  $log_facility                 = 'LOG_LOCAL0',
+  $use_syslog                   = true,
+  $ks_token_expiration          = 3600,
+  $token_driver                 = 'keystone.token.backends.sql.Token'
 ){
 
   $encoded_user     = uriescape($keystone_db_user)

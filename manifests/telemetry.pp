@@ -22,66 +22,66 @@
 #
 # [*ceilometer_secret*]
 #   Secret key for signing messages.
-#   Default value in params
+#   Defaults to 'ceilometersecret'
 #
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+#   Defaults to ['127.0.0.1:5672']
 #
 # [*rabbit_password*]
 #   (optional) Password to connect to nova queues.
-#   Default value in params
+#   Defaults to 'rabbitpassword'
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_keystone_public_host*]
 #   (optional) Public Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_ceilometer_password*]
 #   (optional) Password used by Ceilometer to connect to Keystone API
-#   Default value in params
+#   Defaults to 'ceilometerpassword'
 #
 # [*verbose*]
 #   (optional) Set log output to verbose output
-#   Default value in params
+#   Defaults to true
 #
 # [*debug*]
 #   (optional) Set log output to debug output
-#   Default value in params
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 # [*region*]
 #   (optional) the keystone region of this node
-#   Defaults value in params
+#   Defaults to 'RegionOne'
 #
 
 class cloud::telemetry(
-  $ceilometer_secret          = $os_params::ceilometer_secret,
-  $rabbit_hosts               = $os_params::rabbit_hosts,
-  $rabbit_password            = $os_params::rabbit_password,
-  $ks_keystone_internal_host  = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_port  = $os_params::ks_keystone_internal_port,
-  $ks_keystone_internal_proto = $os_params::ks_keystone_internal_proto,
-  $ks_ceilometer_password     = $os_params::ks_ceilometer_password,
-  $region                     = $os_params::region,
-  $verbose                    = $os_params::verbose,
-  $debug                      = $os_params::debug,
-  $log_facility               = $os_params::log_facility,
-  $use_syslog                 = $os_params::use_syslog,
+  $ceilometer_secret          = 'ceilometersecret',
+  $rabbit_hosts               = ['127.0.0.1:5672'],
+  $rabbit_password            = 'rabbitpassword' ,
+  $ks_keystone_internal_host  = '127.0.0.1',
+  $ks_keystone_internal_port  = '5000',
+  $ks_keystone_internal_proto = 'http',
+  $ks_ceilometer_password     = 'ceilometerpassword',
+  $region                     = 'RegionOne',
+  $verbose                    = true,
+  $debug                      = true,
+  $log_facility               = 'LOG_LOCAL0',
+  $use_syslog                 = true,
 ){
 
   # Disable twice logging if syslog is enabled

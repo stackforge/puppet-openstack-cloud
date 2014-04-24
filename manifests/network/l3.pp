@@ -17,8 +17,8 @@
 #
 
 class cloud::network::l3(
-  $external_int = $os_params::external_int,
-  $debug        = $os_params::debug,
+  $external_int = 'eth0',
+  $debug        = true,
 ) {
 
   include 'cloud::network'

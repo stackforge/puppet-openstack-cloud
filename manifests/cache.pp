@@ -21,11 +21,11 @@
 #
 # [*listen_ip*]
 #   (optional) IP address on which memcached instance should listen
-#   Default in params.
+#   Defaults to '127.0.0.1'
 #
 
 class cloud::cache (
-  $listen_ip = $os_params::internal_netif_ip,
+  $listen_ip = '127.0.0.1',
 ){
 
   class { 'memcached':

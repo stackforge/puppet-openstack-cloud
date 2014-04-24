@@ -19,7 +19,7 @@ import 'set_io_scheduler.pp'
 
 # swift storage
 class cloud::object::storage (
-  $storage_eth    = $os_params::storage_eth,
+  $storage_eth    = '127.0.0.1',
   $swift_zone     = undef,
   $object_port    = '6000',
   $container_port = '6001',

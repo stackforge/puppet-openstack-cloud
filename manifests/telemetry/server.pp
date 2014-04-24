@@ -17,12 +17,12 @@
 #
 
 class cloud::telemetry::server(
-  $ks_keystone_internal_host      = $os_params::ks_keystone_internal_host,
-  $ks_keystone_internal_proto     = $os_params::ks_keystone_internal_proto,
-  $ks_ceilometer_internal_port    = $os_params::ks_ceilometer_internal_port,
-  $ks_ceilometer_password         = $os_params::ks_ceilometer_password,
-  $api_eth                        = $os_params::api_eth,
-  $mongo_nodes                    = $os_params::mongo_nodes,
+  $ks_keystone_internal_host      = '127.0.0.1',
+  $ks_keystone_internal_proto     = 'http',
+  $ks_ceilometer_internal_port    = '5000',
+  $ks_ceilometer_password         = 'ceilometerpassword',
+  $api_eth                        = '127.0.0.1',
+  $mongo_nodes                    = ['127.0.0.1:27017'],
 ){
 
   include 'cloud::telemetry'

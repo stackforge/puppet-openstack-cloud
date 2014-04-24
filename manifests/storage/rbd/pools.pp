@@ -15,14 +15,14 @@
 #
 class cloud::storage::rbd::pools(
   $setup_pools          = false,
-  $glance_rbd_user      = $os_params::glance_rbd_user,
-  $glance_rbd_pool      = $os_params::glance_rbd_pool,
-  $cinder_rbd_user      = $os_params::cinder_rbd_user,
-  $cinder_rbd_pool      = $os_params::cinder_rbd_pool,
-  $nova_rbd_pool        = $os_params::nova_rbd_pool,
-  $cinder_backup_user   = $os_params::cinder_rbd_backup_user,
-  $cinder_backup_pool   = $os_params::cinder_rbd_backup_pool,
-  $ceph_fsid            = $os_params::ceph_fsid,
+  $glance_rbd_user      = 'glance',
+  $glance_rbd_pool      = 'images',
+  $cinder_rbd_user      = 'cinder',
+  $cinder_rbd_pool      = 'volumes',
+  $nova_rbd_pool        = 'vms',
+  $cinder_backup_user   = 'cinder',
+  $cinder_backup_pool   = 'cinder_backup',
+  $ceph_fsid            = undef
 ) {
 
   if $setup_pools {
