@@ -60,14 +60,14 @@ mod 'ceph',
   :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
 #FIXME
 mod 'cloud',
-  :git => 'git@github.com:enovance/puppet-openstack-cloud.git',
+  :git => 'git://github.com:enovance/puppet-openstack-cloud.git',
   #:ref => 'stable/havana'
   :ref => 'master'
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => '04356974f72b90a1d0f57346a00e95a717924e43'
 mod 'corosync',
-  :git => 'git@github.com:enovance/puppetlabs-corosync.git',
+  :git => 'git://github.com:enovance/puppetlabs-corosync.git',
   :ref => '79b61302b07fef30b65a42f3b55229616018aacf'
 mod 'dnsclient',
   :git => 'git://github.com/enovance/puppet-module-dnsclient.git',
