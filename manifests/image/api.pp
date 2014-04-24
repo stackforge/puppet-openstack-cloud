@@ -21,72 +21,72 @@
 #
 # [*glance_db_host*]
 #   (optional) Hostname or IP address to connect to glance database
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*glance_db_user*]
 #   (optional) Username to connect to glance database
-#   Default value in params
+#   Defaults to 'glance'
 #
 # [*glance_db_password*]
 #   (optional) Password to connect to glance database
-#   Default value in params
+#   Defaults to 'glancepassword'
 #
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*ks_glance_api_internal_port*]
 #   (optional) TCP port to connect to Glance API from internal network
-#   Default value in params
+#   Defaults to '9292'
 #
 # [*ks_glance_registry_internal_port*]
 #   (optional) TCP port to connect to Glance Registry from internal network
-#   Default value in params
+#   Defaults to '9191'
 #
 # [*ks_glance_password*]
 #   (optional) Password used by Glance to connect to Keystone API
-#   Default value in params
+#   Defaults to 'glancepassword'
 #
-# [*rabbit_hosts*]
-#   (optional) List of RabbitMQ servers. Should be an array.
-#   Default value in params
+# [*rabbit_host*]
+#   (optional) IP or Hostname of one RabbitMQ server.
+#   Defaults to '127.0.0.1'
 #
 # [*rabbit_password*]
-#   (optional) Password to connect to nova queues.
-#   Default value in params
+#   (optional) Password to connect to glance queue.
+#   Defaults to 'rabbitpassword'
 #
 # [*api_eth*]
 #   (optional) Which interface we bind the Glance API server.
-#   Default value in params
+#   Defaults to '127.0.0.1'
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults value in params
+#   Defaults to true
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults value in params
+#   Defaults to 'LOG_LOCAL0'
 #
 
 class cloud::image::api(
-  $glance_db_host                   = $os_params::glance_db_host,
-  $glance_db_user                   = $os_params::glance_db_user,
-  $glance_db_password               = $os_params::glance_db_password,
-  $ks_keystone_internal_host        = $os_params::ks_keystone_internal_host,
-  $ks_glance_internal_host          = $os_params::ks_glance_internal_host,
-  $ks_glance_api_internal_port      = $os_params::ks_glance_api_internal_port,
-  $ks_glance_registry_internal_port = $os_params::ks_glance_registry_internal_port,
-  $ks_glance_password               = $os_params::ks_glance_password,
-  $rabbit_password                  = $os_params::rabbit_password,
-  $rabbit_host                      = $os_params::rabbit_host,
-  $api_eth                          = $os_params::api_eth,
-  $openstack_vip                    = $os_params::vip_public_ip,
-  $glance_rbd_pool                  = $os_params::glance_rbd_pool,
-  $glance_rbd_user                  = $os_params::glance_rbd_user,
-  $verbose                          = $os_params::verbose,
-  $debug                            = $os_params::debug,
-  $log_facility                     = $os_params::log_facility,
-  $use_syslog                       = $os_params::use_syslog
+  $glance_db_host                   = '127.0.0.1',
+  $glance_db_user                   = 'glance',
+  $glance_db_password               = 'glancepassword',
+  $ks_keystone_internal_host        = '127.0.0.1',
+  $ks_glance_internal_host          = '127.0.0.1',
+  $ks_glance_api_internal_port      = '9292',
+  $ks_glance_registry_internal_port = '9191',
+  $ks_glance_password               = 'glancepassword',
+  $rabbit_password                  = 'rabbit_password',
+  $rabbit_host                      = '127.0.0.1',
+  $api_eth                          = '127.0.0.1',
+  $openstack_vip                    = '127.0.0.1',
+  $glance_rbd_pool                  = 'images',
+  $glance_rbd_user                  = 'glance',
+  $verbose                          = true,
+  $debug                            = true,
+  $log_facility                     = 'LOG_LOCAL0',
+  $use_syslog                       = true
 ) {
 
   # Disable twice logging if syslog is enabled
