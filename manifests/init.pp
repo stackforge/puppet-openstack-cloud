@@ -20,6 +20,10 @@
 
 class cloud(
   $rhn_registration = undef,
+  $root_password    = 'root',
+  $ntp_servers      = ['0.debian.pool.ntp.org', '1.debian.pool.ntp.org'],
+  $dns_ips          = ['8.8.8.8', '8.8.4.4'],
+  $site_domain      = 'mydomain'
 ) {
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
@@ -50,20 +54,18 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # DNS
   class { 'dnsclient':
-    nameservers => ['8.8.8.8'],
-    options     => 'UNSET',
-    search      => 'example.com',
-    domain      => 'example.com',
+    nameservers => $dns_ips,
+    domain      => $site_domain
   }
 
 # NTP
-  class { 'ntp': servers => undef }
+  class { 'ntp': servers => $ntp_servers }
 
 # Strong root password for all servers
   user { 'root':
     ensure           => 'present',
     gid              => '0',
-    password         => 'root',
+    password         => $root_password,
     uid              => '0',
   }
 
