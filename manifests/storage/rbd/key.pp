@@ -14,8 +14,7 @@
 # under the License.
 #
 
-class cloud::storage::rbd::key (
-) {
+class cloud::storage::rbd::key {
 
   if !empty($::ceph_admin_key) {
     @@ceph::key { 'admin':
