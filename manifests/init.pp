@@ -21,7 +21,6 @@
 class cloud(
   $rhn_registration = undef,
   $root_password    = 'root',
-  $ntp_servers      = '0.debian.pool.ntp.org',
   $dns_ips          = ['8.8.8.8', '8.8.4.4'],
   $site_domain      = 'mydomain'
 ) {
@@ -59,7 +58,7 @@ This node is under the control of Puppet ${::puppetversion}.
   }
 
 # NTP
-  class { 'ntp': servers => $ntp_servers }
+  class { 'ntp': }
 
 # Strong root password for all servers
   user { 'root':
