@@ -13,7 +13,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-
 class cloud::storage::rbd::key {
 
   if !empty($::ceph_admin_key) {
