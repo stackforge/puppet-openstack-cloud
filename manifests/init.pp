@@ -21,7 +21,7 @@
 class cloud(
   $rhn_registration = undef,
   $root_password    = 'root',
-  $ntp_servers      = ['0.debian.pool.ntp.org', '1.debian.pool.ntp.org'],
+  $ntp_servers      = '0.debian.pool.ntp.org',
   $dns_ips          = ['8.8.8.8', '8.8.4.4'],
   $site_domain      = 'mydomain'
 ) {
