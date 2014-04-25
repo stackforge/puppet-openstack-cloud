@@ -35,7 +35,7 @@ class cloud::compute::hypervisor(
   $nova_ssh_public_key        = undef,
   $spice_port                 = 6082,
   $cinder_rbd_user            = 'cinder',
-  $nova_rbd_pool              = 'volumes',
+  $nova_rbd_pool              = 'vms',
   $nova_rbd_secret_uuid       = undef,
   $has_ceph                   = false
 ) {
