@@ -131,8 +131,7 @@ class cloud::image::api(
   #   rabbit_host     => $rabbit_host,
   # }
   glance_api_config {
-    # TODO(EmilienM) Will be deprecated in Icehouse for notification_driver.
-    'DEFAULT/notifier_strategy': value => 'noop';
+    'DEFAULT/notifier_driver': value => 'noop';
   }
 
   class { 'glance::backend::rbd':
