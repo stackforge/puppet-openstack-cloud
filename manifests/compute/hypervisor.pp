@@ -123,13 +123,13 @@ Host *
     $libvirt_disk_cachemodes_real = ['network=writeback']
     include 'cloud::storage::rbd'
 
-    # TODO(EmilienM) Temporary, while https://review.openstack.org/#/c/72440 got merged
+    class { 'nova::compute::rbd':
+      libvirt_rbd_user        => $cinder_rbd_user,
+      libvirt_images_rbd_pool => $nova_rbd_pool
+    }
+    # we don't want puppet-nova manages keyring
     nova_config {
-      'DEFAULT/libvirt_images_type':          value => 'rbd';
-      'DEFAULT/libvirt_images_rbd_pool':      value => $nova_rbd_pool;
-      'DEFAULT/libvirt_images_rbd_ceph_conf': value => '/etc/ceph/ceph.conf';
-      'DEFAULT/rbd_user':                     value => $cinder_rbd_user;
-      'DEFAULT/rbd_secret_uuid':              value => $nova_rbd_secret_uuid;
+      'libvirt/rbd_secret_uuid': value => $nova_rbd_secret_uuid;
     }
 
     File <<| tag == 'ceph_compute_secret_file' |>>
@@ -173,8 +173,8 @@ Host *
 
   # Extra config for nova-compute
   nova_config {
-    'DEFAULT/libvirt_inject_key':        value => false;
-    'DEFAULT/libvirt_inject_partition':  value => '-2';
+    'libvirt/inject_key':                value => false;
+    'libvirt/inject_partition':          value => '-2';
     'DEFAULT/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
   }
 
