@@ -111,6 +111,7 @@ describe 'cloud::volume::storage' do
         should contain_group('cephkeyring').with(:ensure => 'present')
         should contain_exec('add-cinder-to-group').with(
           :command => 'usermod -a -G cephkeyring cinder',
+          :path    => ['/usr/bin', '/bin'],
           :unless  => 'groups cinder | grep cephkeyring'
         )
       end

@@ -82,6 +82,7 @@ define cloud::volume::backend::rbd (
 
   ensure_resource ('exec','add-cinder-to-group', {
     'command' => 'usermod -a -G cephkeyring cinder',
+    'path'    => ['/usr/bin', '/bin'],
     'unless'  => 'groups cinder | grep cephkeyring'
   })
 
