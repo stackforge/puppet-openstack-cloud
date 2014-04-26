@@ -147,6 +147,7 @@ Host *
 
     ensure_resource ('exec','add-nova-to-group', {
       'command' => 'usermod -a -G cephkeyring nova',
+      'path'    => ['/usr/sbin', '/sbin'],
       'unless'  => 'groups nova | grep cephkeyring'
     })
 
