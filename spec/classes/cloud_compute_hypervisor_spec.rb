@@ -70,10 +70,7 @@ describe 'cloud::compute::hypervisor' do
       { :libvirt_type                         => 'kvm',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
-        :has_ceph                             => true,
-        :cinder_rbd_user                      => 'cinder',
-        :nova_rbd_pool                        => 'nova',
-        :nova_rbd_secret_uuid                 => 'secrete',
+        :has_ceph                             => false,
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_public_proto                 => 'http',
@@ -213,15 +210,6 @@ describe 'cloud::compute::hypervisor' do
         )
     end
 
-    it 'configure libvirt driver' do
-      should contain_class('nova::compute::libvirt').with(
-          :libvirt_type      => 'kvm',
-          :vncserver_listen  => '0.0.0.0',
-          :migration_support => true,
-          :libvirt_disk_cachemodes => ['network=writeback']
-        )
-    end
-
     it 'configure nova compute with neutron' do
       should contain_class('nova::compute::neutron')
     end
@@ -230,24 +218,23 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('ceilometer::agent::compute')
     end
 
-    it 'configure nova-compute to support RBD backend' do
-      should contain_nova_config('DEFAULT/libvirt_images_type').with('value' => 'rbd')
-      should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'nova')
-      should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-      should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
-      should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
-      should contain_group('cephkeyring').with(:ensure => 'present')
-      should contain_exec('add-nova-to-group').with(
-        :command => 'usermod -a -G cephkeyring nova',
-        :unless  => 'groups nova | grep cephkeyring',
-        :path    => ['/usr/sbin', '/usr/bin', '/bin', '/sbin']
-      )
+    it 'should not configure nova-compute for RBD backend' do
+      should_not contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+    end
+
+    it 'configure libvirt driver without disk cachemodes' do
+      should contain_class('nova::compute::libvirt').with(
+          :libvirt_type      => 'kvm',
+          :vncserver_listen  => '0.0.0.0',
+          :migration_support => true,
+          :libvirt_disk_cachemodes => []
+        )
     end
 
     it 'configure nova-compute with extra parameters' do
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
-      should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
-      should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
+      should contain_nova_config('libvirt/inject_key').with('value' => false)
+      should contain_nova_config('libvirt/inject_partition').with('value' => '-2')
       should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
     end
 
@@ -267,23 +254,59 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'without RBD backend' do
+    context 'with RBD backend on Debian plaforms' do
       before :each do
-        params.merge!( :has_ceph => false )
+        facts.merge!( :osfamily => 'Debian' )
+        params.merge!(
+          :has_ceph             => true,
+          :cinder_rbd_user      => 'cinder',
+          :nova_rbd_pool        => 'nova',
+          :nova_rbd_secret_uuid => 'secrete' )
       end
 
-      it 'should not configure nova-compute for RBD backend' do
-        should_not contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
+      it 'configure nova-compute to support RBD backend' do
+        should contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        should contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        should contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        should contain_group('cephkeyring').with(:ensure => 'present')
+        should contain_exec('add-nova-to-group').with(
+          :command => 'usermod -a -G cephkeyring nova',
+          :unless  => 'groups nova | grep cephkeyring'
+        )
       end
-      it 'configure libvirt driver without disk cachemodes' do
+
+      it 'configure libvirt driver' do
         should contain_class('nova::compute::libvirt').with(
             :libvirt_type      => 'kvm',
             :vncserver_listen  => '0.0.0.0',
             :migration_support => true,
-            :libvirt_disk_cachemodes => []
+            :libvirt_disk_cachemodes => ['network=writeback']
           )
       end
     end
+
+    context 'when trying to enable RBD backend on RedHat plaforms' do
+      before :each do
+        facts.merge!( :operatingsystem => 'RedHat' )
+        params.merge!(
+          :has_ceph             => true,
+          :cinder_rbd_user      => 'cinder',
+          :nova_rbd_pool        => 'nova',
+          :nova_rbd_secret_uuid => 'secrete' )
+      end
+
+      it 'configure libvirt driver without libvirt_disk_cachemodes' do
+        should contain_class('nova::compute::libvirt').with(
+          :libvirt_type      => 'kvm',
+          :vncserver_listen  => '0.0.0.0',
+          :migration_support => true,
+          :libvirt_disk_cachemodes => []
+        )
+      end
+    end
+
  end
 
   context 'on Debian platforms' do

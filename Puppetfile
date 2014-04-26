@@ -19,28 +19,28 @@ forge 'http://forge.puppetlabs.com'
 # Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => 'f71f935a3e41dcd11f8f5986a1fe0708b124e589'
+  :ref => 'f444fc8937a6bc05d0257c1a935e742491e94b02'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'bd1536626f2b5d66f9ea77bcd69ba7d1f5f33961'
+  :ref => '504a061918ac08297f6a9b9f64f1836643573447'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'
+  :ref => 'e61e47d664e4d18e849bc7c3d5f40f452397d0f4'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => 'bdf094da21161ec6f78530775a0c41fc76fd3339'
+  :ref => '2847d4d42fdc413c0297b7aeedc9f29198e336c2'
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
   :ref => 'da0cedce6f14f5c35e733ac345d8d862db11cd2b'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => 'ce49f6b6d9bb0e89e3e1e63a88a1d63d5a930851'
+  :ref => 'd9aac2f78240e0fd651a6dc0ac05db4ffcba885b'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => '39b7efdbc83c65966b7a961df98561c5550c2d23'
+  :ref => '78428c844f73bf585a8f8a3bdf615ba2a0e8983b'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => 'b7811392062b649572f470f5f3ddca1882997210'
+  :ref => '47d576d2e62b4c449309ef228cdbc17bcf3fdcf0'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'

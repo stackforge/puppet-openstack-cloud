@@ -43,6 +43,12 @@ describe 'cloud::network::controller' do
         :ks_neutron_password      => 'secrete',
         :ks_keystone_admin_host   => '10.0.0.1',
         :ks_keystone_public_port  => '5000',
+        :nova_url                 => 'http://127.0.0.1:8774/v2',
+        :$nova_admin_auth_url     => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_username      => 'nova',
+        :nova_admin_tenant_name   => 'services',
+        :nova_admin_password      => 'novapassword',
+        :nova_region_name         => 'RegionOne',
         :api_eth                  => '10.0.0.1' }
     end
 
@@ -92,6 +98,16 @@ describe 'cloud::network::controller' do
         )
     end
 
+    it 'configure neutron server notifications to nova' do
+      should contain_class('neutron::server::notifications').with(
+        :nova_url                => 'http://127.0.0.1:8774/v2',
+        :nova_admin_auth_url     => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_username     => 'nova',
+        :nova_admin_tenant_name  => 'services',
+        :nova_admin_password     => 'novapassword',
+        :nova_region_name        => 'RegionOne'
+      )
+    end
     it 'checks if Neutron DB is populated' do
       should contain_exec('neutron_db_sync').with(
         :command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',

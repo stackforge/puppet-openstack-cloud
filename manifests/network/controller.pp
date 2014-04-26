@@ -25,7 +25,13 @@ class cloud::network::controller(
   $ks_keystone_public_port = 5000,
   $ks_neutron_public_port  = 9696,
   $api_eth                 = '127.0.0.1',
-  $ks_admin_tenant         = 'admin'
+  $ks_admin_tenant         = 'admin',
+  $nova_url                = 'http://127.0.0.1:8774/v2',
+  $nova_admin_auth_url     = 'http://127.0.0.1:35357/v2.0',
+  $nova_admin_username     = 'nova',
+  $nova_admin_tenant_name  = 'services',
+  $nova_admin_password     = 'novapassword',
+  $nova_region_name        = 'RegionOne'
 ) {
 
   include 'cloud::network'
@@ -41,6 +47,15 @@ class cloud::network::controller(
     api_workers         => $::processorcount,
     agent_down_time     => '60',
     report_interval     => '30',
+  }
+
+  class { 'neutron::server::notifications':
+    nova_url               => $nova_url,
+    nova_admin_auth_url    => $nova_admin_auth_url,
+    nova_admin_username    => $nova_admin_username,
+    nova_admin_tenant_name => $nova_admin_tenant_name,
+    nova_admin_password    => $nova_admin_password,
+    nova_region_name       => $nova_region_name
   }
 
   # Note(EmilienM):
