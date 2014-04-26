@@ -269,6 +269,7 @@ class cloud::database::sql (
   exec{'clean-mysql-binlog':
     # first sync take a long time
     command     => "/bin/bash -c '/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; /bin/rm  ${::mysql::params::datadir}/ib_logfile*'",
+    path        => '/usr/bin',
     require     => [
       File['/root/.my.cnf'],
       Service['mysqld'],
