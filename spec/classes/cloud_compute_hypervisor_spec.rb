@@ -239,7 +239,8 @@ describe 'cloud::compute::hypervisor' do
       should contain_group('cephkeyring').with(:ensure => 'present')
       should contain_exec('add-nova-to-group').with(
         :command => 'usermod -a -G cephkeyring nova',
-        :unless  => 'groups nova | grep cephkeyring'
+        :unless  => 'groups nova | grep cephkeyring',
+        :path    => ['/usr/sbin', '/sbin']
       )
     end
 
