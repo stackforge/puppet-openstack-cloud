@@ -242,6 +242,17 @@ class cloud::loadbalancer(
     $keepalived_public_ipvs_real = $keepalived_public_ipvs
   }
 
+  # Fail if OpenStack and Galera VIP are  not in the VIP list
+  if $vip_public_ip and !($vip_public_ip in $keepalived_public_ipvs_real) {
+    fail('vip_public_ip should be part of keepalived_public_ipvs.')
+  }
+  if $vip_internal_ip and !($vip_internal_ip in $keepalived_internal_ipvs) {
+    fail('vip_internal_ip should be part of keepalived_internal_ipvs.')
+  }
+  if $galera_ip and !(($galera_ip in $keepalived_public_ipvs_real) or ($galera_ip in $keepalived_internal_ipvs)) {
+    fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
+  }
+
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
   class { 'haproxy': }
