@@ -38,7 +38,6 @@ class cloud::loadbalancer(
   $keepalived_priority              = 50,
   $keepalived_interface             = 'eth0',
   $keepalived_ipvs                  = ['127.0.0.1'],
-  $keepalived_localhost_ip          = '127.0.0.1',
   $ks_cinder_public_port            = 8776,
   $ks_ceilometer_public_port        = 8777,
   $ks_ec2_public_port               = 8773,

@@ -44,7 +44,6 @@ describe 'cloud::loadbalancer' do
         :keepalived_priority               => 50,
         :keepalived_interface              => 'eth0',
         :keepalived_ipvs                   => ['10.0.0.1', '10.0.0.2'],
-        :keepalived_localhost_ip           => '127.0.0.1',
         :horizon_port                      => '80',
         :spice_port                        => '6082',
         :vip_public_ip                     => '10.0.0.3',
