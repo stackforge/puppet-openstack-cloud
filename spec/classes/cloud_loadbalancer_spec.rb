@@ -73,7 +73,7 @@ describe 'cloud::loadbalancer' do
     end # configure keepalived server
 
     context 'configure an internal VIP' do
-      before :each do
+      before do
         params.merge!(:keepalived_internal_ipvs => ['192.168.0.1'])
       end
       it 'configure an internal VRRP instance' do
@@ -90,7 +90,7 @@ describe 'cloud::loadbalancer' do
     end
 
     context 'configure keepalived with deprecated parameters' do
-      before :each do
+      before do
         params.merge!(
           :keepalived_ipvs      => ['192.168.0.2'],
           :vip_public_ip        => '192.168.0.2',
@@ -126,7 +126,7 @@ describe 'cloud::loadbalancer' do
     end # configure keepalived in backup
 
     context 'configure keepalived in master' do
-      before :each do
+      before do
         params.merge!( :keepalived_state => 'MASTER' )
       end
       it 'configure vrrp_instance with MASTER state' do
@@ -172,31 +172,27 @@ describe 'cloud::loadbalancer' do
     end # configure monitor haproxy listen
 
     context 'with a public OpenStack VIP not in the keepalived VIP list' do
-      before :each do
+      before do
         params.merge!(
           :vip_public_ip          => '172.16.0.1',
           :keepalived_public_ipvs => ['192.168.0.1', '192.168.0.2']
         )
       end
-      it 'should fail to configure HAproxy' do
-        expect { should contain_class('cloud::loadbalancer') }.to raise_error(Puppet::Error, /vip_public_ip should be part of keepalived_public_ipvs./)
-      end
+      it_raises 'a Puppet::Error', /vip_public_ip should be part of keepalived_public_ipvs./
     end
 
     context 'with an internal OpenStack VIP not in the keepalived VIP list' do
-      before :each do
+      before do
         params.merge!(
           :vip_internal_ip          => '172.16.0.1',
           :keepalived_internal_ipvs => ['192.168.0.1', '192.168.0.2']
         )
       end
-      it 'should fail to configure HAproxy' do
-        expect { should contain_class('cloud::loadbalancer') }.to raise_error(Puppet::Error, /vip_internal_ip should be part of keepalived_internal_ipvs./)
-      end
+      it_raises 'a Puppet::Error', /vip_internal_ip should be part of keepalived_internal_ipvs./
     end
 
     context 'with a Galera VIP not in the keepalived VIP list' do
-      before :each do
+      before do
         params.merge!(
           :galera_ip                => '172.16.0.1',
           :vip_public_ip            => '192.168.0.1',
@@ -204,9 +200,7 @@ describe 'cloud::loadbalancer' do
           :keepalived_internal_ipvs => ['192.168.1.1', '192.168.1.2']
         )
       end
-      it 'should fail to configure HAproxy' do
-        expect { should contain_class('cloud::loadbalancer') }.to raise_error(Puppet::Error, /galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs./)
-      end
+      it_raises 'a Puppet::Error', /galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs./
     end
   end # shared:: openstack loadbalancer
 
