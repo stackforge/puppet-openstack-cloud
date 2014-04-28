@@ -13,7 +13,41 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# HAproxy nodes
+# == Class: cloud::loadbalancer
+#
+# Install Load-Balancer node (HAproxy + Keepalived)
+#
+# === Parameters:
+#
+# [*keepalived_public_interface*]
+#   (optional) Networking interface to bind the VIP connected to public network.
+#   Defaults to 'eth0'
+#
+# [*keepalived_internal_interface*]
+#   (optional) Networking interface to bind the VIP connected to internal network.
+#   keepalived_internal_ipvs should be configured to enable the internal VIP.
+#   Defaults to 'eth1'
+#
+# [*keepalived_public_ipvs*]
+#   (optional) IP address of the VIP connected to public network.
+#   Should be an array.
+#   Defaults to ['127.0.0.1']
+#
+# [*keepalived_internal_ipvs*]
+#   (optional) IP address of the VIP connected to internal network.
+#   Should be an array.
+#   Defaults to false (disabled)
+#
+# [*keepalived_interface*]
+#   (optional) Networking interface to bind the VIP connected to internal network.
+#   DEPRECATED: use keepalived_public_interface instead.
+#   Defaults to false (disabled)
+#
+# [*keepalived_ipvs*]
+#   (optional) IP address of the VIP connected to public network.
+#   DEPRECATED: use keepalived_public_ipvs instead.
+#   Should be an array.
+#   Defaults to false (disabled)
 #
 class cloud::loadbalancer(
   $swift_api                        = true,
@@ -36,8 +70,10 @@ class cloud::loadbalancer(
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = 50,
-  $keepalived_interface             = 'eth0',
-  $keepalived_ipvs                  = ['127.0.0.1'],
+  $keepalived_public_interface      = 'eth0',
+  $keepalived_public_ipvs           = ['127.0.0.1'],
+  $keepalived_internal_interface    = 'eth1',
+  $keepalived_internal_ipvs         = false,
   $ks_cinder_public_port            = 8776,
   $ks_ceilometer_public_port        = 8777,
   $ks_ec2_public_port               = 8773,
@@ -55,8 +91,25 @@ class cloud::loadbalancer(
   $horizon_port                     = 80,
   $spice_port                       = 6082,
   $vip_public_ip                    = '127.0.0.2',
-  $galera_ip                        = '127.0.0.1'
+  $galera_ip                        = '127.0.0.1',
+  # Deprecated parameters
+  $keepalived_interface             = false,
+  $keepalived_ipvs                  = false,
 ){
+
+  # Manage deprecation when using old parameters
+  if $keepalived_interface {
+    warning('keepalived_interface parameter is deprecated. Use internal/external parameters instead.')
+    $keepalived_public_interface_real = $keepalived_interface
+  } else {
+    $keepalived_public_interface_real = $keepalived_public_interface
+  }
+  if $keepalived_ipvs {
+    warning('keepalived_ipvs parameter is deprecated. Use internal/external parameters instead.')
+    $keepalived_public_ipvs_real = $keepalived_ipvs
+  } else {
+    $keepalived_public_ipvs_real = $keepalived_public_ipvs
+  }
 
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
@@ -67,13 +120,25 @@ class cloud::loadbalancer(
   }
 
   keepalived::instance { '1':
-    interface     => $keepalived_interface,
-    virtual_ips   => unique(split(join(flatten([$keepalived_ipvs, ['']]), " dev ${keepalived_interface},"), ',')),
+    interface     => $keepalived_public_interface_real,
+    virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs_real, ['']]), " dev ${keepalived_public_interface_real},"), ',')),
     state         => $keepalived_state,
     track_script  => ['haproxy'],
     priority      => $keepalived_priority,
     notify_master => '"/etc/init.d/haproxy start"',
     notify_backup => '"/etc/init.d/haproxy stop"',
+  }
+
+  if $keepalived_internal_ipvs {
+    keepalived::instance { '2':
+      interface     => $keepalived_internal_interface,
+      virtual_ips   => unique(split(join(flatten([$keepalived_internal_ipvs, ['']]), " dev ${keepalived_internal_interface},"), ',')),
+      state         => $keepalived_state,
+      track_script  => ['haproxy'],
+      priority      => $keepalived_priority,
+      notify_master => '"/etc/init.d/haproxy start"',
+      notify_backup => '"/etc/init.d/haproxy stop"',
+    }
   }
 
   file { '/etc/logrotate.d/haproxy':
