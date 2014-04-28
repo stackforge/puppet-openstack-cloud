@@ -49,6 +49,110 @@
 #   Should be an array.
 #   Defaults to false (disabled)
 #
+# [*swift_api*]
+#   (optional) Enable or not Swift public binding.
+#   Defaults to true
+#
+# [*ceilometer_api*]
+#   (optional) Enable or not Ceilometer public binding.
+#   Defaults to true
+#
+# [*cinder_api*]
+#   (optional) Enable or not Cinder public binding.
+#   Defaults to true
+#
+# [*glance_api*]
+#   (optional) Enable or not Glance API public binding.
+#   Defaults to true
+#
+# [*glance_registry*]
+#   (optional) Enable or not Glance Registry public binding.
+#   Defaults to true
+#
+# [*neutron_api*]
+#   (optional) Enable or not Neutron public binding.
+#   Defaults to true
+#
+# [*heat_api*]
+#   (optional) Enable or not Heat public binding.
+#   Defaults to true
+#
+# [*heat_cfn_api*]
+#   (optional) Enable or not Heat CFN public binding.
+#   Defaults to true
+#
+# [*heat_cloudwatch_api*]
+#   (optional) Enable or not Heat Cloudwatch public binding.
+#   Defaults to true
+#
+# [*nova_api*]
+#   (optional) Enable or not Nova public binding.
+#   Defaults to true
+#
+# [*ec2_api*]
+#   (optional) Enable or not EC2 public binding.
+#   Defaults to true
+#
+# [*metadata_api*]
+#   (optional) Enable or not Metadata public binding.
+#   Defaults to true
+#
+# [*keystone_api*]
+#   (optional) Enable or not Keystone public binding.
+#   Defaults to true
+#
+# [*keystone_api_admin*]
+#   (optional) Enable or not Keystone admin binding.
+#   Defaults to true
+#
+# [*keystone_api_internal*]
+#   (optional) Enable or not Keystone internal binding.
+#   Defaults to true
+#
+# [*cinder_api_internal*]
+#   (optional) Enable or not Cinder internal binding.
+#   Defaults to true
+#
+# [*ceilometer_api_internal*]
+#   (optional) Enable or not Ceilometer internal binding.
+#   Defaults to true
+#
+# [*glance_api_internal*]
+#   (optional) Enable or not Glance API internal binding.
+#   Defaults to true
+#
+# [*glance_registry_internal*]
+#   (optional) Enable or not Glance Registry internal binding.
+#   Defaults to true
+#
+# [*nova_api_internal*]
+#   (optional) Enable or not Nova internal binding.
+#   Defaults to true
+#
+# [*ec2_api_internal*]
+#   (optional) Enable or not EC2 internal binding.
+#   Defaults to true
+#
+# [*neutron_api_internal*]
+#   (optional) Enable or not Neutron internal binding.
+#   Defaults to true
+#
+# [*swift_api_internal*]
+#   (optional) Enable or not Swift internal binding.
+#   Defaults to true
+#
+# [*heat_api_internal*]
+#   (optional) Enable or not Heat internal binding.
+#   Defaults to true
+#
+# [*heat_cfn_api_internal*]
+#   (optional) Enable or not Heat CFN internal binding.
+#   Defaults to true
+#
+# [*heat_cloudwatch_api_internal*]
+#   (optional) Enable or not Heat Cloudwatch internal binding.
+#   Defaults to true
+#
 class cloud::loadbalancer(
   $swift_api                        = true,
   $ceilometer_api                   = true,
@@ -62,8 +166,21 @@ class cloud::loadbalancer(
   $nova_api                         = true,
   $ec2_api                          = true,
   $metadata_api                     = true,
-  $keystone_api_admin               = true,
   $keystone_api                     = true,
+  $swift_api_internal               = true,
+  $ceilometer_api_internal          = true,
+  $cinder_api_internal              = true,
+  $glance_api_internal              = true,
+  $glance_registry_internal         = true,
+  $neutron_api_internal             = true,
+  $heat_api_internal                = true,
+  $heat_cfn_api_internal            = true,
+  $heat_cloudwatch_api_internal     = true,
+  $nova_api_internal                = true,
+  $ec2_api_internal                 = true,
+  $metadata_api_internal            = true,
+  $keystone_api_internal            = true,
+  $keystone_api_admin               = true,
   $horizon                          = true,
   $horizon_ssl                      = false,
   $spice                            = true,
@@ -74,23 +191,37 @@ class cloud::loadbalancer(
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = false,
-  $ks_cinder_public_port            = 8776,
+  $ks_ceilometer_internal_port      = 8777,
   $ks_ceilometer_public_port        = 8777,
+  $ks_cinder_internal_port          = 8776,
+  $ks_cinder_public_port            = 8776,
+  $ks_ec2_internal_port             = 8773,
   $ks_ec2_public_port               = 8773,
+  $ks_glance_api_internal_port      = 9292,
   $ks_glance_api_public_port        = 9292,
   $ks_glance_registry_internal_port = 9191,
-  $ks_heat_public_port              = 8004,
+  $ks_glance_registry_public_port   = 9191,
+  $ks_heat_cfn_internal_port        = 8000,
   $ks_heat_cfn_public_port          = 8000,
+  $ks_heat_cloudwatch_internal_port = 8003,
   $ks_heat_cloudwatch_public_port   = 8003,
+  $ks_heat_internal_port            = 8004,
+  $ks_heat_public_port              = 8004,
   $ks_keystone_admin_port           = 35357,
+  $ks_keystone_internal_port        = 5000,
   $ks_keystone_public_port          = 5000,
+  $ks_metadata_internal_port        = 8775,
   $ks_metadata_public_port          = 8775,
+  $ks_neutron_internal_port         = 9696,
   $ks_neutron_public_port           = 9696,
+  $ks_nova_internal_port            = 8774,
   $ks_nova_public_port              = 8774,
+  $ks_swift_internal_port           = 8080,
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
   $spice_port                       = 6082,
   $vip_public_ip                    = '127.0.0.2',
+  $vip_internal_ip                  = false,
   $galera_ip                        = '127.0.0.1',
   # Deprecated parameters
   $keepalived_interface             = false,
@@ -170,6 +301,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $keystone_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'keystone_api_internal_cluster':
+        ports     => $ks_keystone_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $swift_api {
     cloud::loadbalancer::listen_http{
       'swift_api_cluster':
@@ -178,6 +317,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $swift_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'swift_api_internal_cluster':
+        ports     => $ks_swift_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $nova_api {
     cloud::loadbalancer::listen_http{
       'nova_api_cluster':
@@ -185,6 +332,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $nova_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'nova_api_internal_cluster':
+        ports     => $ks_nova_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $ec2_api {
     cloud::loadbalancer::listen_http{
       'ec2_api_cluster':
@@ -192,6 +347,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $ec2_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'ec2_api_internal_cluster':
+        ports     => $ks_ec2_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $metadata_api {
     cloud::loadbalancer::listen_http{
       'metadata_api_cluster':
@@ -199,6 +362,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $metadata_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'metadata_api_internal_cluster':
+        ports     => $ks_metadata_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $spice {
     cloud::loadbalancer::listen_http{
       'spice_cluster':
@@ -214,13 +385,30 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'glance_api_internal_cluster':
+        ports     => $ks_glance_api_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $glance_registry {
+    warning('Glance Registry should not be exposed to public network.')
     cloud::loadbalancer::listen_http{
       'glance_registry_cluster':
         ports     => $ks_glance_registry_internal_port,
         listen_ip => $vip_public_ip;
     }
   }
+  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'glance_api_internal_cluster':
+        ports     => $ks_glance_api_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $neutron_api {
     cloud::loadbalancer::listen_http{
       'neutron_api_cluster':
@@ -228,6 +416,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $neutron_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'neutron_api_internal_cluster':
+        ports     => $ks_neutron_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $cinder_api {
     cloud::loadbalancer::listen_http{
       'cinder_api_cluster':
@@ -235,6 +431,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $cinder_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'cinder_api_internal_cluster':
+        ports     => $ks_cinder_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $ceilometer_api {
     cloud::loadbalancer::listen_http{
       'ceilometer_api_cluster':
@@ -242,6 +446,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $ceilometer_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'ceilometer_api_internal_cluster':
+        ports     => $ks_ceilometer_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $heat_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cluster':
@@ -249,6 +461,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $heat_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'heat_api_internal_cluster':
+        ports     => $ks_heat_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $heat_cfn_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cfn_cluster':
@@ -256,6 +476,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $heat_cfn_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'heat_cfn_internal_cluster':
+        ports     => $ks_heat_cfn_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $heat_cloudwatch_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cloudwatch_cluster':
@@ -263,6 +491,14 @@ class cloud::loadbalancer(
         listen_ip => $vip_public_ip;
     }
   }
+  if $heat_cloudwatch_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    cloud::loadbalancer::listen_http {
+      'heat_cloudwatch_internal_cluster':
+        ports     => $ks_heat_cloudwatch_internal_port,
+        listen_ip => $vip_internal_ip;
+    }
+  }
+
   if $horizon {
     if $horizon_ssl {
       cloud::loadbalancer::listen_https{
@@ -279,6 +515,9 @@ class cloud::loadbalancer(
     }
   }
 
+  if ($galera_ip in $keepalived_public_ipvs_real) {
+    warning('Exposing Galera cluster to public network is a security issue.')
+  }
   haproxy::listen { 'galera_cluster':
     ipaddress          => $galera_ip,
     ports              => 3306,
