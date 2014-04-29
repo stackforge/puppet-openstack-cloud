@@ -42,13 +42,12 @@ describe 'cloud::loadbalancer' do
         :haproxy_auth                      => 'root:secrete',
         :keepalived_state                  => 'BACKUP',
         :keepalived_priority               => 50,
-        :keepalived_interface              => 'eth0',
-        :keepalived_ipvs                   => ['10.0.0.1', '10.0.0.2'],
-        :keepalived_localhost_ip           => '127.0.0.1',
+        :keepalived_public_interface       => 'eth0',
+        :keepalived_public_ipvs            => ['10.0.0.1', '10.0.0.2'],
         :horizon_port                      => '80',
         :spice_port                        => '6082',
-        :vip_public_ip                     => '10.0.0.3',
-        :galera_ip                         => '10.0.0.4',
+        :vip_public_ip                     => '10.0.0.1',
+        :galera_ip                         => '10.0.0.2',
         :ks_ceilometer_public_port         => '8777',
         :ks_nova_public_port               => '8774',
         :ks_ec2_public_port                => '8773',
@@ -73,10 +72,50 @@ describe 'cloud::loadbalancer' do
       should contain_class('keepalived')
     end # configure keepalived server
 
+    context 'configure an internal VIP' do
+      before do
+        params.merge!(:keepalived_internal_ipvs => ['192.168.0.1'])
+      end
+      it 'configure an internal VRRP instance' do
+        should contain_keepalived__instance('2').with({
+          'interface'     => 'eth1',
+          'virtual_ips'   => ['192.168.0.1 dev eth1'],
+          'track_script'  => ['haproxy'],
+          'state'         => 'BACKUP',
+          'priority'      => params[:keepalived_priority],
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
+    end
+
+    context 'configure keepalived with deprecated parameters' do
+      before do
+        params.merge!(
+          :keepalived_ipvs      => ['192.168.0.2'],
+          :vip_public_ip        => '192.168.0.2',
+          :galera_ip            => '192.168.0.2',
+          :keepalived_interface => 'eth3'
+        )
+      end
+      it 'configure a public VRRP instance with deprecated parameters' do
+        should contain_keepalived__instance('1').with({
+          'interface'     => 'eth3',
+          'virtual_ips'   => ['192.168.0.2 dev eth3'],
+          'track_script'  => ['haproxy'],
+          'state'         => 'BACKUP',
+          'priority'      => params[:keepalived_priority],
+          'notify_master' => '"/etc/init.d/haproxy start"',
+          'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
+    end
+
     context 'configure keepalived in backup' do
       it 'configure vrrp_instance with BACKUP state' do
         should contain_keepalived__instance('1').with({
-          'interface'     => params[:keepalived_interface],
+          'interface'     => params[:keepalived_public_interface],
+          'virtual_ips'   => ['10.0.0.1 dev eth0', '10.0.0.2 dev eth0'],
           'track_script'  => ['haproxy'],
           'state'         => params[:keepalived_state],
           'priority'      => params[:keepalived_priority],
@@ -87,12 +126,12 @@ describe 'cloud::loadbalancer' do
     end # configure keepalived in backup
 
     context 'configure keepalived in master' do
-      before :each do
+      before do
         params.merge!( :keepalived_state => 'MASTER' )
       end
       it 'configure vrrp_instance with MASTER state' do
         should contain_keepalived__instance('1').with({
-          'interface'     => params[:keepalived_interface],
+          'interface'     => params[:keepalived_public_interface],
           'track_script'  => ['haproxy'],
           'state'         => 'MASTER',
           'priority'      => params[:keepalived_priority],
@@ -132,6 +171,37 @@ describe 'cloud::loadbalancer' do
       )}
     end # configure monitor haproxy listen
 
+    context 'with a public OpenStack VIP not in the keepalived VIP list' do
+      before do
+        params.merge!(
+          :vip_public_ip          => '172.16.0.1',
+          :keepalived_public_ipvs => ['192.168.0.1', '192.168.0.2']
+        )
+      end
+      it_raises 'a Puppet::Error', /vip_public_ip should be part of keepalived_public_ipvs./
+    end
+
+    context 'with an internal OpenStack VIP not in the keepalived VIP list' do
+      before do
+        params.merge!(
+          :vip_internal_ip          => '172.16.0.1',
+          :keepalived_internal_ipvs => ['192.168.0.1', '192.168.0.2']
+        )
+      end
+      it_raises 'a Puppet::Error', /vip_internal_ip should be part of keepalived_internal_ipvs./
+    end
+
+    context 'with a Galera VIP not in the keepalived VIP list' do
+      before do
+        params.merge!(
+          :galera_ip                => '172.16.0.1',
+          :vip_public_ip            => '192.168.0.1',
+          :keepalived_public_ipvs   => ['192.168.0.1', '192.168.0.2'],
+          :keepalived_internal_ipvs => ['192.168.1.1', '192.168.1.2']
+        )
+      end
+      it_raises 'a Puppet::Error', /galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs./
+    end
   end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do
