@@ -41,7 +41,7 @@ fixtures:
       ref: '04356974f72b90a1d0f57346a00e95a717924e43'
     'haproxy':
       repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
-      ref: '0d4c50ed56f4fce06b66c04611cebec29f7a37a8'
+      ref: 'ff713f85d8fac7ade808f3d65d949a1a06b8ea88'
     'keepalived':
       repo: 'git://github.com/enovance/puppet-module-keepalived.git'
       ref: 'eb345b6d3b25106cbe166028f2b8dd9974a10230'

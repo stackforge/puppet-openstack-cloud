@@ -253,9 +253,20 @@ class cloud::loadbalancer(
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
+  # Ensure HAproxy service is only started on MASTER node
+  # It avoids binding warnings when running Puppet on BACKUP nodes where HAproxy
+  # tries to bind the services to the VIP which is not here.
+  if $keepalived_state == 'BACKUP' {
+    $manage_haproxy_service = false
+  } else {
+    $manage_haproxy_service = true
+  }
+
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
-  class { 'haproxy': }
+  class { 'haproxy':
+    service_manage => $manage_haproxy_service
+  }
 
   keepalived::vrrp_script { 'haproxy':
     name_is_process => true
