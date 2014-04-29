@@ -191,32 +191,19 @@ class cloud::loadbalancer(
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = false,
-  $ks_ceilometer_internal_port      = 8777,
   $ks_ceilometer_public_port        = 8777,
-  $ks_cinder_internal_port          = 8776,
   $ks_cinder_public_port            = 8776,
-  $ks_ec2_internal_port             = 8773,
   $ks_ec2_public_port               = 8773,
-  $ks_glance_api_internal_port      = 9292,
   $ks_glance_api_public_port        = 9292,
-  $ks_glance_registry_internal_port = 9191,
   $ks_glance_registry_public_port   = 9191,
-  $ks_heat_cfn_internal_port        = 8000,
   $ks_heat_cfn_public_port          = 8000,
-  $ks_heat_cloudwatch_internal_port = 8003,
   $ks_heat_cloudwatch_public_port   = 8003,
-  $ks_heat_internal_port            = 8004,
   $ks_heat_public_port              = 8004,
   $ks_keystone_admin_port           = 35357,
-  $ks_keystone_internal_port        = 5000,
   $ks_keystone_public_port          = 5000,
-  $ks_metadata_internal_port        = 8775,
   $ks_metadata_public_port          = 8775,
-  $ks_neutron_internal_port         = 9696,
   $ks_neutron_public_port           = 9696,
-  $ks_nova_internal_port            = 8774,
   $ks_nova_public_port              = 8774,
-  $ks_swift_internal_port           = 8080,
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
   $spice_port                       = 6082,
@@ -313,82 +300,72 @@ class cloud::loadbalancer(
     }
   }
 
+  if $keystone_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $keystone_api {
     cloud::loadbalancer::listen_http {
       'keystone_api_cluster':
         ports     => $ks_keystone_public_port,
-        listen_ip => $vip_public_ip;
+        listen_ip => $listen_ip_real;
       'keystone_api_admin_cluster':
         ports     => $ks_keystone_admin_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $keystone_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'keystone_api_internal_cluster':
-        ports     => $ks_keystone_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $swift_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $swift_api {
     cloud::loadbalancer::listen_http{
       'swift_api_cluster':
         ports     => $ks_swift_public_port,
         httpchk   => 'httpchk /healthcheck',
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $swift_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'swift_api_internal_cluster':
-        ports     => $ks_swift_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $nova_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $nova_api {
     cloud::loadbalancer::listen_http{
       'nova_api_cluster':
         ports     => $ks_nova_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $nova_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'nova_api_internal_cluster':
-        ports     => $ks_nova_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $ec2_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $ec2_api {
     cloud::loadbalancer::listen_http{
       'ec2_api_cluster':
         ports     => $ks_ec2_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $ec2_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'ec2_api_internal_cluster':
-        ports     => $ks_ec2_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $metadata_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $metadata_api {
     cloud::loadbalancer::listen_http{
       'metadata_api_cluster':
         ports     => $ks_metadata_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $metadata_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'metadata_api_internal_cluster':
-        ports     => $ks_metadata_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
@@ -400,124 +377,109 @@ class cloud::loadbalancer(
         httpchk   => 'httpchk GET /';
     }
   }
+
+  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $glance_api {
     cloud::loadbalancer::listen_http{
       'glance_api_cluster':
         ports     => $ks_glance_api_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'glance_api_internal_cluster':
-        ports     => $ks_glance_api_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $glance_registry_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $glance_registry {
     warning('Glance Registry should not be exposed to public network.')
     cloud::loadbalancer::listen_http{
       'glance_registry_cluster':
         ports     => $ks_glance_registry_internal_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'glance_api_internal_cluster':
-        ports     => $ks_glance_api_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $neutron_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $neutron_api {
     cloud::loadbalancer::listen_http{
       'neutron_api_cluster':
         ports     => $ks_neutron_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $neutron_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'neutron_api_internal_cluster':
-        ports     => $ks_neutron_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $cinder_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $cinder_api {
     cloud::loadbalancer::listen_http{
       'cinder_api_cluster':
         ports     => $ks_cinder_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $cinder_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'cinder_api_internal_cluster':
-        ports     => $ks_cinder_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $ceilometer_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $ceilometer_api {
     cloud::loadbalancer::listen_http{
       'ceilometer_api_cluster':
         ports     => $ks_ceilometer_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $ceilometer_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'ceilometer_api_internal_cluster':
-        ports     => $ks_ceilometer_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $heat_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $heat_api {
     cloud::loadbalancer::listen_http{
       'heat_api_cluster':
         ports     => $ks_heat_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $heat_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'heat_api_internal_cluster':
-        ports     => $ks_heat_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $heat_cfn_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $heat_cfn_api {
     cloud::loadbalancer::listen_http{
       'heat_cfn_api_cluster':
         ports     => $ks_heat_cfn_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $heat_cfn_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'heat_cfn_api_internal_cluster':
-        ports     => $ks_heat_cfn_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
+  if $heat_cloudwatch_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
+    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
+  } else {
+    $listen_ip_real = $vip_public_ip
+  }
   if $heat_cloudwatch_api {
     cloud::loadbalancer::listen_http{
       'heat_cloudwatch_api_cluster':
         ports     => $ks_heat_cloudwatch_public_port,
-        listen_ip => $vip_public_ip;
-    }
-  }
-  if $heat_cloudwatch_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    cloud::loadbalancer::listen_http {
-      'heat_cloudwatch_api_internal_cluster':
-        ports     => $ks_heat_cloudwatch_internal_port,
-        listen_ip => $vip_internal_ip;
+        listen_ip => $listen_ip_real;
     }
   }
 
