@@ -518,11 +518,18 @@ class cloud::loadbalancer(
           listen_ip => $vip_public_ip;
       }
     } else {
+
+      # Horizon URL is not the same on Red Hat and Debian/Ubuntu
+      if $::operatingsystem == 'RedHat' {
+        $horizon_auth_url = 'dashboard'
+      } else {
+        $horizon_auth_url = 'horizon'
+      }
       cloud::loadbalancer::listen_http{
         'horizon_cluster':
           ports     => $horizon_port,
-          httpchk   => "httpchk GET  /  HTTP/1.0\r\nUser-Agent:\ ${::hostname}",
-          options   => {'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
+          httpchk   => "httpchk GET  /$horizon_auth_url  HTTP/1.0\r\nUser-Agent:\ HAproxy-${::hostname}",
+          options   => { 'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
           listen_ip => $vip_public_ip;
       }
     }
