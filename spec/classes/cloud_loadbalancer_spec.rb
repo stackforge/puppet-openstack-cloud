@@ -111,7 +111,7 @@ describe 'cloud::loadbalancer' do
       end
     end
 
-    context 'configure keepalived in backup' do
+    context 'when keepalived and HAproxy are in backup' do
       it 'configure vrrp_instance with BACKUP state' do
         should contain_keepalived__instance('1').with({
           'interface'     => params[:keepalived_public_interface],
@@ -123,6 +123,9 @@ describe 'cloud::loadbalancer' do
           'notify_backup' => '"/etc/init.d/haproxy stop"',
         })
       end # configure vrrp_instance with BACKUP state
+      it 'configure haproxy server without service managed' do
+        should contain_class('haproxy').with(:service_manage => false)
+      end # configure haproxy server
     end # configure keepalived in backup
 
     context 'configure keepalived in master' do
@@ -139,6 +142,9 @@ describe 'cloud::loadbalancer' do
           'notify_backup' => '"/etc/init.d/haproxy stop"',
         })
       end
+      it 'configure haproxy server with service managed' do
+        should contain_class('haproxy').with(:service_manage => true)
+      end # configure haproxy server
     end # configure keepalived in master
 
     context 'configure logrotate file' do
