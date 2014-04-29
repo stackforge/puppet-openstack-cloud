@@ -493,14 +493,14 @@ class cloud::loadbalancer(
 
   if $heat_cfn_api {
     cloud::loadbalancer::listen_http{
-      'heat_api_cfn_cluster':
+      'heat_cfn_api_cluster':
         ports     => $ks_heat_cfn_public_port,
         listen_ip => $vip_public_ip;
     }
   }
   if $heat_cfn_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
     cloud::loadbalancer::listen_http {
-      'heat_cfn_internal_cluster':
+      'heat_cfn_api_internal_cluster':
         ports     => $ks_heat_cfn_internal_port,
         listen_ip => $vip_internal_ip;
     }
@@ -508,14 +508,14 @@ class cloud::loadbalancer(
 
   if $heat_cloudwatch_api {
     cloud::loadbalancer::listen_http{
-      'heat_api_cloudwatch_cluster':
+      'heat_cloudwatch_api_cluster':
         ports     => $ks_heat_cloudwatch_public_port,
         listen_ip => $vip_public_ip;
     }
   }
   if $heat_cloudwatch_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
     cloud::loadbalancer::listen_http {
-      'heat_cloudwatch_internal_cluster':
+      'heat_cloudwatch_api_internal_cluster':
         ports     => $ks_heat_cloudwatch_internal_port,
         listen_ip => $vip_internal_ip;
     }
