@@ -20,7 +20,7 @@ define cloud::loadbalancer::binding (
   $httpchk = undef
 ){
 
-include cloud::loadbalancer
+  include cloud::loadbalancer
 
   # join all VIP together
   $vip_public_ip_array   = any2array($::cloud::loadbalancer::vip_public_ip)
@@ -37,25 +37,27 @@ include cloud::loadbalancer
   if ! $::cloud::loadbalancer::vip_internal_ip and ! $::cloud::loadbalancer::vip_public_ip {
     fail('vip_public_ip and vip_internal_ip are both set to false, no binding is possible.')
   }
+  $all_vip_array = split($all_vip, ',')
+
   # when we do not want binding
   if ($ip == false) {
     notice("no HAproxy binding for ${name} has been enabled.")
   } else {
     # when we want both internal & public binding
     if ($ip == true) {
-      $listen_ip_real = $all_vip
+      $listen_ip_real = $all_vip_array
     } else {
       # when binding is specified in parameter
-      if ($ip in $all_vip) {
+      if ($ip in $all_vip_array) {
         $listen_ip_real = $ip
       } else {
         fail("${ip} is not part of VIP pools.")
       }
-      cloud::loadbalancer::listen_http { $name:
-        ports     => $port,
-        httpchk   => $httpchk,
-        listen_ip => $listen_ip_real;
-      }
+    }
+    cloud::loadbalancer::listen_http { $name :
+      ports     => $port,
+      httpchk   => $httpchk,
+      listen_ip => [$listen_ip_real];
     }
   }
 
