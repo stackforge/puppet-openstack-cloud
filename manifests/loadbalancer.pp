@@ -51,108 +51,111 @@
 #
 # [*swift_api*]
 #   (optional) Enable or not Swift public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*ceilometer_api*]
 #   (optional) Enable or not Ceilometer public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*cinder_api*]
 #   (optional) Enable or not Cinder public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*glance_api*]
 #   (optional) Enable or not Glance API public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*glance_registry*]
 #   (optional) Enable or not Glance Registry public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*neutron_api*]
 #   (optional) Enable or not Neutron public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_api*]
 #   (optional) Enable or not Heat public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_cfn_api*]
 #   (optional) Enable or not Heat CFN public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_cloudwatch_api*]
 #   (optional) Enable or not Heat Cloudwatch public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*nova_api*]
 #   (optional) Enable or not Nova public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*ec2_api*]
 #   (optional) Enable or not EC2 public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*keystone_api*]
 #   (optional) Enable or not Keystone public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*keystone_api_admin*]
 #   (optional) Enable or not Keystone admin binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
 #   Defaults to true
 #
-# [*keystone_api_internal*]
-#   (optional) Enable or not Keystone internal binding.
-#   Defaults to true
+# [*vip_public_ip*]
+#  (optional) Array or string for public VIP
+#  Should be part of keepalived_public_ips
+#  Defaults to '127.0.0.2'
 #
-# [*cinder_api_internal*]
-#   (optional) Enable or not Cinder internal binding.
-#   Defaults to true
-#
-# [*ceilometer_api_internal*]
-#   (optional) Enable or not Ceilometer internal binding.
-#   Defaults to true
-#
-# [*glance_api_internal*]
-#   (optional) Enable or not Glance API internal binding.
-#   Defaults to true
-#
-# [*glance_registry_internal*]
-#   (optional) Enable or not Glance Registry internal binding.
-#   Defaults to true
-#
-# [*nova_api_internal*]
-#   (optional) Enable or not Nova internal binding.
-#   Defaults to true
-#
-# [*ec2_api_internal*]
-#   (optional) Enable or not EC2 internal binding.
-#   Defaults to true
-#
-# [*neutron_api_internal*]
-#   (optional) Enable or not Neutron internal binding.
-#   Defaults to true
-#
-# [*swift_api_internal*]
-#   (optional) Enable or not Swift internal binding.
-#   Defaults to true
-#
-# [*heat_api_internal*]
-#   (optional) Enable or not Heat internal binding.
-#   Defaults to true
-#
-# [*heat_cfn_api_internal*]
-#   (optional) Enable or not Heat CFN internal binding.
-#   Defaults to true
-#
-# [*heat_cloudwatch_api_internal*]
-#   (optional) Enable or not Heat Cloudwatch internal binding.
-#   Defaults to true
-#
+# [*vip_internal_ip*]
+#  (optional) Array or string for internal VIP
+#  Should be part of keepalived_internal_ips
+#  Defaults to false (backward compatibility)
 class cloud::loadbalancer(
   $swift_api                        = true,
   $ceilometer_api                   = true,
@@ -167,26 +170,13 @@ class cloud::loadbalancer(
   $ec2_api                          = true,
   $metadata_api                     = true,
   $keystone_api                     = true,
-  $swift_api_internal               = true,
-  $ceilometer_api_internal          = true,
-  $cinder_api_internal              = true,
-  $glance_api_internal              = true,
-  $glance_registry_internal         = true,
-  $neutron_api_internal             = true,
-  $heat_api_internal                = true,
-  $heat_cfn_api_internal            = true,
-  $heat_cloudwatch_api_internal     = true,
-  $nova_api_internal                = true,
-  $ec2_api_internal                 = true,
-  $metadata_api_internal            = true,
-  $keystone_api_internal            = true,
   $keystone_api_admin               = true,
   $horizon                          = true,
   $horizon_ssl                      = false,
   $spice                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
-  $keepalived_priority              = 50,
+  $keepalived_priority              = '50',
   $keepalived_public_interface      = 'eth0',
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
@@ -195,7 +185,7 @@ class cloud::loadbalancer(
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
   $ks_glance_api_public_port        = 9292,
-  $ks_glance_registry_public_port   = 9191,
+  $ks_glance_registry_internal_port = 9191,
   $ks_heat_cfn_public_port          = 8000,
   $ks_heat_cloudwatch_public_port   = 8003,
   $ks_heat_public_port              = 8004,
@@ -207,7 +197,7 @@ class cloud::loadbalancer(
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
   $spice_port                       = 6082,
-  $vip_public_ip                    = '127.0.0.2',
+  $vip_public_ip                    = '127.0.0.1',
   $vip_internal_ip                  = false,
   $galera_ip                        = '127.0.0.1',
   # Deprecated parameters
@@ -240,19 +230,11 @@ class cloud::loadbalancer(
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
-  # Ensure HAproxy service is only started on MASTER node
-  # It avoids binding warnings when running Puppet on BACKUP nodes where HAproxy
-  # tries to bind the services to the VIP which is not here.
-  if $keepalived_state == 'BACKUP' {
-    $manage_haproxy_service = false
-  } else {
-    $manage_haproxy_service = true
-  }
-
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
+  # HAproxy is managed by Keepalived.
   class { 'keepalived': } ->
   class { 'haproxy':
-    service_manage => $manage_haproxy_service
+    service_manage => false
   }
 
   keepalived::vrrp_script { 'haproxy':
@@ -300,210 +282,88 @@ class cloud::loadbalancer(
     }
   }
 
-  if $keystone_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  # Instanciate HAproxy binding
+  cloud::loadbalancer::binding { 'keystone_api_cluster':
+    ip   => $keystone_api,
+    port => $ks_keystone_public_port;
   }
-  if $keystone_api {
-    cloud::loadbalancer::listen_http {
-      'keystone_api_cluster':
-        ports     => $ks_keystone_public_port,
-        listen_ip => $listen_ip_real;
-      'keystone_api_admin_cluster':
-        ports     => $ks_keystone_admin_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'keystone_api_admin_cluster':
+    ip   => $keystone_api_admin,
+    port => $ks_keystone_admin_port;
   }
-
-  if $swift_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'swift_api_cluster':
+    ip      => $swift_api,
+    port    => $ks_swift_public_port,
+    httpchk => 'httpchk /healthcheck';
   }
-  if $swift_api {
-    cloud::loadbalancer::listen_http{
-      'swift_api_cluster':
-        ports     => $ks_swift_public_port,
-        httpchk   => 'httpchk /healthcheck',
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'nova_api_cluster':
+    ip   => $nova_api,
+    port => $ks_nova_public_port;
   }
-
-  if $nova_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'ec2_api_cluster':
+    ip   => $ec2_api,
+    port => $ks_ec2_public_port;
   }
-  if $nova_api {
-    cloud::loadbalancer::listen_http{
-      'nova_api_cluster':
-        ports     => $ks_nova_public_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'metadata_api_cluster':
+    ip   => $metadata_api,
+    port => $ks_metadata_public_port;
   }
-
-  if $ec2_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'spice_cluster':
+    ip      => $spice,
+    port    => $spice_port,
+    httpchk => 'httpchk GET /';
   }
-  if $ec2_api {
-    cloud::loadbalancer::listen_http{
-      'ec2_api_cluster':
-        ports     => $ks_ec2_public_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'glance_api_cluster':
+    ip   => $glance_api,
+    port => $ks_glance_api_public_port;
   }
-
-  if $metadata_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'glance_registry_cluster':
+    ip   => $glance_registry,
+    port => $ks_glance_registry_internal_port;
   }
-  if $metadata_api {
-    cloud::loadbalancer::listen_http{
-      'metadata_api_cluster':
-        ports     => $ks_metadata_public_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'neutron_api_cluster':
+    ip   => $neutron_api,
+    port => $ks_neutron_public_port;
   }
-
-  if $spice {
-    cloud::loadbalancer::listen_http{
-      'spice_cluster':
-        ports     => $spice_port,
-        listen_ip => $vip_public_ip,
-        httpchk   => 'httpchk GET /';
-    }
+  cloud::loadbalancer::binding { 'cinder_api_cluster':
+    ip   => $cinder_api,
+    port => $ks_cinder_public_port;
   }
-
-  if $glance_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'ceilometer_api_cluster':
+    ip   => $ceilometer_api,
+    port => $ks_ceilometer_public_port;
   }
-  if $glance_api {
-    cloud::loadbalancer::listen_http{
-      'glance_api_cluster':
-        ports     => $ks_glance_api_public_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'heat_api_cluster':
+    ip   => $heat_api,
+    port => $ks_heat_public_port;
   }
-
-  if $glance_registry_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
+  cloud::loadbalancer::binding { 'heat_api_cfn_cluster':
+    ip   => $heat_cfn_api,
+    port => $ks_heat_cfn_public_port;
   }
-  if $glance_registry {
-    warning('Glance Registry should not be exposed to public network.')
-    cloud::loadbalancer::listen_http{
-      'glance_registry_cluster':
-        ports     => $ks_glance_registry_internal_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $neutron_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $neutron_api {
-    cloud::loadbalancer::listen_http{
-      'neutron_api_cluster':
-        ports     => $ks_neutron_public_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $cinder_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $cinder_api {
-    cloud::loadbalancer::listen_http{
-      'cinder_api_cluster':
-        ports     => $ks_cinder_public_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $ceilometer_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $ceilometer_api {
-    cloud::loadbalancer::listen_http{
-      'ceilometer_api_cluster':
-        ports     => $ks_ceilometer_public_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $heat_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $heat_api {
-    cloud::loadbalancer::listen_http{
-      'heat_api_cluster':
-        ports     => $ks_heat_public_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $heat_cfn_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $heat_cfn_api {
-    cloud::loadbalancer::listen_http{
-      'heat_cfn_api_cluster':
-        ports     => $ks_heat_cfn_public_port,
-        listen_ip => $listen_ip_real;
-    }
-  }
-
-  if $heat_cloudwatch_api_internal and $vip_internal_ip and $keepalived_internal_ipvs {
-    $listen_ip_real = [$vip_public_ip, $vip_internal_ip]
-  } else {
-    $listen_ip_real = $vip_public_ip
-  }
-  if $heat_cloudwatch_api {
-    cloud::loadbalancer::listen_http{
-      'heat_cloudwatch_api_cluster':
-        ports     => $ks_heat_cloudwatch_public_port,
-        listen_ip => $listen_ip_real;
-    }
+  cloud::loadbalancer::binding { 'heat_api_cloudwatch_cluster':
+    ip   => $heat_cloudwatch_api,
+    port => $ks_heat_cloudwatch_public_port;
   }
 
   if $horizon {
     if $horizon_ssl {
-      cloud::loadbalancer::listen_https{
-        'horizon_cluster':
-          ports     => $horizon_port,
-          listen_ip => $vip_public_ip;
+      cloud::loadbalancer::listen_https{ 'horizon_cluster':
+        ports     => $horizon_port,
+        listen_ip => $vip_public_ip;
       }
     } else {
-
       # Horizon URL is not the same on Red Hat and Debian/Ubuntu
       if $::operatingsystem == 'RedHat' {
         $horizon_auth_url = 'dashboard'
       } else {
         $horizon_auth_url = 'horizon'
       }
-      cloud::loadbalancer::listen_http{
-        'horizon_cluster':
-          ports     => $horizon_port,
-          httpchk   => "httpchk GET  /$horizon_auth_url  HTTP/1.0\r\nUser-Agent:\ HAproxy-${::hostname}",
-          options   => { 'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
-          listen_ip => $vip_public_ip;
+      cloud::loadbalancer::listen_http{ 'horizon_cluster':
+        ports     => $horizon_port,
+        httpchk   => "httpchk GET  /$horizon_auth_url  HTTP/1.0\r\nUser-Agent:\ HAproxy-${::hostname}",
+        options   => { 'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
+        listen_ip => $vip_public_ip;
       }
     }
   }
