@@ -15,9 +15,6 @@
 #
 # Swift Storage node
 #
-import 'set_io_scheduler.pp'
-
-# swift storage
 class cloud::object::storage (
   $storage_eth    = '127.0.0.1',
   $swift_zone     = undef,
