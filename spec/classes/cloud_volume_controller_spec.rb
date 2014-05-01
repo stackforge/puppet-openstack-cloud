@@ -102,7 +102,7 @@ describe 'cloud::volume::controller' do
           :default_volume_type  => nil
         )
       end
-      it 'should raise an error and fail' do
+      xit 'should raise an error and fail' do
         should compile.and_raise_error(/when using multi-backend, you should define a default_volume_type value in cloud::volume::controller/)
       end
     end
