@@ -143,7 +143,7 @@ describe 'cloud::loadbalancer' do
         })
       end
       it 'configure haproxy server with service managed' do
-        should contain_class('haproxy').with(:service_manage => true)
+        should contain_class('haproxy').with(:service_manage => false)
       end # configure haproxy server
     end # configure keepalived in master
 
