@@ -102,7 +102,7 @@ class cloud::image::api(
 
   $encoded_glance_user     = uriescape($glance_db_user)
   $encoded_glance_password = uriescape($glance_db_password)
- 
+
   class { 'glance::api':
     sql_connection        => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
     registry_host         => $openstack_vip,
