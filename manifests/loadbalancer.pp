@@ -337,11 +337,11 @@ class cloud::loadbalancer(
     ip   => $heat_api,
     port => $ks_heat_public_port;
   }
-  cloud::loadbalancer::binding { 'heat_api_cfn_cluster':
+  cloud::loadbalancer::binding { 'heat_cfn_api_cluster':
     ip   => $heat_cfn_api,
     port => $ks_heat_cfn_public_port;
   }
-  cloud::loadbalancer::binding { 'heat_api_cloudwatch_cluster':
+  cloud::loadbalancer::binding { 'heat_cloudwatch_api_cluster':
     ip   => $heat_cloudwatch_api,
     port => $ks_heat_cloudwatch_public_port;
   }
