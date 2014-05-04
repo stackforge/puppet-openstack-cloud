@@ -426,6 +426,7 @@ class os_params {
   $tunnel_eth = $internal_netif_ip
   $provider_vlan_ranges = ['physnet1:1000:2999']
   $provider_bridge_mappings = ['physnet1:br-eth1']
+  $dnsmasq_dns_server = '8.8.8.8'
 
   # Nova
   $ks_nova_password = 'secrete'
