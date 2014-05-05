@@ -207,10 +207,17 @@ class cloud::loadbalancer(
           listen_ip => $vip_public_ip;
       }
     } else {
-      cloud::loadbalancer::listen_http{
-        'horizon_cluster':
-          ports     => $horizon_port,
-          listen_ip => $vip_public_ip;
+      # Horizon URL is not the same on Red Hat and Debian/Ubuntu
+      if $::operatingsystem == 'RedHat' {
+        $horizon_auth_url = 'dashboard'
+      } else {
+        $horizon_auth_url = 'horizon'
+      }
+      cloud::loadbalancer::listen_http{ 'horizon_cluster':
+        ports     => $horizon_port,
+        httpchk   => "httpchk GET \"/${horizon_auth_url} HTTP/1.0\r\nUser-Agent: HAProxy-${::hostname}\"",
+        options   => { 'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
+        listen_ip => $vip_public_ip;
       }
     }
   }
