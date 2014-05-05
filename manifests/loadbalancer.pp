@@ -360,10 +360,12 @@ class cloud::loadbalancer(
         $horizon_auth_url = 'horizon'
       }
       cloud::loadbalancer::listen_http{ 'horizon_cluster':
-        ports     => $horizon_port,
-        httpchk   => "httpchk GET  /$horizon_auth_url  HTTP/1.0\r\nUser-Agent:\ HAproxy-${::hostname}",
-        options   => { 'cookie' => 'sessionid prefix', 'balance' => 'leastconn' },
-        listen_ip => $vip_public_ip;
+        ports       => $horizon_port,
+        httpchk     => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\r\nUser-Agent: HAproxy-${::hostname}\"",
+        options     => {
+          'cookie'  => 'sessionid prefix',
+          'balance' => 'leastconn' },
+        listen_ip   => $vip_public_ip;
       }
     }
   }
