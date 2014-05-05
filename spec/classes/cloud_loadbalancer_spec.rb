@@ -124,7 +124,7 @@ describe 'cloud::loadbalancer' do
         })
       end # configure vrrp_instance with BACKUP state
       it 'configure haproxy server without service managed' do
-        should contain_class('haproxy').with(:service_manage => false)
+        should contain_class('haproxy').with(:service_manage => true)
       end # configure haproxy server
     end # configure keepalived in backup
 
@@ -143,7 +143,7 @@ describe 'cloud::loadbalancer' do
         })
       end
       it 'configure haproxy server with service managed' do
-        should contain_class('haproxy').with(:service_manage => false)
+        should contain_class('haproxy').with(:service_manage => true)
       end # configure haproxy server
     end # configure keepalived in master
 

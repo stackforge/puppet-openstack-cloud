@@ -233,13 +233,7 @@ class cloud::loadbalancer(
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
   class { 'haproxy':
-    service_manage => false
-  }
-  # Still allow HAproxy to start
-  if ($::osfamily == 'Debian') {
-    file { '/etc/default/haproxy':
-      content => 'ENABLED=1'
-    }
+    service_manage => true
   }
 
   keepalived::vrrp_script { 'haproxy':
