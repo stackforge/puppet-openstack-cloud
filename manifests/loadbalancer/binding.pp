@@ -56,7 +56,7 @@ define cloud::loadbalancer::binding (
     cloud::loadbalancer::listen_http { $name :
       ports     => $port,
       httpchk   => $httpchk,
-      listen_ip => [$listen_ip_real];
+      listen_ip => $listen_ip_real;
     }
   }
 
