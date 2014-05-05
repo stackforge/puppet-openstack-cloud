@@ -197,9 +197,9 @@ class cloud::loadbalancer(
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
   $spice_port                       = 6082,
-  $vip_public_ip                    = '127.0.0.1',
+  $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
-  $galera_ip                        = '127.0.0.1',
+  $galera_ip                        = ['127.0.0.1'],
   # Deprecated parameters
   $keepalived_interface             = false,
   $keepalived_ipvs                  = false,
