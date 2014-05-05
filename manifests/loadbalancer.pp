@@ -231,10 +231,15 @@ class cloud::loadbalancer(
   }
 
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
-  # HAproxy is managed by Keepalived.
+  # Also, manage HAproxy only where Keepalived is MASTER
+  if $keepalived_state == 'BACKUP' {
+    $manage_haproxy_service = false
+  } else {
+    $manage_haproxy_service = true
+  }
   class { 'keepalived': } ->
   class { 'haproxy':
-    service_manage => false
+    service_manage => $manage_haproxy_service
   }
 
   keepalived::vrrp_script { 'haproxy':
