@@ -1,3 +1,17 @@
+##2014-05-06 - Features release 1.3.0
+###Summary
+* High Availability refactorization
+* OpenStack services separation in different classes
+* DHCP Agent: Add support of DNS server declaration
+* Defaults values for all puppet parameters, can now support Hiera.
+* Fix all unit tests to pass Travis
+
+####Bugfixes
+* Fix HAproxy configuration for Heat API binding
+
+####Known Bugs
+* No known bugs
+
 ##2014-04-22 - Features release 1.2.0
 ###Summary
 * Now supports Ubuntu 12.04
