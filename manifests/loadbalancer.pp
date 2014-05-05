@@ -238,8 +238,7 @@ class cloud::loadbalancer(
   # Still allow HAproxy to start
   if ($::osfamily == 'Debian') {
     file { '/etc/default/haproxy':
-      content => 'ENABLED=1',
-      before  => Service['haproxy'],
+      content => 'ENABLED=1'
     }
   }
 
