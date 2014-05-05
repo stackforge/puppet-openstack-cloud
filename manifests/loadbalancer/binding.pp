@@ -26,18 +26,17 @@ define cloud::loadbalancer::binding (
   $vip_public_ip_array   = any2array($::cloud::loadbalancer::vip_public_ip)
   $vip_internal_ip_array = any2array($::cloud::loadbalancer::vip_internal_ip)
   if $::cloud::loadbalancer::vip_public_ip and $::cloud::loadbalancer::vip_internal_ip {
-    $all_vip = join([$vip_public_ip_array,$vip_internal_ip_array], ',')
+    $all_vip_array = union($vip_public_ip_array, $vip_internal_ip_array)
   }
   if $::cloud::loadbalancer::vip_public_ip and ! $::cloud::loadbalancer::vip_internal_ip {
-    $all_vip = join($vip_public_ip_array, ',')
+    $all_vip_array = $vip_public_ip_array
   }
   if ! $::cloud::loadbalancer::vip_public_ip and $::cloud::loadbalancer::vip_internal_ip {
-    $all_vip = join($vip_internal_ip_array, ',')
+    $all_vip_array = $vip_internal_ip_array
   }
   if ! $::cloud::loadbalancer::vip_internal_ip and ! $::cloud::loadbalancer::vip_public_ip {
     fail('vip_public_ip and vip_internal_ip are both set to false, no binding is possible.')
   }
-  $all_vip_array = split($all_vip, ',')
 
   # when we do not want binding
   if ($ip == false) {
