@@ -361,7 +361,7 @@ class cloud::loadbalancer(
       }
       cloud::loadbalancer::listen_http{ 'horizon_cluster':
         ports       => $horizon_port,
-        httpchk     => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\r\nUser-Agent: HAproxy-${::hostname}\"",
+        httpchk     => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\"",
         options     => {
           'cookie'  => 'sessionid prefix',
           'balance' => 'leastconn' },
