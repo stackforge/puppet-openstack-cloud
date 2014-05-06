@@ -23,5 +23,5 @@ class cloud::compute::consoleauth {
   class { 'nova::consoleauth':
     enabled => true,
   }
-  
+
 }

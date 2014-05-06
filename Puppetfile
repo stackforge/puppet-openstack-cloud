@@ -74,7 +74,7 @@ mod 'dnsclient',
   :ref => '4158b30f4660623f98dcdbd1ce9b482556180b57'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
-  :ref => '0d4c50ed56f4fce06b66c04611cebec29f7a37a8'
+  :ref => 'ff713f85d8fac7ade808f3d65d949a1a06b8ea88'
 mod 'inifile',
   :git => 'git://github.com/enovance/puppetlabs-inifile.git',
   :ref => 'ae23a4db97d2815ec305d0529912685f07746d3c'

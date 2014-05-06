@@ -83,6 +83,48 @@ describe 'cloud::network::dhcp' do
 
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
       should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(true)
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_ensure('absent')
+
+      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
+        :mode => '0755',
+        :owner => 'root',
+        :group => 'root'
+      )
+      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
+    end
+  end
+
+  shared_examples_for 'openstack network dhcp with custom nameserver' do
+
+    let :pre_condition do
+      "class { 'cloud::network':
+        rabbit_hosts             => ['10.0.0.1'],
+        rabbit_password          => 'secrete',
+        tunnel_eth               => '10.0.1.1',
+        api_eth                  => '10.0.0.1',
+        provider_vlan_ranges     => ['physnet1:1000:2999'],
+        provider_bridge_mappings => ['physnet1:br-eth1'],
+        verbose                  => true,
+        debug                    => true,
+        use_syslog               => true,
+        dhcp_lease_duration      => '10',
+        log_facility             => 'LOG_LOCAL0' }"
+    end
+
+    let :params do
+      { :veth_mtu           => '1400',
+        :debug              => true,
+        :dnsmasq_dns_server => '1.2.3.4' }
+    end
+
+    it 'configure neutron dhcp' do
+      should contain_class('neutron::agents::dhcp').with(
+          :debug => true
+      )
+
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
+      should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(true)
+      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_value('1.2.3.4')
 
       should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
         :mode => '0755',
@@ -103,6 +145,7 @@ describe 'cloud::network::dhcp' do
     end
 
     it_configures 'openstack network dhcp'
+    it_configures 'openstack network dhcp with custom nameserver'
   end
 
   context 'on RedHat platforms' do
@@ -115,6 +158,7 @@ describe 'cloud::network::dhcp' do
     end
 
     it_configures 'openstack network dhcp'
+    it_configures 'openstack network dhcp with custom nameserver'
   end
 
 end

@@ -1,6 +1,6 @@
 # puppet-openstack-cloud
 
-[![Build Status](https://travis-ci.org/enovance/puppet-openstack-cloud.svg)](https://travis-ci.org/enovance/puppet-openstack-cloud)
+[![Build Status](https://api.travis-ci.org/enovance/puppet-openstack-cloud.svg?branch=master)](https://travis-ci.org/enovance/puppet-openstack-cloud)
 
 #### Table of Contents
 
