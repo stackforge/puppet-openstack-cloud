@@ -70,6 +70,10 @@ describe 'cloud::telemetry::server' do
       should contain_class('ceilometer::collector')
     end
 
+    it 'configure ceilometer notification agent' do
+      should contain_class('ceilometer::agent::notification')
+    end
+
     it 'configure ceilometer alarm evaluator' do
       should contain_class('ceilometer::alarm::evaluator')
     end
