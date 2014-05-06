@@ -52,6 +52,7 @@ class cloud::database::nosql(
     bind_ip   => $array_bind_ip,
     nojournal => $nojournal,
     replset   => 'ceilometer',
+    logpath   => '/var/log/mongodb/mongod.log',
   }
 
   exec {'check_mongodb' :

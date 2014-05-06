@@ -33,7 +33,8 @@ describe 'cloud::database::nosql' do
       should contain_class('mongodb::globals').with_before('Class[Mongodb]')
       should contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
-        :nojournal => false
+        :nojournal => false,
+        :logpath   => '/var/log/mongodb/mongod.log',
       )
     end
 
