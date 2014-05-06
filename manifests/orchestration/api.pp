@@ -21,23 +21,27 @@ class cloud::orchestration::api(
   $ks_heat_cfn_internal_port        = 8000,
   $ks_heat_cloudwatch_internal_port = 8003,
   $api_eth                          = '127.0.0.1',
+  $workers                          = $::processorcount,
 ) {
 
   include 'cloud::orchestration'
 
   class { 'heat::api':
     bind_host => $api_eth,
-    bind_port => $ks_heat_internal_port
+    bind_port => $ks_heat_internal_port,
+    workers   => $workers
   }
 
   class { 'heat::api_cfn':
     bind_host => $api_eth,
-    bind_port => $ks_heat_cfn_internal_port
+    bind_port => $ks_heat_cfn_internal_port,
+    workers   => $workers
   }
 
   class { 'heat::api_cloudwatch':
     bind_host => $api_eth,
-    bind_port => $ks_heat_cloudwatch_internal_port
+    bind_port => $ks_heat_cloudwatch_internal_port,
+    workers   => $workers
   }
 
   @@haproxy::balancermember{"${::fqdn}-heat_api":
