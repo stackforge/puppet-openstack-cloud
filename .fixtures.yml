@@ -2,7 +2,7 @@ fixtures:
   repositories:
     'cinder':
       repo: 'git://github.com/enovance/puppet-cinder'
-      ref: 'c55b95cb7edbaf0afa63e49c19d6d08bb80ab555'
+      ref: 'eccaa59fb9635c62d108029e797388d456e8f6c2'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
       ref: '77dbc80de15b5ef02a5e89c8ef040e70df576a1d'
@@ -23,7 +23,7 @@ fixtures:
       ref: '66c436bc2f06c5a71d79c674697394a11ec227f9'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
-      ref: 'a914270e284e050f0d1ce94b646c9e742f28c059'
+      ref: '615b6463ba04af34b810a358e106da25f208b080'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
       ref: '17736b2fd726858cb83590f8a8b1d594a087ea44'

@@ -161,7 +161,6 @@ describe 'cloud::identity' do
 
     it 'configure swift endpoints' do
       should contain_class('swift::keystone::auth').with(
-        :address          => '10.0.0.1',
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
         :public_port      => '8080',

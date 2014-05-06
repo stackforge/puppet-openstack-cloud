@@ -140,8 +140,7 @@ describe 'cloud::compute::controller' do
     let :facts do
       { :osfamily => 'RedHat' }
     end
-    #TODO(sbadia) Wait https://review.openstack.org/#/c/72449/ in stable/havana
-    #it_configures 'openstack compute controller'
+    it_configures 'openstack compute controller'
   end
 
 end

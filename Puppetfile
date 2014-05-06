@@ -19,10 +19,10 @@ forge 'http://forge.puppetlabs.com'
 # Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => 'a914270e284e050f0d1ce94b646c9e742f28c059'
+  :ref => '615b6463ba04af34b810a358e106da25f208b080'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'c55b95cb7edbaf0afa63e49c19d6d08bb80ab555'
+  :ref => 'eccaa59fb9635c62d108029e797388d456e8f6c2'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
   :ref => 'f3bbfd9efcc2436d6ed4beca87d62168bb109453'

@@ -78,11 +78,11 @@ describe 'cloud::network::dhcp' do
 
     it 'configure neutron dhcp' do
       should contain_class('neutron::agents::dhcp').with(
-          :debug => true
+          :debug                    => true,
+          :dnsmasq_config_file      => '/etc/neutron/dnsmasq-neutron.conf',
+          :enable_isolated_metadata => true
       )
 
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
-      should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(true)
       should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_ensure('absent')
 
       should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(

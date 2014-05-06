@@ -462,7 +462,6 @@ class cloud::identity (
 
   if $swift_enabled {
     class {'swift::keystone::auth':
-      address          => $ks_swift_internal_host,
       password         => $ks_swift_password,
       public_address   => $ks_swift_public_host,
       public_port      => $ks_swift_public_port,

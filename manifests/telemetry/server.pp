@@ -38,6 +38,6 @@ class cloud::telemetry::server(
   class { 'cloud::telemetry::alarmevaluator': }
   class { 'cloud::telemetry::alarmnotifier': }
   class { 'cloud::telemetry::collector': }
-  class { 'cloud::telemetry::agent::notification': }
+  class { 'cloud::telemetry::notification': }
 
 }
