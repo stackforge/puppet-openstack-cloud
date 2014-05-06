@@ -101,6 +101,7 @@ class cloud::network(
     service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
     log_dir                 => $log_dir,
     dhcp_lease_duration     => $dhcp_lease_duration,
+    report_interval         => '30',
   }
 
   class { 'neutron::agents::ovs':

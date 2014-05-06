@@ -46,7 +46,6 @@ class cloud::network::controller(
     database_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
     api_workers         => $::processorcount,
     agent_down_time     => '60',
-    report_interval     => '30',
   }
 
   class { 'neutron::server::notifications':
