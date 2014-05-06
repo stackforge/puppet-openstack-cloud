@@ -72,7 +72,7 @@ describe 'cloud::network::l3' do
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
     end
 
