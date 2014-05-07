@@ -19,7 +19,7 @@ forge 'http://forge.puppetlabs.com'
 # Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => '615b6463ba04af34b810a358e106da25f208b080'
+  :ref => 'fe9e463fa7d9b74d91c95f0f95140f4894e57020'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
   :ref => 'eccaa59fb9635c62d108029e797388d456e8f6c2'
@@ -61,7 +61,6 @@ mod 'ceph',
 #FIXME
 mod 'cloud',
   :git => 'git://github.com/enovance/puppet-openstack-cloud.git',
-  #:ref => 'stable/havana'
   :ref => 'master'
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
