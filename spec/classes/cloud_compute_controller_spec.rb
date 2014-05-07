@@ -122,7 +122,8 @@ describe 'cloud::compute::controller' do
           :admin_password                       => 'secrete',
           :api_bind_address                     => '10.0.0.1',
           :metadata_listen                      => '10.0.0.1',
-          :neutron_metadata_proxy_shared_secret => 'secrete'
+          :neutron_metadata_proxy_shared_secret => 'secrete',
+          :osapi_v3                             => true
         )
     end
 
