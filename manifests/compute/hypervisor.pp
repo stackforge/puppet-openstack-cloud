@@ -182,7 +182,7 @@ Host *
   nova_config {
     'libvirt/inject_key':                value => false;
     'libvirt/inject_partition':          value => '-2';
-    'DEFAULT/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
+    'libvirt/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
   }
 
   class { 'ceilometer::agent::compute': }
