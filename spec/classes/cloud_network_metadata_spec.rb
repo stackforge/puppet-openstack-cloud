@@ -64,7 +64,8 @@ describe 'cloud::network::metadata' do
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
           :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
           :log_dir                 => false,
-          :dhcp_lease_duration     => '10'
+          :dhcp_lease_duration     => '10',
+          :report_interval         => '30'
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
@@ -78,7 +79,7 @@ describe 'cloud::network::metadata' do
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
     end
 

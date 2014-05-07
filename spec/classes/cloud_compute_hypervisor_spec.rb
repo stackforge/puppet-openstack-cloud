@@ -138,7 +138,8 @@ describe 'cloud::compute::hypervisor' do
           :bind_host               => '10.0.0.1',
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
           :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
-          :log_dir                 => false
+          :log_dir                 => false,
+          :report_interval         => '30'
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
@@ -152,7 +153,7 @@ describe 'cloud::compute::hypervisor' do
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
     end
 
@@ -219,7 +220,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'should not configure nova-compute for RBD backend' do
-      should_not contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
+      should_not contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
     end
 
     it 'configure libvirt driver without disk cachemodes' do
@@ -233,9 +234,9 @@ describe 'cloud::compute::hypervisor' do
 
     it 'configure nova-compute with extra parameters' do
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
-      should contain_nova_config('DEFAULT/libvirt_inject_key').with('value' => false)
-      should contain_nova_config('DEFAULT/libvirt_inject_partition').with('value' => '-2')
-      should contain_nova_config('DEFAULT/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+      should contain_nova_config('libvirt/inject_key').with('value' => false)
+      should contain_nova_config('libvirt/inject_partition').with('value' => '-2')
+      should contain_nova_config('libvirt/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
     end
 
     context 'with dbus on Ubuntu' do
@@ -265,11 +266,11 @@ describe 'cloud::compute::hypervisor' do
       end
 
       it 'configure nova-compute to support RBD backend' do
-        should contain_nova_config('DEFAULT/libvirt_images_type').with('value' => 'rbd')
-        should contain_nova_config('DEFAULT/libvirt_images_rbd_pool').with('value' => 'nova')
-        should contain_nova_config('DEFAULT/libvirt_images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-        should contain_nova_config('DEFAULT/rbd_user').with('value' => 'cinder')
-        should contain_nova_config('DEFAULT/rbd_secret_uuid').with('value' => 'secrete')
+        should contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        should contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        should contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
         should contain_group('cephkeyring').with(:ensure => 'present')
         should contain_exec('add-nova-to-group').with(
           :command => 'usermod -a -G cephkeyring nova',

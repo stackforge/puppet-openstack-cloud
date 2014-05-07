@@ -73,15 +73,18 @@ describe 'cloud::orchestration::api' do
     it 'configure heat api' do
       should contain_class('heat::api').with(
           :bind_host => '10.0.0.1',
-          :bind_port => '8004'
+          :bind_port => '8004',
+          :workers   => '8'
         )
       should contain_class('heat::api_cfn').with(
           :bind_host => '10.0.0.1',
-          :bind_port => '8000'
+          :bind_port => '8000',
+          :workers   => '8'
         )
       should contain_class('heat::api_cloudwatch').with(
           :bind_host => '10.0.0.1',
-          :bind_port => '8003'
+          :bind_port => '8003',
+          :workers   => '8'
         )
     end
 
@@ -98,7 +101,8 @@ describe 'cloud::orchestration::api' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily       => 'Debian',
+        :processorcount => '8' }
     end
 
     it_configures 'openstack orchestration api'
@@ -106,7 +110,8 @@ describe 'cloud::orchestration::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily       => 'RedHat',
+        :processorcount => '8' }
     end
 
     it_configures 'openstack orchestration api'

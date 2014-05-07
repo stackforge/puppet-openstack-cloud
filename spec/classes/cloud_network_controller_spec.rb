@@ -43,6 +43,12 @@ describe 'cloud::network::controller' do
         :ks_neutron_password      => 'secrete',
         :ks_keystone_admin_host   => '10.0.0.1',
         :ks_keystone_public_port  => '5000',
+        :nova_url                 => 'http://127.0.0.1:8774/v2',
+        :nova_admin_auth_url      => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_username      => 'nova',
+        :nova_admin_tenant_name   => 'services',
+        :nova_admin_password      => 'novapassword',
+        :nova_region_name         => 'RegionOne',
         :api_eth                  => '10.0.0.1' }
     end
 
@@ -62,7 +68,8 @@ describe 'cloud::network::controller' do
           :core_plugin             => 'neutron.plugins.ml2.plugin.Ml2Plugin',
           :service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
           :log_dir                 => false,
-          :dhcp_lease_duration     => '10'
+          :dhcp_lease_duration     => '10',
+          :report_interval         => '30'
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
@@ -76,7 +83,7 @@ describe 'cloud::network::controller' do
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :enable_security_group  => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
     end
 
@@ -87,11 +94,20 @@ describe 'cloud::network::controller' do
           :auth_port           => '5000',
           :database_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
           :api_workers         => '2',
-          :agent_down_time     => '60',
-          :report_interval     => '30'
+          :agent_down_time     => '60'
         )
     end
 
+    it 'configure neutron server notifications to nova' do
+      should contain_class('neutron::server::notifications').with(
+        :nova_url                => 'http://127.0.0.1:8774/v2',
+        :nova_admin_auth_url     => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_username     => 'nova',
+        :nova_admin_tenant_name  => 'services',
+        :nova_admin_password     => 'novapassword',
+        :nova_region_name        => 'RegionOne'
+      )
+    end
     it 'checks if Neutron DB is populated' do
       should contain_exec('neutron_db_sync').with(
         :command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',

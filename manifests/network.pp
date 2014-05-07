@@ -101,6 +101,7 @@ class cloud::network(
     service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
     log_dir                 => $log_dir,
     dhcp_lease_duration     => $dhcp_lease_duration,
+    report_interval         => '30',
   }
 
   class { 'neutron::agents::ovs':
@@ -116,7 +117,7 @@ class cloud::network(
     network_vlan_ranges   => $provider_vlan_ranges,
     tunnel_id_ranges      => ['1:10000'],
     mechanism_drivers     => ['openvswitch','l2population'],
-    enable_security_group => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+    enable_security_group => true
   }
 
   # TODO(EmilienM) Temporary, need to be fixed upstream.

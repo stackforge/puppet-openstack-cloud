@@ -19,31 +19,31 @@ forge 'http://forge.puppetlabs.com'
 # Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => 'f71f935a3e41dcd11f8f5986a1fe0708b124e589'
+  :ref => '615b6463ba04af34b810a358e106da25f208b080'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'bd1536626f2b5d66f9ea77bcd69ba7d1f5f33961'
+  :ref => 'eccaa59fb9635c62d108029e797388d456e8f6c2'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => '001f1b6a8ef6bd0fde8fbe0a4b3362f31e6bbcda'
+  :ref => 'f3bbfd9efcc2436d6ed4beca87d62168bb109453'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => 'bdf094da21161ec6f78530775a0c41fc76fd3339'
+  :ref => '17736b2fd726858cb83590f8a8b1d594a087ea44'
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
-  :ref => 'da0cedce6f14f5c35e733ac345d8d862db11cd2b'
+  :ref => '36383e90d1c4013d7989561b00ffcb08c76908de'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => 'ce49f6b6d9bb0e89e3e1e63a88a1d63d5a930851'
+  :ref => '77dbc80de15b5ef02a5e89c8ef040e70df576a1d'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => '39b7efdbc83c65966b7a961df98561c5550c2d23'
+  :ref => '66c436bc2f06c5a71d79c674697394a11ec227f9'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => 'b7811392062b649572f470f5f3ddca1882997210'
+  :ref => '1e77a9d48a85a3ae6d30993b3c887f58e4a5973c'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
-  :ref => '9b60581a1c8fd2c1a98adafc1bcdc53796859e23'
+  :ref => '9874edd2655e122bf8bd3eedc70e697bc5b83326'
 
 # Dependency
 mod 'apache',
@@ -122,7 +122,7 @@ mod 'sysctl',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'
 mod 'vswitch',
   :git => 'git://github.com/enovance/puppet-vswitch.git',
-  :ref => '065fadb2d33857cd31f293677de56d18793e1412'
+  :ref => '49dbaff15e8f017dbe365ebf08eb505472b695a1'
 mod 'xinetd',
   :git => 'git://github.com/enovance/puppetlabs-xinetd.git',
   :ref => '7557af0e418d1a587df04fe7d01322ff2473c32e'
