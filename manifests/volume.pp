@@ -40,14 +40,6 @@
 #   (optional) Password to connect to cinder queues.
 #   Defaults to 'rabbitpassword'
 #
-# [*ks_keystone_internal_host*]
-#   (optional) Keystone host (authentication)
-#   Defaults to '127.0.0.1'
-#
-# [*ks_cinder_password*]
-#   (optional) Keystone password for cinder user.
-#   Defaults to 'cinderpassword'
-#
 # [*verbose*]
 #   (optional) Set log output to verbose output
 #   Defaults to true
@@ -71,8 +63,6 @@ class cloud::volume(
   $cinder_db_password         = 'cinderpassword',
   $rabbit_hosts               = ['127.0.0.1:5672'],
   $rabbit_password            = 'rabbitpassword',
-  $ks_keystone_internal_host  = '127.0.0.1',
-  $ks_cinder_password         = 'cinderpassword',
   $verbose                    = true,
   $debug                      = true,
   $log_facility               = 'LOG_LOCAL0',

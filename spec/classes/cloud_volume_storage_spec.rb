@@ -29,8 +29,6 @@ describe 'cloud::volume::storage' do
         cinder_db_password         => 'secret',
         rabbit_hosts               => ['10.0.0.1'],
         rabbit_password            => 'secret',
-        ks_keystone_internal_host  => '10.0.0.1',
-        ks_cinder_password         => 'secret',
         verbose                    => true,
         debug                      => true,
         log_facility               => 'LOG_LOCAL0',
