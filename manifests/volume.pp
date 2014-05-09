@@ -66,6 +66,7 @@ class cloud::volume(
   $verbose                    = true,
   $debug                      = true,
   $log_facility               = 'LOG_LOCAL0',
+  $storage_availability_zone  = 'nova',
   $use_syslog                 = true
 ) {
 
@@ -81,16 +82,17 @@ class cloud::volume(
 
 
   class { 'cinder':
-    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
-    rabbit_userid       => 'cinder',
-    rabbit_hosts        => $rabbit_hosts,
-    rabbit_password     => $rabbit_password,
-    rabbit_virtual_host => '/',
-    verbose             => $verbose,
-    debug               => $debug,
-    log_dir             => $log_dir,
-    log_facility        => $log_facility,
-    use_syslog          => $use_syslog
+    sql_connection            => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
+    rabbit_userid             => 'cinder',
+    rabbit_hosts              => $rabbit_hosts,
+    rabbit_password           => $rabbit_password,
+    rabbit_virtual_host       => '/',
+    verbose                   => $verbose,
+    debug                     => $debug,
+    log_dir                   => $log_dir,
+    log_facility              => $log_facility,
+    use_syslog                => $use_syslog,
+    storage_availability_zone => $storage_availability_zone
   }
 
   class { 'cinder::ceilometer': }
