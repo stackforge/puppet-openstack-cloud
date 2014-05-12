@@ -86,19 +86,19 @@ class cloud::image::registry(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { 'glance::registry':
-    sql_connection    => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
-    verbose           => $verbose,
-    debug             => $debug,
-    auth_host         => $ks_keystone_internal_host,
-    keystone_password => $ks_glance_password,
-    keystone_tenant   => 'services',
-    keystone_user     => 'glance',
-    bind_host         => $api_eth,
-    log_dir           => $log_dir,
-    log_file          => $log_file_registry,
-    bind_port         => $ks_glance_registry_internal_port,
-    use_syslog        => $use_syslog,
-    log_facility      => $log_facility,
+    database_connection => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
+    verbose             => $verbose,
+    debug               => $debug,
+    auth_host           => $ks_keystone_internal_host,
+    keystone_password   => $ks_glance_password,
+    keystone_tenant     => 'services',
+    keystone_user       => 'glance',
+    bind_host           => $api_eth,
+    log_dir             => $log_dir,
+    log_file            => $log_file_registry,
+    bind_port           => $ks_glance_registry_internal_port,
+    use_syslog          => $use_syslog,
+    log_facility        => $log_facility,
   }
 
   exec {'glance_db_sync':

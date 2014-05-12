@@ -8,10 +8,10 @@ fixtures:
       ref: '77dbc80de15b5ef02a5e89c8ef040e70df576a1d'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: '1e77a9d48a85a3ae6d30993b3c887f58e4a5973c'
+      ref: '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
-      ref: 'f3bbfd9efcc2436d6ed4beca87d62168bb109453'
+      ref: '8156a87cd04943904258d572e47838d0c346654f'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
       ref: '36383e90d1c4013d7989561b00ffcb08c76908de'
@@ -23,7 +23,7 @@ fixtures:
       ref: '66c436bc2f06c5a71d79c674697394a11ec227f9'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
-      ref: '615b6463ba04af34b810a358e106da25f208b080'
+      ref: 'fe9e463fa7d9b74d91c95f0f95140f4894e57020'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
       ref: '17736b2fd726858cb83590f8a8b1d594a087ea44'

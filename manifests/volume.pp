@@ -40,14 +40,6 @@
 #   (optional) Password to connect to cinder queues.
 #   Defaults to 'rabbitpassword'
 #
-# [*ks_keystone_internal_host*]
-#   (optional) Keystone host (authentication)
-#   Defaults to '127.0.0.1'
-#
-# [*ks_cinder_password*]
-#   (optional) Keystone password for cinder user.
-#   Defaults to 'cinderpassword'
-#
 # [*verbose*]
 #   (optional) Set log output to verbose output
 #   Defaults to true
@@ -71,11 +63,10 @@ class cloud::volume(
   $cinder_db_password         = 'cinderpassword',
   $rabbit_hosts               = ['127.0.0.1:5672'],
   $rabbit_password            = 'rabbitpassword',
-  $ks_keystone_internal_host  = '127.0.0.1',
-  $ks_cinder_password         = 'cinderpassword',
   $verbose                    = true,
   $debug                      = true,
   $log_facility               = 'LOG_LOCAL0',
+  $storage_availability_zone  = 'nova',
   $use_syslog                 = true
 ) {
 
@@ -91,16 +82,22 @@ class cloud::volume(
 
 
   class { 'cinder':
-    sql_connection      => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
-    rabbit_userid       => 'cinder',
-    rabbit_hosts        => $rabbit_hosts,
-    rabbit_password     => $rabbit_password,
-    rabbit_virtual_host => '/',
-    verbose             => $verbose,
-    debug               => $debug,
-    log_dir             => $log_dir,
-    log_facility        => $log_facility,
-    use_syslog          => $use_syslog
+    sql_connection            => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
+    rabbit_userid             => 'cinder',
+    rabbit_hosts              => $rabbit_hosts,
+    rabbit_password           => $rabbit_password,
+    rabbit_virtual_host       => '/',
+    verbose                   => $verbose,
+    debug                     => $debug,
+    log_dir                   => $log_dir,
+    log_facility              => $log_facility,
+    use_syslog                => $use_syslog,
+    # https://review.openstack.org/#/c/92993/
+    # storage_availability_zone => $storage_availability_zone
+  }
+
+  cinder_config {
+    'DEFAULT/storage_availability_zone': value => $storage_availability_zone
   }
 
   class { 'cinder::ceilometer': }

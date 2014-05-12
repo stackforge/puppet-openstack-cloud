@@ -45,7 +45,7 @@ describe 'cloud::image' do
 
     it 'configure glance-api' do
       should contain_class('glance::api').with(
-        :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+        :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance',
         :keystone_password     => 'secrete',
         :registry_host         => '10.0.0.42',
         :registry_port         => '9191',
@@ -66,7 +66,7 @@ describe 'cloud::image' do
 
     it 'configure glance-registry' do
       should contain_class('glance::registry').with(
-        :sql_connection        => 'mysql://glance:secrete@10.0.0.1/glance',
+        :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance',
         :keystone_password     => 'secrete',
         :keystone_tenant       => 'services',
         :keystone_user         => 'glance',

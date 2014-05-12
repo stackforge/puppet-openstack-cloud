@@ -35,6 +35,7 @@ class cloud::compute::api(
     api_bind_address                     => $api_eth,
     metadata_listen                      => $api_eth,
     neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
+    osapi_v3                             => true,
   }
 
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
