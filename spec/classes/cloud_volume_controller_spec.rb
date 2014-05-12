@@ -60,7 +60,7 @@ describe 'cloud::volume::controller' do
           :log_facility              => 'LOG_LOCAL0',
           :use_syslog                => true,
           :log_dir                   => false,
-          :storage_availability_zone => 'nova'
+          # :storage_availability_zone => 'nova'
         )
       should contain_class('cinder::ceilometer')
     end

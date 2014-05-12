@@ -25,7 +25,7 @@ mod 'cinder',
   :ref => 'eccaa59fb9635c62d108029e797388d456e8f6c2'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => 'f3bbfd9efcc2436d6ed4beca87d62168bb109453'
+  :ref => '8156a87cd04943904258d572e47838d0c346654f'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
   :ref => '17736b2fd726858cb83590f8a8b1d594a087ea44'
@@ -40,7 +40,7 @@ mod 'neutron',
   :ref => '66c436bc2f06c5a71d79c674697394a11ec227f9'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => '1e77a9d48a85a3ae6d30993b3c887f58e4a5973c'
+  :ref => '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => '9874edd2655e122bf8bd3eedc70e697bc5b83326'

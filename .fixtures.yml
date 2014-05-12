@@ -8,10 +8,10 @@ fixtures:
       ref: '77dbc80de15b5ef02a5e89c8ef040e70df576a1d'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: '1e77a9d48a85a3ae6d30993b3c887f58e4a5973c'
+      ref: '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
-      ref: 'f3bbfd9efcc2436d6ed4beca87d62168bb109453'
+      ref: '8156a87cd04943904258d572e47838d0c346654f'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
       ref: '36383e90d1c4013d7989561b00ffcb08c76908de'
