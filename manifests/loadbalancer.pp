@@ -196,6 +196,7 @@ class cloud::loadbalancer(
   $ks_nova_public_port              = 8774,
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
+  $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
@@ -347,8 +348,8 @@ class cloud::loadbalancer(
 
   if $horizon {
     if $horizon_ssl {
-      cloud::loadbalancer::listen_https{ 'horizon_cluster':
-        ports     => $horizon_port,
+      cloud::loadbalancer::listen_https{ 'horizon_ssl_cluster':
+        ports     => $horizon_ssl_port,
         listen_ip => $vip_public_ip;
       }
     } else {

@@ -78,6 +78,7 @@ class cloud::dashboard(
   $ks_keystone_internal_host = '127.0.0.1',
   $secret_key                = 'secrete',
   $horizon_port              = 80,
+  $horizon_ssl_port          = 443,
   $servername                = $::fqdn,
   $api_eth                   = '127.0.0.1',
   $listen_ssl                = false,
@@ -141,5 +142,16 @@ class cloud::dashboard(
     options           => "check inter 2000 rise 2 fall 5 cookie ${::hostname}"
   }
 
+  if $listen_ssl {
+
+    @@haproxy::balancermember{"${::fqdn}-horizon-ssl":
+      listening_service => 'horizon_ssl_cluster',
+      server_names      => $::hostname,
+      ipaddresses       => $api_eth,
+      ports             => $horizon_ssl_port,
+      options           => "check inter 2000 rise 2 fall 5 cookie ${::hostname}"
+    }
+
+  }
 
 }
