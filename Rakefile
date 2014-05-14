@@ -16,7 +16,7 @@ PuppetLint.configuration.send('disable_class_parameter_defaults')
 PuppetLint.configuration.send('disable_quoted_booleans')
 # Ignore all upstream modules
 exclude_paths = ['spec/**/*','pkg/**/*','vendor/**/*']
-exclude_lint_paths = exclude_paths + ['examples/*.pp']
+exclude_lint_paths = exclude_paths
 
 PuppetLint.configuration.ignore_paths = exclude_lint_paths
 PuppetSyntax.exclude_paths = exclude_paths
