@@ -182,7 +182,15 @@ describe 'cloud::loadbalancer' do
     context 'configure OpenStack binding on public network only' do
       it { should contain_haproxy__listen('spice_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
-        :ports     => '6082'
+        :ports     => '6082',
+        :options   => {
+          'mode'           => 'http',
+          'option'         => ['tcpka','tcplog','httpchk GET /'],
+          'http-check'     => 'expect ! rstatus ^5',
+          'balance'        => 'leastconn',
+          'timeout server' => '120m',
+          'timeout client' => '120m'
+        }
       )}
     end
 

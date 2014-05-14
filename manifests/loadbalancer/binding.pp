@@ -17,7 +17,8 @@
 define cloud::loadbalancer::binding (
   $ip,
   $port,
-  $httpchk = undef
+  $httpchk = undef,
+  $options = undef
 ){
 
   include cloud::loadbalancer
@@ -56,6 +57,7 @@ define cloud::loadbalancer::binding (
     cloud::loadbalancer::listen_http { $name :
       ports     => $port,
       httpchk   => $httpchk,
+      options   => $options,
       listen_ip => $listen_ip_real;
     }
   }

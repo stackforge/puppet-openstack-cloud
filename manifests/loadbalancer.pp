@@ -309,9 +309,14 @@ class cloud::loadbalancer(
     port => $ks_metadata_public_port;
   }
   cloud::loadbalancer::binding { 'spice_cluster':
-    ip      => $spice,
-    port    => $spice_port,
-    httpchk => 'httpchk GET /';
+    ip                 => $spice,
+    port               => $spice_port,
+    options            => {
+      'balance'        => 'leastconn',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
+    httpchk            => 'httpchk GET /';
   }
   cloud::loadbalancer::binding { 'glance_api_cluster':
     ip   => $glance_api,
