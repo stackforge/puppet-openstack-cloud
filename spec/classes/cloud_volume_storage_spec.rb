@@ -125,7 +125,8 @@ describe 'cloud::volume::storage' do
         should contain_cinder_config('premium/netapp_server_hostname').with_value('netapp-server.host')
         should contain_cinder__type('premium').with(
           :set_key   => 'volume_backend_name',
-          :set_value => 'premium'
+          :set_value => 'premium',
+          :notify    => 'Service[cinder-volume]'
         )
       end
     end

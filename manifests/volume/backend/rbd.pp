@@ -97,6 +97,7 @@ define cloud::volume::backend::rbd (
 
   @cinder::type { $volume_backend_name:
     set_key   => 'volume_backend_name',
-    set_value => $volume_backend_name
+    set_value => $volume_backend_name,
+    notify    => Service['cinder-volume']
   }
 }
