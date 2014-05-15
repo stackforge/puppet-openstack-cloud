@@ -22,7 +22,7 @@ mod 'ceilometer',
   :ref => 'fe9e463fa7d9b74d91c95f0f95140f4894e57020'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'eccaa59fb9635c62d108029e797388d456e8f6c2'
+  :ref => '6e052620481055cffced7911a0f31bfd0849c68a'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
   :ref => '8156a87cd04943904258d572e47838d0c346654f'
