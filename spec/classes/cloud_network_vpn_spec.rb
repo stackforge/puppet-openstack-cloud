@@ -68,7 +68,7 @@ describe 'cloud::network::vpn' do
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :enable_security_group  => true,
-          :firewall_driver        => 'neutron.agent.not.a.real.FirewallDriver'
+          :firewall_driver        => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
     end
 

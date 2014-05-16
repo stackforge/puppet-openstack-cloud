@@ -118,7 +118,7 @@ class cloud::network(
     tunnel_id_ranges      => ['1:10000'],
     mechanism_drivers     => ['openvswitch','l2population'],
     enable_security_group => true,
-    firewall_driver       => 'neutron.agent.not.a.real.FirewallDriver'
+    firewall_driver       => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
   }
 
   # TODO(EmilienM) Temporary, need to be fixed upstream.
