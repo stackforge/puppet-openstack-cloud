@@ -83,7 +83,8 @@ describe 'cloud::network::controller' do
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :enable_security_group  => true
+          :enable_security_group  => true,
+          :firewall_driver        => 'neutron.agent.not.a.real.FirewallDriver'
       )
     end
 

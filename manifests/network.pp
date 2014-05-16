@@ -117,7 +117,8 @@ class cloud::network(
     network_vlan_ranges   => $provider_vlan_ranges,
     tunnel_id_ranges      => ['1:10000'],
     mechanism_drivers     => ['openvswitch','l2population'],
-    enable_security_group => true
+    enable_security_group => true,
+    firewall_driver       => 'neutron.agent.not.a.real.FirewallDriver'
   }
 
   # TODO(EmilienM) Temporary, need to be fixed upstream.
