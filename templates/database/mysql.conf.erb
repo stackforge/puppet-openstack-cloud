@@ -2,6 +2,10 @@
 # Module:: cloud::database::sql
 #
 [mysqld]
+default-storage-engine          = innodb
+collation-server                = utf8_general_ci
+init-connect                    = 'SET NAMES utf8'
+character-set-server            = utf8
 max_connections                 = 1000
 skip_name_resolve               = 1
 connect_timeout                 = 5
