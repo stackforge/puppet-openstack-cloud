@@ -13,14 +13,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::telemetry::centralagent class
+# Unit tests for cloud::telemetry::notification class
 #
 
 require 'spec_helper'
 
-describe 'cloud::telemetry::centralagent' do
+describe 'cloud::telemetry::notification' do
 
-  shared_examples_for 'openstack telemetry centralagent' do
+  shared_examples_for 'openstack telemetry notification' do
 
     let :pre_condition do
       "class { 'cloud::telemetry':
@@ -36,10 +36,6 @@ describe 'cloud::telemetry::centralagent' do
         use_syslog                 => true,
         verbose                    => true,
         debug                      => true }"
-    end
-
-    let :params do
-      { :enabled            => 'true', }
     end
 
     it 'configure ceilometer common' do
@@ -61,10 +57,8 @@ describe 'cloud::telemetry::centralagent' do
         )
     end
 
-    it 'configure ceilometer central agent' do
-      should contain_class('ceilometer::agent::central').with({
-        'enabled' => 'true',
-      })
+    it 'configure ceilometer notification agent' do
+      should contain_class('ceilometer::agent::notification')
     end
 
   end
@@ -75,7 +69,7 @@ describe 'cloud::telemetry::centralagent' do
         :hostname => 'node1' }
     end
 
-    it_configures 'openstack telemetry centralagent'
+    it_configures 'openstack telemetry notification'
   end
 
   context 'on RedHat platforms' do
@@ -84,7 +78,7 @@ describe 'cloud::telemetry::centralagent' do
         :hostname => 'node1' }
     end
 
-    it_configures 'openstack telemetry centralagent'
+    it_configures 'openstack telemetry notification'
   end
 
 end

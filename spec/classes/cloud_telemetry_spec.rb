@@ -13,14 +13,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::telemetry::centralagent class
+# Unit tests for cloud::telemetry::server class
 #
 
 require 'spec_helper'
 
-describe 'cloud::telemetry::centralagent' do
+describe 'cloud::telemetry::server' do
 
-  shared_examples_for 'openstack telemetry centralagent' do
+  shared_examples_for 'openstack telemetry server' do
 
     let :pre_condition do
       "class { 'cloud::telemetry':
@@ -39,7 +39,12 @@ describe 'cloud::telemetry::centralagent' do
     end
 
     let :params do
-      { :enabled            => 'true', }
+      { :ks_keystone_internal_host            => '10.0.0.1',
+        :ks_keystone_internal_proto           => 'http',
+        :ks_ceilometer_internal_port          => '8777',
+        :ks_ceilometer_password               => 'secrete',
+        :api_eth                              => '10.0.0.1',
+        :mongo_nodes                          => ['node1', 'node2', 'node3'] }
     end
 
     it 'configure ceilometer common' do
@@ -61,12 +66,45 @@ describe 'cloud::telemetry::centralagent' do
         )
     end
 
-    it 'configure ceilometer central agent' do
-      should contain_class('ceilometer::agent::central').with({
-        'enabled' => 'true',
-      })
+    it 'configure ceilometer collector' do
+      should contain_class('ceilometer::collector')
     end
 
+    it 'configure ceilometer notification agent' do
+      should contain_class('ceilometer::agent::notification')
+    end
+
+    it 'configure ceilometer alarm evaluator' do
+      should contain_class('ceilometer::alarm::evaluator')
+    end
+
+    it 'configure ceilometer alarm notifier' do
+      should contain_class('ceilometer::alarm::notifier')
+    end
+
+    it 'configure ceilometer-api' do
+      should contain_class('ceilometer::api').with(
+          :keystone_password => 'secrete',
+          :keystone_host     => '10.0.0.1',
+          :keystone_protocol => 'http',
+          :host              => '10.0.0.1'
+        )
+    end
+
+    it 'configure ceilometer-expirer' do
+      should contain_class('ceilometer::expirer').with(
+          :time_to_live => '2592000',
+          :minute       => '0',
+          :hour         => '0'
+        )
+    end
+
+    it 'synchronize ceilometer db indexes' do
+      should contain_class('ceilometer::db').with(
+        :sync_db             => true,
+        :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
+        )
+    end
   end
 
   context 'on Debian platforms' do
@@ -75,7 +113,7 @@ describe 'cloud::telemetry::centralagent' do
         :hostname => 'node1' }
     end
 
-    it_configures 'openstack telemetry centralagent'
+    it_configures 'openstack telemetry server'
   end
 
   context 'on RedHat platforms' do
@@ -84,7 +122,7 @@ describe 'cloud::telemetry::centralagent' do
         :hostname => 'node1' }
     end
 
-    it_configures 'openstack telemetry centralagent'
+    it_configures 'openstack telemetry server'
   end
 
 end
