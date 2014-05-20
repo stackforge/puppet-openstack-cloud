@@ -86,7 +86,7 @@ class cloud::image::registry(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { 'glance::registry':
-    database_connection => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance",
+    database_connection => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
     verbose             => $verbose,
     debug               => $debug,
     auth_host           => $ks_keystone_internal_host,

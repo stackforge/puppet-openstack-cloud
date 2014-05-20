@@ -411,7 +411,7 @@ class cloud::identity (
     debug            => $debug,
     idle_timeout     => 60,
     log_facility     => $log_facility,
-    sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone",
+    sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone?charset=utf8",
     token_provider   => 'keystone.token.providers.uuid.Provider',
     use_syslog       => $use_syslog,
     verbose          => $verbose,
