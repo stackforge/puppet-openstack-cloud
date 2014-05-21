@@ -541,6 +541,9 @@ class cloud::identity (
     password         => $ks_heat_password
   }
 
+  # Purge expored tokens every days at midnight
+  class { 'keystone::cron::token_flush': }
+
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Keystone DB.
   # It's a hack to fit with our setup where we run MySQL/Galera

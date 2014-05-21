@@ -260,6 +260,10 @@ describe 'cloud::identity' do
       )
     end
 
+    it 'configure a crontab to purge tokens every days at midnight' do
+      should contain_class('keystone::cron::token_flush')
+    end
+
     context 'without syslog' do
       before :each do
         params.merge!(:use_syslog => false)
