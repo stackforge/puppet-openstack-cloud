@@ -100,12 +100,6 @@ allow_versions = on
     weight      => '100.0',
   }
 
-  class{
-    ['swift::storage::object',
-    'swift::storage::container',
-    'swift::storage::account']:
-  }
-
   Swift::Ringsync<<| |>> ->
     Swift::Storage::Server[$container_port] ->
     Swift::Storage::Server[$account_port] ->
