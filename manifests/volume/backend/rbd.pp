@@ -58,7 +58,6 @@ define cloud::volume::backend::rbd (
   $rbd_ceph_conf                    = '/etc/ceph/ceph.conf',
   $rbd_flatten_volume_from_snapshot = false,
   $rbd_secret_uuid                  = false,
-  $volume_tmp_dir                   = false,
   $rbd_max_clone_depth              = '5',
 ) {
 
@@ -69,6 +68,7 @@ define cloud::volume::backend::rbd (
     rbd_ceph_conf                    => $rbd_ceph_conf,
     rbd_flatten_volume_from_snapshot => $rbd_flatten_volume_from_snapshot,
     rbd_max_clone_depth              => $rbd_max_clone_depth,
+    volume_tmp_dir                   => '/tmp'
   }
 
   # Configure Ceph keyring
