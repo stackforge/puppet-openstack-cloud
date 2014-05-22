@@ -22,6 +22,8 @@ class cloud::object::ringbuilder(
     $swift_rsync_max_connections = 5,
 ) {
 
+  include cloud::object
+
   Ring_object_device <<| |>>
   Ring_container_device <<| |>>
   Ring_account_device <<| |>>
