@@ -73,12 +73,9 @@ allow_versions = on
     log_facility     => 'LOG_LOCAL6',
   }
 
-  swift::storage::filter::recon { 'object': }
-  swift::storage::filter::recon { 'container': }
-  swift::storage::filter::recon { 'account': }
-  swift::storage::filter::healthcheck { 'object': }
-  swift::storage::filter::healthcheck { 'container': }
-  swift::storage::filter::healthcheck { 'account': }
+  $swift_components = ['account', 'container', 'object']
+  swift::storage::filter::recon { $swift_components : }
+  swift::storage::filter::healthcheck { $swift_components : }
 
   $object_nodes = flatten([ range('sdc','sdd')])
   swift::storage::xfs { $object_nodes: }
@@ -98,12 +95,6 @@ allow_versions = on
   @@ring_object_device {$object_urls:
     zone        => $swift_zone,
     weight      => '100.0',
-  }
-
-  class{
-    ['swift::storage::object',
-    'swift::storage::container',
-    'swift::storage::account']:
   }
 
   Swift::Ringsync<<| |>> ->
