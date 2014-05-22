@@ -87,5 +87,11 @@ fixtures:
     'kmod':
       repo: 'git://github.com/enovance/puppet-kmod.git'
       ref: 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
+    'ssh':
+      repo: 'git://github.com/enovance/puppet-ssh.git'
+      ref: '10675c0d80511a8cdd514af67b695887fa97ec40'
+    'rsync':
+      repo: 'git://github.com/enovance/puppetlabs-rsync.git'
+      ref: '7122983d89bf68bc4170415cc03212f6a8a4636e'
   symlinks:
     'cloud': '#{source_dir}'
