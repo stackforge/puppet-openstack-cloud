@@ -16,12 +16,15 @@
 # Swift Storage node
 #
 class cloud::object::storage (
-  $storage_eth    = '127.0.0.1',
-  $swift_zone     = undef,
-  $object_port    = '6000',
-  $container_port = '6001',
-  $account_port   = '6002',
-  $onloopdevices  = false,
+  $storage_eth           = '127.0.0.1',
+  $swift_zone            = undef,
+  $object_port           = '6000',
+  $container_port        = '6001',
+  $account_port          = '6002',
+  $fstype                = 'xfs',
+  $device_config_hash    = {},
+  $ring_container_device = 'sdb',
+  $ring_account_device   = 'sdb',
 ) {
 
   include 'cloud::object'
@@ -77,21 +80,18 @@ allow_versions = on
   swift::storage::filter::recon { $swift_components : }
   swift::storage::filter::healthcheck { $swift_components : }
 
-  $object_nodes = flatten([ range('sdc','sdd')])
-  swift::storage::xfs { $object_nodes: }
-  swift::storage::xfs { 'sdb': }
-  cloud::object::set_io_scheduler {'sdb':}
-  cloud::object::set_io_scheduler {$object_nodes:}
+  create_resources("swift::storage::${fstype}", $device_config_hash)
+  create_resources('cloud::object::set_io_scheduler', $device_config_hash)
 
-  @@ring_container_device { "${storage_eth}:${container_port}/sdb":
+  @@ring_container_device { "${storage_eth}:${container_port}/${ring_container_device}":
     zone        => $swift_zone,
     weight      => '100.0',
   }
-  @@ring_account_device { "${storage_eth}:${account_port}/sdb":
+  @@ring_account_device { "${storage_eth}:${account_port}/${ring_account_device}":
     zone        => $swift_zone,
     weight      => '100.0',
   }
-  $object_urls = prefix($object_nodes, "${storage_eth}:${object_port}/")
+  $object_urls = prefix(keys($device_config_hash), "${storage_eth}:${object_port}/")
   @@ring_object_device {$object_urls:
     zone        => $swift_zone,
     weight      => '100.0',
