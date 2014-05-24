@@ -15,7 +15,6 @@
 #
 # Swift ring builder node
 #
-
 class cloud::object::ringbuilder(
     $rsyncd_ipaddress            = '127.0.0.1',
     $replicas                    = 3,
@@ -28,44 +27,15 @@ class cloud::object::ringbuilder(
   Ring_container_device <<| |>>
   Ring_account_device <<| |>>
 
-  Class['swift'] -> Class['cloud::object::ringbuilder']
-
-  swift::ringbuilder::create{ ['account', 'container']:
-    part_power     => 9,
-    replicas       => $replicas,
-    min_part_hours => 24,
-  }
-
-  swift::ringbuilder::create{'object':
+  class {'swift::ringbuilder' :
     part_power     => 15,
     replicas       => $replicas,
     min_part_hours => 24,
   }
 
-  Swift::Ringbuilder::Create['object'] -> Ring_object_device <| |> ~> Swift::Ringbuilder::Rebalance['object']
-  Swift::Ringbuilder::Create['container'] -> Ring_container_device <| |> ~> Swift::Ringbuilder::Rebalance['container']
-  Swift::Ringbuilder::Create['account'] -> Ring_account_device <| |> ~> Swift::Ringbuilder::Rebalance['account']
-
-  swift::ringbuilder::rebalance{ ['object', 'account', 'container']: }
-
-  class { 'rsync::server':
-    use_xinetd => true,
-    address    => $rsyncd_ipaddress,
-    use_chroot => 'no',
-  }
-
-  Rsync::Server::Module {
-    incoming_chmod  => 'u=rwX,go=rX',
-    outgoing_chmod  => 'u=rwX,go=rX',
-  }
-
-  rsync::server::module { 'swift_server':
-    path            => '/etc/swift',
-    lock_file       => '/var/lock/swift_server.lock',
-    uid             => 'swift',
-    gid             => 'swift',
+  class {'swift::ringserver' :
+    local_net_ip    => $rsyncd_ipaddress,
     max_connections => $swift_rsync_max_connections,
-    read_only       => true,
   }
 
   # exports rsync gets that can be used to sync the ring files
