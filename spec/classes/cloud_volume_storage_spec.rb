@@ -100,6 +100,7 @@ describe 'cloud::volume::storage' do
         should contain_cinder_config('lowcost/rbd_pool').with_value('ceph_cinder')
         should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
         should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
+        should contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
         should contain_cinder__type('lowcost').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'lowcost',
@@ -156,6 +157,7 @@ describe 'cloud::volume::storage' do
         should contain_cinder_config('lowcost/rbd_pool').with_value('low')
         should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
         should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
+        should contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
         should contain_cinder__type('lowcost').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'lowcost',
@@ -168,6 +170,7 @@ describe 'cloud::volume::storage' do
         should contain_cinder_config('normal/rbd_pool').with_value('normal')
         should contain_cinder_config('normal/rbd_user').with_value('cinder')
         should contain_cinder_config('normal/rbd_secret_uuid').with_value('secret')
+        should contain_cinder_config('normal/volume_tmp_dir').with_value('/tmp')
         should contain_cinder__type('normal').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'normal',
