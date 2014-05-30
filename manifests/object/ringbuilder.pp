@@ -23,10 +23,6 @@ class cloud::object::ringbuilder(
 
   include cloud::object
 
-  Ring_object_device <<| |>>
-  Ring_container_device <<| |>>
-  Ring_account_device <<| |>>
-
   class {'swift::ringbuilder' :
     part_power     => 15,
     replicas       => $replicas,
