@@ -43,7 +43,7 @@ mod 'nova',
   :ref => '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
-  :ref => '9874edd2655e122bf8bd3eedc70e697bc5b83326'
+  :ref => 'f7d1385d6990492705ddaa228ffa544ca235913a'
 
 # Dependency
 mod 'apache',
