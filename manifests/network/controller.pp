@@ -27,7 +27,7 @@ class cloud::network::controller(
   $api_eth                 = '127.0.0.1',
   $ks_admin_tenant         = 'admin',
   $nova_url                = 'http://127.0.0.1:8774/v2',
-  $nova_admin_auth_url     = 'http://127.0.0.1:35357/v2.0',
+  $nova_admin_auth_url     = 'http://127.0.0.1:5000/v2.0',
   $nova_admin_username     = 'nova',
   $nova_admin_tenant_name  = 'services',
   $nova_admin_password     = 'novapassword',

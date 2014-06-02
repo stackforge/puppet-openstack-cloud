@@ -44,7 +44,7 @@ describe 'cloud::network::controller' do
         :ks_keystone_admin_host   => '10.0.0.1',
         :ks_keystone_public_port  => '5000',
         :nova_url                 => 'http://127.0.0.1:8774/v2',
-        :nova_admin_auth_url      => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_auth_url      => 'http://127.0.0.1:5000/v2.0',
         :nova_admin_username      => 'nova',
         :nova_admin_tenant_name   => 'services',
         :nova_admin_password      => 'novapassword',
@@ -102,7 +102,7 @@ describe 'cloud::network::controller' do
     it 'configure neutron server notifications to nova' do
       should contain_class('neutron::server::notifications').with(
         :nova_url                => 'http://127.0.0.1:8774/v2',
-        :nova_admin_auth_url     => 'http://127.0.0.1:35357/v2.0',
+        :nova_admin_auth_url     => 'http://127.0.0.1:5000/v2.0',
         :nova_admin_username     => 'nova',
         :nova_admin_tenant_name  => 'services',
         :nova_admin_password     => 'novapassword',
