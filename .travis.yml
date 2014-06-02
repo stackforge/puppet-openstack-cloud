@@ -1,5 +1,5 @@
 language: ruby
-script: "bundle exec rake test COV=y SPEC_OPTS='--format n --color --backtrace'"
+script: "bundle exec rake test COV=y SPEC_OPTS='--format documentation --color --backtrace'"
 rvm:
   - 1.9.3
   - 2.0.0
