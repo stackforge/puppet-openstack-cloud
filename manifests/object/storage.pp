@@ -81,7 +81,7 @@ allow_versions = on
   swift::storage::filter::healthcheck { $swift_components : }
 
   create_resources("swift::storage::${fstype}", $device_config_hash)
-  create_resources('cloud::object::set_io_scheduler', $device_config_hash)
+  ensure_resource('cloud::object::set_io_scheduler', keys($device_config_hash))
 
   @@ring_container_device { "${storage_eth}:${container_port}/${ring_container_device}":
     zone        => $swift_zone,
