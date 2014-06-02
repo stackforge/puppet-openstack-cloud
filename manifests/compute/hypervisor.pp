@@ -163,6 +163,7 @@ Host *
       group   => 'cephkeyring',
       mode    => '0440',
       require => Ceph::Key[$cinder_rbd_user],
+      notify  => Service['nova-compute'],
     })
 
     Concat::Fragment <<| title == 'ceph-client-os' |>>
