@@ -19,10 +19,14 @@
 #
 # === Parameters:
 #
-# [*has_ceph]
-#   (optional) Enable or not ceph capabilities on compute node.
-#   If Ceph is used as a backend for Cinder or Nova, this option should be
-#   set to True.
+# [*vm_rbd]
+#   (optional) Enable or not ceph capabilities on compute node to store
+#   nova instances on ceph storage.
+#   Default to false.
+#
+# [*volume_rbd]
+#   (optional) Enable or not ceph capabilities on compute node to attach
+#   cinder volumes backend by ceph on nova instances.
 #   Default to false.
 #
 
@@ -37,12 +41,26 @@ class cloud::compute::hypervisor(
   $cinder_rbd_user            = 'cinder',
   $nova_rbd_pool              = 'vms',
   $nova_rbd_secret_uuid       = undef,
+  $vm_rbd                     = false,
+  $volume_rbd                 = false,
+  # DEPRECATED
   $has_ceph                   = false
 ) {
 
   include 'cloud::compute'
   include 'cloud::telemetry'
   include 'cloud::network'
+
+  # Backward compatibility
+  # if has_ceph was enabled, we consider deployments run Ceph for Nova & Cinder
+  if $has_ceph {
+    warning('has_ceph parameter is deprecated. Please use vm_rbd and volume_rbd parameters.')
+    $vm_rbd_real     = true
+    $volume_rbd_real = true
+  } else {
+    $vm_rbd_real     = $vm_rbd
+    $volume_rbd_real = $volume_rbd
+  }
 
   file{ '/var/lib/nova/.ssh':
     ensure  => directory,
@@ -103,12 +121,9 @@ Host *
       notify => Service['libvirtd']
     }
     # Nova support for RBD backend is not supported in Red Hat packages
-    if $has_ceph {
-      warning('Red Hat does not support RBD backend for VMs.')
+    if $has_ceph or $vm_rbd {
+      fail('Red Hat does not support RBD backend for VMs.')
     }
-    $has_ceph_real = false
-  } else {
-    $has_ceph_real = $has_ceph
   }
 
   if $::operatingsystem == 'Ubuntu' {
@@ -125,14 +140,23 @@ Host *
 
   class { 'nova::compute::neutron': }
 
-  if $has_ceph_real {
+  if $vm_rbd_real or $volume_rbd_real {
 
-    $libvirt_disk_cachemodes_real = ['network=writeback']
     include 'cloud::storage::rbd'
 
-    class { 'nova::compute::rbd':
-      libvirt_rbd_user        => $cinder_rbd_user,
-      libvirt_images_rbd_pool => $nova_rbd_pool
+    $libvirt_disk_cachemodes_real = ['network=writeback']
+
+    # when nova uses ceph for instances storage
+    if $vm_rbd_real {
+      class { 'nova::compute::rbd':
+        libvirt_rbd_user        => $cinder_rbd_user,
+        libvirt_images_rbd_pool => $nova_rbd_pool
+      }
+    } else {
+      # when nova only needs to attach ceph volumes to instances
+      nova_config {
+        'libvirt/rbd_user': value => $cinder_rbd_user;
+      }
     }
     # we don't want puppet-nova manages keyring
     nova_config {
