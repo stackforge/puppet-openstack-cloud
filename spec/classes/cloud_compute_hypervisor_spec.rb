@@ -74,6 +74,8 @@ describe 'cloud::compute::hypervisor' do
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_public_proto                 => 'http',
+        :vm_rbd                               => false,
+        :volume_rbd                           => false,
         :ks_nova_public_host                  => '10.0.0.1' }
     end
 
@@ -221,6 +223,7 @@ describe 'cloud::compute::hypervisor' do
 
     it 'should not configure nova-compute for RBD backend' do
       should_not contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+      should_not contain_nova_config('libvirt/images_type').with('value' => 'rbd')
     end
 
     it 'configure libvirt driver without disk cachemodes' do
@@ -255,7 +258,73 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with RBD backend on Debian plaforms' do
+    context 'with RBD backend for instances and volumes on Debian plaforms' do
+      before :each do
+        facts.merge!( :osfamily => 'Debian' )
+        params.merge!(
+          :vm_rbd               => true,
+          :volume_rbd           => true,
+          :cinder_rbd_user      => 'cinder',
+          :nova_rbd_pool        => 'nova',
+          :nova_rbd_secret_uuid => 'secrete' )
+      end
+
+      it 'configure nova-compute to support RBD backend' do
+        should contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        should contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        should contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        should contain_group('cephkeyring').with(:ensure => 'present')
+        should contain_exec('add-nova-to-group').with(
+          :command => 'usermod -a -G cephkeyring nova',
+          :unless  => 'groups nova | grep cephkeyring'
+        )
+      end
+
+      it 'configure libvirt driver' do
+        should contain_class('nova::compute::libvirt').with(
+            :libvirt_type      => 'kvm',
+            :vncserver_listen  => '0.0.0.0',
+            :migration_support => true,
+            :libvirt_disk_cachemodes => ['network=writeback']
+          )
+      end
+    end
+
+    context 'with RBD support only for volumes on Debian plaforms' do
+      before :each do
+        facts.merge!( :osfamily => 'Debian' )
+        params.merge!(
+          :vm_rbd               => false,
+          :volume_rbd           => true,
+          :cinder_rbd_user      => 'cinder',
+          :nova_rbd_secret_uuid => 'secrete' )
+      end
+
+      it 'configure nova-compute to support RBD backend' do
+        should_not contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        should_not contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        should contain_group('cephkeyring').with(:ensure => 'present')
+        should contain_exec('add-nova-to-group').with(
+          :command => 'usermod -a -G cephkeyring nova',
+          :unless  => 'groups nova | grep cephkeyring'
+        )
+      end
+
+      it 'configure libvirt driver' do
+        should contain_class('nova::compute::libvirt').with(
+            :libvirt_type      => 'kvm',
+            :vncserver_listen  => '0.0.0.0',
+            :migration_support => true,
+            :libvirt_disk_cachemodes => ['network=writeback']
+          )
+      end
+    end
+
+    context 'with RBD backend on Debian plaforms using deprecated parameter' do
       before :each do
         facts.merge!( :osfamily => 'Debian' )
         params.merge!(
@@ -292,22 +361,25 @@ describe 'cloud::compute::hypervisor' do
       before :each do
         facts.merge!( :operatingsystem => 'RedHat' )
         params.merge!(
+          :vm_rbd               => true,
+          :cinder_rbd_user      => 'cinder',
+          :nova_rbd_pool        => 'nova',
+          :nova_rbd_secret_uuid => 'secrete' )
+      end
+      it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
+    end
+
+    context 'when trying to enable RBD backend with deprecated parameter on RedHat plaforms' do
+      before :each do
+        facts.merge!( :operatingsystem => 'RedHat' )
+        params.merge!(
           :has_ceph             => true,
           :cinder_rbd_user      => 'cinder',
           :nova_rbd_pool        => 'nova',
           :nova_rbd_secret_uuid => 'secrete' )
       end
-
-      it 'configure libvirt driver without libvirt_disk_cachemodes' do
-        should contain_class('nova::compute::libvirt').with(
-          :libvirt_type      => 'kvm',
-          :vncserver_listen  => '0.0.0.0',
-          :migration_support => true,
-          :libvirt_disk_cachemodes => []
-        )
-      end
+      it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
     end
-
  end
 
   context 'on Debian platforms' do
