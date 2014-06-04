@@ -57,7 +57,7 @@ mod 'boolean',
   :ref => '157011a4eaa27f1202a9d94335ee4876b26d377e'
 mod 'ceph',
   :git => 'git://github.com/enovance/puppet-ceph.git',
-  :ref => 'cc63bacaef2b1d8949777f58e23698e6bbf87f43'
+  :ref => '351787053fb18b6a5817fa0e3ccf6041b3689545'
 #FIXME
 mod 'cloud',
   :git => 'git://github.com/enovance/puppet-openstack-cloud.git',
