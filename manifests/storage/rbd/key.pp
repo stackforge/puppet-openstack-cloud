@@ -13,12 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class cloud::storage::rbd::key {
+class cloud::storage::rbd::key (
+  $enabled = false
+) {
 
-  if !empty($::ceph_admin_key) {
-    @@ceph::key { 'admin':
-      secret       => $::ceph_admin_key,
-      keyring_path => '/etc/ceph/keyring',
+  if $enabled {
+    if !empty($::ceph_admin_key) {
+      @@ceph::key { 'admin':
+        secret       => $::ceph_admin_key,
+        keyring_path => '/etc/ceph/keyring',
+      }
     }
   }
 
