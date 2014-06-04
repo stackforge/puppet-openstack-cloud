@@ -71,6 +71,12 @@ mod 'corosync',
 mod 'dnsclient',
   :git => 'git://github.com/enovance/puppet-module-dnsclient.git',
   :ref => '4158b30f4660623f98dcdbd1ce9b482556180b57'
+mod 'elasticsearch',
+  :git => 'git://github.com/enovance/puppet-elasticsearch.git',
+  :ref => '042720d52a3879786c2f9d9f67961c4f42004fae'
+mod 'fluentd',
+  :git => 'git://github.com/enovance/puppet-fluentd.git',
+  :ref => '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
   :ref => 'ff713f85d8fac7ade808f3d65d949a1a06b8ea88'
@@ -80,6 +86,9 @@ mod 'inifile',
 mod 'keepalived',
   :git => 'git://github.com/enovance/puppet-module-keepalived.git',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
+mod 'kibana3',
+  :git => 'git://github.com/enovance/kibana3.git',
+  :ref => '977699fa283ebbd593ba0b1ba99791e928681e29'
 mod 'kmod',
   :git => 'git://github.com/enovance/puppet-kmod.git',
   :ref => 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
