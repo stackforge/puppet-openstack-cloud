@@ -87,11 +87,17 @@ class cloud::storage::rbd::pools(
         tag     => 'ceph_compute_secret_file',
       }
 
+      if $::osfamily == 'RedHat' {
+        $libvirt_package_name = 'libvirt'
+      } else {
+        $libvirt_package_name = 'libvirt-bin'
+      }
+
       @@exec { 'get_or_set_virsh_secret':
         command => 'virsh secret-define --file /etc/ceph/secret.xml',
         unless  => "virsh secret-list | tail -n +3 | cut -f1 -d' ' | grep -sq ${ceph_fsid}",
         tag     => 'ceph_compute_get_secret',
-        require => [Package['libvirt-bin'],File['/etc/ceph/secret.xml']],
+        require => [Package[$libvirt_package_name],File['/etc/ceph/secret.xml']],
         notify  => Exec['set_secret_value_virsh'],
       }
 
