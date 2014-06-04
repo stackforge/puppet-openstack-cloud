@@ -40,7 +40,11 @@ class cloud::object::controller(
       'catch_errors', 'healthcheck', 'cache', 'ratelimit',
       #'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
       'swift3', 's3token', 'tempurl',
-      'formpost', 'staticweb', 'ceilometer', 'authtoken', 'keystone',
+      'formpost', 'staticweb',
+      # TODO: (spredzy) re enable ceilometer middleware after the current bug as been fixed
+      # https://review.openstack.org/#/c/97702
+      # 'ceilometer',
+      'authtoken', 'keystone',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
@@ -64,7 +68,9 @@ log_statsd_default_sample_rate = 1
   #class { 'swift::proxy::container_quotas': }
   #class { 'swift::proxy::bulk': }
   class { 'swift::proxy::staticweb': }
-  class { 'swift::proxy::ceilometer': }
+  # TODO: (spredzy) re enable ceilometer middleware after the current bug as been fixed
+  # https://review.openstack.org/#/c/97702
+  #class { 'swift::proxy::ceilometer': }
   class { 'swift::proxy::keystone':
     operator_roles => ['admin', 'SwiftOperator', 'ResellerAdmin'],
   }
