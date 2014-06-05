@@ -5,7 +5,7 @@ fixtures:
       ref: '6e052620481055cffced7911a0f31bfd0849c68a'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
-      ref: '6aa7a17941056a7de2a7bdeeb99024b5c714f882'
+      ref: 'cf77bb23c059416b2d00a37f96a339f06d8c1e2c'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
       ref: '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
