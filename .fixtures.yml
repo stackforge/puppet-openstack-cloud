@@ -2,16 +2,16 @@ fixtures:
   repositories:
     'cinder':
       repo: 'git://github.com/enovance/puppet-cinder'
-      ref: '6e052620481055cffced7911a0f31bfd0849c68a'
+      ref: '131108aa089fdd66dcd0c46a2acf99c3d21548d7'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
       ref: 'cf77bb23c059416b2d00a37f96a339f06d8c1e2c'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: '0249428f294217c2ad5fb75f8d0a0bafac12fe9c'
+      ref: 'ca16cbf55cfa3d2b62c7a78431fa75aadae97af4'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
-      ref: '8156a87cd04943904258d572e47838d0c346654f'
+      ref: '3bf6ea5b3e21a72230cbadf4c8722850f6389bfe'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
       ref: '36383e90d1c4013d7989561b00ffcb08c76908de'
@@ -20,13 +20,13 @@ fixtures:
       ref: 'f7d1385d6990492705ddaa228ffa544ca235913a'
     'neutron':
       repo: 'git://github.com/enovance/puppet-neutron'
-      ref: '66c436bc2f06c5a71d79c674697394a11ec227f9'
+      ref: '40f98eee3f53b6ecb878d27ffcecabd776ddb713'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
-      ref: 'fe9e463fa7d9b74d91c95f0f95140f4894e57020'
+      ref: '166b00a773bb2830175bd61a451294d757453eb3'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
-      ref: '17736b2fd726858cb83590f8a8b1d594a087ea44'
+      ref: '025b8cb830d7fa476c4ab1a0b0228b88b5ba10c3'
     'apt':
       repo: 'git://github.com/enovance/puppetlabs-apt.git'
       ref: '9b001af8775c7231ea2656b7eb43d6141b536f49'
