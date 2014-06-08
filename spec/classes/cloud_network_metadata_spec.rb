@@ -86,20 +86,23 @@ describe 'cloud::network::metadata' do
 
     it 'configure neutron metadata' do
       should contain_class('neutron::agents::metadata').with(
-          :debug         => true,
-          :enabled       => true,
-          :shared_secret => 'secrete',
-          :metadata_ip   => '10.0.0.1',
-          :auth_url      => 'http://10.0.0.1:35357/v2.0',
-          :auth_password => 'secrete',
-          :auth_region   => 'MyRegion'
+          :debug            => true,
+          :enabled          => true,
+          :shared_secret    => 'secrete',
+          :metadata_ip      => '10.0.0.1',
+          :auth_url         => 'http://10.0.0.1:35357/v2.0',
+          :auth_password    => 'secrete',
+          :auth_region      => 'MyRegion',
+          :metadata_workers => '8'
       )
+      should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '4096')
     end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily       => 'Debian',
+        :processorcount => '8' }
     end
 
     let :platform_params do
@@ -111,7 +114,8 @@ describe 'cloud::network::metadata' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily       => 'RedHat',
+        :processorcount => '8' }
     end
 
     let :platform_params do
