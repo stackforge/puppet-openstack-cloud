@@ -319,8 +319,13 @@ class cloud::loadbalancer(
     httpchk            => 'httpchk GET /';
   }
   cloud::loadbalancer::binding { 'glance_api_cluster':
-    ip   => $glance_api,
-    port => $ks_glance_api_public_port;
+    ip                 => $glance_api,
+    options            => {
+      'balance'        => 'leastconn',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
+    port               => $ks_glance_api_public_port;
   }
   cloud::loadbalancer::binding { 'glance_registry_cluster':
     ip   => $glance_registry,
