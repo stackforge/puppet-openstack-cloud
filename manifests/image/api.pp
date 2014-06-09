@@ -144,7 +144,8 @@ class cloud::image::api(
     owner   => 'glance',
     group   => 'glance',
     mode    => '0400',
-    require => Ceph::Key[$glance_rbd_user]
+    require => Ceph::Key[$glance_rbd_user],
+    notify  => Service['glance-api','glance-registry']
   }
   Concat::Fragment <<| title == 'ceph-client-os' |>>
 
