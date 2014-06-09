@@ -32,13 +32,19 @@ class cloud::network::metadata(
   include 'cloud::network'
 
   class { 'neutron::agents::metadata':
-    enabled       => $enabled,
-    shared_secret => $neutron_metadata_proxy_shared_secret,
-    debug         => $debug,
-    metadata_ip   => $nova_metadata_server,
-    auth_url      => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
-    auth_password => $ks_neutron_password,
-    auth_region   => $auth_region
+    enabled          => $enabled,
+    shared_secret    => $neutron_metadata_proxy_shared_secret,
+    debug            => $debug,
+    metadata_ip      => $nova_metadata_server,
+    auth_url         => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
+    auth_password    => $ks_neutron_password,
+    auth_region      => $auth_region,
+    metadata_workers => $::processorcount
+  }
+
+  # TODO(EmilienM) need to be deleted hen https://review.openstack.org/98633 got merged
+  neutron_metadata_agent_config {
+    'DEFAULT/metadata_backlog': value => '4096';
   }
 
 }
