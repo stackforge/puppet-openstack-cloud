@@ -129,6 +129,7 @@ class cloud::compute(
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
     'DEFAULT/default_availability_zone':        value => $availability_zone;
     'DEFAULT/servicegroup_driver':              value => 'mc';
+    'DEFAULT/glance_num_retries':               value => '10';
   }
 
   # Note(EmilienM):
