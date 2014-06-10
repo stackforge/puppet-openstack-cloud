@@ -47,6 +47,25 @@
 #   (optionnal) Bridge mapping for provider networks
 #   Defaults to ['physnet1:br-eth1']
 #
+# [*flat_networks*]
+#   (optionnal) List of physical_network names with which flat networks
+#   can be created. Use * to allow flat networks with arbitrary
+#   physical_network names.
+#   Should be an array.
+#   Default to ['public'].
+#
+# [*external_int*]
+#   (optionnal) Network interface to bind the external provider network
+#   Defaults to 'eth1'.
+#
+# [*external_bridge*]
+#   (optionnal) OVS bridge used to bind external provider network
+#   Defaults to 'br-pub'.
+#
+# [*manage_ext_network*]
+#   (optionnal) Manage or not external network with provider network API
+#   Defaults to false.
+#
 # [*use_syslog*]
 #   (optional) Use syslog for logging
 #   Defaults to true
@@ -68,10 +87,14 @@ class cloud::network(
   $tunnel_eth               = '127.0.0.1',
   $api_eth                  = '127.0.0.1',
   $provider_vlan_ranges     = ['physnet1:1000:2999'],
-  $provider_bridge_mappings = ['physnet1:br-eth1'],
+  $provider_bridge_mappings = ['public:br-pub'],
   $use_syslog               = true,
   $log_facility             = 'LOG_LOCAL0',
-  $dhcp_lease_duration      = '120'
+  $dhcp_lease_duration      = '120',
+  $flat_networks            = ['public'],
+  $external_int             = 'eth1',
+  $external_bridge          = 'br-pub',
+  $manage_ext_network       = false
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -112,10 +135,11 @@ class cloud::network(
   }
 
   class { 'neutron::plugins::ml2':
-    type_drivers          => ['gre','vlan'],
+    type_drivers          => ['gre','vlan','flat'],
     tenant_network_types  => ['gre'],
     network_vlan_ranges   => $provider_vlan_ranges,
     tunnel_id_ranges      => ['1:10000'],
+    flat_networks         => $flat_networks,
     mechanism_drivers     => ['openvswitch','l2population'],
     enable_security_group => true,
     firewall_driver       => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
@@ -142,6 +166,19 @@ class cloud::network(
       owner  => 'neutron',
       group  => 'neutron',
       mode   => '0755'
+  }
+
+  if $manage_ext_network {
+    vs_port {$external_int:
+      ensure => present,
+      bridge => $external_bridge
+    } ->
+    neutron_network {'public':
+      provider_network_type     => 'flat',
+      provider_physical_network => 'public',
+      shared                    => true,
+      router_external           => true
+    }
   }
 
 }

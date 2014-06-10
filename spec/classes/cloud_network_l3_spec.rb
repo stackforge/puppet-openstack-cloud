@@ -28,7 +28,11 @@ describe 'cloud::network::l3' do
         tunnel_eth               => '10.0.1.1',
         api_eth                  => '10.0.0.1',
         provider_vlan_ranges     => ['physnet1:1000:2999'],
-        provider_bridge_mappings => ['physnet1:br-eth1'],
+        provider_bridge_mappings => ['public:br-pub'],
+        flat_networks            => ['public'],
+        external_int             => 'eth1',
+        external_bridge          => 'br-pub',
+        manage_ext_network       => false,
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
@@ -63,30 +67,92 @@ describe 'cloud::network::l3' do
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
           :tunnel_types     => ['gre'],
-          :bridge_mappings  => ['physnet1:br-eth1'],
+          :bridge_mappings  => ['public:br-pub'],
           :local_ip         => '10.0.1.1'
       )
       should contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre','vlan'],
+          :type_drivers           => ['gre','vlan','flat'],
           :tenant_network_types   => ['gre'],
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
+          :flat_networks          => ['public'],
           :enable_security_group  => true,
           :firewall_driver        => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
       )
+      should_not contain__neutron_network('public')
     end
 
     it 'configure neutron l3' do
       should contain_class('neutron::agents::l3').with(
-          :debug                        => true
+          :debug                   => true,
+          :external_network_bridge => 'br-ex'
       )
+    end
+    it 'configure br-ex bridge' do
+      should_not contain__vs_bridge('br-ex')
     end
 
     it 'configure neutron metering agent' do
       should contain_class('neutron::agents::metering').with(
           :debug => true
       )
+    end
+
+    context 'when using provider external network' do
+      let :pre_condition do
+        "class { 'cloud::network':
+          rabbit_hosts             => ['10.0.0.1'],
+          rabbit_password          => 'secrete',
+          tunnel_eth               => '10.0.1.1',
+          api_eth                  => '10.0.0.1',
+          provider_vlan_ranges     => ['physnet1:1000:2999'],
+          provider_bridge_mappings => ['public:br-pub'],
+          flat_networks            => ['public'],
+          external_int             => 'eth1',
+          external_bridge          => 'br-pub',
+          manage_ext_network       => true,
+          verbose                  => true,
+          debug                    => true,
+          use_syslog               => true,
+          dhcp_lease_duration      => '10',
+          log_facility             => 'LOG_LOCAL0' }"
+      end
+
+      before do
+       params.merge!(
+         :ext_provider_net => true,
+       )
+      end
+
+      it 'configure neutron l3 without br-ex' do
+        should contain_class('neutron::agents::l3').with(
+            :debug                   => true,
+            :external_network_bridge => ''
+        )
+      end
+
+      it 'do not configure br-ex bridge' do
+        should_not contain_vs_bridge('br-ex')
+      end
+
+      it 'configure br-pub bridge' do
+        should contain_vs_bridge('br-pub')
+      end
+      it 'configure eth1 in br-pub' do
+        should contain_vs_port('eth1').with(
+          :ensure => 'present',
+          :bridge => 'br-pub'
+        )
+      end
+      it 'configure provider external network' do
+        should contain_neutron_network('public').with(
+          :provider_network_type     => 'flat',
+          :provider_physical_network => 'public',
+          :shared                    => true,
+          :router_external           => true
+        )
+      end
     end
   end
 
