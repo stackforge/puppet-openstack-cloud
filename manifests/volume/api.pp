@@ -49,7 +49,8 @@ class cloud::volume::api(
 
   class { 'cinder::glance':
     glance_api_servers     => "${ks_glance_internal_host}:${ks_glance_api_internal_port}",
-    glance_request_timeout => '10'
+    glance_request_timeout => '10',
+    glance_num_retries     => '10'
   }
 
   @@haproxy::balancermember{"${::fqdn}-cinder_api":

@@ -61,6 +61,7 @@ describe 'cloud::compute::conductor' do
       should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
+      should contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
     end
 
     it 'configure neutron on compute node' do

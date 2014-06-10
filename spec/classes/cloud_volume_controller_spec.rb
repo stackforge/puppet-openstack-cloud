@@ -110,7 +110,8 @@ describe 'cloud::volume::controller' do
     it 'configure cinder glance backend' do
       should contain_class('cinder::glance').with(
           :glance_api_servers     => '10.0.0.2:9292',
-          :glance_request_timeout => '10'
+          :glance_request_timeout => '10',
+          :glance_num_retries     => '10'
         )
     end
 
