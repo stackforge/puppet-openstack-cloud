@@ -6,9 +6,10 @@ describe 'cloud::object::ringbuilder' do
 
     let :params do
       {
-        :rsyncd_ipaddress           => '127.0.0.1',
+        :rsyncd_ipaddress            => '127.0.0.1',
         :replicas                    => 3,
         :swift_rsync_max_connections => 5,
+        :enabled                     => true
       }
     end
 
@@ -27,6 +28,16 @@ describe 'cloud::object::ringbuilder' do
       })
     end
 
+    context 'when ringbuilder is not enabled' do
+      before do
+        params.merge!(
+          :enabled => false
+        )
+      end
+      it 'should not configure swift ring builder' do
+        should_not contain_class('swift::ringbuilder')
+      end
+    end
   end
 
   context 'on Debian platforms' do
