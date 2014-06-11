@@ -16,6 +16,7 @@
 # Swift ring builder node
 #
 class cloud::object::ringbuilder(
+    $enabled                     = false,
     $rsyncd_ipaddress            = '127.0.0.1',
     $replicas                    = 3,
     $swift_rsync_max_connections = 5,
@@ -23,24 +24,27 @@ class cloud::object::ringbuilder(
 
   include cloud::object
 
-  Ring_object_device <<| |>>
-  Ring_container_device <<| |>>
-  Ring_account_device <<| |>>
+  if $enabled {
+    Ring_object_device <<| |>>
+    Ring_container_device <<| |>>
+    Ring_account_device <<| |>>
 
-  class {'swift::ringbuilder' :
-    part_power     => 15,
-    replicas       => $replicas,
-    min_part_hours => 24,
+    class {'swift::ringbuilder' :
+      part_power     => 15,
+      replicas       => $replicas,
+      min_part_hours => 24,
+    }
+
+    class {'swift::ringserver' :
+      local_net_ip    => $rsyncd_ipaddress,
+      max_connections => $swift_rsync_max_connections,
+    }
+
+    # exports rsync gets that can be used to sync the ring files
+    @@swift::ringsync { ['account', 'object', 'container']:
+      ring_server => $rsyncd_ipaddress,
+    }
   }
 
-  class {'swift::ringserver' :
-    local_net_ip    => $rsyncd_ipaddress,
-    max_connections => $swift_rsync_max_connections,
-  }
-
-  # exports rsync gets that can be used to sync the ring files
-  @@swift::ringsync { ['account', 'object', 'container']:
-    ring_server => $rsyncd_ipaddress,
-  }
 }
 
