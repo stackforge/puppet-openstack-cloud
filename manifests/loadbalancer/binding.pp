@@ -17,8 +17,9 @@
 define cloud::loadbalancer::binding (
   $ip,
   $port,
-  $httpchk = undef,
-  $options = undef
+  $httpchk      = undef,
+  $options      = undef,
+  $bind_options = undef,
 ){
 
   include cloud::loadbalancer
@@ -54,11 +55,22 @@ define cloud::loadbalancer::binding (
         fail("${ip} is not part of VIP pools.")
       }
     }
-    cloud::loadbalancer::listen_http { $name :
-      ports     => $port,
-      httpchk   => $httpchk,
-      options   => $options,
-      listen_ip => $listen_ip_real;
+    if 'ssl' in $bind_options {
+      cloud::loadbalancer::listen_https { $name :
+        ports        => $port,
+        httpchk      => $httpchk,
+        options      => $options,
+        listen_ip    => $listen_ip_real,
+        bind_options => $bind_options;
+      }
+    } else {
+      cloud::loadbalancer::listen_http { $name :
+        ports        => $port,
+        httpchk      => $httpchk,
+        options      => $options,
+        listen_ip    => $listen_ip_real,
+        bind_options => $bind_options;
+      }
     }
   }
 

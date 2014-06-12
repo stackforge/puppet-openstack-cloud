@@ -18,21 +18,23 @@
 # cloud::loadbalancer::listen_https
 #
 define cloud::loadbalancer::listen_https(
-  $ports     = 'unset',
-  $httpchk   = 'ssl-hello-chk',
-  $options   = {},
-  $listen_ip = '0.0.0.0') {
+  $ports        = 'unset',
+  $httpchk      = 'ssl-hello-chk',
+  $options      = {},
+  $bind_options = [],
+  $listen_ip    = '0.0.0.0') {
 
-  $options_basic = {'mode'       => 'tcp',
+  $options_basic = {'mode'       => 'http',
                     'balance'    => 'roundrobin',
                     'http-check' => 'expect ! rstatus ^5',
-                    'option'     => ['tcpka', 'tcplog', $httpchk] }
+                    'option'     => ['tcpka', 'forwardfor', 'tcplog', $httpchk] }
 
   $options_custom = merge($options_basic, $options)
 
   haproxy::listen { $name:
-    ipaddress => $listen_ip,
-    ports     => $ports,
-    options   => $options_custom,
+    ipaddress    => $listen_ip,
+    ports        => $ports,
+    options      => $options_custom,
+    bind_options => $bind_options,
   }
 }
