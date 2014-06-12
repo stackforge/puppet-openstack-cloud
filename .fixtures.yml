@@ -39,12 +39,21 @@ fixtures:
     'concat':
       repo: 'git://github.com/enovance/puppet-concat.git'
       ref: '04356974f72b90a1d0f57346a00e95a717924e43'
+    'elasticsearch':
+      repo: 'git://github.com/enovance/puppet-elasticsearch.git'
+      ref: '042720d52a3879786c2f9d9f67961c4f42004fae'
+    'fluentd':
+      repo: 'git://github.com/enovance/puppet-fluentd.git'
+      ref: '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
     'haproxy':
       repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
       ref: 'ff713f85d8fac7ade808f3d65d949a1a06b8ea88'
     'keepalived':
       repo: 'git://github.com/enovance/puppet-module-keepalived.git'
       ref: 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
+    'kibana3':
+      repo: 'git://github.com/enovance/kibana3.git'
+      ref: '977699fa283ebbd593ba0b1ba99791e928681e29'
     'mongodb':
       repo: 'git://github.com/enovance/puppetlabs-mongodb.git'
       ref: 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
