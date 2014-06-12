@@ -395,4 +395,10 @@ class cloud::loadbalancer(
     }
   }
 
+  # Allow HAProxy to bind to a non-local IP address
+  $haproxy_sysctl_settings = {
+    'net.ipv4.ip_nonlocal_bind' => { value => 1 }
+  }
+  create_resources(sysctl::value,$haproxy_sysctl_settings)
+
 }
