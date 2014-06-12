@@ -17,21 +17,29 @@
 #
 
 class cloud::network::l3(
-  $external_int = 'eth0',
-  $debug        = true,
+  $external_int     = 'eth1',
+  $ext_provider_net = false,
+  $debug            = true,
 ) {
 
   include 'cloud::network'
 
+  if ! $ext_provider_net {
+    vs_bridge{'br-ex':
+      external_ids => 'bridge-id=br-ex',
+    } ->
+    vs_port{$external_int:
+      ensure => present,
+      bridge => 'br-ex'
+    }
+    $external_network_bridge_real = 'br-ex'
+  } else {
+    $external_network_bridge_real = ''
+  }
+
   class { 'neutron::agents::l3':
-    debug                        => $debug,
-  } ->
-  vs_bridge{'br-ex':
-    external_ids => 'bridge-id=br-ex',
-  } ->
-  vs_port{$external_int:
-    ensure => present,
-    bridge => 'br-ex'
+    debug                   => $debug,
+    external_network_bridge => $external_network_bridge_real
   }
 
   class { 'neutron::agents::metering':
