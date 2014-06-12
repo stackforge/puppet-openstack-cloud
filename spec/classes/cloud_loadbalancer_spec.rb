@@ -73,6 +73,12 @@ describe 'cloud::loadbalancer' do
       should contain_class('keepalived')
     end # configure keepalived server
 
+    it 'configure sysctl to allow HAproxy to bind to a non-local IP address' do
+      should contain_exec('exec_sysctl_net.ipv4.ip_nonlocal_bind').with_command(
+        'sysctl -w net.ipv4.ip_nonlocal_bind=1'
+      )
+    end
+
     context 'configure an internal VIP' do
       before do
         params.merge!(:keepalived_internal_ipvs => ['192.168.0.1'])
