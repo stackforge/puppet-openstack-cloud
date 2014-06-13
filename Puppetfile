@@ -79,7 +79,7 @@ mod 'fluentd',
   :ref => '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
-  :ref => 'ff713f85d8fac7ade808f3d65d949a1a06b8ea88'
+  :ref => 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
 mod 'inifile',
   :git => 'git://github.com/enovance/puppetlabs-inifile.git',
   :ref => 'ae23a4db97d2815ec305d0529912685f07746d3c'

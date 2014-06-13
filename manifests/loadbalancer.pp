@@ -195,7 +195,6 @@ class cloud::loadbalancer(
   $nova_bind_options                = [],
   $swift_bind_options               = [],
   $spice_bind_options               = [],
-  $galera_bind_options              = [],
   $horizon_bind_options             = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
