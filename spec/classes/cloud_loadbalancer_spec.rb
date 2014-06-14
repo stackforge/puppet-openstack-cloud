@@ -38,6 +38,22 @@ describe 'cloud::loadbalancer' do
         :keystone_api                      => true,
         :horizon                           => true,
         :spice                             => true,
+        :ceilometer_bind_options           => [],
+        :cinder_bind_options               => [],
+        :ec2_bind_options                  => [],
+        :glance_api_bind_options           => [],
+        :glance_registry_bind_options      => [],
+        :heat_cfn_bind_options             => [],
+        :heat_cloudwatch_bind_options      => [],
+        :heat_api_bind_options             => [],
+        :keystone_bind_options             => [],
+        :keystone_admin_bind_options       => [],
+        :metadata_bind_options             => [],
+        :neutron_bind_options              => [],
+        :swift_bind_options                => [],
+        :spice_bind_options                => [],
+        :horizon_bind_options              => [],
+        :galera_bind_options               => [],
         :haproxy_auth                      => 'root:secrete',
         :keepalived_state                  => 'BACKUP',
         :keepalived_priority               => 50,
@@ -47,6 +63,8 @@ describe 'cloud::loadbalancer' do
         :spice_port                        => '6082',
         :vip_public_ip                     => '10.0.0.1',
         :galera_ip                         => '10.0.0.2',
+        :horizon_ssl                       => false,
+        :horizon_ssl_port                  => false,
         :ks_ceilometer_public_port         => '8777',
         :ks_nova_public_port               => '8774',
         :ks_ec2_public_port                => '8773',
@@ -280,11 +298,92 @@ describe 'cloud::loadbalancer' do
       it_raises 'a Puppet::Error', /galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs./
     end
 
+    context 'configure OpenStack binding with HTTPS and SSL offloading' do
+      before do
+        params.merge!(
+          :nova_bind_options => ['ssl', 'crt']
+        )
+      end
+      it { should contain_haproxy__listen('nova_api_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '8774',
+        :options   => {
+          'mode'           => 'http',
+          'option'         => ['tcpka','forwardfor','tcplog','ssl-hello-chk'],
+          'http-check'     => 'expect ! rstatus ^5',
+          'balance'        => 'roundrobin',
+        },
+        :bind_options => ['ssl', 'crt']
+      )}
+    end
+
+    context 'configure OpenStack binding with HTTP options' do
+      before do
+        params.merge!(
+          :cinder_bind_options => 'something not secure',
+        )
+      end
+      it { should contain_haproxy__listen('cinder_api_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '8776',
+        :options   => {
+          'mode'           => 'http',
+          'option'         => ['tcpka','tcplog','httpchk'],
+          'http-check'     => 'expect ! rstatus ^5',
+          'balance'        => 'roundrobin',
+        },
+        :bind_options => ['something not secure']
+      )}
+    end
+
+    context 'configure OpenStack Horizon SSL with backward compatibility' do
+      before do
+        params.merge!(
+          :horizon_ssl      => true,
+          :horizon_ssl_port => '443'
+        )
+      end
+      it { should contain_haproxy__listen('horizon_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '443',
+        :options   => {
+          'mode'           => 'tcp',
+          'http-check'     => 'expect ! rstatus ^5',
+          'option'         => ['tcpka','tcplog','ssl-hello-chk'],
+          'cookie'         => 'sessionid prefix',
+          'balance'        => 'leastconn',
+        },
+      )}
+    end
+
+    context 'configure OpenStack Horizon SSL binding' do
+      before do
+        params.merge!(
+          :horizon_ssl          => false,
+          :horizon_ssl_port     => false,
+          :horizon_bind_options => ['ssl', 'crt']
+        )
+      end
+      it { should contain_haproxy__listen('horizon_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '443',
+        :options   => {
+          'mode'           => 'http',
+          'http-check'     => 'expect ! rstatus ^5',
+          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
+          'cookie'         => 'sessionid prefix',
+          'balance'        => 'leastconn',
+        },
+        :bind_options => ['ssl', 'crt']
+      )}
+    end
+
   end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily       => 'Debian',
+        :hostname       => 'myhost',
         :concat_basedir => '/var/lib/puppet/concat' }
     end
 
@@ -294,6 +393,7 @@ describe 'cloud::loadbalancer' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily       => 'RedHat',
+        :hostname       => 'myhost',
         :concat_basedir => '/var/lib/puppet/concat' }
     end
 

@@ -196,6 +196,7 @@ class cloud::loadbalancer(
   $swift_bind_options               = [],
   $spice_bind_options               = [],
   $horizon_bind_options             = [],
+  $galera_bind_options              = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
@@ -219,7 +220,7 @@ class cloud::loadbalancer(
   $keepalived_interface             = false,
   $keepalived_ipvs                  = false,
   $horizon_ssl                      = false,
-  $horizon_ssl_port                 = 443,
+  $horizon_ssl_port                 = false,
 ){
 
   # Manage deprecation when using old parameters
@@ -250,8 +251,11 @@ class cloud::loadbalancer(
   }
   if $horizon_ssl_port {
     warning('horizon_ssl_port parameter is deprecated. Specify port with the horizon_port instead.')
-    $horizon_port = $horizon_ssl_port
+    $horizon_port_real = $horizon_ssl_port
+  } else {
+    $horizon_port_real = '443'
   }
+  # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
   if $vip_public_ip and !($vip_public_ip in $keepalived_public_ipvs_real) {
@@ -411,7 +415,8 @@ class cloud::loadbalancer(
   }
   cloud::loadbalancer::binding { 'horizon_cluster':
     ip           => $vip_public_ip,
-    port         => $horizon_port,
+    # to maintain backward compatibility
+    port         => $horizon_port_real,
     httpchk      => $horizon_httpchk,
     options      => $horizon_options,
     bind_options => $horizon_bind_options,
@@ -420,9 +425,9 @@ class cloud::loadbalancer(
   if ($galera_ip in $keepalived_public_ipvs_real) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
-  cloud::loadbalancer::binding {'galera_cluster' :
-    ip           => $galera_ip,
-    port         => 3306,
+  haproxy::listen { 'galera_cluster':
+    ipaddress    => $galera_ip,
+    ports        => 3306,
     options      => {
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
