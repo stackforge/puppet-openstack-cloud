@@ -35,7 +35,6 @@ net.ipv4.ip_local_port_range = 1024 65000
 
 ## 10Gb Tuning
 net.core.netdev_max_backlog = 300000
-net.ipv4.tcp_timestamps = 0
 net.ipv4.tcp_sack = 0
 
 ",
