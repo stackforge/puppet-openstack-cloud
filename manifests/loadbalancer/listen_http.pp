@@ -27,7 +27,7 @@ define cloud::loadbalancer::listen_http(
   $options_basic = {'mode'       => 'http',
                     'balance'    => 'roundrobin',
                     'http-check' => 'expect ! rstatus ^5',
-                    'option'     => ['tcpka', 'tcplog', $httpchk] }
+                    'option'     => ['tcpka', 'forwardfor', 'tcplog', $httpchk] }
 
   $options_custom = merge($options_basic, $options)
 

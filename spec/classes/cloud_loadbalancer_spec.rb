@@ -207,7 +207,7 @@ describe 'cloud::loadbalancer' do
         :ports     => '6082',
         :options   => {
           'mode'           => 'http',
-          'option'         => ['tcpka','tcplog','httpchk GET /'],
+          'option'         => ['tcpka', 'forwardfor', 'tcplog','httpchk GET /'],
           'http-check'     => 'expect ! rstatus ^5',
           'balance'        => 'leastconn',
           'timeout server' => '120m',
@@ -309,7 +309,7 @@ describe 'cloud::loadbalancer' do
         :ports     => '8774',
         :options   => {
           'mode'           => 'http',
-          'option'         => ['tcpka','forwardfor','tcplog','ssl-hello-chk'],
+          'option'         => ['tcpka','forwardfor','tcplog','httpchk'],
           'http-check'     => 'expect ! rstatus ^5',
           'balance'        => 'roundrobin',
         },
@@ -328,7 +328,7 @@ describe 'cloud::loadbalancer' do
         :ports     => '8776',
         :options   => {
           'mode'           => 'http',
-          'option'         => ['tcpka','tcplog','httpchk'],
+          'option'         => ['tcpka','forwardfor','tcplog', 'httpchk'],
           'http-check'     => 'expect ! rstatus ^5',
           'balance'        => 'roundrobin',
         },
@@ -349,7 +349,7 @@ describe 'cloud::loadbalancer' do
         :options   => {
           'mode'           => 'tcp',
           'http-check'     => 'expect ! rstatus ^5',
-          'option'         => ['tcpka','tcplog','ssl-hello-chk'],
+          'option'         => ['tcpka','forwardfor','tcplog',  'ssl-hello-chk'],
           'cookie'         => 'sessionid prefix',
           'balance'        => 'leastconn',
         },
