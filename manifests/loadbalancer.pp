@@ -172,7 +172,6 @@ class cloud::loadbalancer(
   $keystone_api                     = true,
   $keystone_api_admin               = true,
   $horizon                          = true,
-  $horizon_ssl                      = false,
   $spice                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
@@ -181,6 +180,23 @@ class cloud::loadbalancer(
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = false,
+  $ceilometer_bind_options          = [],
+  $cinder_bind_options              = [],
+  $ec2_bind_options                 = [],
+  $glance_api_bind_options          = [],
+  $glance_registry_bind_options     = [],
+  $heat_cfn_bind_options            = [],
+  $heat_cloudwatch_bind_options     = [],
+  $heat_api_bind_options            = [],
+  $keystone_bind_options            = [],
+  $keystone_admin_bind_options      = [],
+  $metadata_bind_options            = [],
+  $neutron_bind_options             = [],
+  $nova_bind_options                = [],
+  $swift_bind_options               = [],
+  $spice_bind_options               = [],
+  $horizon_bind_options             = [],
+  $galera_bind_options              = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
@@ -196,7 +212,6 @@ class cloud::loadbalancer(
   $ks_nova_public_port              = 8774,
   $ks_swift_public_port             = 8080,
   $horizon_port                     = 80,
-  $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
@@ -204,6 +219,8 @@ class cloud::loadbalancer(
   # Deprecated parameters
   $keepalived_interface             = false,
   $keepalived_ipvs                  = false,
+  $horizon_ssl                      = false,
+  $horizon_ssl_port                 = false,
 ){
 
   # Manage deprecation when using old parameters
@@ -219,6 +236,26 @@ class cloud::loadbalancer(
   } else {
     $keepalived_public_ipvs_real = $keepalived_public_ipvs
   }
+  if $horizon_ssl {
+    warning('horizon_ssl parameter is deprecated. Specify ssl in the horizon_bind_options instead.')
+    $horizon_httpchk = 'ssl-hello-chk'
+    $horizon_options = {
+      'mode'    => 'tcp',
+      'cookie'  => 'sessionid prefix',
+      'balance' => 'leastconn' }
+  } else {
+    $horizon_httpchk = "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\""
+    $horizon_options = {
+      'cookie'  => 'sessionid prefix',
+      'balance' => 'leastconn' }
+  }
+  if $horizon_ssl_port {
+    warning('horizon_ssl_port parameter is deprecated. Specify port with the horizon_port instead.')
+    $horizon_port_real = $horizon_ssl_port
+  } else {
+    $horizon_port_real = '443'
+  }
+  # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
   if $vip_public_ip and !($vip_public_ip in $keepalived_public_ipvs_real) {
@@ -284,29 +321,35 @@ class cloud::loadbalancer(
 
   # Instanciate HAproxy binding
   cloud::loadbalancer::binding { 'keystone_api_cluster':
-    ip   => $keystone_api,
-    port => $ks_keystone_public_port;
+    ip           => $keystone_api,
+    port         => $ks_keystone_public_port,
+    bind_options => $keystone_bind_options,
   }
   cloud::loadbalancer::binding { 'keystone_api_admin_cluster':
-    ip   => $keystone_api_admin,
-    port => $ks_keystone_admin_port;
+    ip           => $keystone_api_admin,
+    port         => $ks_keystone_admin_port,
+    bind_options => $keystone_admin_bind_options,
   }
   cloud::loadbalancer::binding { 'swift_api_cluster':
-    ip      => $swift_api,
-    port    => $ks_swift_public_port,
-    httpchk => 'httpchk /healthcheck';
+    ip           => $swift_api,
+    port         => $ks_swift_public_port,
+    bind_options => $swift_bind_options,
+    httpchk      => 'httpchk /healthcheck',
   }
   cloud::loadbalancer::binding { 'nova_api_cluster':
-    ip   => $nova_api,
-    port => $ks_nova_public_port;
+    ip           => $nova_api,
+    port         => $ks_nova_public_port,
+    bind_options => $nova_bind_options,
   }
   cloud::loadbalancer::binding { 'ec2_api_cluster':
-    ip   => $ec2_api,
-    port => $ks_ec2_public_port;
+    ip           => $ec2_api,
+    port         => $ks_ec2_public_port,
+    bind_options => $ec2_bind_options,
   }
   cloud::loadbalancer::binding { 'metadata_api_cluster':
-    ip   => $metadata_api,
-    port => $ks_metadata_public_port;
+    ip           => $metadata_api,
+    port         => $ks_metadata_public_port,
+    bind_options => $metadata_bind_options,
   }
   cloud::loadbalancer::binding { 'spice_cluster':
     ip                 => $spice,
@@ -316,6 +359,7 @@ class cloud::loadbalancer(
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
+    bind_options       => $spice_bind_options,
     httpchk            => 'httpchk GET /';
   }
   cloud::loadbalancer::binding { 'glance_api_cluster':
@@ -325,74 +369,73 @@ class cloud::loadbalancer(
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
-    port               => $ks_glance_api_public_port;
+    port               => $ks_glance_api_public_port,
+    bind_options       => $glance_api_bind_options,
   }
   cloud::loadbalancer::binding { 'glance_registry_cluster':
-    ip   => $glance_registry,
-    port => $ks_glance_registry_internal_port;
+    ip           => $glance_registry,
+    port         => $ks_glance_registry_internal_port,
+    bind_options => $glance_registry_bind_options,
   }
   cloud::loadbalancer::binding { 'neutron_api_cluster':
-    ip   => $neutron_api,
-    port => $ks_neutron_public_port;
+    ip           => $neutron_api,
+    port         => $ks_neutron_public_port,
+    bind_options => $neutron_bind_options,
   }
   cloud::loadbalancer::binding { 'cinder_api_cluster':
-    ip   => $cinder_api,
-    port => $ks_cinder_public_port;
+    ip           => $cinder_api,
+    port         => $ks_cinder_public_port,
+    bind_options => $cinder_bind_options,
   }
   cloud::loadbalancer::binding { 'ceilometer_api_cluster':
-    ip   => $ceilometer_api,
-    port => $ks_ceilometer_public_port;
+    ip           => $ceilometer_api,
+    port         => $ks_ceilometer_public_port,
+    bind_options => $ceilometer_bind_options,
   }
   cloud::loadbalancer::binding { 'heat_api_cluster':
-    ip   => $heat_api,
-    port => $ks_heat_public_port;
+    ip           => $heat_api,
+    port         => $ks_heat_public_port,
+    bind_options => $heat_api_bind_options,
   }
   cloud::loadbalancer::binding { 'heat_cfn_api_cluster':
-    ip   => $heat_cfn_api,
-    port => $ks_heat_cfn_public_port;
+    ip           => $heat_cfn_api,
+    port         => $ks_heat_cfn_public_port,
+    bind_options => $heat_cfn_bind_options,
   }
   cloud::loadbalancer::binding { 'heat_cloudwatch_api_cluster':
-    ip   => $heat_cloudwatch_api,
-    port => $ks_heat_cloudwatch_public_port;
+    ip           => $heat_cloudwatch_api,
+    port         => $ks_heat_cloudwatch_public_port,
+    bind_options => $heat_cloudwatch_bind_options,
   }
 
-  if $horizon {
-    if $horizon_ssl {
-      cloud::loadbalancer::listen_https{ 'horizon_ssl_cluster':
-        ports     => $horizon_ssl_port,
-        listen_ip => $vip_public_ip;
-      }
-    } else {
-      # Horizon URL is not the same on Red Hat and Debian/Ubuntu
-      if $::operatingsystem == 'RedHat' {
-        $horizon_auth_url = 'dashboard'
-      } else {
-        $horizon_auth_url = 'horizon'
-      }
-      cloud::loadbalancer::listen_http{ 'horizon_cluster':
-        ports       => $horizon_port,
-        httpchk     => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\"",
-        options     => {
-          'cookie'  => 'sessionid prefix',
-          'balance' => 'leastconn' },
-        listen_ip   => $vip_public_ip;
-      }
-    }
+  if $::operatingsystem == 'RedHat' {
+    $horizon_auth_url = 'dashboard'
+  } else {
+    $horizon_auth_url = 'horizon'
+  }
+  cloud::loadbalancer::binding { 'horizon_cluster':
+    ip           => $vip_public_ip,
+    # to maintain backward compatibility
+    port         => $horizon_port_real,
+    httpchk      => $horizon_httpchk,
+    options      => $horizon_options,
+    bind_options => $horizon_bind_options,
   }
 
   if ($galera_ip in $keepalived_public_ipvs_real) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
   haproxy::listen { 'galera_cluster':
-    ipaddress          => $galera_ip,
-    ports              => 3306,
-    options            => {
+    ipaddress    => $galera_ip,
+    ports        => 3306,
+    options      => {
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
       'timeout client' => '400s',
       'timeout server' => '400s',
-    }
+    },
+    bind_options => $galera_bind_options,
   }
 
   # Allow HAProxy to bind to a non-local IP address
