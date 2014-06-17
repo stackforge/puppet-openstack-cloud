@@ -336,6 +336,25 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
+    context 'configure OpenStack Horizon with backward compatibility' do
+      before do
+        params.merge!(
+          :horizon_ssl_port => '80'
+        )
+      end
+      it { should contain_haproxy__listen('horizon_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '80',
+        :options   => {
+          'mode'           => 'http',
+          'http-check'     => 'expect ! rstatus ^5',
+          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
+          'cookie'         => 'sessionid prefix',
+          'balance'        => 'leastconn',
+        },
+      )}
+    end
+
     context 'configure OpenStack Horizon SSL with backward compatibility' do
       before do
         params.merge!(
@@ -359,6 +378,7 @@ describe 'cloud::loadbalancer' do
     context 'configure OpenStack Horizon SSL binding' do
       before do
         params.merge!(
+          :horizon_port         => '443',
           :horizon_ssl          => false,
           :horizon_ssl_port     => false,
           :horizon_bind_options => ['ssl', 'crt']
