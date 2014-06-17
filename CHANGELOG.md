@@ -1,3 +1,20 @@
+##2014-06-19 - Features release 2.0.0
+###Summary
+* Icehouse release support
+* OpenStack Object Storage support (Swift)
+* Neutron Metadata multi-worker
+* RBD flexibility on compute nodes
+* Keystone and Nova v3 API support
+* SSL termination support
+
+####Bugfixes
+* Fix nova-compute service when using RBD backend
+* Fix cinder-volume service when creating a volume type
+* Enable to have Swift Storage & Ceph OSD on same nodes
+
+####Known Bugs
+* No known bugs
+
 ##2014-05-06 - Features release 1.3.0
 ###Summary
 * High Availability refactorization
@@ -10,7 +27,9 @@
 * Fix HAproxy configuration for Heat API binding
 
 ####Known Bugs
-* No known bugs
+* When using RBD as Nova Backend, nova-compute should be notified
+* When creating a volume type, cinder-volume should be notified
+* Impossible to attach a volume backend by RBD if not using RBD backend for Nova
 
 ##2014-04-22 - Features release 1.2.0
 ###Summary
