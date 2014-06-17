@@ -253,7 +253,7 @@ class cloud::loadbalancer(
     warning('horizon_ssl_port parameter is deprecated. Specify port with the horizon_port instead.')
     $horizon_port_real = $horizon_ssl_port
   } else {
-    $horizon_port_real = '443'
+    $horizon_port_real = $horizon_port
   }
   # end of deprecation support
 
