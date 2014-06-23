@@ -2,7 +2,7 @@ fixtures:
   repositories:
     'cinder':
       repo: 'git://github.com/enovance/puppet-cinder'
-      ref: '131108aa089fdd66dcd0c46a2acf99c3d21548d7'
+      ref: '9b33d7e1a7b88109e2b85c281534450bc6e53998'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
       ref: 'cf77bb23c059416b2d00a37f96a339f06d8c1e2c'
@@ -11,7 +11,7 @@ fixtures:
       ref: 'ca16cbf55cfa3d2b62c7a78431fa75aadae97af4'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
-      ref: '3bf6ea5b3e21a72230cbadf4c8722850f6389bfe'
+      ref: '7f439210b1197efc55ec148074a598b1cb1e3816'
     'horizon':
       repo: 'git://github.com/enovance/puppet-horizon'
       ref: '36383e90d1c4013d7989561b00ffcb08c76908de'

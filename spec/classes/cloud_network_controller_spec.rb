@@ -46,6 +46,7 @@ describe 'cloud::network::controller' do
         :neutron_db_password      => 'secrete',
         :ks_neutron_password      => 'secrete',
         :ks_keystone_admin_host   => '10.0.0.1',
+        :ks_keystone_admin_proto  => 'https',
         :ks_keystone_public_port  => '5000',
         :nova_url                 => 'http://127.0.0.1:8774/v2',
         :nova_admin_auth_url      => 'http://127.0.0.1:5000/v2.0',
@@ -99,6 +100,7 @@ describe 'cloud::network::controller' do
           :auth_password       => 'secrete',
           :auth_host           => '10.0.0.1',
           :auth_port           => '5000',
+          :auth_protocol       => 'https',
           :database_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
           :api_workers         => '2',
           :agent_down_time     => '60'

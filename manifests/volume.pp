@@ -92,12 +92,7 @@ class cloud::volume(
     log_dir                   => $log_dir,
     log_facility              => $log_facility,
     use_syslog                => $use_syslog,
-    # https://review.openstack.org/#/c/92993/
-    # storage_availability_zone => $storage_availability_zone
-  }
-
-  cinder_config {
-    'DEFAULT/storage_availability_zone': value => $storage_availability_zone
+    storage_availability_zone => $storage_availability_zone
   }
 
   class { 'cinder::ceilometer': }

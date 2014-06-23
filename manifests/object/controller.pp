@@ -23,6 +23,8 @@ class cloud::object::controller(
   $ks_keystone_internal_port    = 5000,
   $ks_swift_dispersion_password = 'dispersion',
   $ks_swift_internal_port       = 8080,
+  $ks_keystone_internal_proto   = 'http',
+  $ks_keystone_admin_proto      = 'http',
   $ks_swift_password            = 'swiftpassword',
   $statsd_host                  = '127.0.0.1',
   $statsd_port                  = 4125,
@@ -81,6 +83,7 @@ log_statsd_default_sample_rate = 1
     admin_password      => $ks_swift_password,
     auth_host           => $ks_keystone_admin_host,
     auth_port           => $ks_keystone_admin_port,
+    auth_protocol       => $ks_keystone_admin_proto,
     delay_auth_decision => inline_template('1
 cache = swift.cache')
   }
@@ -90,10 +93,11 @@ cache = swift.cache')
   class { 'swift::proxy::s3token':
     auth_host     => $ks_keystone_admin_host,
     auth_port     => $ks_keystone_admin_port,
+    auth_protocol => $ks_keystone_internal_proto
   }
 
   class { 'swift::dispersion':
-    auth_url      => "http://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
+    auth_url      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
     swift_dir     => '/etc/swift',
     auth_pass     => $ks_swift_dispersion_password,
     endpoint_type => 'internalURL'

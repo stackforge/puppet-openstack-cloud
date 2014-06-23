@@ -27,6 +27,7 @@ class cloud::network::metadata(
   $ks_keystone_admin_port               = 35357,
   $ks_keystone_admin_host               = '127.0.0.1',
   $auth_region                          = 'RegionOne',
+  $ks_nova_internal_proto               = 'http'
 ) {
 
   include 'cloud::network'
@@ -42,9 +43,9 @@ class cloud::network::metadata(
     metadata_workers => $::processorcount
   }
 
-  # TODO(EmilienM) need to be deleted hen https://review.openstack.org/98633 got merged
   neutron_metadata_agent_config {
-    'DEFAULT/metadata_backlog': value => '4096';
+    'DEFAULT/metadata_backlog':       value => '4096';
+    'DEFAULT/nova_metadata_protocol': value => $ks_nova_internal_proto;
   }
 
 }
