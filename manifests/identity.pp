@@ -336,23 +336,31 @@ class cloud::identity (
   $ks_ceilometer_public_host    = '127.0.0.1',
   $ks_ceilometer_public_port    = 8777,
   $ks_ceilometer_public_proto   = 'http',
+  $ks_ceilometer_admin_proto    = 'http',
+  $ks_ceilometer_internal_proto = 'http',
   $ks_cinder_admin_host         = '127.0.0.1',
   $ks_cinder_internal_host      = '127.0.0.1',
   $ks_cinder_password           = 'cinderpassword',
   $ks_cinder_public_host        = '127.0.0.1',
   $ks_cinder_public_proto       = 'http',
+  $ks_cinder_admin_proto        = 'http',
+  $ks_cinder_internal_proto     = 'http',
   $ks_cinder_public_port        = 8776,
   $ks_glance_admin_host         = '127.0.0.1',
   $ks_glance_internal_host      = '127.0.0.1',
   $ks_glance_password           = 'glancepassword',
   $ks_glance_public_host        = '127.0.0.1',
   $ks_glance_public_proto       = 'http',
+  $ks_glance_internal_proto     = 'http',
+  $ks_glance_admin_proto        = 'http',
   $ks_glance_api_public_port    = 9292,
   $ks_heat_admin_host           = '127.0.0.1',
   $ks_heat_internal_host        = '127.0.0.1',
   $ks_heat_password             = 'heatpassword',
   $ks_heat_public_host          = '127.0.0.1',
   $ks_heat_public_proto         = 'http',
+  $ks_heat_admin_proto          = 'http',
+  $ks_heat_internal_proto       = 'http',
   $ks_heat_public_port          = 8004,
   $ks_heat_cfn_public_port      = 8000,
   $ks_keystone_admin_host       = '127.0.0.1',
@@ -363,16 +371,22 @@ class cloud::identity (
   $ks_keystone_public_port      = 5000,
   $ks_keystone_public_proto     = 'http',
   $ks_neutron_admin_host        = '127.0.0.1',
+  $ks_keystone_admin_proto      = 'http',
+  $ks_keystone_internal_proto   = 'http',
   $ks_neutron_internal_host     = '127.0.0.1',
   $ks_neutron_password          = 'neutronpassword',
   $ks_neutron_public_host       = '127.0.0.1',
   $ks_neutron_public_proto      = 'http',
+  $ks_neutron_admin_proto       = 'http',
+  $ks_neutron_internal_proto    = 'http',
   $ks_neutron_public_port       = 9696,
   $ks_nova_admin_host           = '127.0.0.1',
   $ks_nova_internal_host        = '127.0.0.1',
   $ks_nova_password             = 'novapassword',
   $ks_nova_public_host          = '127.0.0.1',
   $ks_nova_public_proto         = 'http',
+  $ks_nova_internal_proto       = 'http',
+  $ks_nova_admin_proto          = 'http',
   $ks_nova_public_port          = 8774,
   $ks_ec2_public_port           = 8773,
   $ks_swift_dispersion_password = 'dispersion',
@@ -382,6 +396,8 @@ class cloud::identity (
   $ks_swift_public_host         = '127.0.0.1',
   $ks_swift_public_port         = 8080,
   $ks_swift_public_proto        = 'http',
+  $ks_swift_admin_proto         = 'http',
+  $ks_swift_internal_proto      = 'http',
   $api_eth                      = '127.0.0.1',
   $region                       = 'RegionOne',
   $verbose                      = true,
@@ -439,14 +455,10 @@ class cloud::identity (
   keystone_role { $identity_roles_addons: ensure => present }
 
   class {'keystone::endpoint':
-    admin_address    => $ks_keystone_admin_host,
-    admin_port       => $ks_keystone_admin_port,
-    internal_address => $ks_keystone_internal_host,
-    internal_port    => $ks_keystone_internal_port,
-    public_address   => $ks_keystone_public_host,
-    public_port      => $ks_keystone_public_port,
-    public_protocol  => $ks_keystone_public_proto,
-    region           => $region,
+    public_url        => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}",
+    internal_url      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}",
+    admin_url         => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}",
+    region            => $region,
   }
 
   # TODO(EmilienM) Disable WSGI - bug #98
@@ -462,13 +474,15 @@ class cloud::identity (
 
   if $swift_enabled {
     class {'swift::keystone::auth':
-      password         => $ks_swift_password,
-      public_address   => $ks_swift_public_host,
-      public_port      => $ks_swift_public_port,
-      public_protocol  => $ks_swift_public_proto,
-      admin_address    => $ks_swift_admin_host,
-      internal_address => $ks_swift_internal_host,
-      region           => $region
+      password          => $ks_swift_password,
+      public_address    => $ks_swift_public_host,
+      public_port       => $ks_swift_public_port,
+      public_protocol   => $ks_swift_public_proto,
+      admin_protocol    => $ks_swift_admin_proto,
+      internal_protocol => $ks_swift_internal_proto,
+      admin_address     => $ks_swift_admin_host,
+      internal_address  => $ks_swift_internal_host,
+      region            => $region
     }
 
     class {'swift::keystone::dispersion':
@@ -477,68 +491,89 @@ class cloud::identity (
   }
 
   class {'ceilometer::keystone::auth':
-    admin_address    => $ks_ceilometer_admin_host,
-    internal_address => $ks_ceilometer_internal_host,
-    public_address   => $ks_ceilometer_public_host,
-    port             => $ks_ceilometer_public_port,
-    region           => $region,
-    password         => $ks_ceilometer_password
+    admin_address     => $ks_ceilometer_admin_host,
+    internal_address  => $ks_ceilometer_internal_host,
+    public_address    => $ks_ceilometer_public_host,
+    public_protocol   => $ks_ceilometer_public_proto,
+    admin_protocol    => $ks_ceilometer_admin_proto,
+    internal_protocol => $ks_ceilometer_internal_proto,
+    port              => $ks_ceilometer_public_port,
+    region            => $region,
+    password          => $ks_ceilometer_password
   }
 
   class { 'nova::keystone::auth':
-    cinder           => true,
-    admin_address    => $ks_nova_admin_host,
-    internal_address => $ks_nova_internal_host,
-    public_address   => $ks_nova_public_host,
-    compute_port     => $ks_nova_public_port,
-    ec2_port         => $ks_ec2_public_port,
-    region           => $region,
-    password         => $ks_nova_password
+    cinder             => true,
+    admin_address      => $ks_nova_admin_host,
+    internal_address   => $ks_nova_internal_host,
+    public_address     => $ks_nova_public_host,
+    compute_port       => $ks_nova_public_port,
+    public_protocol    => $ks_nova_public_proto,
+    admin_protocol     => $ks_nova_admin_proto,
+    internal_protocol  => $ks_nova_internal_proto,
+    ec2_port           => $ks_ec2_public_port,
+    region             => $region,
+    password           => $ks_nova_password
   }
 
   class { 'neutron::keystone::auth':
-    admin_address    => $ks_neutron_admin_host,
-    internal_address => $ks_neutron_internal_host,
-    public_address   => $ks_neutron_public_host,
-    port             => $ks_neutron_public_port,
-    region           => $region,
-    password         => $ks_neutron_password
+    admin_address      => $ks_neutron_admin_host,
+    internal_address   => $ks_neutron_internal_host,
+    public_address     => $ks_neutron_public_host,
+    public_protocol    => $ks_neutron_public_proto,
+    internal_protocol  => $ks_neutron_internal_proto,
+    admin_protocol     => $ks_neutron_admin_proto,
+    port               => $ks_neutron_public_port,
+    region             => $region,
+    password           => $ks_neutron_password
   }
 
   class { 'cinder::keystone::auth':
-    admin_address    => $ks_cinder_admin_host,
-    internal_address => $ks_cinder_internal_host,
-    public_address   => $ks_cinder_public_host,
-    port             => $ks_cinder_public_port,
-    region           => $region,
-    password         => $ks_cinder_password
+    admin_address     => $ks_cinder_admin_host,
+    internal_address  => $ks_cinder_internal_host,
+    public_address    => $ks_cinder_public_host,
+    port              => $ks_cinder_public_port,
+    public_protocol   => $ks_cinder_public_proto,
+    admin_protocol    => $ks_cinder_admin_proto,
+    internal_protocol => $ks_cinder_internal_proto,
+    region            => $region,
+    password          => $ks_cinder_password
   }
 
   class { 'glance::keystone::auth':
-    admin_address    => $ks_glance_admin_host,
-    internal_address => $ks_glance_internal_host,
-    public_address   => $ks_glance_public_host,
-    port             => $ks_glance_api_public_port,
-    region           => $region,
-    password         => $ks_glance_password
+    admin_address     => $ks_glance_admin_host,
+    internal_address  => $ks_glance_internal_host,
+    public_address    => $ks_glance_public_host,
+    port              => $ks_glance_api_public_port,
+    public_protocol   => $ks_glance_public_proto,
+    internal_protocol => $ks_glance_internal_proto,
+    admin_protocol    => $ks_glance_admin_proto,
+    region            => $region,
+    password          => $ks_glance_password
   }
 
   class { 'heat::keystone::auth':
-    admin_address    => $ks_heat_admin_host,
-    internal_address => $ks_heat_internal_host,
-    public_address   => $ks_heat_public_host,
-    port             => $ks_heat_public_port,
-    region           => $region,
-    password         => $ks_heat_password
+    admin_address     => $ks_heat_admin_host,
+    internal_address  => $ks_heat_internal_host,
+    public_address    => $ks_heat_public_host,
+    port              => $ks_heat_public_port,
+    public_protocol   => $ks_heat_public_proto,
+    internal_protocol => $ks_heat_internal_proto,
+    admin_protocol    => $ks_heat_admin_proto,
+    region            => $region,
+    password          => $ks_heat_password
   }
 
   class { 'heat::keystone::auth_cfn':
-    admin_address    => $ks_heat_admin_host,
-    internal_address => $ks_heat_internal_host,
-    public_address   => $ks_heat_public_host,
-    port             => $ks_heat_cfn_public_port,
-    region           => $region,
-    password         => $ks_heat_password
+    admin_address     => $ks_heat_admin_host,
+    internal_address  => $ks_heat_internal_host,
+    public_address    => $ks_heat_public_host,
+    port              => $ks_heat_cfn_public_port,
+    public_protocol   => $ks_heat_public_proto,
+    internal_protocol => $ks_heat_internal_proto,
+    admin_protocol    => $ks_heat_admin_proto,
+    region            => $region,
+    password          => $ks_heat_password
   }
 
   # Purge expored tokens every days at midnight

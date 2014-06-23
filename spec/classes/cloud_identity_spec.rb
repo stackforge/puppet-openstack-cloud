@@ -37,23 +37,30 @@ describe 'cloud::identity' do
         :ks_ceilometer_password       => 'secrete',
         :ks_ceilometer_public_host    => '10.0.0.1',
         :ks_ceilometer_public_port    => '8777',
-        :ks_ceilometer_public_proto   => 'http',
+        :ks_ceilometer_public_proto   => 'https',
+        :ks_ceilometer_admin_proto    => 'https',
+        :ks_ceilometer_internal_proto => 'https',
         :ks_cinder_admin_host         => '10.0.0.1',
         :ks_cinder_internal_host      => '10.0.0.1',
         :ks_cinder_password           => 'secrete',
         :ks_cinder_public_host        => '10.0.0.1',
-        :ks_cinder_public_proto       => 'http',
-        :ks_cinder_public_port        => '8776',
+        :ks_cinder_public_proto       => 'https',
+        :ks_cinder_public_proto       => 'https',
+        :ks_cinder_admin_proto        => 'https',
         :ks_glance_admin_host         => '10.0.0.1',
         :ks_glance_internal_host      => '10.0.0.1',
         :ks_glance_password           => 'secrete',
         :ks_glance_public_host        => '10.0.0.1',
-        :ks_glance_public_proto       => 'http',
+        :ks_glance_public_proto       => 'https',
+        :ks_glance_admin_proto        => 'https',
+        :ks_glance_internal_proto     => 'https',
         :ks_heat_admin_host           => '10.0.0.1',
         :ks_heat_internal_host        => '10.0.0.1',
         :ks_heat_password             => 'secrete',
         :ks_heat_public_host          => '10.0.0.1',
-        :ks_heat_public_proto         => 'http',
+        :ks_heat_public_proto         => 'https',
+        :ks_heat_admin_proto          => 'https',
+        :ks_heat_internal_proto       => 'https',
         :ks_heat_public_port          => '8004',
         :ks_heat_cfn_public_port      => '8000',
         :ks_keystone_admin_host       => '10.0.0.1',
@@ -62,18 +69,24 @@ describe 'cloud::identity' do
         :ks_keystone_internal_port    => '5000',
         :ks_keystone_public_host      => '10.0.0.1',
         :ks_keystone_public_port      => '5000',
-        :ks_keystone_public_proto     => 'http',
+        :ks_keystone_public_proto     => 'https',
+        :ks_keystone_admin_proto      => 'https',
+        :ks_keystone_internal_proto   => 'https',
         :ks_neutron_admin_host        => '10.0.0.1',
         :ks_neutron_internal_host     => '10.0.0.1',
         :ks_neutron_password          => 'secrete',
         :ks_neutron_public_host       => '10.0.0.1',
-        :ks_neutron_public_proto      => 'http',
+        :ks_neutron_admin_proto       => 'https',
+        :ks_neutron_internal_proto    => 'https',
+        :ks_neutron_public_proto      => 'https',
         :ks_neutron_public_port       => '9696',
         :ks_nova_admin_host           => '10.0.0.1',
         :ks_nova_internal_host        => '10.0.0.1',
         :ks_nova_password             => 'secrete',
         :ks_nova_public_host          => '10.0.0.1',
-        :ks_nova_public_proto         => 'http',
+        :ks_nova_public_proto         => 'https',
+        :ks_nova_internal_proto       => 'https',
+        :ks_nova_admin_proto          => 'https',
         :ks_nova_public_port          => '8774',
         :ks_ec2_public_port           => '8773',
         :ks_swift_dispersion_password => 'secrete',
@@ -81,7 +94,9 @@ describe 'cloud::identity' do
         :ks_swift_password            => 'secrete',
         :ks_swift_public_host         => '10.0.0.1',
         :ks_swift_public_port         => '8080',
-        :ks_swift_public_proto        => 'http',
+        :ks_swift_public_proto        => 'https',
+        :ks_swift_admin_proto         => 'https',
+        :ks_swift_internal_proto      => 'https',
         :ks_swift_admin_host          => '10.0.0.1',
         :region                       => 'BigCloud',
         :verbose                      => true,
@@ -148,26 +163,24 @@ describe 'cloud::identity' do
 
     it 'configure keystone endpoint' do
       should contain_class('keystone::endpoint').with(
-        :admin_address    => '10.0.0.1',
-        :admin_port       => '35357',
-        :internal_address => '10.0.0.1',
-        :internal_port    => '5000',
-        :public_address   => '10.0.0.1',
-        :public_port      => '5000',
-        :public_protocol  => 'http',
-        :region           => 'BigCloud'
+        :public_url   => 'https://10.0.0.1:5000',
+        :admin_url    => 'https://10.0.0.1:35357',
+        :internal_url => 'https://10.0.0.1:5000',
+        :region       => 'BigCloud'
       )
     end
 
     it 'configure swift endpoints' do
       should contain_class('swift::keystone::auth').with(
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_port      => '8080',
-        :public_protocol  => 'http',
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :region           => 'BigCloud'
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_port       => '8080',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :region            => 'BigCloud'
       )
     end
 
@@ -177,39 +190,45 @@ describe 'cloud::identity' do
 
     it 'configure ceilometer endpoints' do
       should contain_class('ceilometer::keystone::auth').with(
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :port             => '8777',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :port              => '8777',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :region            => 'BigCloud'
       )
     end
 
     it 'configure nova endpoints' do
       should contain_class('nova::keystone::auth').with(
-        :admin_address    => '10.0.0.1',
-        :cinder           => true,
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :compute_port     => '8774',
-        :ec2_port         => '8773',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :cinder            => true,
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :compute_port      => '8774',
+        :ec2_port          => '8773',
+        :region            => 'BigCloud'
       )
     end
 
     it 'configure neutron endpoints' do
       should contain_class('neutron::keystone::auth').with(
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :port             => '9696',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :internal_protocol => 'https',
+        :admin_protocol    => 'https',
+        :port              => '9696',
+        :region            => 'BigCloud'
       )
     end
 
@@ -219,44 +238,50 @@ describe 'cloud::identity' do
         :internal_address => '10.0.0.1',
         :password         => 'secrete',
         :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
+        :public_protocol  => 'https',
         :region           => 'BigCloud'
       )
     end
 
     it 'configure glance endpoints' do
       should contain_class('glance::keystone::auth').with(
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :port             => '9292',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :port              => '9292',
+        :region            => 'BigCloud'
       )
     end
 
     it 'configure heat endpoints' do
       should contain_class('heat::keystone::auth').with(
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :port             => '8004',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :port              => '8004',
+        :region            => 'BigCloud'
       )
     end
 
     it 'configure heat cloudformation endpoints' do
       should contain_class('heat::keystone::auth_cfn').with(
-        :admin_address    => '10.0.0.1',
-        :internal_address => '10.0.0.1',
-        :password         => 'secrete',
-        :public_address   => '10.0.0.1',
-        :public_protocol  => 'http',
-        :port             => '8000',
-        :region           => 'BigCloud'
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :port              => '8000',
+        :region            => 'BigCloud'
       )
     end
 
