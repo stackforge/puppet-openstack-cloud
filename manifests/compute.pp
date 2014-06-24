@@ -69,23 +69,24 @@
 #
 
 class cloud::compute(
-  $nova_db_host            = '127.0.0.1',
-  $nova_db_user            = 'nova',
-  $nova_db_password        = 'novapassword',
-  $rabbit_hosts            = ['127.0.0.1:5672'],
-  $rabbit_password         = 'rabbitpassword',
-  $ks_glance_internal_host = '127.0.0.1',
-  $glance_api_port         = 9292,
-  $verbose                 = true,
-  $debug                   = true,
-  $use_syslog              = true,
-  $log_facility            = 'LOG_LOCAL0',
-  $neutron_endpoint        = '127.0.0.1',
-  $neutron_protocol        = 'http',
-  $neutron_password        = 'neutronpassword',
-  $neutron_region_name     = 'RegionOne',
-  $memcache_servers        = ['127.0.0.1:11211'],
-  $availability_zone       = 'RegionOne'
+  $nova_db_host             = '127.0.0.1',
+  $nova_db_user             = 'nova',
+  $nova_db_password         = 'novapassword',
+  $rabbit_hosts             = ['127.0.0.1:5672'],
+  $rabbit_password          = 'rabbitpassword',
+  $ks_glance_internal_host  = '127.0.0.1',
+  $ks_glance_internal_proto = 'http',
+  $glance_api_port          = 9292,
+  $verbose                  = true,
+  $debug                    = true,
+  $use_syslog               = true,
+  $log_facility             = 'LOG_LOCAL0',
+  $neutron_endpoint         = '127.0.0.1',
+  $neutron_protocol         = 'http',
+  $neutron_password         = 'neutronpassword',
+  $neutron_region_name      = 'RegionOne',
+  $memcache_servers         = ['127.0.0.1:11211'],
+  $availability_zone        = 'RegionOne'
 ) {
 
   if !defined(Resource['nova_config']) {
@@ -109,7 +110,7 @@ class cloud::compute(
     rabbit_userid       => 'nova',
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,
-    glance_api_servers  => "http://${ks_glance_internal_host}:${glance_api_port}",
+    glance_api_servers  => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${glance_api_port}",
     memcached_servers   => $memcache_servers,
     verbose             => $verbose,
     debug               => $debug,

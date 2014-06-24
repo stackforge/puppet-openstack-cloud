@@ -69,24 +69,26 @@
 #
 
 class cloud::image::api(
-  $glance_db_host                   = '127.0.0.1',
-  $glance_db_user                   = 'glance',
-  $glance_db_password               = 'glancepassword',
-  $ks_keystone_internal_host        = '127.0.0.1',
-  $ks_glance_internal_host          = '127.0.0.1',
-  $ks_glance_api_internal_port      = '9292',
-  $ks_glance_registry_internal_port = '9191',
-  $ks_glance_password               = 'glancepassword',
-  $rabbit_password                  = 'rabbit_password',
-  $rabbit_host                      = '127.0.0.1',
-  $api_eth                          = '127.0.0.1',
-  $openstack_vip                    = '127.0.0.1',
-  $glance_rbd_pool                  = 'images',
-  $glance_rbd_user                  = 'glance',
-  $verbose                          = true,
-  $debug                            = true,
-  $log_facility                     = 'LOG_LOCAL0',
-  $use_syslog                       = true
+  $glance_db_host                    = '127.0.0.1',
+  $glance_db_user                    = 'glance',
+  $glance_db_password                = 'glancepassword',
+  $ks_keystone_internal_host         = '127.0.0.1',
+  $ks_keystone_internal_proto        = 'http',
+  $ks_glance_internal_host           = '127.0.0.1',
+  $ks_glance_api_internal_port       = '9292',
+  $ks_glance_registry_internal_port  = '9191',
+  $ks_glance_registry_internal_proto = 'http',
+  $ks_glance_password                = 'glancepassword',
+  $rabbit_password                   = 'rabbit_password',
+  $rabbit_host                       = '127.0.0.1',
+  $api_eth                           = '127.0.0.1',
+  $openstack_vip                     = '127.0.0.1',
+  $glance_rbd_pool                   = 'images',
+  $glance_rbd_user                   = 'glance',
+  $verbose                           = true,
+  $debug                             = true,
+  $log_facility                      = 'LOG_LOCAL0',
+  $use_syslog                        = true
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -104,22 +106,24 @@ class cloud::image::api(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { 'glance::api':
-    database_connection   => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
-    registry_host         => $openstack_vip,
-    registry_port         => $ks_glance_registry_internal_port,
-    verbose               => $verbose,
-    debug                 => $debug,
-    auth_host             => $ks_keystone_internal_host,
-    keystone_password     => $ks_glance_password,
-    keystone_tenant       => 'services',
-    keystone_user         => 'glance',
-    show_image_direct_url => true,
-    log_dir               => $log_dir,
-    log_file              => $log_file_api,
-    log_facility          => $log_facility,
-    bind_host             => $api_eth,
-    bind_port             => $ks_glance_api_internal_port,
-    use_syslog            => $use_syslog,
+    database_connection      => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    registry_host            => $openstack_vip,
+    registry_port            => $ks_glance_registry_internal_port,
+    verbose                  => $verbose,
+    debug                    => $debug,
+    auth_host                => $ks_keystone_internal_host,
+    auth_protocol            => $ks_keystone_internal_proto,
+    registry_client_protocol => $ks_glance_registry_internal_proto,
+    keystone_password        => $ks_glance_password,
+    keystone_tenant          => 'services',
+    keystone_user            => 'glance',
+    show_image_direct_url    => true,
+    log_dir                  => $log_dir,
+    log_file                 => $log_file_api,
+    log_facility             => $log_facility,
+    bind_host                => $api_eth,
+    bind_port                => $ks_glance_api_internal_port,
+    use_syslog               => $use_syslog,
   }
 
   # TODO(EmilienM) Disabled for now
@@ -131,7 +135,7 @@ class cloud::image::api(
   #   rabbit_host     => $rabbit_host,
   # }
   glance_api_config {
-    'DEFAULT/notifier_driver': value => 'noop';
+    'DEFAULT/notifier_driver':          value => 'noop';
   }
 
   class { 'glance::backend::rbd':

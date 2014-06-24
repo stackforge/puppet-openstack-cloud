@@ -40,6 +40,7 @@ describe 'cloud::volume::controller' do
       { :ks_cinder_password          => 'secrete',
         :ks_cinder_internal_port     => '8776',
         :ks_keystone_internal_host   => '10.0.0.1',
+        :ks_keystone_internal_proto  => 'https',
         :ks_glance_internal_host     => '10.0.0.2',
         :ks_glance_api_internal_port => '9292',
         :volume_multi_backend        => false,
@@ -60,7 +61,7 @@ describe 'cloud::volume::controller' do
           :log_facility              => 'LOG_LOCAL0',
           :use_syslog                => true,
           :log_dir                   => false,
-          # :storage_availability_zone => 'nova'
+          :storage_availability_zone => 'nova'
         )
       should contain_class('cinder::ceilometer')
     end
@@ -109,7 +110,7 @@ describe 'cloud::volume::controller' do
 
     it 'configure cinder glance backend' do
       should contain_class('cinder::glance').with(
-          :glance_api_servers     => '10.0.0.2:9292',
+          :glance_api_servers     => 'http://10.0.0.2:9292',
           :glance_request_timeout => '10',
           :glance_num_retries     => '10'
         )
@@ -117,9 +118,10 @@ describe 'cloud::volume::controller' do
 
     it 'configure cinder api' do
       should contain_class('cinder::api').with(
-          :keystone_password   => 'secrete',
-          :keystone_auth_host  => '10.0.0.1',
-          :bind_host           => '10.0.0.1'
+          :keystone_password      => 'secrete',
+          :keystone_auth_host     => '10.0.0.1',
+          :keystone_auth_protocol => 'https',
+          :bind_host              => '10.0.0.1'
         )
       should contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
     end

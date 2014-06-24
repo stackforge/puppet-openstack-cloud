@@ -45,6 +45,7 @@ describe 'cloud::compute::api' do
 
     let :params do
       { :ks_keystone_internal_host            => '127.0.0.1',
+        :ks_keystone_internal_proto           => 'https',
         :ks_nova_password                     => 'novapassword',
         :api_eth                              => '127.0.0.1',
         :ks_ec2_public_port                   => '8773',
@@ -96,6 +97,7 @@ describe 'cloud::compute::api' do
       should contain_class('nova::api').with(
           :enabled                              => true,
           :auth_host                            => '127.0.0.1',
+          :auth_protocol                        => 'https',
           :admin_password                       => 'novapassword',
           :api_bind_address                     => '127.0.0.1',
           :metadata_listen                      => '127.0.0.1',

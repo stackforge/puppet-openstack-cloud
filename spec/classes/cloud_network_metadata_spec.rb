@@ -49,6 +49,7 @@ describe 'cloud::network::metadata' do
         :nova_metadata_server                 => '10.0.0.1',
         :ks_keystone_admin_proto              => 'http',
         :ks_keystone_admin_port               => '35357',
+        :ks_nova_internal_proto               => 'https',
         :ks_keystone_admin_host               => '10.0.0.1' }
     end
 
@@ -102,6 +103,7 @@ describe 'cloud::network::metadata' do
           :metadata_workers => '8'
       )
       should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '4096')
+      should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => 'https')
     end
 
     context 'when using provider external network' do
