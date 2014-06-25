@@ -245,9 +245,16 @@ class cloud::loadbalancer(
       'balance' => 'leastconn' }
   } else {
     $horizon_httpchk = "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\""
-    $horizon_options = {
+    if 'ssl' in $horizon_bind_options {
+      $horizon_options = {
+      'cookie'  => 'sessionid prefix',
+      'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }',
+      'balance' => 'leastconn' }
+    } else {
+      $horizon_options = {
       'cookie'  => 'sessionid prefix',
       'balance' => 'leastconn' }
+    }
   }
   if $horizon_ssl_port {
     warning('horizon_ssl_port parameter is deprecated. Specify port with the horizon_port instead.')
