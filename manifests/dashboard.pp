@@ -102,13 +102,13 @@ class cloud::dashboard(
 
   # Apache2 specific configuration
   if $ssl_forward {
-    $set_env_real = ['SetEnvIf X-Forwarded-Proto https HTTPS=1']
+    $setenvif = ['X-Forwarded-Proto https HTTPS=1']
   } else {
-    $set_env_real = []
+    $setenvif = []
   }
   $vhost_extra_params = {
     'add_listen' => true,
-    'setenv'     => $set_env_real
+    'setenvif'   => $setenvif
   }
   ensure_resource('class', 'apache', {
     default_vhost => false

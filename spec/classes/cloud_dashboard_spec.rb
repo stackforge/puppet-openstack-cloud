@@ -51,7 +51,7 @@ describe 'cloud::dashboard' do
           :neutron_options     => { 'enable_lb' => true },
           :vhost_extra_params  => {
               'add_listen' => true ,
-              'setenv'     => ['SetEnvIf X-Forwarded-Proto https HTTPS=1']
+              'setenvif'     => ['X-Forwarded-Proto https HTTPS=1']
           }
         )
       should contain_class('apache').with(:default_vhost => false)
