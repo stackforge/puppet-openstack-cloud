@@ -73,6 +73,10 @@
 # [*horizon_ca*]
 #   (required with listen_ssl) CA certificate to use for SSL support.
 #
+# [*ssl_forward*]
+#   (optional) Forward HTTPS proto in the headers
+#   Useful when activating SSL binding on HAproxy and not in Horizon.
+#   Defaults to false
 
 class cloud::dashboard(
   $ks_keystone_internal_host = '127.0.0.1',
@@ -90,14 +94,21 @@ class cloud::dashboard(
   $horizon_cert              = undef,
   $horizon_key               = undef,
   $horizon_ca                = undef,
+  $ssl_forward               = false
 ) {
 
   # We build the param needed for horizon class
   $keystone_url = "${keystone_proto}://${keystone_host}:${keystone_port}/v2.0"
 
   # Apache2 specific configuration
+  if $ssl_forward {
+    $set_env_real = ['SetEnvIf X-Forwarded-Proto https HTTPS=1']
+  } else {
+    $set_env_real = []
+  }
   $vhost_extra_params = {
-    'add_listen'    => true
+    'add_listen' => true,
+    'setenv'     => $set_env_real
   }
   ensure_resource('class', 'apache', {
     default_vhost => false
