@@ -66,3 +66,6 @@ monitor fail if heat_cloudwatch_api_dead
 acl horizon_dead nbsrv(horizon_cluster) lt 1
 monitor fail if horizon_dead
 <%- end -%>
+
+# Used when forwarding SSL in http headers
+acl is-ssl dst_port 443
