@@ -126,7 +126,8 @@ describe 'cloud::identity' do
         :admin_port          => '35357',
         :token_expiration    => '3600',
         :log_dir             => false,
-        :log_file            => false
+        :log_file            => false,
+        :admin_endpoint      => 'https://10.0.0.1:35357/v2.0'
       )
       should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
       should contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
