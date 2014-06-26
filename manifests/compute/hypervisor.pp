@@ -43,6 +43,9 @@ class cloud::compute::hypervisor(
   $nova_rbd_secret_uuid       = undef,
   $vm_rbd                     = false,
   $volume_rbd                 = false,
+  # set to false to keep backward compatibility
+  $ks_spice_public_proto      = false,
+  $ks_spice_public_host       = false,
   # DEPRECATED
   $has_ceph                   = false
 ) {
@@ -60,6 +63,16 @@ class cloud::compute::hypervisor(
   } else {
     $vm_rbd_real     = $vm_rbd
     $volume_rbd_real = $volume_rbd
+  }
+  if $ks_spice_public_proto {
+    $ks_spice_public_proto_real = $ks_spice_public_proto
+  } else {
+    $ks_spice_public_proto_real = $ks_nova_public_proto
+  }
+  if $ks_spice_public_host {
+    $ks_spice_public_host_real = $ks_spice_public_host
+  } else {
+    $ks_spice_public_host_real = $ks_nova_public_host
   }
 
   file{ '/var/lib/nova/.ssh':
@@ -105,8 +118,8 @@ Host *
   class { 'nova::compute::spice':
     server_listen              => '0.0.0.0',
     server_proxyclient_address => $server_proxyclient_address,
-    proxy_host                 => $ks_nova_public_host,
-    proxy_protocol             => $ks_nova_public_proto,
+    proxy_host                 => $ks_spice_public_host_real,
+    proxy_protocol             => $ks_spice_public_proto_real,
     proxy_port                 => $spice_port
 
   }

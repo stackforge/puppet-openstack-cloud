@@ -79,6 +79,8 @@ describe 'cloud::compute::hypervisor' do
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_public_proto                 => 'http',
+        :ks_spice_public_proto                => 'https',
+        :ks_spice_public_host                 => '10.0.0.2',
         :vm_rbd                               => false,
         :volume_rbd                           => false,
         :ks_nova_public_host                  => '10.0.0.1' }
@@ -216,8 +218,8 @@ describe 'cloud::compute::hypervisor' do
       should contain_class('nova::compute::spice').with(
           :server_listen              => '0.0.0.0',
           :server_proxyclient_address => '7.0.0.1',
-          :proxy_host                 => '10.0.0.1',
-          :proxy_protocol             => 'http',
+          :proxy_host                 => '10.0.0.2',
+          :proxy_protocol             => 'https',
           :proxy_port                 => '6082'
         )
     end
@@ -388,6 +390,23 @@ describe 'cloud::compute::hypervisor' do
           :nova_rbd_secret_uuid => 'secrete' )
       end
       it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
+    end
+
+    context 'when configuring spice with backward compatibility' do
+      before :each do
+        params.merge!(
+          :ks_spice_public_proto => false,
+          :ks_spice_public_host  => false )
+      end
+      it 'configure spice console with nova parameters' do
+        should contain_class('nova::compute::spice').with(
+            :server_listen              => '0.0.0.0',
+            :server_proxyclient_address => '7.0.0.1',
+            :proxy_host                 => '10.0.0.1',
+            :proxy_protocol             => 'http',
+            :proxy_port                 => '6082'
+          )
+      end
     end
 
     context 'when using provider external network' do
