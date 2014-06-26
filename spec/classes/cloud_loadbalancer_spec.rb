@@ -393,6 +393,7 @@ describe 'cloud::loadbalancer' do
           'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
           'cookie'         => 'sessionid prefix',
           'balance'        => 'leastconn',
+          'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }'
         },
         :bind_options => ['ssl', 'crt']
       )}
