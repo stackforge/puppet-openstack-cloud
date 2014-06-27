@@ -36,12 +36,17 @@
 class cloud::spof(
   $cluster_ip        = '127.0.0.1',
   $cluster_members   = false,
-  $multicast_address = '239.1.1.2'
+  $multicast_address = '239.1.1.2',
+  $cluster_password  = 'secrete'
 ) {
 
   if $::operatingsystem == 'RedHat' {
     if ! $cluster_members {
       fail('cluster_members is a required parameter.')
+    }
+
+    class { 'pacemaker':
+      hacluster_pwd => $cluster_password
     }
 
     class { 'pacemaker::corosync':
