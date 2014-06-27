@@ -23,7 +23,7 @@ fixtures:
       ref: 'cfd0abbab040fe75144f4e7814de530bfbf4c538'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
-      ref: '166b00a773bb2830175bd61a451294d757453eb3'
+      ref: 'bea7794633943e454fe3e99ee119298c3d0000ff'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
       ref: '025b8cb830d7fa476c4ab1a0b0228b88b5ba10c3'
