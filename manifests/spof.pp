@@ -24,9 +24,8 @@
 #   Defaults to '127.0.0.1'
 #
 # [*cluster_members*]
-#   (required) Members of the cluster.
-#   Should be an array
-#   Defaults to ['127.0.0.1']
+#   (required on Red Hat) A space-separted list of cluster IP's or names
+#   Defaults to false
 #
 # [*multicast_address*]
 #   (optionnal) IP address used to send multicast traffic
@@ -50,7 +49,7 @@ class cloud::spof(
     }
 
     class { 'pacemaker::corosync':
-      cluster_name    => 'openstack_cluster',
+      cluster_name    => 'openstack',
       cluster_members => $cluster_members
     }
 
@@ -64,7 +63,7 @@ class cloud::spof(
       group   => 'root',
     } ->
     pcmk_resource { 'ceilometer-agent-central':
-      primitive_type  => 'ocf:heartbeat:ceilometer-agent-central'
+      resource_type  => 'ocf:heartbeat:ceilometer-agent-central'
     } ->
     file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
       source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
@@ -73,7 +72,7 @@ class cloud::spof(
       group   => 'root',
     } ->
     pcmk_resource { 'heat-engine':
-      primitive_type  => 'ocf:heartbeat:heat-engine'
+      resource_type  => 'ocf:heartbeat:heat-engine'
     }
   } else {
 
