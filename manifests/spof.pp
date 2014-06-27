@@ -22,7 +22,6 @@
 # [*cluster_ip*]
 #   (optional) Interface used by Corosync to send multicast traffic
 #   Defaults to '127.0.0.1'
-#
 # [*cluster_members*]
 #   (required on Red Hat) A space-separted list of cluster IP's or names
 #   Defaults to false
@@ -39,7 +38,7 @@ class cloud::spof(
   $cluster_password  = 'secrete'
 ) {
 
-  if $::operatingsystem == 'RedHat' {
+  if $::osfamily == 'RedHat' {
     if ! $cluster_members {
       fail('cluster_members is a required parameter.')
     }
@@ -62,17 +61,23 @@ class cloud::spof(
       owner   => 'root',
       group   => 'root',
     } ->
-    pcmk_resource { 'ceilometer-agent-central':
-      resource_type  => 'ocf:heartbeat:ceilometer-agent-central'
-    } ->
+    exec {'pcmk_ceilometer_agent_central':
+      command => 'pcs resource create ceilometer-agent-central ocf:heartbeat:ceilometer-agent-central',
+      path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
+      user    => 'root',
+      unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
+    }
     file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
       source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
       mode    => '0755',
       owner   => 'root',
       group   => 'root',
     } ->
-    pcmk_resource { 'heat-engine':
-      resource_type  => 'ocf:heartbeat:heat-engine'
+    exec {'pcmk_heat_engine':
+      command => 'pcs resource create heat-engine ocf:heartbeat:heat-engine',
+      path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
+      user    => 'root',
+      unless  => '/usr/sbin/pcs resource | /bin/grep heat-engine | /bin/grep Started'
     }
   } else {
 
