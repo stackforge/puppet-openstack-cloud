@@ -44,7 +44,6 @@ class cloud::network::metadata(
   }
 
   neutron_metadata_agent_config {
-    'DEFAULT/metadata_backlog':       value => '4096';
     'DEFAULT/nova_metadata_protocol': value => $ks_nova_internal_proto;
   }
 
