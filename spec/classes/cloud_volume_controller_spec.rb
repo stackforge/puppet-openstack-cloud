@@ -33,7 +33,8 @@ describe 'cloud::volume::controller' do
         debug                      => true,
         log_facility               => 'LOG_LOCAL0',
         storage_availability_zone  => 'nova',
-        use_syslog                 => true }"
+        use_syslog                 => true,
+        nova_endpoint_type         => 'internalURL' }"
     end
 
     let :params do
@@ -64,6 +65,7 @@ describe 'cloud::volume::controller' do
           :storage_availability_zone => 'nova'
         )
       should contain_class('cinder::ceilometer')
+      should contain_cinder_config('DEFAULT/nova_catalog_info').with('value' => 'compute:nova:internalURL')
     end
 
     it 'checks if Cinder DB is populated' do

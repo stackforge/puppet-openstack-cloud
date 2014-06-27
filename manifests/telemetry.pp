@@ -82,6 +82,7 @@ class cloud::telemetry(
   $debug                      = true,
   $log_facility               = 'LOG_LOCAL0',
   $use_syslog                 = true,
+  $os_endpoint_type           = 'publicURL'
 ){
 
   # Disable twice logging if syslog is enabled
@@ -101,6 +102,10 @@ class cloud::telemetry(
     log_dir         => $log_dir,
     use_syslog      => $use_syslog,
     log_facility    => $log_facility
+  }
+
+  ceilometer_config {
+    'service_credentials/os_endpoint_type': value => $os_endpoint_type;
   }
 
   class { 'ceilometer::agent::auth':

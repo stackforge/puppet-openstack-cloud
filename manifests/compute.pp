@@ -86,7 +86,8 @@ class cloud::compute(
   $neutron_password         = 'neutronpassword',
   $neutron_region_name      = 'RegionOne',
   $memcache_servers         = ['127.0.0.1:11211'],
-  $availability_zone        = 'RegionOne'
+  $availability_zone        = 'RegionOne',
+  $cinder_endpoint_type     = 'publicURL'
 ) {
 
   if !defined(Resource['nova_config']) {
@@ -131,6 +132,7 @@ class cloud::compute(
     'DEFAULT/default_availability_zone':        value => $availability_zone;
     'DEFAULT/servicegroup_driver':              value => 'mc';
     'DEFAULT/glance_num_retries':               value => '10';
+    'DEFAULT/cinder_catalog_info':              value => "volume:cinder:${cinder_endpoint_type}";
   }
 
   # Note(EmilienM):

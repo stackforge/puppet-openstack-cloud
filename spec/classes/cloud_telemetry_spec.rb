@@ -35,7 +35,8 @@ describe 'cloud::telemetry::server' do
         log_facility               => 'LOG_LOCAL0',
         use_syslog                 => true,
         verbose                    => true,
-        debug                      => true }"
+        debug                      => true,
+        os_endpoint_type           => 'internalURL' }"
     end
 
     let :params do
@@ -64,6 +65,8 @@ describe 'cloud::telemetry::server' do
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
         )
+
+      should contain_ceilometer_config('service_credentials/os_endpoint_type').with('value' => 'internalURL')
     end
 
     it 'configure ceilometer collector' do
