@@ -74,6 +74,9 @@ mod 'dnsclient',
 mod 'elasticsearch',
   :git => 'git://github.com/enovance/puppet-elasticsearch.git',
   :ref => '042720d52a3879786c2f9d9f67961c4f42004fae'
+mod 'firewall',
+  :git => 'git@github.com:enovance/puppetlabs-firewall.git',
+  :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
 mod 'fluentd',
   :git => 'git://github.com/enovance/puppet-fluentd.git',
   :ref => '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
