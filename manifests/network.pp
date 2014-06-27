@@ -141,8 +141,7 @@ class cloud::network(
     tunnel_id_ranges      => ['1:10000'],
     flat_networks         => $flat_networks,
     mechanism_drivers     => ['openvswitch','l2population'],
-    enable_security_group => true,
-    firewall_driver       => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+    enable_security_group => true
   }
 
   # TODO(EmilienM) Temporary, need to be fixed upstream.
@@ -150,14 +149,15 @@ class cloud::network(
   # config file, only ML2. I need to patch puppet-neutron.
   # Follow-up: https://github.com/enovance/puppet-openstack-cloud/issues/199
   neutron_plugin_ml2 {
-    'agent/tunnel_types':     value => ['gre'];
-    'agent/l2_population':    value => true;
-    'agent/polling_interval': value => '15';
-    'OVS/local_ip':           value => $tunnel_eth;
-    'OVS/enable_tunneling':   value => true;
-    'OVS/integration_bridge': value => 'br-int';
-    'OVS/tunnel_bridge':      value => 'br-tun';
-    'OVS/bridge_mappings':    value => $provider_bridge_mappings;
+    'agent/tunnel_types':            value => ['gre'];
+    'agent/l2_population':           value => true;
+    'agent/polling_interval':        value => '15';
+    'OVS/local_ip':                  value => $tunnel_eth;
+    'OVS/enable_tunneling':          value => true;
+    'OVS/integration_bridge':        value => 'br-int';
+    'OVS/tunnel_bridge':             value => 'br-tun';
+    'OVS/bridge_mappings':           value => $provider_bridge_mappings;
+    'securitygroup/firewall_driver': value => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver';
   }
 
   # TODO(EmilienM), Temporary, it's a bug in Debian packages. GH#342

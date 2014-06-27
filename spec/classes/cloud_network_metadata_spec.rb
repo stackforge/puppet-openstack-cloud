@@ -85,8 +85,7 @@ describe 'cloud::network::metadata' do
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :flat_networks          => ['public'],
-          :enable_security_group  => true,
-          :firewall_driver        => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
       should_not contain__neutron_network('public')
     end
@@ -102,7 +101,6 @@ describe 'cloud::network::metadata' do
           :auth_region      => 'MyRegion',
           :metadata_workers => '8'
       )
-      should contain_neutron_metadata_agent_config('DEFAULT/metadata_backlog').with(:value => '4096')
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => 'https')
     end
 

@@ -164,8 +164,7 @@ describe 'cloud::compute::hypervisor' do
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :flat_networks          => ['public'],
-          :enable_security_group  => true,
-          :firewall_driver        => 'neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver'
+          :enable_security_group  => true
       )
       should_not contain__neutron_network('public')
     end
