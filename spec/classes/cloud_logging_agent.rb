@@ -27,13 +27,27 @@ describe 'cloud::logging::agent' do
       include ::fluentd"
     end
 
+    let :params do {
+      :server => '127.0.0.1',
+      :sources => {
+        'apache' => {'type' => 'tail', 'configfile' => 'apache'},
+        'syslog' => {'type' => 'tail', 'configfile' => 'syslog'}
+      }
+    }
+    end
+
     it 'configure logging common' do
       it should contain_concat("/etc/td-agent/config.d/forward.conf")
     end
 
-    it 'configure elasticsearch' do
-      should contain_class('elasticsearch')
+    it 'config apache logging source' do
+      it should contain_fluentd__configfile('apache')
+      it should contain_fluentd__source('apache').with({
+        :type       => 'tail',
+        :configfile => 'apache',
+      })
     end
+
   end
 
   context 'on Debian platforms' do

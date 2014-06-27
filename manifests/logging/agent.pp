@@ -23,14 +23,23 @@
 #   (optional) IP address or hostname of the logging server
 #   Defaults to '127.0.0.1'
 #
-
+# [*sources*]
+#   (optional) Fluentd sources
+#   Defaults to empty hash
+#
 class cloud::logging::agent(
-  $server = '127.0.0.1'
+  $server = '127.0.0.1',
+  $sources = {},
 ){
 
   include cloud::logging
 
-  fluentd::configfile { 'syslog': }
+  resources {'fluentd::configfile':
+    purge => true,
+  }
+  resources {'fluentd::source' :
+    purge => true,
+  }
 
   file { '/var/db':
     ensure => directory,
@@ -42,16 +51,8 @@ class cloud::logging::agent(
     require => Class['fluentd'],
   }
 
-  fluentd::source { 'syslog_main':
-    configfile => 'syslog',
-    type       => 'tail',
-    format     => 'syslog',
-    tag        => 'system.syslog',
-    config     => {
-      path     => '/var/log/syslog',
-      pos_file => '/var/db/td-agent/td-agent.syslog.pos'
-    }
-  }
+  create_resources('fluentd::configfile', keys($sources))
+  create_resources('fluentd::source', $sources)
 
   fluentd::match { 'forward_main':
     configfile => 'forward',
