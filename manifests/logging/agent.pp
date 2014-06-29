@@ -19,25 +19,36 @@
 #
 # === Parameters:
 #
-# [*server*]
-#   (optional) IP address or hostname of the logging server
-#   Defaults to '127.0.0.1'
+# [*syslog_enable*]
+#   (optional) Enable the configuration of rsyslog
+#   Defaults to false
 #
 # [*sources*]
 #   (optional) Fluentd sources
 #   Defaults to empty hash
 #
+# [*matches*]
+#   (optional) Fluentd matches
+#   Defaults to empty hash
+#
+# [*plugins*]
+#   (optional) Fluentd plugins to install
+#   Defaults to empty hash
+#
 class cloud::logging::agent(
-  $server = '127.0.0.1',
-  $sources = {},
+  $syslog_enable = false,
+  $sources       = {},
+  $matches       = {},
+  $plugins       = {},
 ){
 
   include cloud::logging
 
-  resources {'fluentd::configfile':
-    purge => true,
+  if $syslog_enable {
+    include rsyslog::client
   }
-  resources {'fluentd::source' :
+
+  resources {['fluentd::configfile', 'fluentd::source', 'fluentd::match']:
     purge => true,
   }
 
@@ -51,14 +62,10 @@ class cloud::logging::agent(
     require => Class['fluentd'],
   }
 
-  create_resources('fluentd::configfile', keys($sources))
-  create_resources('fluentd::source', $sources)
-
-  fluentd::match { 'forward_main':
-    configfile => 'forward',
-    pattern    => '**',
-    type       => 'forward',
-    servers    => [ { 'host' => $server } ]
-  }
+  ensure_resource('fluentd::configfile', keys($sources))
+  ensure_resource('fluentd::configfile', keys($matches))
+  create_resources('fluentd::source', $sources, {'require' => 'File[\'/var/db/td-agent\']'})
+  create_resources('fluentd::match', $matches)
+  create_resources('fluentd::install_plugin', $plugins)
 
 }

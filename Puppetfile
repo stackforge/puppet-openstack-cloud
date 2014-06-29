@@ -122,6 +122,9 @@ mod 'rsync',
 mod 'ssh',
   :git => 'git://github.com/enovance/puppet-ssh.git',
   :ref => '10675c0d80511a8cdd514af67b695887fa97ec40'
+mod 'rsyslog',
+  :git => 'git://github.com/enovance/puppet-rsyslog.git',
+  :ref => '3072553c9543b5c7769c54ed251bdfcce2967ce9'
 mod 'stdlib',
   :git => 'git://github.com/enovance/puppetlabs-stdlib.git',
   :ref => '224b8f9a191f635b03ee900a9bf87bfdb0f1a6ed'
