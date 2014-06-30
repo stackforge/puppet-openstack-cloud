@@ -399,20 +399,41 @@ class cloud::loadbalancer(
     port         => $ks_ceilometer_public_port,
     bind_options => $ceilometer_bind_options,
   }
+  if 'ssl' in $heat_api_bind_options {
+    $heat_api_options = {
+    'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }' }
+  } else {
+    $heat_api_options = {}
+  }
   cloud::loadbalancer::binding { 'heat_api_cluster':
     ip           => $heat_api,
     port         => $ks_heat_public_port,
     bind_options => $heat_api_bind_options,
+    options      => $heat_api_options
+  }
+  if 'ssl' in $heat_cfn_bind_options {
+    $heat_cfn_options = {
+    'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }' }
+  } else {
+    $heat_cfn_options = { }
   }
   cloud::loadbalancer::binding { 'heat_cfn_api_cluster':
     ip           => $heat_cfn_api,
     port         => $ks_heat_cfn_public_port,
     bind_options => $heat_cfn_bind_options,
+    options      => $heat_cfn_options
+  }
+  if 'ssl' in $heat_cloudwatch_bind_options {
+    $heat_cloudwatch_options = {
+    'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }' }
+  } else {
+    $heat_cloudwatch_options = { }
   }
   cloud::loadbalancer::binding { 'heat_cloudwatch_api_cluster':
     ip           => $heat_cloudwatch_api,
     port         => $ks_heat_cloudwatch_public_port,
     bind_options => $heat_cloudwatch_bind_options,
+    options      => $heat_cloudwatch_options
   }
 
   if $::operatingsystem == 'RedHat' {
