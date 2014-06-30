@@ -399,6 +399,25 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
+    context 'configure OpenStack Heat API SSL binding' do
+      before do
+        params.merge!(
+          :heat_api_bind_options => ['ssl', 'crt']
+        )
+      end
+      it { should contain_haproxy__listen('heat_api_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '8004',
+        :options   => {
+          'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }',
+          'mode'           => 'http',
+          'option'         => ['tcpka','forwardfor','tcplog', 'httpchk'],
+          'http-check'     => 'expect ! rstatus ^5',
+          'balance'        => 'roundrobin'
+        },
+        :bind_options => ['ssl', 'crt']
+      )}
+    end
   end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do
