@@ -74,6 +74,9 @@ mod 'dnsclient',
 mod 'elasticsearch',
   :git => 'git://github.com/enovance/puppet-elasticsearch.git',
   :ref => '042720d52a3879786c2f9d9f67961c4f42004fae'
+mod 'firewall',
+  :git => 'git@github.com:enovance/puppetlabs-firewall.git',
+  :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
 mod 'fluentd',
   :git => 'git://github.com/enovance/puppet-fluentd.git',
   :ref => '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
@@ -110,6 +113,9 @@ mod 'mysql',
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
+mod 'pacemaker',
+  :git => 'git://github.com/enovance/puppet-pacemaker.git',
+  :ref => '7e304243b5bd2dced5f54d5146ecc58d0b5a51f1'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
   :ref => '25420cb3c26c9a8432ab519d43c094d614d4fec4'

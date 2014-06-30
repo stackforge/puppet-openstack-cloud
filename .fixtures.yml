@@ -39,6 +39,15 @@ fixtures:
     'concat':
       repo: 'git://github.com/enovance/puppet-concat.git'
       ref: '04356974f72b90a1d0f57346a00e95a717924e43'
+    'corosync':
+      repo: 'git://github.com/enovance/puppetlabs-corosync.git'
+      ref: '79b61302b07fef30b65a42f3b55229616018aacf'
+    'firewall':
+      repo: 'git://github.com/enovance/puppetlabs-firewall.git'
+      ref: '6540b31b0ca0727094ddf44436274436d2853d6d'
+    'pacemaker':
+      repo: 'git://github.com/enovance/puppet-pacemaker.git'
+      ref: '3e64c61c205376885ba537fb3c0d37ced0fb53ac'
     'elasticsearch':
       repo: 'git://github.com/enovance/puppet-elasticsearch.git'
       ref: '042720d52a3879786c2f9d9f67961c4f42004fae'
