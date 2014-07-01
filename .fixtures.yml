@@ -47,7 +47,7 @@ fixtures:
       ref: '6540b31b0ca0727094ddf44436274436d2853d6d'
     'pacemaker':
       repo: 'git://github.com/enovance/puppet-pacemaker.git'
-      ref: '3e64c61c205376885ba537fb3c0d37ced0fb53ac'
+      ref: 'a2949b62b5308e0edaa3063295ddb2b78fa975eb'
     'elasticsearch':
       repo: 'git://github.com/enovance/puppet-elasticsearch.git'
       ref: '042720d52a3879786c2f9d9f67961c4f42004fae'

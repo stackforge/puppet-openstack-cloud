@@ -115,7 +115,7 @@ mod 'ntp',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
 mod 'pacemaker',
   :git => 'git://github.com/enovance/puppet-pacemaker.git',
-  :ref => '7e304243b5bd2dced5f54d5146ecc58d0b5a51f1'
+  :ref => 'a2949b62b5308e0edaa3063295ddb2b78fa975eb'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
   :ref => '25420cb3c26c9a8432ab519d43c094d614d4fec4'
