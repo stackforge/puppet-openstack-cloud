@@ -46,15 +46,17 @@ class cloud::spof(
     class { 'pacemaker':
       hacluster_pwd => $cluster_password
     }
-
     class { 'pacemaker::corosync':
-      cluster_name    => 'openstack',
-      cluster_members => $cluster_members
+      cluster_name     => 'openstack',
+      cluster_members  => $cluster_members,
+      settle_timeout   => 10,
+      settle_tries     => 2,
+      settle_try_sleep => 5,
+      manage_fw        => false
     }
-
     class {'pacemaker::stonith':
       disable => true
-    } ->
+    }
     file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
       source  => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
       mode    => '0755',
@@ -66,7 +68,7 @@ class cloud::spof(
       path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
       user    => 'root',
       unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
-    }
+    } ->
     file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
       source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
       mode    => '0755',

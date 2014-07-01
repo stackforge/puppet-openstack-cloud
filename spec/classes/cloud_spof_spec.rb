@@ -68,8 +68,12 @@ describe 'cloud::spof' do
         should contain_class('pacemaker').with(:hacluster_pwd => 'verysecrete')
         should contain_class('pacemaker::stonith').with(:disable => true)
         should contain_class('pacemaker::corosync').with(
-          :cluster_name    => 'openstack',
-          :cluster_members => 'srv1 srv2 srv3')
+          :cluster_name     => 'openstack',
+          :settle_timeout   => 10,
+          :settle_tries     => 2,
+          :settle_try_sleep => 5,
+          :manage_fw        => false,
+          :cluster_members  => 'srv1 srv2 srv3')
         should contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
           :source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
           :mode   => '0755',
