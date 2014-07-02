@@ -56,6 +56,10 @@ describe 'cloud::database::sql' do
         :neutron_db_user                => 'neutron',
         :neutron_db_password            => 'secrete',
         :neutron_db_allowed_hosts       => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :trove_db_host                  => '10.0.0.1',
+        :trove_db_user                  => 'trove',
+        :trove_db_password              => 'secrete',
+        :trove_db_allowed_hosts         => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :mysql_root_password            => 'secrete',
         :mysql_sys_maint_password       => 'sys',
         :galera_clustercheck_dbuser     => 'clustercheckuser',
@@ -147,6 +151,15 @@ describe 'cloud::database::sql' do
         should contain_class('heat::db::mysql').with(
             :dbname        => 'heat',
             :user          => 'heat',
+            :password      => 'secrete',
+            :host          => '10.0.0.1',
+            :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
+      end
+
+      it 'configure trove database' do
+        should contain_class('trove::db::mysql').with(
+            :dbname        => 'trove',
+            :user          => 'trove',
             :password      => 'secrete',
             :host          => '10.0.0.1',
             :allowed_hosts => ['10.0.0.1','10.0.0.2','10.0.0.3'] )
