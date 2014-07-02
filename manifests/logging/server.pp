@@ -18,33 +18,8 @@
 
 class cloud::logging::server{
 
-  include cloud::logging
-
-  class { 'elasticsearch':
-    config => {}
-  }
-
-  # kibana3 requires a separate vhost or a different port
-  class { 'kibana3':
-    ws_port => 8001,
-  }
-
-  fluentd::install_plugin { 'elasticsearch-plugin':
-    ensure      => present,
-    plugin_type => 'gem',
-    plugin_name => 'fluent-plugin-elasticsearch',
-  }
-
-  fluentd::source { 'forward_collector':
-    configfile => 'forward',
-    type       => 'forward',
-  }
-
-  fluentd::match { 'forward_logs':
-    configfile => 'forward',
-    pattern    => '**',
-    type       => 'elasticsearch',
-    config     => { logstash_format => true }
-  }
+  include ::elasticsearch
+  include ::kibana3
+  include cloud::logging::agent
 
 }

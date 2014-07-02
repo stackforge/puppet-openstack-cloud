@@ -108,6 +108,9 @@ fixtures:
     'ssh':
       repo: 'git://github.com/enovance/puppet-ssh.git'
       ref: '10675c0d80511a8cdd514af67b695887fa97ec40'
+    'rsyslog':
+      repo: 'git://github.com/enovance/puppet-rsyslog.git'
+      ref: '3072553c9543b5c7769c54ed251bdfcce2967ce9'
     'rsync':
       repo: 'git://github.com/enovance/puppetlabs-rsync.git'
       ref: '7122983d89bf68bc4170415cc03212f6a8a4636e'

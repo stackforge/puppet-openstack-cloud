@@ -20,14 +20,14 @@ require 'spec_helper'
 
 describe 'cloud::logging::agent' do
 
-  shared_examples_for 'openstack logging server' do
+  shared_examples_for 'openstack logging agent' do
 
     let :pre_condition do
       "class { 'cloud::logging': }
       include ::fluentd"
     end
 
-    let :params do {
+    let :common_params do {
       :server => '127.0.0.1',
       :sources => {
         'apache' => {'type' => 'tail', 'configfile' => 'apache'},
@@ -36,16 +36,50 @@ describe 'cloud::logging::agent' do
     }
     end
 
-    it 'configure logging common' do
-      it should contain_concat("/etc/td-agent/config.d/forward.conf")
+
+    context 'rsyslog is enabled' do
+      let :params do 
+        common_params.merge( {:syslog_enable => 'true' } )
+      end
+
+      it 'include cloud::loging' do
+        it should contain_class('cloud::logging')
+      end
+
+      it 'include rsyslog::client' do
+        it should contain_class('rsyglog::client')
+      end
+
+      it 'create /var/db/td-agent' do
+        it should contain_file('/var/db/td-agent').with({
+          :ensure => 'directory',
+          :owner  => 'td-agent',
+          :group  => 'td-agent',
+        })
+      end
+
     end
 
-    it 'config apache logging source' do
-      it should contain_fluentd__configfile('apache')
-      it should contain_fluentd__source('apache').with({
-        :type       => 'tail',
-        :configfile => 'apache',
-      })
+    context 'rsyslog is disabled' do
+      let :params do 
+        common_params.merge( {:syslog_enable => 'false' } )
+      end
+
+      it 'include cloud::loging' do
+        it should contain_class('cloud::logging')
+      end
+
+      it 'include rsyslog::client' do
+        it should_not contain_class('rsyglog::client')
+      end
+
+      it 'create /var/db/td-agent' do
+        it should contain_file('/var/db/td-agent').with({
+          :ensure => 'directory',
+          :owner  => 'td-agent',
+          :group  => 'td-agent',
+        })
+      end
     end
 
   end
@@ -55,7 +89,7 @@ describe 'cloud::logging::agent' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'openstack logging server'
+    it_configures 'openstack logging agent'
   end
 
   context 'on RedHat platforms' do
@@ -63,7 +97,7 @@ describe 'cloud::logging::agent' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'openstack logging server'
+    it_configures 'openstack logging agent'
   end
 
 end
