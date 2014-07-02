@@ -110,6 +110,18 @@
 #   (optional) Public Hostname or IP to connect to Cinder API
 #   Defaults to '127.0.0.1'
 #
+# [*ks_trove_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Trove API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_trove_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Trove API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_trove_public_host*]
+#   (optional) Public Hostname or IP to connect to Trove API
+#   Defaults to '127.0.0.1'
+#
 # [*ks_neutron_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Neutron API
 #   Defaults to '127.0.0.1'
@@ -145,6 +157,10 @@
 # [*ks_swift_public_host*]
 #   (optional) Public Hostname or IP to connect to Swift API
 #   Defaults to '127.0.0.1'
+#
+# [*ks_trove_password*]
+#   (optional) Password used by Trove to connect to Keystone API
+#   Defaults to 'trovepassword'
 #
 # [*ks_ceilometer_password*]
 #   (optional) Password used by Ceilometer to connect to Keystone API
@@ -194,6 +210,10 @@
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_trove_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_glance_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
@@ -233,6 +253,18 @@
 # [*ks_nova_internal_port*]
 #   (optional) TCP port to connect to Nova API from internal network
 #   Defaults to '8774'
+#
+# [*ks_trove_internal_port*]
+#   (optional) TCP port to connect to Trove API from internal network
+#   Defaults to '8779'
+#
+# [*ks_trove_public_port*]
+#   (optional) TCP port to connect to Trove API from public network
+#   Defaults to '8779'
+#
+# [*ks_trove_admin_port*]
+#   (optional) TCP port to connect to Trove API from admin network
+#   Defaults to '8779'
 #
 # [*ks_nova_public_port*]
 #   (optional) TCP port to connect to Nova API from public network
@@ -398,6 +430,14 @@ class cloud::identity (
   $ks_swift_public_proto        = 'http',
   $ks_swift_admin_proto         = 'http',
   $ks_swift_internal_proto      = 'http',
+  $ks_trove_admin_host          = '127.0.0.1',
+  $ks_trove_internal_host       = '127.0.0.1',
+  $ks_trove_password            = 'trovepassword',
+  $ks_trove_public_host         = '127.0.0.1',
+  $ks_trove_public_port         = 8779,
+  $ks_trove_public_proto        = 'http',
+  $ks_trove_admin_proto         = 'http',
+  $ks_trove_internal_proto      = 'http',
   $api_eth                      = '127.0.0.1',
   $region                       = 'RegionOne',
   $verbose                      = true,
@@ -575,6 +615,18 @@ class cloud::identity (
     admin_protocol    => $ks_heat_admin_proto,
     region            => $region,
     password          => $ks_heat_password
+  }
+
+  class {'trove::keystone::auth':
+    admin_address     => $ks_trove_admin_host,
+    internal_address  => $ks_trove_internal_host,
+    public_address    => $ks_trove_public_host,
+    public_protocol   => $ks_trove_public_proto,
+    admin_protocol    => $ks_trove_admin_proto,
+    internal_protocol => $ks_trove_internal_proto,
+    port              => $ks_trove_public_port,
+    region            => $region,
+    password          => $ks_trove_password
   }
 
   # Purge expored tokens every days at midnight
