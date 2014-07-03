@@ -48,10 +48,6 @@ class cloud::logging::agent(
     include rsyslog::client
   }
 
-  resources {['fluentd::configfile', 'fluentd::source', 'fluentd::match']:
-    purge => true,
-  }
-
   file { '/var/db':
     ensure => directory,
   } ->

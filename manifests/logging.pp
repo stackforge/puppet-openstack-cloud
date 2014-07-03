@@ -21,6 +21,5 @@
 class cloud::logging{
 
   include ::fluentd
-  fluentd::configfile { 'forward': }
 
 }
