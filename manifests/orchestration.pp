@@ -110,7 +110,8 @@ class cloud::orchestration(
   $verbose                    = true,
   $debug                      = true,
   $use_syslog                 = true,
-  $log_facility               = 'LOG_LOCAL0'
+  $log_facility               = 'LOG_LOCAL0',
+  $os_endpoint_type           = 'publicURL'
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -153,4 +154,7 @@ class cloud::orchestration(
     unless  => "/usr/bin/mysql heat -h ${heat_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
   }
 
+  heat_config {
+    'clients/endpoint_type': value => $os_endpoint_type;
+  }
 }

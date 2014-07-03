@@ -41,7 +41,8 @@ describe 'cloud::orchestration::engine' do
         verbose                    => true,
         log_facility               => 'LOG_LOCAL0',
         use_syslog                 => true,
-        debug                      => true }"
+        debug                      => true,
+        os_endpoint_type           => 'internalURL' }"
     end
 
     let :params do
@@ -71,6 +72,7 @@ describe 'cloud::orchestration::engine' do
           :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat?charset=utf8',
           :log_dir                 => false
         )
+      should contain_heat_config('clients/endpoint_type').with('value' => 'internalURL')
     end
 
     it 'configure heat engine' do

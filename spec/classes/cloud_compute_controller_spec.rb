@@ -40,7 +40,8 @@ describe 'cloud::compute::controller' do
         neutron_region_name     => 'MyRegion',
         neutron_password        => 'secrete',
         memcache_servers        => ['10.0.0.1','10.0.0.2'],
-        log_facility            => 'LOG_LOCAL0' }"
+        log_facility            => 'LOG_LOCAL0',
+        cinder_endpoint_type    => 'adminURL' }"
     end
 
     let :params do
@@ -73,6 +74,7 @@ describe 'cloud::compute::controller' do
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
       should contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
+      should contain_nova_config('DEFAULT/cinder_catalog_info').with_value('volume:cinder:adminURL')
     end
 
     it 'configure neutron on compute node' do
