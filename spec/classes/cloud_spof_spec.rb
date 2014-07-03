@@ -47,13 +47,6 @@ describe 'cloud::spof' do
           :owner  => 'root',
           :group  => 'root'
         )
-        should contain_file('/usr/lib/ocf/resource.d/heartbeat/heat-engine').with(
-          :source => 'puppet:///modules/cloud/heartbeat/heat-engine',
-          :mode   => '0755',
-          :owner  => 'root',
-          :group  => 'root'
-        )
-        should contain_class('cloud::orchestration::engine').with(:enabled => false)
         should contain_class('cloud::telemetry::centralagent').with(:enabled => false)
       end
     end
@@ -80,25 +73,12 @@ describe 'cloud::spof' do
           :owner  => 'root',
           :group  => 'root'
         )
-        should contain_file('/usr/lib/ocf/resource.d/heartbeat/heat-engine').with(
-          :source => 'puppet:///modules/cloud/heartbeat/heat-engine',
-          :mode   => '0755',
-          :owner  => 'root',
-          :group  => 'root'
-        )
         should contain_exec('pcmk_ceilometer_agent_central').with(
           :command => 'pcs resource create ceilometer-agent-central ocf:heartbeat:ceilometer-agent-central',
           :path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
           :user    => 'root',
           :unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
         )
-        should contain_exec('pcmk_heat_engine').with(
-          :command => 'pcs resource create heat-engine ocf:heartbeat:heat-engine',
-          :path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
-          :user    => 'root',
-          :unless  => '/usr/sbin/pcs resource | /bin/grep heat-engine | /bin/grep Started'
-        )
-        should contain_class('cloud::orchestration::engine').with(:enabled => false)
         should contain_class('cloud::telemetry::centralagent').with(:enabled => false)
       end
     end

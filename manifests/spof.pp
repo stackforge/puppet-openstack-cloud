@@ -68,18 +68,6 @@ class cloud::spof(
       path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
       user    => 'root',
       unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
-    } ->
-    file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-      source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
-    } ->
-    exec {'pcmk_heat_engine':
-      command => 'pcs resource create heat-engine ocf:heartbeat:heat-engine',
-      path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
-      user    => 'root',
-      unless  => '/usr/sbin/pcs resource | /bin/grep heat-engine | /bin/grep Started'
     }
   } else {
 
@@ -123,37 +111,11 @@ class cloud::spof(
           on-fail  => 'restart'
         }
       }
-    } ->
-    file { '/usr/lib/ocf/resource.d/heartbeat/heat-engine':
-      source  => 'puppet:///modules/cloud/heartbeat/heat-engine',
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
-    } ->
-    cs_primitive { 'heat-engine':
-      primitive_class => 'ocf',
-      primitive_type  => 'heat-engine',
-      provided_by     => 'heartbeat',
-      operations      => {
-        'monitor' => {
-          interval => '10s',
-          timeout  => '30s'
-        },
-        'start'   => {
-          interval => '0',
-          timeout  => '30s',
-          on-fail  => 'restart'
-        }
-      }
     }
   }
 
 
   # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
-  class { 'cloud::orchestration::engine':
-    enabled => false,
-  }
-
   class { 'cloud::telemetry::centralagent':
     enabled => false,
   }
