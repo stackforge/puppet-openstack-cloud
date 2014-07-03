@@ -66,7 +66,7 @@ class cloud::messaging(
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq'],
   }
-  rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat']:
+  rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat','trove']:
     admin    => true,
     password => $rabbit_password,
     provider => 'rabbitmqctl',
@@ -79,6 +79,7 @@ class cloud::messaging(
     'cinder@/',
     'ceilometer@/',
     'heat@/',
+    'trove@/',
   ]:
     configure_permission => '.*',
     write_permission     => '.*',
