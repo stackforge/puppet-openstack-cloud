@@ -45,6 +45,9 @@ mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => 'f7d1385d6990492705ddaa228ffa544ca235913a'
 
+mod 'trove',
+  :git => 'git://github.com/enovance/puppet-trove.git'
+
 # Dependency
 mod 'apache',
   :git => 'git://github.com/enovance/puppetlabs-apache.git',
