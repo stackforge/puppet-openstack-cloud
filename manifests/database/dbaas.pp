@@ -58,9 +58,9 @@ class cloud::database::dbaas(
   $trove_db_password            = 'trovepassword',
   $rabbit_hosts                 = ['127.0.0.1:5672'],
   $rabbit_password              = 'rabbitpassword',
-  $nova_proxy_admin_pass        = 'novapassword',
-  $nova_proxy_admin_user        = 'admin',
-  $nova_proxy_admin_tenant_name = 'admin',
+  $nova_admin_username          = 'trove',
+  $nova_admin_tenant_name       = 'services',
+  $nova_admin_password          = 'trovepassword',
 ) {
 
   $encoded_user     = uriescape($trove_db_user)
@@ -70,9 +70,10 @@ class cloud::database::dbaas(
     database_connection          => "mysql://${encoded_user}:${encoded_password}@${trove_db_host}/trove?charset=utf8",
     rabbit_hosts                 => $rabbit_hosts,
     rabbit_password              => $rabbit_password,
-    nova_proxy_admin_pass        => $nova_proxy_admin_pass,
-    nova_proxy_admin_user        => $nova_proxy_admin_user,
-    nova_proxy_admin_tenant_name => $nova_proxy_admin_tenant_name
+    rabbit_userid                => 'trove',
+    nova_proxy_admin_pass        => $nova_admin_password,
+    nova_proxy_admin_user        => $nova_admin_username,
+    nova_proxy_admin_tenant_name => $nova_admin_tenant_name
   }
 
   exec {'trove_db_sync':
