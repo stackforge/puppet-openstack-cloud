@@ -119,7 +119,7 @@
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
-# [*trive_api*]
+# [*trove_api*]
 #   (optional) Enable or not Trove public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
