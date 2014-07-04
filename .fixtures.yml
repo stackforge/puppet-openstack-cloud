@@ -50,7 +50,10 @@ fixtures:
       ref: 'a2949b62b5308e0edaa3063295ddb2b78fa975eb'
     'elasticsearch':
       repo: 'git://github.com/enovance/puppet-elasticsearch.git'
-      ref: '042720d52a3879786c2f9d9f67961c4f42004fae'
+      ref: '6d08442e8382f0f47388d4185122992c2d73cd9b'
+    'git':
+      repo: 'git://github.com/enovance/puppetlabs-git.git'
+      ref: '0df1f62130a7752c728efb7555f2b07ca178ee5b'
     'fluentd':
       repo: 'git://github.com/enovance/puppet-fluentd.git'
       ref: '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
@@ -62,7 +65,7 @@ fixtures:
       ref: 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
     'kibana3':
       repo: 'git://github.com/enovance/kibana3.git'
-      ref: '977699fa283ebbd593ba0b1ba99791e928681e29'
+      ref: 'acd8aca374f0cfd9601871f45e50cb810bef2678'
     'mongodb':
       repo: 'git://github.com/enovance/puppetlabs-mongodb.git'
       ref: 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
