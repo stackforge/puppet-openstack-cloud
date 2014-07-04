@@ -29,6 +29,7 @@ fixtures:
       ref: '025b8cb830d7fa476c4ab1a0b0228b88b5ba10c3'
     'trove':
       repo: 'git://github.com/enovance/puppet-trove'
+      ref: '6cad2a1474ece5dad813821893f994b69df29fed'
     'apt':
       repo: 'git://github.com/enovance/puppetlabs-apt.git'
       ref: '9b001af8775c7231ea2656b7eb43d6141b536f49'
