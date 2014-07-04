@@ -93,6 +93,9 @@ fixtures:
     'vswitch':
       repo: 'git://github.com/enovance/puppet-vswitch'
       ref: '49dbaff15e8f017dbe365ebf08eb505472b695a1'
+    'vcsrepo':
+      repo: 'git://github.com/enovance/puppetlabs-vcsrepo.git'
+      ref: '4592bfd59cd5d4795069798a14b483e16c98c1ff'
     'stdlib':
       repo: 'git://github.com/enovance/puppetlabs-stdlib.git'
       ref: '224b8f9a191f635b03ee900a9bf87bfdb0f1a6ed'
