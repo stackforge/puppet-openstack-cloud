@@ -67,6 +67,11 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to 'LOG_LOCAL0'
 #
+# [*backend*]
+#   (optionnal) Backend to use to store images
+#   Can be 'rbd' or 'file'.
+#   Defaults to 'rbd' to maintain backward compatibility
+#
 
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
@@ -88,7 +93,9 @@ class cloud::image::api(
   $verbose                           = true,
   $debug                             = true,
   $log_facility                      = 'LOG_LOCAL0',
-  $use_syslog                        = true
+  $use_syslog                        = true,
+  $backend                           = 'rbd',
+  $filesystem_store_datadir          = undef
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -138,20 +145,28 @@ class cloud::image::api(
     'DEFAULT/notifier_driver':          value => 'noop';
   }
 
-  class { 'glance::backend::rbd':
-    rbd_store_user => $glance_rbd_user,
-    rbd_store_pool => $glance_rbd_pool
-  }
+  if ($backend == 'rbd') {
+    class { 'glance::backend::rbd':
+      rbd_store_user => $glance_rbd_user,
+      rbd_store_pool => $glance_rbd_pool
+    }
 
-  Ceph::Key <<| title == $glance_rbd_user |>>
-  file { '/etc/ceph/ceph.client.glance.keyring':
-    owner   => 'glance',
-    group   => 'glance',
-    mode    => '0400',
-    require => Ceph::Key[$glance_rbd_user],
-    notify  => Service['glance-api','glance-registry']
+    Ceph::Key <<| title == $glance_rbd_user |>>
+    file { '/etc/ceph/ceph.client.glance.keyring':
+      owner   => 'glance',
+      group   => 'glance',
+      mode    => '0400',
+      require => Ceph::Key[$glance_rbd_user],
+      notify  => Service['glance-api','glance-registry']
+    }
+    Concat::Fragment <<| title == 'ceph-client-os' |>>
+  } elsif ($backend == 'file') {
+    class { 'glance::backend::file':
+      filesystem_store_datadir => $filesystem_store_datadir
+    }
+  } else {
+    fail("${backend} is not a Glance supported backend.")
   }
-  Concat::Fragment <<| title == 'ceph-client-os' |>>
 
   class { 'glance::cache::cleaner': }
   class { 'glance::cache::pruner': }

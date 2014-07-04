@@ -35,6 +35,7 @@ describe 'cloud::image::api' do
       :rabbit_password                   => 'secrete',
       :glance_rbd_user                   => 'glance',
       :glance_rbd_pool                   => 'images',
+      :backend                           => 'rbd',
       :debug                             => true,
       :verbose                           => true,
       :use_syslog                        => true,
@@ -92,6 +93,25 @@ describe 'cloud::image::api' do
       should contain_class('glance::cache::pruner')
     end
 
+    context 'with file Glance backend' do
+      before :each do
+        params.merge!(:backend => 'file')
+      end
+
+      it 'configure Glance with file backend' do
+        should contain_class('glance::backend::file')
+        should_not contain_class('glance::backend::rbd')
+        should contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/var/lib/glance/images/')
+        should contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+      end
+    end
+
+    context 'with wrong Glance backend' do
+      before :each do
+        params.merge!(:backend => 'Something')
+      end
+      it { should compile.and_raise_error(/Something is not a Glance supported backend./) }
+    end
   end
 
   context 'on Debian platforms' do
