@@ -73,7 +73,10 @@ mod 'dnsclient',
   :ref => '4158b30f4660623f98dcdbd1ce9b482556180b57'
 mod 'elasticsearch',
   :git => 'git://github.com/enovance/puppet-elasticsearch.git',
-  :ref => '042720d52a3879786c2f9d9f67961c4f42004fae'
+  :ref => '6d08442e8382f0f47388d4185122992c2d73cd9b'
+mod 'git',
+  :git => 'git://github.com/enovance/puppetlabs-git.git',
+  :ref => '0df1f62130a7752c728efb7555f2b07ca178ee5b'
 mod 'firewall',
   :git => 'git@github.com:enovance/puppetlabs-firewall.git',
   :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
@@ -91,7 +94,7 @@ mod 'keepalived',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
 mod 'kibana3',
   :git => 'git://github.com/enovance/kibana3.git',
-  :ref => '977699fa283ebbd593ba0b1ba99791e928681e29'
+  :ref => 'acd8aca374f0cfd9601871f45e50cb810bef2678'
 mod 'kmod',
   :git => 'git://github.com/enovance/puppet-kmod.git',
   :ref => 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
