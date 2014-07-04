@@ -36,6 +36,7 @@ describe 'cloud::loadbalancer' do
         :swift_api                         => true,
         :keystone_api_admin                => true,
         :keystone_api                      => true,
+        :trove_api                         => true,
         :horizon                           => true,
         :spice                             => true,
         :ceilometer_bind_options           => [],
@@ -50,6 +51,7 @@ describe 'cloud::loadbalancer' do
         :keystone_admin_bind_options       => [],
         :metadata_bind_options             => [],
         :neutron_bind_options              => [],
+        :trove_bind_options                => [],
         :swift_bind_options                => [],
         :spice_bind_options                => [],
         :horizon_bind_options              => [],
@@ -76,6 +78,7 @@ describe 'cloud::loadbalancer' do
         :ks_keystone_admin_port            => '35357',
         :ks_cinder_public_port             => '8776',
         :ks_neutron_public_port            => '9696',
+        :ks_trove_public_port              => '8779',
         :ks_heat_public_port               => '8004',
         :ks_heat_cfn_public_port           => '8000',
         :ks_heat_cloudwatch_public_port    => '8003' }

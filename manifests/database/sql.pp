@@ -51,6 +51,10 @@ class cloud::database::sql (
     $neutron_db_user                = 'neutron',
     $neutron_db_password            = 'neutronpassword',
     $neutron_db_allowed_hosts       = ['127.0.0.1'],
+    $trove_db_host                  = '127.0.0.1',
+    $trove_db_user                  = 'trove',
+    $trove_db_password              = 'trovepassword',
+    $trove_db_allowed_hosts         = ['127.0.0.1'],
     $mysql_root_password            = 'rootpassword',
     $mysql_sys_maint_password       = 'sys_maint',
     $galera_clustercheck_dbuser     = 'clustercheckdbuser',
@@ -206,6 +210,14 @@ class cloud::database::sql (
       password      => $heat_db_password,
       host          => $heat_db_host,
       allowed_hosts => $heat_db_allowed_hosts,
+    }
+
+    class { 'trove::db::mysql':
+      dbname        => 'trove',
+      user          => $trove_db_user,
+      password      => $trove_db_password,
+      host          => $trove_db_host,
+      allowed_hosts => $trove_db_allowed_hosts,
     }
 
 

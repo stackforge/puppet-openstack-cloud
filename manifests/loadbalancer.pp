@@ -119,6 +119,13 @@
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
+# [*trove_api*]
+#   (optional) Enable or not Trove public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
+#   Defaults to true
+#
 # [*ec2_api*]
 #   (optional) Enable or not EC2 public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
@@ -171,6 +178,7 @@ class cloud::loadbalancer(
   $metadata_api                     = true,
   $keystone_api                     = true,
   $keystone_api_admin               = true,
+  $trove_api                        = true,
   $horizon                          = true,
   $spice                            = true,
   $haproxy_auth                     = 'admin:changeme',
@@ -193,6 +201,7 @@ class cloud::loadbalancer(
   $metadata_bind_options            = [],
   $neutron_bind_options             = [],
   $nova_bind_options                = [],
+  $trove_bind_options               = [],
   $swift_bind_options               = [],
   $spice_bind_options               = [],
   $horizon_bind_options             = [],
@@ -211,6 +220,7 @@ class cloud::loadbalancer(
   $ks_neutron_public_port           = 9696,
   $ks_nova_public_port              = 8774,
   $ks_swift_public_port             = 8080,
+  $ks_trove_public_port             = 8779,
   $horizon_port                     = 80,
   $spice_port                       = 6082,
   $vip_public_ip                    = ['127.0.0.1'],
@@ -368,6 +378,11 @@ class cloud::loadbalancer(
     },
     bind_options       => $spice_bind_options,
     httpchk            => 'httpchk GET /';
+  }
+  cloud::loadbalancer::binding { 'trove_api_cluster':
+    ip           => $trove_api,
+    port         => $ks_trove_public_port,
+    bind_options => $trove_bind_options,
   }
   cloud::loadbalancer::binding { 'glance_api_cluster':
     ip                 => $glance_api,

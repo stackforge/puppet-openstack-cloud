@@ -98,6 +98,14 @@ describe 'cloud::identity' do
         :ks_swift_admin_proto         => 'https',
         :ks_swift_internal_proto      => 'https',
         :ks_swift_admin_host          => '10.0.0.1',
+        :ks_trove_admin_host          => '10.0.0.1',
+        :ks_trove_internal_host       => '10.0.0.1',
+        :ks_trove_password            => 'secrete',
+        :ks_trove_public_host         => '10.0.0.1',
+        :ks_trove_public_port         => '8779',
+        :ks_trove_public_proto        => 'https',
+        :ks_trove_admin_proto         => 'https',
+        :ks_trove_internal_proto      => 'https',
         :region                       => 'BigCloud',
         :verbose                      => true,
         :debug                        => true,
@@ -195,6 +203,20 @@ describe 'cloud::identity' do
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
         :port              => '8777',
+        :public_address    => '10.0.0.1',
+        :public_protocol   => 'https',
+        :admin_protocol    => 'https',
+        :internal_protocol => 'https',
+        :region            => 'BigCloud'
+      )
+    end
+
+    it 'configure trove endpoints' do
+      should contain_class('trove::keystone::auth').with(
+        :admin_address     => '10.0.0.1',
+        :internal_address  => '10.0.0.1',
+        :password          => 'secrete',
+        :port              => '8779',
         :public_address    => '10.0.0.1',
         :public_protocol   => 'https',
         :admin_protocol    => 'https',
