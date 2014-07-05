@@ -72,7 +72,7 @@ describe 'cloud::database::dbaas::api' do
 
     it 'checks if Trove DB is populated' do
       should contain_exec('trove_db_sync').with(
-        :command => 'trove-manage db sync',
+        :command => 'trove-manage db_sync',
         :user    => 'trove',
         :path    => '/usr/bin',
         :unless  => '/usr/bin/mysql trove -h 10.0.0.1 -u trove -psecrete -e "show tables" | /bin/grep Tables'
