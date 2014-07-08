@@ -60,7 +60,7 @@ class cloud::logging::agent(
 
   ensure_resource('fluentd::configfile', keys($sources))
   ensure_resource('fluentd::configfile', keys($matches))
-  create_resources('fluentd::source', $sources, {'require' => 'File[\'/var/db/td-agent\']'})
+  create_resources('fluentd::source', $sources, {'require' => 'File[/var/db/td-agent]'})
   create_resources('fluentd::match', $matches)
   create_resources('fluentd::install_plugin', $plugins)
 
