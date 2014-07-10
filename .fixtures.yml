@@ -59,7 +59,7 @@ fixtures:
       ref: '0df1f62130a7752c728efb7555f2b07ca178ee5b'
     'fluentd':
       repo: 'git://github.com/enovance/puppet-fluentd.git'
-      ref: '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
+      ref: '93ea059e21850c22f1ca079cbacd51b548d3b1b3'
     'haproxy':
       repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
       ref: 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
@@ -68,7 +68,7 @@ fixtures:
       ref: 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
     'kibana3':
       repo: 'git://github.com/enovance/kibana3.git'
-      ref: 'acd8aca374f0cfd9601871f45e50cb810bef2678'
+      ref: '64fb5f898a0f062ebf188e53ba613b3b13e9d829'
     'mongodb':
       repo: 'git://github.com/enovance/puppetlabs-mongodb.git'
       ref: 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
