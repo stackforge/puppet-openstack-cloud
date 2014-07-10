@@ -101,10 +101,10 @@ class cloud::network(
   if $use_syslog {
     $log_dir = false
     neutron_config {
-      'DEFAULT/logging_context_format': value => '%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s';
-      'DEFAULT/logging_default_format': value => '%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s';
-      'DEFAULT/logging_debug_format': value => '%(funcName)s %(pathname)s:%(lineno)d';
-      'DEFAULT/logging_exception_format': value => '%(process)d TRACE %(name)s %(instance)s';
+      'DEFAULT/logging_context_format_string': value => '%(process)d %(levelname)s %(name)s [%(request_id)s %(user_identity)s] %(instance)s%(message)s';
+      'DEFAULT/logging_default_format_string': value => '%(process)d %(levelname)s %(name)s [-] %(instance)s%(message)s';
+      'DEFAULT/logging_debug_format_suffix': value => '%(funcName)s %(pathname)s:%(lineno)d';
+      'DEFAULT/logging_exception_prefix': value => '%(process)d TRACE %(name)s %(instance)s';
     }
   } else {
     $log_dir = '/var/log/neutron'
