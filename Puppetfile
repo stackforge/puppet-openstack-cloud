@@ -85,7 +85,7 @@ mod 'firewall',
   :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
 mod 'fluentd',
   :git => 'git://github.com/enovance/puppet-fluentd.git',
-  :ref => '474ad6d2b84f3d1e03000c2fc340ec1e3408488d'
+  :ref => '93ea059e21850c22f1ca079cbacd51b548d3b1b3'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
   :ref => 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
@@ -97,7 +97,7 @@ mod 'keepalived',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
 mod 'kibana3',
   :git => 'git://github.com/enovance/kibana3.git',
-  :ref => 'acd8aca374f0cfd9601871f45e50cb810bef2678'
+  :ref => '64fb5f898a0f062ebf188e53ba613b3b13e9d829'
 mod 'vcsrepo',
   :git => 'git://github.com/enovance/puppetlabs-vcsrepo.git',
   :ref => '4592bfd59cd5d4795069798a14b483e16c98c1ff'
