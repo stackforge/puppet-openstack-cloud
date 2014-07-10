@@ -1,3 +1,19 @@
+##2014-07-15 - Features release 2.1.0
+###Summary
+* Advanced logging support with kibana3, elasticsearch and fluentd
+* Improve SSL termination support
+* File backend support for Glance
+* OpenStack Database as a Service support (Trove) as experimental
+* Pacemaker support in Red-Hat
+* heat-engine is no more managed as a single point of failure
+
+####Bugfixes
+* Fix heat-cfn & heat-cloudwatch HAproxy binding
+* Fix issues when using SSL termination
+
+####Known Bugs
+* No known bugs
+
 ##2014-06-19 - Features release 2.0.0
 ###Summary
 * Icehouse release support
