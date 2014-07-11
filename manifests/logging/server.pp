@@ -21,5 +21,6 @@ class cloud::logging::server{
   include ::elasticsearch
   include ::kibana3
   include cloud::logging::agent
+  elasticsearch::instance {'fluentd' : }
 
 }

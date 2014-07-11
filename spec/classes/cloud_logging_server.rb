@@ -34,6 +34,10 @@ describe 'cloud::logging::server' do
     it 'configure kibana' do
       should contain_class('kibana3').with(:ws_port => '8001')
     end
+
+    it 'configure an elasticsearch instance' do
+      should contain_elasticsearch__instance('fluentd')
+    end
   end
 
   context 'on Debian platforms' do
