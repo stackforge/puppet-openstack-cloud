@@ -59,7 +59,7 @@ fixtures:
       ref: '0df1f62130a7752c728efb7555f2b07ca178ee5b'
     'fluentd':
       repo: 'git://github.com/enovance/puppet-fluentd.git'
-      ref: 'da0ce0a3de340b671c243a5550a27532e6679da2'
+      ref: '47612d1d447873c80afa2d82d9f28c0d15d5547b'
     'haproxy':
       repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
       ref: 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
