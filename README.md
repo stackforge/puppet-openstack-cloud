@@ -27,12 +27,14 @@ The OpenStack Puppet Modules are a flexible Puppet implementation capable of con
 * [Ceilometer](https://github.com/stackforge/puppet-ceilometer) (telemetry)
 * [Neutron](https://github.com/stackforge/puppet-neutron) (networking)
 * [Swift](https://github.com/stackforge/puppet-swift) (object storage)
+* [Trove](https://github.com/stackforge/puppet-trove) (database as a service)
 
 Cinder, Glance and Nova can use Ceph as backend storage, using [puppet-ceph](https://github.com/enovance/puppet-ceph).
 
 Only KVM and QEMU are supported as hypervisors, for now.
 Neutron use ML2 plugin with GRE and Open-vSwitch drivers.
 Cinder has multi-backend support with Ceph used by default and NetApp as an option.
+Trove support is now experimental.
 
 [Puppet Modules](http://docs.puppetlabs.com/learning/modules1.html#modules) are a collection of related contents that can be used to model the configuration of a discrete service.
 
