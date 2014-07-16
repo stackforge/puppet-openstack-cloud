@@ -85,7 +85,7 @@ mod 'firewall',
   :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
 mod 'fluentd',
   :git => 'git://github.com/enovance/puppet-fluentd.git',
-  :ref => '47612d1d447873c80afa2d82d9f28c0d15d5547b'
+  :ref => '1cd41d484b01113f47a564e472a3b61d322c5429'
 mod 'haproxy',
   :git => 'git://github.com/enovance/puppetlabs-haproxy.git',
   :ref => 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
