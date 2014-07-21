@@ -192,7 +192,7 @@ class cloud::loadbalancer(
   $keepalived_public_interface      = 'eth0',
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
-  $keepalived_internal_ipvs         = false,
+  $keepalived_internal_ipvs         = [],
   $ceilometer_bind_options          = [],
   $cinder_bind_options              = [],
   $ec2_bind_options                 = [],
@@ -259,13 +259,13 @@ class cloud::loadbalancer(
   # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
-  if $vip_public_ip and !($vip_public_ip in $keepalived_public_ipvs_real) {
+  if $vip_public_ip and !(member(any2array($keepalived_public_ipvs_real), $vip_public_ip)) {
     fail('vip_public_ip should be part of keepalived_public_ipvs.')
   }
-  if $vip_internal_ip and !($vip_internal_ip in $keepalived_internal_ipvs) {
+  if $vip_internal_ip and !(member(any2array($keepalived_internal_ipvs),$vip_internal_ip)) {
     fail('vip_internal_ip should be part of keepalived_internal_ipvs.')
   }
-  if $galera_ip and !(($galera_ip in $keepalived_public_ipvs_real) or ($galera_ip in $keepalived_internal_ipvs)) {
+  if $galera_ip and !((member(any2array($keepalived_public_ipvs_real),$galera_ip)) or (member(any2array($keepalived_internal_ipvs),$galera_ip))) {
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
@@ -289,7 +289,7 @@ class cloud::loadbalancer(
     notify_backup => '"/etc/init.d/haproxy stop"',
   }
 
-  if $keepalived_internal_ipvs {
+  if !empty($keepalived_internal_ipvs) {
     if ! $keepalived_vrrp_interface {
       $keepalived_vrrp_interface_internal = $keepalived_internal_interface
     } else {
@@ -484,7 +484,7 @@ class cloud::loadbalancer(
     bind_options => $horizon_ssl_bind_options,
   }
 
-  if ($galera_ip in $keepalived_public_ipvs_real) {
+  if (member(any2array($keepalived_public_ipvs_real), $galera_ip)) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
   haproxy::listen { 'galera_cluster':
