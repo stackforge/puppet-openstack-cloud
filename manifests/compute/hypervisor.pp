@@ -180,9 +180,6 @@ Host *
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
     Exec <<| tag == 'set_secret_value_virsh' |>>
 
-    # Configure Ceph keyring
-    Ceph::Key <<| title == $cinder_rbd_user |>>
-
     # If Cinder & Nova reside on the same node, we need a group
     # where nova & cinder users have read permissions.
     ensure_resource('group', 'cephkeyring', {
@@ -195,6 +192,8 @@ Host *
       'unless'  => 'groups nova | grep cephkeyring'
     })
 
+    # Configure Ceph keyring
+    Ceph::Key <<| title == $cinder_rbd_user |>> ->
     ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
       owner   => 'root',
       group   => 'cephkeyring',
