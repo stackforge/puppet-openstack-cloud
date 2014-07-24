@@ -193,14 +193,19 @@ Host *
     })
 
     # Configure Ceph keyring
-    Ceph::Key <<| title == $cinder_rbd_user |>> ->
-    ensure_resource('file', "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
-      owner   => 'root',
-      group   => 'cephkeyring',
-      mode    => '0440',
-      require => Ceph::Key[$cinder_rbd_user],
-      notify  => Service['nova-compute'],
-    })
+    Ceph::Key <<| title == $cinder_rbd_user |>>
+    if defined(Ceph::Key[$cinder_rbd_user]) {
+      ensure_resource(
+        'file',
+        "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring", {
+          owner   => 'root',
+          group   => 'cephkeyring',
+          mode    => '0440',
+          require => Ceph::Key[$cinder_rbd_user],
+          notify  => Service['nova-compute'],
+        }
+      )
+    }
 
     Concat::Fragment <<| title == 'ceph-client-os' |>>
   } else {
