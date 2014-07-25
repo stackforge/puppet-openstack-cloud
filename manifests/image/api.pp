@@ -72,7 +72,6 @@
 #   Can be 'rbd' or 'file'.
 #   Defaults to 'rbd' to maintain backward compatibility
 #
-
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
   $glance_db_user                    = 'glance',
@@ -120,6 +119,7 @@ class cloud::image::api(
 
   class { 'glance::api':
     database_connection      => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    mysql_module             => '2.2',
     registry_host            => $openstack_vip,
     registry_port            => $ks_glance_registry_internal_port,
     verbose                  => $verbose,

@@ -90,6 +90,7 @@ class cloud::volume(
 
   class { 'cinder':
     sql_connection            => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
+    mysql_module              => '2.2',
     rabbit_userid             => 'cinder',
     rabbit_hosts              => $rabbit_hosts,
     rabbit_password           => $rabbit_password,

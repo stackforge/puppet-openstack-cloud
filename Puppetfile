@@ -118,7 +118,7 @@ mod 'mongodb',
   :ref => 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
 mod 'mysql',
   :git => 'git://github.com/enovance/puppetlabs-mysql.git',
-  :ref => '11ab036fed3b252492f5400bf8fd69698d510482'
+  :ref => '8b814d4d2cb5786a15e8e37fb3b7444d5d5f0d3f'
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'

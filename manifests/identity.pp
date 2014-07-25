@@ -350,7 +350,6 @@
 #   (optional) Amount of time a token should remain valid (in seconds)
 #   Defaults to '3600' (1 hour)
 #
-
 class cloud::identity (
   $swift_enabled                = true,
   $identity_roles_addons        = ['SwiftOperator', 'ResellerAdmin'],
@@ -474,6 +473,7 @@ class cloud::identity (
     idle_timeout     => 60,
     log_facility     => $log_facility,
     sql_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone?charset=utf8",
+    mysql_module     => '2.2',
     token_provider   => 'keystone.token.providers.uuid.Provider',
     use_syslog       => $use_syslog,
     verbose          => $verbose,

@@ -21,7 +21,6 @@
 #    Array of internal ip of the galera nodes.
 #    Defaults to ['127.0.0.1']
 #
-
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
     $service_provider               = 'sysv',
@@ -74,14 +73,11 @@ class cloud::database::sql (
 
   case $::osfamily {
     'RedHat': {
-      class { 'mysql':
-        server_package_name => 'MariaDB-Galera-server',
-        client_package_name => 'MariaDB-client',
-        service_name        => $mysql_service_name,
-      }
-
       # Specific to Red Hat
+      $mysql_server_package_name = 'MariaDB-Galera-server'
+      $mysql_client_package_name = 'MariaDB-client'
       $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
+      $mysql_server_config_file = '/etc/my.cnf'
 
       $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
 
@@ -93,19 +89,15 @@ class cloud::database::sql (
       }
     } # RedHat
     'Debian': {
-      class { 'mysql':
-        server_package_name => 'mariadb-galera-server',
-        client_package_name => 'mariadb-client',
-        service_name        => $mysql_service_name,
-      }
-
       # Specific to Debian / Ubuntu
+      $mysql_server_package_name = 'mariadb-galera-server'
+      $mysql_client_package_name = 'mariadb-client'
       $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
+      $mysql_server_config_file = '/etc/mysql/my.cnf'
 
-      database_user { 'debian-sys-maint@localhost':
+      mysql_user { 'debian-sys-maint@localhost':
         ensure        => 'present',
         password_hash => mysql_password($mysql_sys_maint_password),
-        provider      => 'mysql',
         require       => File['/root/.my.cnf']
       }
 
@@ -155,18 +147,33 @@ class cloud::database::sql (
   }
 
   class { 'mysql::server':
-    config_hash         => {
-      bind_address      => $api_eth,
-      root_password     => $mysql_root_password,
-      service_name      => $mysql_service_name,
-    },
-    notify              => Service['xinetd'],
+    manage_config_file => false,
+    config_file        => $mysql_server_config_file,
+    package_name       => $mysql_server_package_name,
+    service_name       => $mysql_service_name,
+    override_options   => { 'mysqld' => { 'bind-address' => $api_eth } },
+    root_password      => $mysql_root_password,
+    notify             => Service['xinetd'],
+  }
+
+  file { $mysql_server_config_file:
+    content => template('cloud/database/mysql.conf.erb'),
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    notify  => [Service['mysqld'],Exec['clean-mysql-binlog']],
+    require => Package['mysql-server'],
+  }
+
+  class { 'mysql::client':
+    package_name => $mysql_client_package_name,
   }
 
   if $::hostname == $galera_master_name {
 
-# OpenStack DB
+    # OpenStack DB
     class { 'keystone::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'keystone',
       user          => $keystone_db_user,
       password      => $keystone_db_password,
@@ -174,6 +181,7 @@ class cloud::database::sql (
       allowed_hosts => $keystone_db_allowed_hosts,
     }
     class { 'glance::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'glance',
       user          => $glance_db_user,
       password      => $glance_db_password,
@@ -181,6 +189,7 @@ class cloud::database::sql (
       allowed_hosts => $glance_db_allowed_hosts,
     }
     class { 'nova::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'nova',
       user          => $nova_db_user,
       password      => $nova_db_password,
@@ -189,6 +198,7 @@ class cloud::database::sql (
     }
 
     class { 'cinder::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'cinder',
       user          => $cinder_db_user,
       password      => $cinder_db_password,
@@ -197,6 +207,7 @@ class cloud::database::sql (
     }
 
     class { 'neutron::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'neutron',
       user          => $neutron_db_user,
       password      => $neutron_db_password,
@@ -205,6 +216,7 @@ class cloud::database::sql (
     }
 
     class { 'heat::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'heat',
       user          => $heat_db_user,
       password      => $heat_db_password,
@@ -213,6 +225,7 @@ class cloud::database::sql (
     }
 
     class { 'trove::db::mysql':
+      mysql_module  => '2.2',
       dbname        => 'trove',
       user          => $trove_db_user,
       password      => $trove_db_password,
@@ -220,24 +233,21 @@ class cloud::database::sql (
       allowed_hosts => $trove_db_allowed_hosts,
     }
 
-
-# Monitoring DB
-    warning('Database mapping must be updated to puppetlabs/puppetlabs-mysql >= 2.x (see: https://dev.ring.enovance.com/redmine/issues/4510)')
-
-    database { 'monitoring':
+    # Monitoring DB
+    mysql_database { 'monitoring':
       ensure  => 'present',
       charset => 'utf8',
+      collate => 'utf8_unicode_ci',
       require => File['/root/.my.cnf']
     }
-    database_user { "${galera_clustercheck_dbuser}@localhost":
+    mysql_user { "${galera_clustercheck_dbuser}@localhost":
       ensure        => 'present',
       # can not change password in clustercheck script
       password_hash => mysql_password($galera_clustercheck_dbpassword),
-      provider      => 'mysql',
       require       => File['/root/.my.cnf']
     }
-    database_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
-      privileges => ['all']
+    mysql_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
+      privileges => ['ALL']
     }
 
     Database_user<<| |>>
@@ -277,7 +287,6 @@ class cloud::database::sql (
     require     => Service['xinetd'],
   }
 
-
   exec{'clean-mysql-binlog':
     # first sync take a long time
     command     => "/bin/bash -c '/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; /bin/rm  ${::mysql::params::datadir}/ib_logfile*'",
@@ -289,13 +298,6 @@ class cloud::database::sql (
     notify      => Exec['mysqld-restart'],
     refreshonly => true,
     onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
-  }
-
-  # TODO/WARNING(Gonéri): template changes do not trigger configuration changes
-  mysql::server::config{'basic_config':
-    notify_service => true,
-    notify         => Exec['clean-mysql-binlog'],
-    settings       => template('cloud/database/mysql.conf.erb')
   }
 
   @@haproxy::balancermember{$::fqdn:
