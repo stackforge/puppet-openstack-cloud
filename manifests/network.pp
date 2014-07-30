@@ -75,8 +75,23 @@
 #   Defaults to 'LOG_LOCAL0'
 #
 # [*dhcp_lease_duration*]
-#   (optionnal) DHCP Lease duration (in seconds)
-#   Defauls to '120'
+#   (optional) DHCP Lease duration (in seconds)
+#   Defaults to '120'
+#
+# [*tunnel_types*]
+#   (optional) Handled tunnel types
+#   Defaults to ['gre']
+#   Possible value ['local', 'flat', 'vlan', 'gre', 'vxlan']
+#
+# [*tenant_network_types*]
+#   (optional) Handled tenant network types
+#   Defaults to ['gre']
+#   Possible value ['local', 'flat', 'vlan', 'gre', 'vxlan']
+#
+# [*type_drivers*]
+#   (optional) Drivers to load
+#   Defaults to ['gre', 'vlan', 'flat']
+#   Possible value ['local', 'flat', 'vlan', 'gre', 'vxlan']
 #
 
 class cloud::network(
@@ -94,7 +109,10 @@ class cloud::network(
   $flat_networks            = ['public'],
   $external_int             = 'eth1',
   $external_bridge          = 'br-pub',
-  $manage_ext_network       = false
+  $manage_ext_network       = false,
+  $tunnel_types             = ['gre'],
+  $tenant_network_types     = ['gre'],
+  $type_drivers             = ['gre', 'vlan', 'flat'],
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -135,14 +153,14 @@ class cloud::network(
 
   class { 'neutron::agents::ovs':
     enable_tunneling => true,
-    tunnel_types     => ['gre'],
+    tunnel_types     => $tunnel_types,
     bridge_mappings  => $provider_bridge_mappings,
     local_ip         => $tunnel_eth
   }
 
   class { 'neutron::plugins::ml2':
-    type_drivers          => ['gre','vlan','flat'],
-    tenant_network_types  => ['gre'],
+    type_drivers          => $type_drivers,
+    tenant_network_types  => $tenant_network_types,
     network_vlan_ranges   => $provider_vlan_ranges,
     tunnel_id_ranges      => ['1:10000'],
     flat_networks         => $flat_networks,
@@ -155,7 +173,7 @@ class cloud::network(
   # config file, only ML2. I need to patch puppet-neutron.
   # Follow-up: https://github.com/enovance/puppet-openstack-cloud/issues/199
   neutron_plugin_ml2 {
-    'agent/tunnel_types':            value => ['gre'];
+    'agent/tunnel_types':            value => $tunnel_types;
     'agent/l2_population':           value => true;
     'agent/polling_interval':        value => '15';
     'OVS/local_ip':                  value => $tunnel_eth;
