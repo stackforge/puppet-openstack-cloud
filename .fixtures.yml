@@ -48,6 +48,9 @@ fixtures:
     'corosync':
       repo: 'git://github.com/enovance/puppetlabs-corosync.git'
       ref: '79b61302b07fef30b65a42f3b55229616018aacf'
+    'datacat':
+      repo: 'git://github.com/enovance/puppet-datacat.git'
+      ref: '6a2017b31a8808de35b89d90b9e2b681ef9a0918'
     'firewall':
       repo: 'git://github.com/enovance/puppetlabs-firewall.git'
       ref: '6540b31b0ca0727094ddf44436274436d2853d6d'
@@ -57,6 +60,9 @@ fixtures:
     'elasticsearch':
       repo: 'git://github.com/enovance/puppet-elasticsearch.git'
       ref: '6d08442e8382f0f47388d4185122992c2d73cd9b'
+    'gcc':
+      repo: 'git://github.com/enovance/puppetlabs-gcc.git'
+      ref: '272e6595a2f4824dafa71a2b751960659c05c35d'
     'git':
       repo: 'git://github.com/enovance/puppetlabs-git.git'
       ref: '0df1f62130a7752c728efb7555f2b07ca178ee5b'
@@ -90,9 +96,18 @@ fixtures:
     'ntp':
       repo: 'git://github.com/enovance/puppetlabs-ntp.git'
       ref: 'eb02ba2937ce86fb609ae41499767244b78ec58d'
+    'puppetdbquery':
+      repo: 'git://github.com/enovance/puppet-puppetdbquery.git'
+      ref: '89194917744f929bb600c31d7d6f822b529f5f03'
+    'redis':
+      repo: 'git://github.com/enovance/puppet-redis.git'
+      ref: '1b2b2cea8c9acc08cfa01b42e47fad17f3c4d03d'
     'sysctl':
       repo: 'git://github.com/enovance/puppet-sysctl.git'
       ref: '4a463384e844f51b270428643a5b8beb3628e854'
+    'uchiwa':
+      repo: 'git://github.com/enovance/yelp-uchiwa.git'
+      ref: '8eafd8167ff7d4f1cd696e4d098e3e1497c28279'
     'inifile':
       repo: 'git://github.com/enovance/puppetlabs-inifile'
       ref: 'ae23a4db97d2815ec305d0529912685f07746d3c'
@@ -102,6 +117,9 @@ fixtures:
     'vcsrepo':
       repo: 'git://github.com/enovance/puppetlabs-vcsrepo.git'
       ref: '4592bfd59cd5d4795069798a14b483e16c98c1ff'
+    'wget':
+      repo: 'git://github.com/enovance/puppet-wget.git'
+      ref: '1c3ea6f1c822a99b52defb87305ea5977cba4293'
     'stdlib':
       repo: 'git://github.com/enovance/puppetlabs-stdlib.git'
       ref: '8a9b2dfc0e463bec39c00c82c30e0a8a8b7867f3'
@@ -120,6 +138,9 @@ fixtures:
     'kmod':
       repo: 'git://github.com/enovance/puppet-kmod.git'
       ref: 'accc40093e6f8ee9cc472e9eb6ba3bab4bad3a1f'
+    'sensu':
+      repo: 'git://github.com/enovance/sensu-puppet.git'
+      ref: '4a16ebf3503bfc9ae6192ae3120cb29b9e5c8445'
     'ssh':
       repo: 'git://github.com/enovance/puppet-ssh.git'
       ref: '10675c0d80511a8cdd514af67b695887fa97ec40'
