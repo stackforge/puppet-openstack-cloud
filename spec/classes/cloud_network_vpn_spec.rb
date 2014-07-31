@@ -37,6 +37,9 @@ describe 'cloud::network::vpn' do
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
+        tunnel_types             => ['vxlan'],
+        tenant_network_types     => ['vxlan'],
+        type_drivers             => ['gre', 'vlan', 'flat', 'vxlan'],
         log_facility             => 'LOG_LOCAL0' }"
     end
 
@@ -61,13 +64,13 @@ describe 'cloud::network::vpn' do
       )
       should contain_class('neutron::agents::ovs').with(
           :enable_tunneling => true,
-          :tunnel_types     => ['gre'],
+          :tunnel_types     => ['vxlan'],
           :bridge_mappings  => ['public:br-pub'],
           :local_ip         => '10.0.1.1'
       )
       should contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre','vlan','flat'],
-          :tenant_network_types   => ['gre'],
+          :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
+          :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
