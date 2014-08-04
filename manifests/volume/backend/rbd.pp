@@ -71,9 +71,6 @@ define cloud::volume::backend::rbd (
     volume_tmp_dir                   => '/tmp'
   }
 
-  # Configure Ceph keyring
-  Ceph::Key <<| title == $rbd_user |>>
-
   # If Cinder & Nova reside on the same node, we need a group
   # where nova & cinder users have read permissions.
   ensure_resource('group', 'cephkeyring', {
@@ -86,12 +83,16 @@ define cloud::volume::backend::rbd (
     'unless'  => 'groups cinder | grep cephkeyring'
   })
 
-  ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {
-    owner   => 'root',
-    group   => 'cephkeyring',
-    mode    => '0440',
-    require => Ceph::Key[$rbd_user],
-  })
+  # Configure Ceph keyring
+  Ceph::Key <<| title == $rbd_user |>>
+  if defined(Ceph::Key[$rbd_user]) {
+    ensure_resource('file', "/etc/ceph/ceph.client.${rbd_user}.keyring", {
+      owner   => 'root',
+      group   => 'cephkeyring',
+      mode    => '0440',
+      require => Ceph::Key[$rbd_user],
+      })
+  }
 
   Concat::Fragment <<| title == 'ceph-client-os' |>>
 

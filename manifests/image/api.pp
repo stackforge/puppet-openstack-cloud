@@ -157,7 +157,7 @@ class cloud::image::api(
       rbd_store_pool => $glance_rbd_pool
     }
 
-    Ceph::Key <<| title == $glance_rbd_user |>>
+    Ceph::Key <<| title == $glance_rbd_user |>> ->
     file { '/etc/ceph/ceph.client.glance.keyring':
       owner   => 'glance',
       group   => 'glance',
