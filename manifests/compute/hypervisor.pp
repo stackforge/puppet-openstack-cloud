@@ -222,9 +222,10 @@ Host *
 
   # Extra config for nova-compute
   nova_config {
-    'libvirt/inject_key':                value => false;
-    'libvirt/inject_partition':          value => '-2';
-    'libvirt/live_migration_flag':       value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
+    'libvirt/inject_key':            value => false;
+    'libvirt/inject_partition':      value => '-2';
+    'libvirt/live_migration_flag':   value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
+    'libvirt/block_migration_flag':  value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_DOMAIN_BLOCK_REBASE_COPY,VIR_DOMAIN_BLOCK_REBASE_SHALLOW';
   }
 
   class { 'ceilometer::agent::compute': }

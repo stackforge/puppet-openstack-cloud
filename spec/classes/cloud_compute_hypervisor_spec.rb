@@ -250,6 +250,7 @@ describe 'cloud::compute::hypervisor' do
       should contain_nova_config('libvirt/inject_key').with('value' => false)
       should contain_nova_config('libvirt/inject_partition').with('value' => '-2')
       should contain_nova_config('libvirt/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+      should contain_nova_config('libvirt/block_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_DOMAIN_BLOCK_REBASE_COPY,VIR_DOMAIN_BLOCK_REBASE_SHALLOW')
     end
 
     context 'with dbus on Ubuntu' do
