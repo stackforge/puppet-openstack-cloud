@@ -74,7 +74,7 @@ fixtures:
       ref: 'e3cc9a0ea895f6e01801e4620799c66c2337b7ed'
     'mysql':
       repo: 'git://github.com/enovance/puppetlabs-mysql.git'
-      ref: '11ab036fed3b252492f5400bf8fd69698d510482'
+      ref: '8b814d4d2cb5786a15e8e37fb3b7444d5d5f0d3f'
     'rabbitmq':
       repo: 'git://github.com/enovance/puppetlabs-rabbitmq'
       ref: '25420cb3c26c9a8432ab519d43c094d614d4fec4'

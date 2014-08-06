@@ -32,6 +32,7 @@ class cloud::telemetry::api(
 
   class { 'ceilometer::db':
     database_connection => $db_conn,
+    mysql_module        => '2.2',
     sync_db             => true,
     require             => Anchor['mongodb setup done'],
   }

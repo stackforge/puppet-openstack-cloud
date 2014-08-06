@@ -46,6 +46,7 @@ class cloud::network::controller(
     auth_protocol       => $ks_keystone_admin_proto,
     auth_port           => $ks_keystone_public_port,
     database_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    mysql_module        => '2.2',
     api_workers         => $::processorcount,
     agent_down_time     => '60',
   }

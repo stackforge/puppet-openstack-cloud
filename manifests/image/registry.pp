@@ -94,6 +94,7 @@ class cloud::image::registry(
 
   class { 'glance::registry':
     database_connection => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    mysql_module        => '2.2',
     verbose             => $verbose,
     debug               => $debug,
     auth_host           => $ks_keystone_internal_host,

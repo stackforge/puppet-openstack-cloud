@@ -114,6 +114,7 @@ class cloud::compute(
 
   class { 'nova':
     database_connection => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
+    mysql_module        => '2.2',
     rabbit_userid       => 'nova',
     rabbit_hosts        => $rabbit_hosts,
     rabbit_password     => $rabbit_password,

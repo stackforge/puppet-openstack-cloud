@@ -69,16 +69,21 @@ describe 'cloud::database::sql' do
     end
 
     it 'configure mysql galera server' do
-      should contain_class('mysql').with(
-          :server_package_name => platform_params[:server_package_name],
-          :client_package_name => platform_params[:client_package_name],
-          :service_name => 'mysql'
+      should contain_class('mysql::client').with(
+          :package_name => platform_params[:mysql_client_package_name]
         )
 
       should contain_class('mysql::server').with(
-          :config_hash  => { 'bind_address' => '10.0.0.1', 'root_password' => params[:mysql_root_password], 'service_name' => 'mysql' },
-          :notify       => 'Service[xinetd]'
+          :package_name     => platform_params[:mysql_server_package_name],
+          :root_password    => params[:mysql_root_password],
+          :override_options => { 'mysqld' => { 'bind-address' => '10.0.0.1' } },
+          :notify           => 'Service[xinetd]'
         )
+
+      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_cluster_name\s*= "galera_cluster"$/)
+      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_address\s*= "#{params[:api_eth]}"$/)
+      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_incoming_address\s*= "#{params[:api_eth]}"$/)
+
     end # configure mysql galera server
 
     context 'configure mysqlchk http replication' do
@@ -104,6 +109,7 @@ describe 'cloud::database::sql' do
 
       it 'configure keystone database' do
         should contain_class('keystone::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'keystone',
             :user          => 'keystone',
             :password      => 'secrete',
@@ -113,6 +119,7 @@ describe 'cloud::database::sql' do
 
       it 'configure glance database' do
         should contain_class('glance::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'glance',
             :user          => 'glance',
             :password      => 'secrete',
@@ -122,6 +129,7 @@ describe 'cloud::database::sql' do
 
       it 'configure nova database' do
         should contain_class('nova::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'nova',
             :user          => 'nova',
             :password      => 'secrete',
@@ -131,6 +139,7 @@ describe 'cloud::database::sql' do
 
       it 'configure cinder database' do
         should contain_class('cinder::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'cinder',
             :user          => 'cinder',
             :password      => 'secrete',
@@ -140,6 +149,7 @@ describe 'cloud::database::sql' do
 
       it 'configure neutron database' do
         should contain_class('neutron::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'neutron',
             :user          => 'neutron',
             :password      => 'secrete',
@@ -149,6 +159,7 @@ describe 'cloud::database::sql' do
 
       it 'configure heat database' do
         should contain_class('heat::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'heat',
             :user          => 'heat',
             :password      => 'secrete',
@@ -158,6 +169,7 @@ describe 'cloud::database::sql' do
 
       it 'configure trove database' do
         should contain_class('trove::db::mysql').with(
+            :mysql_module  => '2.2',
             :dbname        => 'trove',
             :user          => 'trove',
             :password      => 'secrete',
@@ -166,17 +178,16 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure monitoring database' do
-        should contain_database('monitoring').with(
+        should contain_mysql_database('monitoring').with(
           :ensure   => 'present',
           :charset  => 'utf8'
         )
-        should contain_database_user("#{params[:galera_clustercheck_dbuser]}@localhost").with(
+        should contain_mysql_user("#{params[:galera_clustercheck_dbuser]}@localhost").with(
           :ensure        => 'present',
-          :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F',
-          :provider      => 'mysql'
+          :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F'
         )
-        should contain_database_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
-          :privileges => 'all'
+        should contain_mysql_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
+          :privileges => 'ALL'
         )
       end # configure monitoring database
     end # configure databases on the galera master server
@@ -188,8 +199,9 @@ describe 'cloud::database::sql' do
     end
 
     let :platform_params do
-      { :server_package_name => 'mariadb-galera-server',
-        :client_package_name => 'mariadb-client',
+      { :mysql_server_package_name => 'mariadb-galera-server',
+        :mysql_client_package_name => 'mariadb-client',
+        :mysql_server_config_file => '/etc/mysql/my.cnf',
         :wsrep_provider      => '/usr/lib/galera/libgalera_smm.so' }
     end
 
@@ -202,8 +214,9 @@ describe 'cloud::database::sql' do
     end
 
     let :platform_params do
-      { :server_package_name => 'MariaDB-Galera-server',
-        :client_package_name => 'MariaDB-client',
+      { :mysql_server_package_name => 'MariaDB-Galera-server',
+        :mysql_client_package_name => 'MariaDB-client',
+        :mysql_server_config_file => '/etc/my.cnf',
         :wsrep_provider      => '/usr/lib64/galera/libgalera_smm.so' }
     end
 

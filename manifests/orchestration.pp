@@ -137,6 +137,7 @@ class cloud::orchestration(
     keystone_password => $ks_heat_password,
     auth_uri          => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
     sql_connection    => "mysql://${encoded_user}:${encoded_password}@${heat_db_host}/heat?charset=utf8",
+    mysql_module      => '2.2',
     rabbit_hosts      => $rabbit_hosts,
     rabbit_password   => $rabbit_password,
     rabbit_userid     => 'heat',
