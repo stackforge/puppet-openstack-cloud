@@ -438,13 +438,8 @@ describe 'cloud::compute::hypervisor' do
           :bridge => 'br-pub'
         )
       end
-      it 'configure provider external network' do
-        should contain_neutron_network('public').with(
-          :provider_network_type     => 'flat',
-          :provider_physical_network => 'public',
-          :shared                    => true,
-          :router_external           => true
-        )
+      it 'should not configure provider external network' do
+        should_not contain__neutron_network('public')
       end
     end
  end

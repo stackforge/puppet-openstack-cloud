@@ -196,12 +196,14 @@ class cloud::network(
     vs_port {$external_int:
       ensure => present,
       bridge => $external_bridge
-    } ->
-    neutron_network {'public':
-      provider_network_type     => 'flat',
-      provider_physical_network => 'public',
-      shared                    => true,
-      router_external           => true
+    }
+    if defined('neutron::server') {
+      neutron_network {'public':
+        provider_network_type     => 'flat',
+        provider_physical_network => 'public',
+        shared                    => true,
+        router_external           => true
+      }
     }
   }
 
