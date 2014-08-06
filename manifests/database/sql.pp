@@ -247,7 +247,11 @@ class cloud::database::sql (
       require       => File['/root/.my.cnf']
     }
     mysql_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
-      privileges => ['ALL']
+      ensure     => 'present',
+      options    => ['GRANT'],
+      privileges => ['ALL'],
+      table      => 'monitoring.*',
+      user       => "${galera_clustercheck_dbuser}@localhost",
     }
 
     Database_user<<| |>>
@@ -291,10 +295,6 @@ class cloud::database::sql (
     # first sync take a long time
     command     => "/bin/bash -c '/usr/bin/mysqladmin --defaults-file=/root/.my.cnf shutdown ; /bin/rm  ${::mysql::params::datadir}/ib_logfile*'",
     path        => '/usr/bin',
-    require     => [
-      File['/root/.my.cnf'],
-      Service['mysqld'],
-    ],
     notify      => Service['mysqld'],
     refreshonly => true,
     onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
