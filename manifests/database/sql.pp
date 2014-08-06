@@ -295,7 +295,7 @@ class cloud::database::sql (
       File['/root/.my.cnf'],
       Service['mysqld'],
     ],
-    notify      => Exec['mysqld-restart'],
+    notify      => Service['mysqld'],
     refreshonly => true,
     onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
   }
