@@ -65,12 +65,103 @@ class cloud::database::sql (
 
   $gcomm_definition = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
 
+  # Specific to the Galera master node
   if $::hostname == $galera_master_name {
-    $mysql_service_name = 'mysql-bootstrap'
+
+    $mysql_root_password_real = $mysql_root_password
+
+    # OpenStack DB
+    class { 'keystone::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'keystone',
+      user          => $keystone_db_user,
+      password      => $keystone_db_password,
+      host          => $keystone_db_host,
+      allowed_hosts => $keystone_db_allowed_hosts,
+    }
+    class { 'glance::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'glance',
+      user          => $glance_db_user,
+      password      => $glance_db_password,
+      host          => $glance_db_host,
+      allowed_hosts => $glance_db_allowed_hosts,
+    }
+    class { 'nova::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'nova',
+      user          => $nova_db_user,
+      password      => $nova_db_password,
+      host          => $nova_db_host,
+      allowed_hosts => $nova_db_allowed_hosts,
+    }
+    class { 'cinder::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'cinder',
+      user          => $cinder_db_user,
+      password      => $cinder_db_password,
+      host          => $cinder_db_host,
+      allowed_hosts => $cinder_db_allowed_hosts,
+    }
+    class { 'neutron::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'neutron',
+      user          => $neutron_db_user,
+      password      => $neutron_db_password,
+      host          => $neutron_db_host,
+      allowed_hosts => $neutron_db_allowed_hosts,
+    }
+    class { 'heat::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'heat',
+      user          => $heat_db_user,
+      password      => $heat_db_password,
+      host          => $heat_db_host,
+      allowed_hosts => $heat_db_allowed_hosts,
+    }
+    class { 'trove::db::mysql':
+      mysql_module  => '2.2',
+      dbname        => 'trove',
+      user          => $trove_db_user,
+      password      => $trove_db_password,
+      host          => $trove_db_host,
+      allowed_hosts => $trove_db_allowed_hosts,
+    }
+
+    # Monitoring DB
+    mysql_database { 'monitoring':
+      ensure  => 'present',
+      charset => 'utf8',
+      collate => 'utf8_unicode_ci',
+      require => File['/root/.my.cnf']
+    }
+    mysql_user { "${galera_clustercheck_dbuser}@localhost":
+      ensure        => 'present',
+      # can not change password in clustercheck script
+      password_hash => mysql_password($galera_clustercheck_dbpassword),
+      require       => File['/root/.my.cnf']
+    }
+    mysql_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
+      ensure     => 'present',
+      options    => ['GRANT'],
+      privileges => ['ALL'],
+      table      => 'monitoring.*',
+      user       => "${galera_clustercheck_dbuser}@localhost",
+    }
+
+    Database_user<<| |>>
   } else {
-    $mysql_service_name = 'mysql'
+    # NOTE(sileht): Only the master must create the password
+    # into the database, slave nodes must just use the password.
+    # The one in the database have been retrieved via galera.
+    file { "${::root_home}/.my.cnf":
+      content => "[client]\nuser=root\nhost=localhost\npassword=${mysql_root_password}\n",
+      owner   => 'root',
+      mode    => '0600',
+    }
   }
 
+  # Specific to Red Hat or Debian systems:
   case $::osfamily {
     'RedHat': {
       # Specific to Red Hat
@@ -78,6 +169,12 @@ class cloud::database::sql (
       $mysql_client_package_name = 'MariaDB-client'
       $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
       $mysql_server_config_file = '/etc/my.cnf'
+
+      if $::hostname == $galera_master_name {
+        $mysql_service_name = 'mysql-bootstrap'
+      } else {
+        $mysql_service_name = 'mariadb'
+      }
 
       $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
 
@@ -87,6 +184,18 @@ class cloud::database::sql (
         before => Service['mysqld'],
         owner  => 'mysql'
       }
+
+      # In Red Hat, the package does not perform the mysql db installation.
+      # We need to do this manually.
+      # Note: in MariaDB repository, package perform this action in post-install,
+      # but MariaDB is not packaged for Red Hat / CentOS 7 in MariaDB repository.
+      exec { 'bootstrap-mysql':
+        command => '/usr/bin/mysql_install_db --rpm --user=mysql',
+        unless  => 'test -d /var/lib/mysql/mysql',
+        notify  => Service['mysqld'],
+        require => [Package['mysql-server'], File[$mysql_server_config_file]]
+      }
+
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
@@ -94,6 +203,12 @@ class cloud::database::sql (
       $mysql_client_package_name = 'mariadb-client'
       $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
       $mysql_server_config_file = '/etc/mysql/my.cnf'
+
+      if $::hostname == $galera_master_name {
+        $mysql_service_name = 'mysql-bootstrap'
+      } else {
+        $mysql_service_name = 'mysql'
+      }
 
       mysql_user { 'debian-sys-maint@localhost':
         ensure        => 'present',
@@ -152,7 +267,7 @@ class cloud::database::sql (
     package_name       => $mysql_server_package_name,
     service_name       => $mysql_service_name,
     override_options   => { 'mysqld' => { 'bind-address' => $api_eth } },
-    root_password      => $mysql_root_password,
+    root_password      => $mysql_root_password_real,
     notify             => Service['xinetd'],
   }
 
@@ -169,93 +284,6 @@ class cloud::database::sql (
     package_name => $mysql_client_package_name,
   }
 
-  if $::hostname == $galera_master_name {
-
-    # OpenStack DB
-    class { 'keystone::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'keystone',
-      user          => $keystone_db_user,
-      password      => $keystone_db_password,
-      host          => $keystone_db_host,
-      allowed_hosts => $keystone_db_allowed_hosts,
-    }
-    class { 'glance::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'glance',
-      user          => $glance_db_user,
-      password      => $glance_db_password,
-      host          => $glance_db_host,
-      allowed_hosts => $glance_db_allowed_hosts,
-    }
-    class { 'nova::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'nova',
-      user          => $nova_db_user,
-      password      => $nova_db_password,
-      host          => $nova_db_host,
-      allowed_hosts => $nova_db_allowed_hosts,
-    }
-
-    class { 'cinder::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'cinder',
-      user          => $cinder_db_user,
-      password      => $cinder_db_password,
-      host          => $cinder_db_host,
-      allowed_hosts => $cinder_db_allowed_hosts,
-    }
-
-    class { 'neutron::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'neutron',
-      user          => $neutron_db_user,
-      password      => $neutron_db_password,
-      host          => $neutron_db_host,
-      allowed_hosts => $neutron_db_allowed_hosts,
-    }
-
-    class { 'heat::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'heat',
-      user          => $heat_db_user,
-      password      => $heat_db_password,
-      host          => $heat_db_host,
-      allowed_hosts => $heat_db_allowed_hosts,
-    }
-
-    class { 'trove::db::mysql':
-      mysql_module  => '2.2',
-      dbname        => 'trove',
-      user          => $trove_db_user,
-      password      => $trove_db_password,
-      host          => $trove_db_host,
-      allowed_hosts => $trove_db_allowed_hosts,
-    }
-
-    # Monitoring DB
-    mysql_database { 'monitoring':
-      ensure  => 'present',
-      charset => 'utf8',
-      collate => 'utf8_unicode_ci',
-      require => File['/root/.my.cnf']
-    }
-    mysql_user { "${galera_clustercheck_dbuser}@localhost":
-      ensure        => 'present',
-      # can not change password in clustercheck script
-      password_hash => mysql_password($galera_clustercheck_dbpassword),
-      require       => File['/root/.my.cnf']
-    }
-    mysql_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
-      ensure     => 'present',
-      options    => ['GRANT'],
-      privileges => ['ALL'],
-      table      => 'monitoring.*',
-      user       => "${galera_clustercheck_dbuser}@localhost",
-    }
-
-    Database_user<<| |>>
-  } # if $::hostname == $galera_master
 
   # Haproxy http monitoring
   file_line { 'mysqlchk-in-etc-services':

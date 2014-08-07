@@ -71,14 +71,13 @@ describe 'cloud::database::sql' do
     it 'configure mysql galera server' do
       should contain_class('mysql::client').with(
           :package_name => platform_params[:mysql_client_package_name]
-        )
+      )
 
       should contain_class('mysql::server').with(
           :package_name     => platform_params[:mysql_server_package_name],
-          :root_password    => params[:mysql_root_password],
           :override_options => { 'mysqld' => { 'bind-address' => '10.0.0.1' } },
           :notify           => 'Service[xinetd]'
-        )
+      )
 
       should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_cluster_name\s*= "galera_cluster"$/)
       should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_address\s*= "#{params[:api_eth]}"$/)
@@ -105,6 +104,15 @@ describe 'cloud::database::sql' do
 
       before :each do
         facts.merge!( :hostname => 'os-ci-test1' )
+      end
+
+      it 'configure mysql server' do
+        should contain_class('mysql::server').with(
+            :package_name     => platform_params[:mysql_server_package_name],
+            :root_password    => 'secrete',
+            :override_options => { 'mysqld' => { 'bind-address' => '10.0.0.1' } },
+            :notify           => 'Service[xinetd]'
+        )
       end
 
       it 'configure keystone database' do
@@ -191,6 +199,20 @@ describe 'cloud::database::sql' do
         )
       end # configure monitoring database
     end # configure databases on the galera master server
+
+    context 'Bootstrap MySQL database on RedHat plaforms' do
+      before :each do
+        facts.merge!( :osfamily => 'RedHat' )
+      end
+      it 'configure mysql database' do
+        should contain_exec('bootstrap-mysql').with(
+          :command => '/usr/bin/mysql_install_db --rpm --user=mysql',
+          :unless  => "test -d /var/lib/mysql/mysql",
+          :notify  => 'Service[mysqld]'
+        )
+      end
+    end
+
   end # openstack database sql
 
   context 'on Debian platforms' do
