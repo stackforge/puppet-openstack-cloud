@@ -2,6 +2,7 @@
 # Module:: cloud::database::sql
 #
 [mysqld]
+bind-address                    = <%= @api_eth %>
 default-storage-engine          = innodb
 collation-server                = utf8_general_ci
 init-connect                    = 'SET NAMES utf8'
