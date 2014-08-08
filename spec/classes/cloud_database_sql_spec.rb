@@ -208,7 +208,7 @@ describe 'cloud::database::sql' do
         should contain_exec('bootstrap-mysql').with(
           :command => '/usr/bin/mysql_install_db --rpm --user=mysql',
           :unless  => "test -d /var/lib/mysql/mysql",
-          :notify  => 'Service[mysqld]'
+          :before  => 'Service[mysqld]'
         )
       end
     end

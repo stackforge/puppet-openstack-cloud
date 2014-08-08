@@ -192,7 +192,7 @@ class cloud::database::sql (
       exec { 'bootstrap-mysql':
         command => '/usr/bin/mysql_install_db --rpm --user=mysql',
         unless  => 'test -d /var/lib/mysql/mysql',
-        notify  => Service['mysqld'],
+        before  => Service['mysqld'],
         require => [Package['mysql-server'], File[$mysql_server_config_file]]
       }
 
