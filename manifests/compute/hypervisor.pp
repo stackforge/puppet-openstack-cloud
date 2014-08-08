@@ -29,6 +29,11 @@
 #   cinder volumes backend by ceph on nova instances.
 #   Default to false.
 #
+# [*manage_tso]
+#   (optional) Enable or not TSO/GSO/GRO/UFO on neutron interfaces.
+#   Should be at True when running linux kernel 3.14.
+#   Default to true.
+#
 
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
@@ -43,6 +48,7 @@ class cloud::compute::hypervisor(
   $nova_rbd_secret_uuid       = undef,
   $vm_rbd                     = false,
   $volume_rbd                 = false,
+  $manage_tso                 = true,
   # set to false to keep backward compatibility
   $ks_spice_public_proto      = false,
   $ks_spice_public_host       = false,
@@ -136,6 +142,21 @@ Host *
     # Nova support for RBD backend is not supported in Red Hat packages
     if $has_ceph or $vm_rbd {
       fail('Red Hat does not support RBD backend for VMs.')
+    }
+  } else {
+    # Disabling or not TSO/GSO/GRO on Debian systems
+    if $manage_tso {
+      ensure_resource ('exec','enable-tso-script', {
+        'command' => '/usr/sbin/update-rc.d disable-tso defaults',
+        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+        'onlyif'  => 'test -f /etc/init.d/disable-tso'
+      })
+      ensure_resource ('exec','start-tso-script', {
+        'command' => '/etc/init.d/disable-tso start',
+        'unless'  => 'test -f /tmp/disable-tso-lock',
+        'onlyif'  => 'test -f /etc/init.d/disable-tso'
+      })
+
     }
   }
 

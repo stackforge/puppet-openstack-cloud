@@ -83,6 +83,7 @@ describe 'cloud::compute::hypervisor' do
         :ks_spice_public_host                 => '10.0.0.2',
         :vm_rbd                               => false,
         :volume_rbd                           => false,
+        :manage_tso                           => true,
         :ks_nova_public_host                  => '10.0.0.1' }
     end
 
@@ -266,6 +267,44 @@ describe 'cloud::compute::hypervisor' do
           :ensure => 'running',
           :enable => 'true'
         )
+      end
+    end
+
+    context 'without TSO/GSO/GRO on Debian systems' do
+      let :facts do
+        { :osfamily        => 'Debian',
+          :operatingsystem => 'Debian',
+          :concat_basedir  => '/var/lib/puppet/concat'
+        }
+      end
+
+      it 'ensure TSO script is enabled at boot' do
+        should contain_exec('enable-tso-script').with(
+          :command => '/usr/sbin/update-rc.d disable-tso defaults',
+          :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+          :onlyif  => 'test -f /etc/init.d/disable-tso'
+        )
+      end
+      it 'start TSO script' do
+        should contain_exec('start-tso-script').with(
+          :command => '/etc/init.d/disable-tso start',
+          :unless  => 'test -f /tmp/disable-tso-lock',
+          :onlyif  => 'test -f /etc/init.d/disable-tso'
+        )
+      end
+    end
+
+    context 'with TSO/GSO/GRO on Debian systems' do
+      before :each do
+        facts.merge!( :osfamily => 'Debian' )
+        params.merge!( :manage_tso => false )
+      end
+
+      it 'ensure TSO script is not enabled at boot' do
+        should_not contain_exec('enable-tso-script')
+      end
+      it 'do no tstart TSO script' do
+        should_not contain_exec('start-tso-script')
       end
     end
 
