@@ -125,6 +125,7 @@ class cloud::compute(
     log_dir             => $log_dir,
     log_facility        => $log_facility,
     use_syslog          => $use_syslog,
+    nova_shell          => '/bin/bash',
   }
 
   class { 'nova::network::neutron':
