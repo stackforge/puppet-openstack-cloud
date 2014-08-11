@@ -289,7 +289,7 @@ class cloud::database::sql (
     context => '/files/etc/services',
     changes => [
       'ins service-name after service-name[last()]',
-      'set service-name[last()] "mysqlchkr"',
+      'set service-name[last()] "mysqlchk"',
       'set service-name[. = "mysqlchk"]/port 9200',
       'set service-name[. = "mysqlchk"]/protocol tcp',
     ],
