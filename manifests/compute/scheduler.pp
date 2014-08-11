@@ -15,13 +15,22 @@
 #
 # Compute Scheduler node
 #
-
-class cloud::compute::scheduler {
+# [*scheduler_default_filters*]
+#   (optional) A comma separated list of filters to be used by default
+#   Defaults to false
+#
+class cloud::compute::scheduler(
+  $scheduler_default_filters = false
+){
 
   include 'cloud::compute'
 
   class { 'nova::scheduler':
     enabled => true,
+  }
+
+  class { 'nova::scheduler::filter':
+    scheduler_default_filters => $scheduler_default_filters,
   }
 
 }
