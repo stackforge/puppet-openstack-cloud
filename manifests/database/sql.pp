@@ -284,13 +284,17 @@ class cloud::database::sql (
     package_name => $mysql_client_package_name,
   }
 
-
   # Haproxy http monitoring
-  file_line { 'mysqlchk-in-etc-services':
-    path   => '/etc/services',
-    line   => 'mysqlchk 9200/tcp',
-    match  => '^mysqlchk 9200/tcp$',
-    notify => [ Service['xinetd'], Exec['reload_xinetd'] ]
+  augeas { 'mysqlchk':
+    context => '/files/etc/services',
+    changes => [
+      'ins service-name after service-name[last()]',
+      'set service-name[last()] mysqlchkr',
+      'set service-name[. = "mysqlchk"]/port 9200',
+      'set service-name[. = "mysqlchk"]/protocol tcp',
+    ],
+    onlyif  => 'match service-name[. = "mysqlchk"] size == 0',
+    notify  => [ Service['xinetd'], Exec['reload_xinetd'] ]
   }
 
   file {

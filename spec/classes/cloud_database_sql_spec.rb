@@ -86,12 +86,6 @@ describe 'cloud::database::sql' do
     end # configure mysql galera server
 
     context 'configure mysqlchk http replication' do
-      it { should contain_file_line('mysqlchk-in-etc-services').with(
-        :line   => 'mysqlchk 9200/tcp',
-        :path   => '/etc/services',
-        :notify => ['Service[xinetd]', 'Exec[reload_xinetd]']
-      )}
-
       it { should contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
       it { should contain_file('/usr/bin/clustercheck').with_mode('0755') }
       it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME="#{params[:galera_clustercheck_dbuser]}"/)}
