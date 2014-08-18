@@ -209,10 +209,10 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '6082',
         :options   => {
-          'mode'           => 'http',
-          'option'         => ['tcpka', 'forwardfor', 'tcplog','httpchk GET /'],
-          'http-check'     => 'expect ! rstatus ^5',
+          'mode'           => 'tcp',
+          'option'         => ['tcpka', 'forwardfor', 'tcplog'],
           'balance'        => 'leastconn',
+          'http-check'     => '',
           'timeout server' => '120m',
           'timeout client' => '120m'
         }
