@@ -199,7 +199,10 @@ Host *
 
     File <<| tag == 'ceph_compute_secret_file' |>>
     Exec <<| tag == 'get_or_set_virsh_secret' |>>
-    Exec <<| tag == 'set_secret_value_virsh' |>>
+
+    # After setting virsh key, we need to restart nova-compute
+    # otherwise nova will fail to connect to RADOS.
+    Exec <<| tag == 'set_secret_value_virsh' |>> ~> Service['nova-compute']
 
     # If Cinder & Nova reside on the same node, we need a group
     # where nova & cinder users have read permissions.
