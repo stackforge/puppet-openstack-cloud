@@ -111,6 +111,12 @@ class cloud::spof(
           on-fail  => 'restart'
         }
       }
+    } ->
+    exec { 'cleanup_ceilometer_agent_central':
+      command => 'crm resource cleanup ceilometer-agent-central',
+      unless  => 'crm resource show ceilometer-agent-central | grep Started',
+      user    => 'root',
+      path    => ['/usr/sbin', '/bin'],
     }
   }
 
