@@ -48,6 +48,12 @@ describe 'cloud::spof' do
           :group  => 'root'
         )
         should contain_class('cloud::telemetry::centralagent').with(:enabled => false)
+        should contain_exec('cleanup_ceilometer_agent_central').with(
+          :command => 'crm resource cleanup ceilometer-agent-central',
+          :path    => ['/usr/sbin', '/bin'],
+          :user    => 'root',
+          :unless  => 'crm resource show ceilometer-agent-central | grep Started'
+        )
       end
     end
 
