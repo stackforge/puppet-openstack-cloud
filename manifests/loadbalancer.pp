@@ -372,12 +372,13 @@ class cloud::loadbalancer(
     ip                 => $spice,
     port               => $spice_port,
     options            => {
-      'balance'        => 'leastconn',
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
     bind_options       => $spice_bind_options,
-    httpchk            => 'httpchk GET /';
   }
   cloud::loadbalancer::binding { 'trove_api_cluster':
     ip           => $trove_api,
@@ -387,7 +388,9 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'glance_api_cluster':
     ip                 => $glance_api,
     options            => {
-      'balance'        => 'leastconn',
+      'mode'           => 'tcp',
+      'balance'        => 'source',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
