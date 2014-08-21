@@ -37,6 +37,9 @@ describe 'cloud' do
         :mode    => '0644'
       }
     end
+
+    it {should contain_class('ntp')}
+
     it {should contain_file('/etc/motd').with(
       {:ensure => 'file'}.merge(file_defaults)
     )}
