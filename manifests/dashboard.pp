@@ -61,9 +61,6 @@
 #   (optional) Enable debug or not.
 #   Defaults to true
 #
-# [*listen_ssl*]
-#   (optional) Enable SSL support in Apache. (Defaults to false)
-#
 # [*horizon_cert*]
 #   (required with listen_ssl) Certificate to use for SSL support.
 #
@@ -85,7 +82,6 @@ class cloud::dashboard(
   $horizon_ssl_port          = 443,
   $servername                = $::fqdn,
   $api_eth                   = '127.0.0.1',
-  $listen_ssl                = false,
   $keystone_host             = '127.0.0.1',
   $keystone_proto            = 'http',
   $keystone_port             = 5000,
