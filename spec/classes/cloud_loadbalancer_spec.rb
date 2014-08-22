@@ -209,10 +209,9 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '6082',
         :options   => {
-          'mode'           => 'http',
-          'option'         => ['tcpka', 'forwardfor', 'tcplog','httpchk GET /'],
-          'http-check'     => 'expect ! rstatus ^5',
-          'balance'        => 'leastconn',
+          'mode'           => 'tcp',
+          'balance'        => 'source',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
           'timeout server' => '120m',
           'timeout client' => '120m'
         }
@@ -370,7 +369,6 @@ describe 'cloud::loadbalancer' do
         :ports     => '443',
         :options   => {
           'mode'           => 'tcp',
-          'http-check'     => 'expect ! rstatus ^5',
           'option'         => ['tcpka','forwardfor','tcplog',  'ssl-hello-chk'],
           'cookie'         => 'sessionid prefix',
           'balance'        => 'leastconn',
