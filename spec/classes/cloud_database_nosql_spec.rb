@@ -29,7 +29,7 @@ describe 'cloud::database::nosql' do
     end
 
     it 'configure mongodb server' do
-      should contain_class('mongodb::globals').with( :manage_package_repo => true)
+      should contain_class('mongodb::globals').with( :manage_package_repo => platform_params[:manage_package_repo])
       should contain_class('mongodb::globals').with_before('Class[Mongodb]')
       should contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
@@ -54,10 +54,12 @@ describe 'cloud::database::nosql' do
 
   context 'on Debian platforms' do
     let :facts do
-      { 
-        :osfamily  => 'Debian',
-        :lsbdistid => 'Debian'
-      }
+      { :osfamily  => 'Debian',
+        :lsbdistid => 'Debian' }
+    end
+
+    let :platform_params do
+      { :manage_package_repo => true }
     end
 
     it_configures 'openstack database nosql'
@@ -66,6 +68,10 @@ describe 'cloud::database::nosql' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+    let :platform_params do
+      { :manage_package_repo => false }
     end
 
     it_configures 'openstack database nosql'

@@ -45,8 +45,17 @@ class cloud::database::nosql(
   $array_bind_ip         = any2array($bind_ip)
   $array_replset_members = any2array($replset_members)
 
+  # Red Hat & CentOS use packages from RHCL or EPEL to support systemd
+  # so manage_package_repo should be at false regarding to mongodb module
+  if $::osfamily == 'RedHat' {
+    $manage_package_repo = false
+  } else {
+  # Debian & Ubuntu are picked from mongodb repo to get recent version
+    $manage_package_repo = true
+  }
+
   class { 'mongodb::globals':
-    manage_package_repo => true
+    manage_package_repo => $manage_package_repo
   }->
   class { 'mongodb':
     bind_ip   => $array_bind_ip,
