@@ -1,6 +1,8 @@
 # puppet-openstack-cloud
 
 [![Build Status](https://api.travis-ci.org/enovance/puppet-openstack-cloud.svg?branch=master)](https://travis-ci.org/enovance/puppet-openstack-cloud)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/eNovance/cloud.svg)](https://forge.puppetlabs.com/eNovance/cloud)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 #### Table of Contents
 
