@@ -63,7 +63,7 @@ class cloud::storage::rbd::pools(
           secret       => $::ceph_keyring_glance,
           keyring_path => "/etc/ceph/ceph.client.${glance_rbd_user}.keyring"
         }
-        Ceph::Key <<| title == $cinder_rbd_user |>>
+        Ceph::Key <<| title == $glance_rbd_user |>>
       }
 
       if $::ceph_keyring_cinder {
