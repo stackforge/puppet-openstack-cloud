@@ -180,6 +180,7 @@ class cloud::loadbalancer(
   $keystone_api_admin               = true,
   $trove_api                        = true,
   $horizon                          = true,
+  $horizon_ssl                      = false,
   $spice                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
@@ -205,6 +206,7 @@ class cloud::loadbalancer(
   $swift_bind_options               = [],
   $spice_bind_options               = [],
   $horizon_bind_options             = [],
+  $horizon_ssl_bind_options         = [],
   $galera_bind_options              = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
@@ -222,6 +224,7 @@ class cloud::loadbalancer(
   $ks_swift_public_port             = 8080,
   $ks_trove_public_port             = 8779,
   $horizon_port                     = 80,
+  $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
@@ -229,8 +232,6 @@ class cloud::loadbalancer(
   # Deprecated parameters
   $keepalived_interface             = false,
   $keepalived_ipvs                  = false,
-  $horizon_ssl                      = false,
-  $horizon_ssl_port                 = false,
 ){
 
   # Manage deprecation when using old parameters
@@ -245,32 +246,6 @@ class cloud::loadbalancer(
     $keepalived_public_ipvs_real = $keepalived_ipvs
   } else {
     $keepalived_public_ipvs_real = $keepalived_public_ipvs
-  }
-  if $horizon_ssl {
-    warning('horizon_ssl parameter is deprecated. Specify ssl in the horizon_bind_options instead.')
-    $horizon_httpchk = 'ssl-hello-chk'
-    $horizon_options = {
-      'mode'    => 'tcp',
-      'cookie'  => 'sessionid prefix',
-      'balance' => 'leastconn' }
-  } else {
-    $horizon_httpchk = "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\""
-    if 'ssl' in $horizon_bind_options {
-      $horizon_options = {
-      'cookie'  => 'sessionid prefix',
-      'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }',
-      'balance' => 'leastconn' }
-    } else {
-      $horizon_options = {
-      'cookie'  => 'sessionid prefix',
-      'balance' => 'leastconn' }
-    }
-  }
-  if $horizon_ssl_port {
-    warning('horizon_ssl_port parameter is deprecated. Specify port with the horizon_port instead.')
-    $horizon_port_real = $horizon_ssl_port
-  } else {
-    $horizon_port_real = $horizon_port
   }
   # end of deprecation support
 
@@ -459,13 +434,40 @@ class cloud::loadbalancer(
   } else {
     $horizon_auth_url = 'horizon'
   }
+
+  $horizon_ssl_options = {
+    'mode'    => 'tcp',
+    'cookie'  => 'sessionid prefix',
+    'balance' => 'leastconn'
+  }
+
+  if 'ssl' in $horizon_bind_options {
+    $horizon_options = {
+      'cookie'  => 'sessionid prefix',
+      'reqadd'  => 'X-Forwarded-Proto:\ https if { ssl_fc }',
+      'balance' => 'leastconn'
+    }
+  } else {
+    $horizon_options = {
+      'cookie'  => 'sessionid prefix',
+      'balance' => 'leastconn'
+    }
+  }
+
   cloud::loadbalancer::binding { 'horizon_cluster':
-    ip           => $vip_public_ip,
-    # to maintain backward compatibility
-    port         => $horizon_port_real,
-    httpchk      => $horizon_httpchk,
+    ip           => $horizon,
+    port         => $horizon_port,
+    httpchk      => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\"",
     options      => $horizon_options,
     bind_options => $horizon_bind_options,
+  }
+
+  cloud::loadbalancer::binding { 'horizon_ssl_cluster':
+    ip           => $horizon_ssl,
+    port         => $horizon_ssl_port,
+    httpchk      => 'ssl-hello-chk',
+    options      => $horizon_ssl_options,
+    bind_options => $horizon_ssl_bind_options,
   }
 
   if ($galera_ip in $keepalived_public_ipvs_real) {

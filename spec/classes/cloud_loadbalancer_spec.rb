@@ -338,45 +338,21 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
-    context 'configure OpenStack Horizon with backward compatibility' do
-      before do
-        params.merge!(
-          :horizon_ssl_port => '80'
-        )
-      end
+    context 'configure OpenStack Horizon' do
       it { should contain_haproxy__listen('horizon_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '80',
         :options   => {
           'mode'           => 'http',
           'http-check'     => 'expect ! rstatus ^5',
-          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
+          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /#{platform_params[:auth_url]}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
           'cookie'         => 'sessionid prefix',
           'balance'        => 'leastconn',
-        },
+        }
       )}
     end
 
-    context 'configure OpenStack Horizon SSL with backward compatibility' do
-      before do
-        params.merge!(
-          :horizon_ssl      => true,
-          :horizon_ssl_port => '443'
-        )
-      end
-      it { should contain_haproxy__listen('horizon_cluster').with(
-        :ipaddress => [params[:vip_public_ip]],
-        :ports     => '443',
-        :options   => {
-          'mode'           => 'tcp',
-          'option'         => ['tcpka','forwardfor','tcplog',  'ssl-hello-chk'],
-          'cookie'         => 'sessionid prefix',
-          'balance'        => 'leastconn',
-        },
-      )}
-    end
-
-    context 'configure OpenStack Horizon SSL binding' do
+    context 'configure OpenStack Horizon with SSL termination on HAProxy' do
       before do
         params.merge!(
           :horizon_port         => '443',
@@ -391,12 +367,31 @@ describe 'cloud::loadbalancer' do
         :options   => {
           'mode'           => 'http',
           'http-check'     => 'expect ! rstatus ^5',
-          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
+          'option'         => ["tcpka", "forwardfor", "tcplog", "httpchk GET  /#{platform_params[:auth_url]}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-myhost\""],
           'cookie'         => 'sessionid prefix',
           'balance'        => 'leastconn',
           'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }'
         },
         :bind_options => ['ssl', 'crt']
+      )}
+    end
+
+    context 'configure OpenStack Horizon SSL with termination on the webserver' do
+      before do
+        params.merge!(
+          :horizon_ssl      => true,
+          :horizon_ssl_port => '443'
+        )
+      end
+      it { should contain_haproxy__listen('horizon_ssl_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '443',
+        :options   => {
+          'mode'           => 'tcp',
+          'option'         => ["tcpka", "forwardfor", "tcplog", "ssl-hello-chk"],
+          'cookie'         => 'sessionid prefix',
+          'balance'        => 'leastconn',
+        }
       )}
     end
 
@@ -428,6 +423,10 @@ describe 'cloud::loadbalancer' do
         :concat_basedir => '/var/lib/puppet/concat' }
     end
 
+    let :platform_params do
+      { :auth_url       => 'horizon' }
+    end
+
     it_configures 'openstack loadbalancer'
   end
 
@@ -436,6 +435,10 @@ describe 'cloud::loadbalancer' do
       { :osfamily       => 'RedHat',
         :hostname       => 'myhost',
         :concat_basedir => '/var/lib/puppet/concat' }
+    end
+
+    let :platform_params do
+      { :auth_url       => 'dashboard' }
     end
 
     it_configures 'openstack loadbalancer'
