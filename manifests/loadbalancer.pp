@@ -454,7 +454,7 @@ class cloud::loadbalancer(
     options      => $heat_cloudwatch_options
   }
 
-  if $::operatingsystem == 'RedHat' {
+  if $::osfamily == 'RedHat' {
     $horizon_auth_url = 'dashboard'
   } else {
     $horizon_auth_url = 'horizon'
