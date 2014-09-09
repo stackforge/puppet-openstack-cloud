@@ -15,15 +15,10 @@
 #
 # Compute Proxy Console node
 #
-# [*secure*]
-# (optionnal) Enabled or not WSS in spice-html5 code
-# Defaults to false.
-#
 
 class cloud::compute::consoleproxy(
   $api_eth    = '127.0.0.1',
-  $spice_port = '6082',
-  $secure     = false,
+  $spice_port = '6082'
 ){
 
   include 'cloud::compute'
@@ -31,15 +26,6 @@ class cloud::compute::consoleproxy(
   class { 'nova::spicehtml5proxy':
     enabled => true,
     host    => $api_eth
-  }
-
-  # Horrible Hack to allow spice-html5 to connect on the web service
-  # by SSL. Since "ws" is hardcoded, there is no way to use HTTPS otherwise.
-  if $secure {
-    exec { 'enable_wss_spice_html5':
-      command => '/bin/sed -i "s/ws:\/\//wss:\/\//g" /usr/share/spice-html5/spice_auto.html',
-      unless  => '/bin/grep -F "wss://" /usr/share/spice-html5/spice_auto.html',
-    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-compute_spice":
