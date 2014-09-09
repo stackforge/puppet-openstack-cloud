@@ -45,7 +45,8 @@ describe 'cloud::compute::consoleproxy' do
 
     let :params do
       { :api_eth    => '10.0.0.1',
-        :spice_port => '6082' }
+        :spice_port => '6082',
+        :secure     => false }
     end
 
     it 'configure nova common' do
@@ -92,6 +93,19 @@ describe 'cloud::compute::consoleproxy' do
         :enabled => true,
         :host    => '10.0.0.1'
       )
+    end
+
+    context 'when using secure console' do
+      before :each do
+        params.merge!( :secure => true )
+      end
+
+      it 'replace ws by wss in spice html5 code' do
+        should contain_exec('enable_wss_spice_html5').with(
+          :command => '/bin/sed -i "s/ws:\/\//wss:\/\//g" /usr/share/spice-html5/spice_auto.html',
+          :unless  => '/bin/grep -F "wss://" /usr/share/spice-html5/spice_auto.html'
+        )
+      end
     end
 
   end
