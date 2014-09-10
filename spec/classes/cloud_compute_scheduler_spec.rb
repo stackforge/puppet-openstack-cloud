@@ -43,6 +43,12 @@ describe 'cloud::compute::scheduler' do
         log_facility            => 'LOG_LOCAL0' }"
     end
 
+    let :params do
+      {
+        :scheduler_default_filters => false
+      }
+    end
+
     it 'configure nova common' do
       should contain_class('nova').with(
           :verbose                 => true,
@@ -86,31 +92,17 @@ describe 'cloud::compute::scheduler' do
       should contain_class('nova::scheduler').with(:enabled => true)
     end
 
-  end
-
-  shared_examples_for 'openstack compute scheduler with nova-scheduler filters' do
-    let :params do
-      { :scheduler_default_filters => ['RamFilter', 'ComputeFilter'] }
-    end
-
-    it 'configure nova-scheduler filters' do
-      should contain_class('nova::scheduler::filter').with(
-        :scheduler_default_filters => ['RamFilter', 'ComputeFilter']
-      )
-      should contain_nova_config('DEFAULT/scheduler_default_filters').with(
+    context 'openstack compute scheduler with nova-scheduler filters' do
+      before do
+        params.merge!(
+          :scheduler_default_filters => ['RamFilter', 'ComputeFilter']
+        )
+      end
+      it { should contain_nova_config('DEFAULT/scheduler_default_filters').with(
         'value' => "RamFilter,ComputeFilter"
-      )
+      )}
     end
-  end
 
-  shared_examples_for 'openstack compute scheduler without nova-scheduler filters' do
-
-    it 'not configure nova-scheduler filters' do
-      should contain_class('nova::scheduler::filter').with(
-        :scheduler_default_filters => false
-      )
-      should_not contain_nova_config('scheduler_default_filters')
-    end
   end
 
   context 'on Debian platforms' do
@@ -119,18 +111,6 @@ describe 'cloud::compute::scheduler' do
     end
 
     it_configures 'openstack compute scheduler'
-    it_configures 'openstack compute scheduler without nova-scheduler filters'
-
-  end
-
-  context 'on Debian platforms with nova-scheduler filters' do
-    let :facts do
-      { :osfamily => 'Debian' }
-    end
-
-    it_configures 'openstack compute scheduler'
-    it_configures 'openstack compute scheduler with nova-scheduler filters'
-
   end
 
   context 'on RedHat platforms' do
@@ -138,16 +118,6 @@ describe 'cloud::compute::scheduler' do
       { :osfamily => 'RedHat' }
     end
     it_configures 'openstack compute scheduler'
-    it_configures 'openstack compute scheduler without nova-scheduler filters'
-
-  end
-
-  context 'on RedHat platforms with nova-scheduler filters' do
-    let :facts do
-      { :osfamily => 'RedHat' }
-    end
-    it_configures 'openstack compute scheduler'
-    it_configures 'openstack compute scheduler with nova-scheduler filters'
   end
 
 end
