@@ -43,6 +43,12 @@ describe 'cloud::compute::scheduler' do
         log_facility            => 'LOG_LOCAL0' }"
     end
 
+    let :params do
+      {
+        :scheduler_default_filters => false
+      }
+    end
+
     it 'configure nova common' do
       should contain_class('nova').with(
           :verbose                 => true,
@@ -84,6 +90,17 @@ describe 'cloud::compute::scheduler' do
 
     it 'configure nova-scheduler' do
       should contain_class('nova::scheduler').with(:enabled => true)
+    end
+
+    context 'openstack compute scheduler with nova-scheduler filters' do
+      before do
+        params.merge!(
+          :scheduler_default_filters => ['RamFilter', 'ComputeFilter']
+        )
+      end
+      it { should contain_nova_config('DEFAULT/scheduler_default_filters').with(
+        'value' => "RamFilter,ComputeFilter"
+      )}
     end
 
   end
