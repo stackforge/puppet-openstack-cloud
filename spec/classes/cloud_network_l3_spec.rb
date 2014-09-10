@@ -151,6 +151,42 @@ describe 'cloud::network::l3' do
         should_not contain__neutron_network('public')
       end
     end
+
+    context 'without TSO/GSO/GRO on Debian systems with 3.14 kernel' do
+      before :each do
+        facts.merge!( :osfamily         => 'Debian',
+                      :kernelmajversion => '3.14' )
+      end
+
+      it 'ensure TSO script is enabled at boot' do
+        should contain_exec('enable-tso-script').with(
+          :command => '/usr/sbin/update-rc.d disable-tso defaults',
+          :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+          :onlyif  => 'test -f /etc/init.d/disable-tso'
+        )
+      end
+      it 'start TSO script' do
+        should contain_exec('start-tso-script').with(
+          :command => '/etc/init.d/disable-tso start',
+          :unless  => 'test -f /tmp/disable-tso-lock',
+          :onlyif  => 'test -f /etc/init.d/disable-tso'
+        )
+      end
+    end
+
+    context 'ensure TSO/GSO/GRO is not managed on Debian systems with kernel < 3.14' do
+      before :each do
+        facts.merge!( :osfamily         => 'Debian',
+                      :kernelmajversion => '3.12' )
+      end
+
+      it 'ensure TSO script is not enabled at boot' do
+        should_not contain_exec('enable-tso-script')
+      end
+      it 'do no tstart TSO script' do
+        should_not contain_exec('start-tso-script')
+      end
+    end
   end
 
   context 'on Debian platforms' do

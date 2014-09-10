@@ -83,7 +83,6 @@ describe 'cloud::compute::hypervisor' do
         :ks_spice_public_host                 => '10.0.0.2',
         :vm_rbd                               => false,
         :volume_rbd                           => false,
-        :manage_tso                           => true,
         :ks_nova_public_host                  => '10.0.0.1' }
     end
 
@@ -272,13 +271,12 @@ describe 'cloud::compute::hypervisor' do
     end
 
     context 'without TSO/GSO/GRO on Debian systems' do
-      let :facts do
-        { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
-          :concat_basedir  => '/var/lib/puppet/concat'
-        }
+      before :each do
+        facts.merge!( :osfamily         => 'Debian',
+                      :operatingsystem  => 'Debian',
+                      :kernelmajversion => '3.14',
+                      :concat_basedir   => '/var/lib/puppet/concat' )
       end
-
       it 'ensure TSO script is enabled at boot' do
         should contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/update-rc.d disable-tso defaults',
@@ -295,10 +293,10 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with TSO/GSO/GRO on Debian systems' do
+    context 'ensure TSO/GSO/GRO is not managed on Debian systems with kernel < 3.14' do
       before :each do
-        facts.merge!( :osfamily => 'Debian' )
-        params.merge!( :manage_tso => false )
+        facts.merge!( :osfamily         => 'Debian',
+                      :kernelmajversion => '3.12' )
       end
 
       it 'ensure TSO script is not enabled at boot' do
@@ -410,7 +408,7 @@ describe 'cloud::compute::hypervisor' do
 
     context 'when trying to enable RBD backend on RedHat plaforms' do
       before :each do
-        facts.merge!( :operatingsystem => 'RedHat' )
+        facts.merge!( :osfamily => 'RedHat' )
         params.merge!(
           :vm_rbd               => true,
           :cinder_rbd_user      => 'cinder',
@@ -422,7 +420,7 @@ describe 'cloud::compute::hypervisor' do
 
     context 'when trying to enable RBD backend with deprecated parameter on RedHat plaforms' do
       before :each do
-        facts.merge!( :operatingsystem => 'RedHat' )
+        facts.merge!( :osfamily => 'RedHat' )
         params.merge!(
           :has_ceph             => true,
           :cinder_rbd_user      => 'cinder',

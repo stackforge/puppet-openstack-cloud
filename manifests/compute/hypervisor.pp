@@ -29,11 +29,6 @@
 #   cinder volumes backend by ceph on nova instances.
 #   Default to false.
 #
-# [*manage_tso]
-#   (optional) Enable or not TSO/GSO/GRO/UFO on neutron interfaces.
-#   Should be at True when running linux kernel 3.14.
-#   Default to true.
-#
 
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
@@ -48,7 +43,6 @@ class cloud::compute::hypervisor(
   $nova_rbd_secret_uuid       = undef,
   $vm_rbd                     = false,
   $volume_rbd                 = false,
-  $manage_tso                 = true,
   # set to false to keep backward compatibility
   $ks_spice_public_proto      = false,
   $ks_spice_public_host       = false,
@@ -130,7 +124,7 @@ Host *
 
   }
 
-  if $::operatingsystem == 'RedHat' {
+  if $::osfamily == 'RedHat' {
     file { '/etc/libvirt/qemu.conf':
       ensure => file,
       source => 'puppet:///modules/cloud/qemu/qemu.conf',
@@ -145,7 +139,7 @@ Host *
     }
   } else {
     # Disabling or not TSO/GSO/GRO on Debian systems
-    if $manage_tso {
+    if $::kernelmajversion >= '3.14' {
       ensure_resource ('exec','enable-tso-script', {
         'command' => '/usr/sbin/update-rc.d disable-tso defaults',
         'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
