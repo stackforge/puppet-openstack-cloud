@@ -46,4 +46,18 @@ class cloud::network::l3(
     debug => $debug,
   }
 
+  # Disabling or not TSO/GSO/GRO on Debian systems
+  if $::osfamily == 'Debian' and $::kernelmajversion >= '3.14' {
+    ensure_resource ('exec','enable-tso-script', {
+      'command' => '/usr/sbin/update-rc.d disable-tso defaults',
+      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+      'onlyif'  => 'test -f /etc/init.d/disable-tso'
+    })
+    ensure_resource ('exec','start-tso-script', {
+      'command' => '/etc/init.d/disable-tso start',
+      'unless'  => 'test -f /tmp/disable-tso-lock',
+      'onlyif'  => 'test -f /etc/init.d/disable-tso'
+    })
+  }
+
 }
