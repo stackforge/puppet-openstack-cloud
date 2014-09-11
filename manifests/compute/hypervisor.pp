@@ -54,6 +54,10 @@ class cloud::compute::hypervisor(
   include 'cloud::telemetry'
   include 'cloud::network'
 
+  if $libvirt_type == 'kvm' and ! $::vtx {
+    fail('libvirt_type is set to KVM and VTX seems to be disabled on this node.')
+  }
+
   # Backward compatibility
   # if has_ceph was enabled, we consider deployments run Ceph for Nova & Cinder
   if $has_ceph {
