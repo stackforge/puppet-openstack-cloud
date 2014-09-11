@@ -258,6 +258,7 @@ describe 'cloud::compute::hypervisor' do
       let :facts do
         { :osfamily        => 'Debian',
           :operatingsystem => 'Ubuntu',
+          :vtx             => true,
           :concat_basedir  => '/var/lib/puppet/concat'
         }
       end
@@ -274,6 +275,7 @@ describe 'cloud::compute::hypervisor' do
       before :each do
         facts.merge!( :osfamily         => 'Debian',
                       :operatingsystem  => 'Debian',
+                      :vtx              => true,
                       :kernelmajversion => '3.14',
                       :concat_basedir   => '/var/lib/puppet/concat' )
       end
@@ -296,6 +298,7 @@ describe 'cloud::compute::hypervisor' do
     context 'ensure TSO/GSO/GRO is not managed on Debian systems with kernel < 3.14' do
       before :each do
         facts.merge!( :osfamily         => 'Debian',
+                      :vtx              => true,
                       :kernelmajversion => '3.12' )
       end
 
@@ -309,7 +312,8 @@ describe 'cloud::compute::hypervisor' do
 
     context 'with RBD backend for instances and volumes on Debian plaforms' do
       before :each do
-        facts.merge!( :osfamily => 'Debian' )
+        facts.merge!( :osfamily => 'Debian',
+                      :vtx      => true )
         params.merge!(
           :vm_rbd               => true,
           :volume_rbd           => true,
@@ -343,7 +347,8 @@ describe 'cloud::compute::hypervisor' do
 
     context 'with RBD support only for volumes on Debian plaforms' do
       before :each do
-        facts.merge!( :osfamily => 'Debian' )
+        facts.merge!( :osfamily => 'Debian',
+                      :vtx      => true )
         params.merge!(
           :vm_rbd               => false,
           :volume_rbd           => true,
@@ -375,7 +380,8 @@ describe 'cloud::compute::hypervisor' do
 
     context 'with RBD backend on Debian plaforms using deprecated parameter' do
       before :each do
-        facts.merge!( :osfamily => 'Debian' )
+        facts.merge!( :osfamily => 'Debian',
+                      :vtx      => true )
         params.merge!(
           :has_ceph             => true,
           :cinder_rbd_user      => 'cinder',
@@ -416,6 +422,13 @@ describe 'cloud::compute::hypervisor' do
           :nova_rbd_secret_uuid => 'secrete' )
       end
       it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
+    end
+
+    context 'when running KVM libvirt driver without VTX enabled' do
+      before :each do
+        facts.merge!( :vtx => false )
+      end
+      it_raises 'a Puppet::Error', /libvirt_type is set to KVM and VTX seems to be disabled on this node./
     end
 
     context 'when trying to enable RBD backend with deprecated parameter on RedHat plaforms' do
@@ -486,6 +499,7 @@ describe 'cloud::compute::hypervisor' do
     let :facts do
       { :osfamily        => 'Debian',
         :operatingsystem => 'Debian',
+        :vtx             => true,
         :concat_basedir  => '/var/lib/puppet/concat'
       }
     end
@@ -500,6 +514,7 @@ describe 'cloud::compute::hypervisor' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat',
+        :vtx             => true,
         :concat_basedir => '/var/lib/puppet/concat'
       }
     end
