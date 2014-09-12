@@ -59,6 +59,7 @@ describe 'cloud::loadbalancer' do
         :haproxy_auth                      => 'root:secrete',
         :keepalived_state                  => 'BACKUP',
         :keepalived_priority               => 50,
+        :keepalived_vrrp_interface         => false,
         :keepalived_public_interface       => 'eth0',
         :keepalived_public_ipvs            => ['10.0.0.1', '10.0.0.2'],
         :horizon_port                      => '80',
@@ -133,6 +134,17 @@ describe 'cloud::loadbalancer' do
           'priority'      => params[:keepalived_priority],
           'notify_master' => '"/etc/init.d/haproxy start"',
           'notify_backup' => '"/etc/init.d/haproxy stop"',
+        })
+      end
+    end
+
+    context 'configure keepalived vrrp on dedicated interface' do
+      before do
+        params.merge!(:keepalived_vrrp_interface => 'eth2')
+      end
+      it 'configure keepalived with a dedicated interface for vrrp' do
+        should contain_keepalived__instance('1').with({
+          'interface' => 'eth2',
         })
       end
     end

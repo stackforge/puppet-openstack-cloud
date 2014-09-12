@@ -18,6 +18,9 @@
 # Install Load-Balancer node (HAproxy + Keepalived)
 #
 # === Parameters:
+# [*keepalived_vrrp_interface*]
+#  (optional) Networking interface to bind the vrrp traffic.
+#  Defaults to false (disabled)
 #
 # [*keepalived_public_interface*]
 #   (optional) Networking interface to bind the VIP connected to public network.
@@ -185,6 +188,7 @@ class cloud::loadbalancer(
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
+  $keepalived_vrrp_interface        = false,
   $keepalived_public_interface      = 'eth0',
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
@@ -247,6 +251,11 @@ class cloud::loadbalancer(
   } else {
     $keepalived_public_ipvs_real = $keepalived_public_ipvs
   }
+  if $keepalived_vrrp_interface {
+    $keepalived_vrrp_interface_real = $keepalived_vrrp_interface
+  } else {
+    $keepalived_vrrp_interface_real = $keepalived_public_interface_real
+  }
   # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
@@ -271,7 +280,7 @@ class cloud::loadbalancer(
   }
 
   keepalived::instance { '1':
-    interface     => $keepalived_public_interface_real,
+    interface     => $keepalived_vrrp_interface_real,
     virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs_real, ['']]), " dev ${keepalived_public_interface_real},"), ',')),
     state         => $keepalived_state,
     track_script  => ['haproxy'],
@@ -281,8 +290,13 @@ class cloud::loadbalancer(
   }
 
   if $keepalived_internal_ipvs {
+    if ! $keepalived_vrrp_interface {
+      $keepalived_vrrp_interface_internal = $keepalived_internal_interface
+    } else {
+      $keepalived_vrrp_interface_internal = $keepalived_vrrp_interface
+    }
     keepalived::instance { '2':
-      interface     => $keepalived_internal_interface,
+      interface     => $keepalived_vrrp_interface_internal,
       virtual_ips   => unique(split(join(flatten([$keepalived_internal_ipvs, ['']]), " dev ${keepalived_internal_interface},"), ',')),
       state         => $keepalived_state,
       track_script  => ['haproxy'],
