@@ -17,10 +17,19 @@
 #
 
 class cloud::telemetry::collector(
+  $mongo_nodes = ['127.0.0.1:27017'],
 ){
 
   include 'cloud::telemetry'
 
+  $s_mongo_nodes = join($mongo_nodes, ',')
+  $db_conn = "mongodb://${s_mongo_nodes}/ceilometer?replicaSet=ceilometer"
+
+  class { 'ceilometer::db':
+    database_connection => $db_conn,
+    sync_db             => true,
+    require             => Anchor['mongodb setup done'],
+  }
   class { 'ceilometer::collector': }
 
 }
