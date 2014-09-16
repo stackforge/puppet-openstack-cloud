@@ -22,7 +22,7 @@ define cloud::loadbalancer::listen_http(
   $httpchk      = 'httpchk',
   $options      = {},
   $bind_options = [],
-  $listen_ip    = ['0.0.0.0']) {
+  $listen_ip    = '0.0.0.0') {
 
   $options_basic = {'mode'       => 'http',
                     'balance'    => 'roundrobin',

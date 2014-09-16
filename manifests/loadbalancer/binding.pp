@@ -49,7 +49,7 @@ define cloud::loadbalancer::binding (
       $listen_ip_real = $all_vip_array
     } else {
       # when binding is specified in parameter
-      if (member($all_vip_array, $ip)) {
+      if ($ip in $all_vip_array) {
         $listen_ip_real = $ip
       } else {
         fail("${ip} is not part of VIP pools.")

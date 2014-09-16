@@ -247,23 +247,6 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
-    context 'configure OpenStack binding on IPv4 and IPv6 public ip' do
-      before do
-        params.merge!(
-          :nova_api               => true,
-          :galera_ip              => '172.16.0.1',
-          :vip_public_ip          => ['172.16.0.1', '2001:0db8:85a3:0000:0000:8a2e:0370:7334'],
-          :vip_internal_ip        => '192.168.0.1',
-          :keepalived_public_ipvs => ['172.16.0.1', '172.16.0.2', '2001:0db8:85a3:0000:0000:8a2e:0370:7334'],
-          :keepalived_internal_ipvs => ['192.168.0.1', '192.168.0.2']
-        )
-      end
-      it { should contain_haproxy__listen('nova_api_cluster').with(
-        :ipaddress => ['172.16.0.1', '2001:0db8:85a3:0000:0000:8a2e:0370:7334', '192.168.0.1'],
-        :ports     => '8774'
-      )}
-    end
-
     context 'disable an OpenStack service binding' do
       before do
         params.merge!(:metadata_api => false)
