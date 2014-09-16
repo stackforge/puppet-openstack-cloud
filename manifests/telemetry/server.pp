@@ -33,12 +33,11 @@ class cloud::telemetry::server(
     ks_ceilometer_internal_port => $ks_ceilometer_internal_port,
     ks_ceilometer_password      => $ks_ceilometer_password,
     api_eth                     => $api_eth,
+    mongo_nodes                 => $mongo_nodes,
   }
   class { 'cloud::telemetry::alarmevaluator': }
   class { 'cloud::telemetry::alarmnotifier': }
-  class { 'cloud::telemetry::collector':
-    mongo_nodes => $mongo_nodes,
-  }
+  class { 'cloud::telemetry::collector': }
   class { 'cloud::telemetry::notification': }
 
 }

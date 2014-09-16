@@ -16,40 +16,37 @@
 # Puppetfile
 forge 'http://forge.puppetlabs.com'
 
-# OpenStack projects
-mod 'openstacklib',
-  :git => 'git://github.com/enovance/puppet-openstacklib.git',
-  :ref => 'c374bed10f8af6000601fa407ebaef0833e1999c'
+# Core OpenStack projects
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
-  :ref => '957c2120d0ee0b9db08bfddcce996686ba61d97d'
+  :ref => 'bea7794633943e454fe3e99ee119298c3d0000ff'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => '77092bbc333e6e5fb512e7c5e88ad979435a23fd'
+  :ref => '9b33d7e1a7b88109e2b85c281534450bc6e53998'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
-  :ref => '78042d76c0854e16a55aaf05c03696d4d422e3c5'
+  :ref => '7f439210b1197efc55ec148074a598b1cb1e3816'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => 'a95a9435dcb5f4b24b2e53213fe05b5466b46d6a'
+  :ref => '025b8cb830d7fa476c4ab1a0b0228b88b5ba10c3'
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
-  :ref => '16b482ea21a70d8dd06ab4c98ac5a218399b0213'
+  :ref => '36383e90d1c4013d7989561b00ffcb08c76908de'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
+  :ref => 'cf77bb23c059416b2d00a37f96a339f06d8c1e2c'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => '3445712b1818160899862e8cf114604cb946813f'
+  :ref => 'b2f8ab7dfc00ee7b2641f290cf9fbcf4fa547db8'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => 'ae171f93ed8dc60e6597ec03a7cfd7c7b70e65ed'
+  :ref => 'ca16cbf55cfa3d2b62c7a78431fa75aadae97af4'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
-  :ref => '3ea00440361ff2452561d2cce808d938e39cce56'
+  :ref => 'f7d1385d6990492705ddaa228ffa544ca235913a'
 mod 'trove',
   :git => 'git://github.com/enovance/puppet-trove.git',
-  :ref => '7d9db32423b25dcc227ea6a6d43c90c63fde0d58'
+  :ref => '6cad2a1474ece5dad813821893f994b69df29fed'
 
 # Dependency
 mod 'apache',

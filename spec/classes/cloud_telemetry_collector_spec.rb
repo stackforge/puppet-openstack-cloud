@@ -38,10 +38,6 @@ describe 'cloud::telemetry::collector' do
         debug                      => true }"
     end
 
-    let :params do
-      { :mongo_nodes => ['node1', 'node2', 'node3'] }
-    end
-
     it 'configure ceilometer common' do
       should contain_class('ceilometer').with(
           :verbose                 => true,
@@ -65,12 +61,6 @@ describe 'cloud::telemetry::collector' do
       should contain_class('ceilometer::collector')
     end
 
-    it 'synchronize ceilometer db indexes' do
-      should contain_class('ceilometer::db').with(
-        :sync_db             => true,
-        :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
-        )
-    end
   end
 
   context 'on Debian platforms' do

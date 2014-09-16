@@ -22,9 +22,20 @@ class cloud::telemetry::api(
   $ks_ceilometer_internal_port    = '8777',
   $ks_ceilometer_password         = 'ceilometerpassword',
   $api_eth                        = '127.0.0.1',
+  $mongo_nodes                    = ['127.0.0.1:27017'],
 ){
 
   include 'cloud::telemetry'
+
+  $s_mongo_nodes = join($mongo_nodes, ',')
+  $db_conn = "mongodb://${s_mongo_nodes}/ceilometer?replicaSet=ceilometer"
+
+  class { 'ceilometer::db':
+    database_connection => $db_conn,
+    mysql_module        => '2.2',
+    sync_db             => true,
+    require             => Anchor['mongodb setup done'],
+  }
 
   class { 'ceilometer::api':
     keystone_password => $ks_ceilometer_password,

@@ -43,7 +43,8 @@ describe 'cloud::telemetry::api' do
         :ks_keystone_internal_proto           => 'http',
         :ks_ceilometer_internal_port          => '8777',
         :ks_ceilometer_password               => 'rabbitpassword',
-        :api_eth                              => '127.0.0.1' }
+        :api_eth                              => '127.0.0.1',
+        :mongo_nodes                          => ['node1', 'node2', 'node3'] }
     end
 
     it 'configure ceilometer common' do
@@ -79,6 +80,13 @@ describe 'cloud::telemetry::api' do
           :time_to_live => '2592000',
           :minute       => '0',
           :hour         => '0'
+        )
+    end
+
+    it 'synchronize ceilometer db indexes' do
+      should contain_class('ceilometer::db').with(
+        :sync_db             => true,
+        :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
         )
     end
   end
