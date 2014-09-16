@@ -259,13 +259,13 @@ class cloud::loadbalancer(
   # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
-  if $vip_public_ip and !($vip_public_ip in $keepalived_public_ipvs_real) {
+  if $vip_public_ip and !(member($keepalived_public_ipvs_real, $vip_public_ip)) {
     fail('vip_public_ip should be part of keepalived_public_ipvs.')
   }
-  if $vip_internal_ip and !($vip_internal_ip in $keepalived_internal_ipvs) {
+  if $vip_internal_ip and !(member($keepalived_internal_ipvs,$vip_internal_ip)) {
     fail('vip_internal_ip should be part of keepalived_internal_ipvs.')
   }
-  if $galera_ip and !(($galera_ip in $keepalived_public_ipvs_real) or ($galera_ip in $keepalived_internal_ipvs)) {
+  if $galera_ip and !((member($keepalived_public_ipvs_real,$galera_ip)) or (member($keepalived_internal_ipvs,$galera_ip))) {
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
@@ -484,7 +484,7 @@ class cloud::loadbalancer(
     bind_options => $horizon_ssl_bind_options,
   }
 
-  if ($galera_ip in $keepalived_public_ipvs_real) {
+  if (member($keepalived_public_ipvs_real, $galera_ip)) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
   haproxy::listen { 'galera_cluster':
