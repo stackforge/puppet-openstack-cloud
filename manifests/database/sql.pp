@@ -26,6 +26,7 @@ class cloud::database::sql (
     $service_provider               = 'sysv',
     $galera_master_name             = 'mgmt001',
     $galera_internal_ips            = ['127.0.0.1'],
+    $galera_gcache                  = '1G',
     $keystone_db_host               = '127.0.0.1',
     $keystone_db_user               = 'keystone',
     $keystone_db_password           = 'keystonepassword',

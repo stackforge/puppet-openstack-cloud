@@ -491,6 +491,7 @@ class cloud::loadbalancer(
     ipaddress    => $galera_ip,
     ports        => 3306,
     options      => {
+      'maxconn'        => '1000',
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
