@@ -141,22 +141,28 @@ Host *
     if $has_ceph or $vm_rbd {
       fail('Red Hat does not support RBD backend for VMs.')
     }
-  } else {
-    # Disabling or not TSO/GSO/GRO on Debian systems
-    if $::kernelmajversion >= '3.14' {
-      ensure_resource ('exec','enable-tso-script', {
-        'command' => '/usr/sbin/update-rc.d disable-tso defaults',
-        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-        'onlyif'  => 'test -f /etc/init.d/disable-tso'
-      })
-      ensure_resource ('exec','start-tso-script', {
-        'command' => '/etc/init.d/disable-tso start',
-        'unless'  => 'test -f /tmp/disable-tso-lock',
-        'onlyif'  => 'test -f /etc/init.d/disable-tso'
-      })
-
-    }
   }
+
+  # Disabling TSO/GSO/GRO
+  if $::osfamily == 'Debian' {
+    ensure_resource ('exec','enable-tso-script', {
+      'command' => '/usr/sbin/update-rc.d disable-tso defaults',
+      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+      'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+    })
+  } elsif $::osfamily == 'RedHat' {
+    ensure_resource ('exec','enable-tso-script', {
+      'command' => '/usr/sbin/chkconfig disable-tso on',
+      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+      'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+    })
+  }
+  ensure_resource ('exec','start-tso-script', {
+    'command' => '/etc/init.d/disable-tso start',
+    'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
+    'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+  })
+
 
   if $::operatingsystem == 'Ubuntu' {
     service { 'dbus':

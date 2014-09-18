@@ -276,37 +276,43 @@ describe 'cloud::compute::hypervisor' do
         facts.merge!( :osfamily         => 'Debian',
                       :operatingsystem  => 'Debian',
                       :vtx              => true,
-                      :kernelmajversion => '3.14',
                       :concat_basedir   => '/var/lib/puppet/concat' )
       end
       it 'ensure TSO script is enabled at boot' do
         should contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/update-rc.d disable-tso defaults',
           :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-          :onlyif  => 'test -f /etc/init.d/disable-tso'
+          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
       it 'start TSO script' do
         should contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
-          :unless  => 'test -f /tmp/disable-tso-lock',
-          :onlyif  => 'test -f /etc/init.d/disable-tso'
+          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
+          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
     end
 
-    context 'ensure TSO/GSO/GRO is not managed on Debian systems with kernel < 3.14' do
+    context 'without TSO/GSO/GRO on Red Hat systems' do
       before :each do
-        facts.merge!( :osfamily         => 'Debian',
+        facts.merge!( :osfamily         => 'RedHat',
                       :vtx              => true,
-                      :kernelmajversion => '3.12' )
+                      :concat_basedir   => '/var/lib/puppet/concat' )
       end
-
-      it 'ensure TSO script is not enabled at boot' do
-        should_not contain_exec('enable-tso-script')
+      it 'ensure TSO script is enabled at boot' do
+        should contain_exec('enable-tso-script').with(
+          :command => '/usr/sbin/chkconfig disable-tso on',
+          :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
+        )
       end
-      it 'do no tstart TSO script' do
-        should_not contain_exec('start-tso-script')
+      it 'start TSO script' do
+        should contain_exec('start-tso-script').with(
+          :command => '/etc/init.d/disable-tso start',
+          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
+          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
+        )
       end
     end
 
