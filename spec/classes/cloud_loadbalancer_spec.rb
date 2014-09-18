@@ -206,6 +206,7 @@ describe 'cloud::loadbalancer' do
         :ipaddress => params[:galera_ip],
         :ports     => '3306',
         :options   => {
+          'maxconn'        => '1000',
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
