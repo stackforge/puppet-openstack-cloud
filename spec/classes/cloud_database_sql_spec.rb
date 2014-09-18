@@ -32,6 +32,7 @@ describe 'cloud::database::sql' do
         :api_eth                        => '10.0.0.1',
         :galera_master_name             => 'os-ci-test1',
         :galera_internal_ips            => ['10.0.0.1','10.0.0.2','10.0.0.3'],
+        :galera_gcache                  => '1G',
         :keystone_db_host               => '10.0.0.1',
         :keystone_db_user               => 'keystone',
         :keystone_db_password           => 'secrete',
@@ -88,8 +89,8 @@ describe 'cloud::database::sql' do
     context 'configure mysqlchk http replication' do
       it { should contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
       it { should contain_file('/usr/bin/clustercheck').with_mode('0755') }
-      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME="#{params[:galera_clustercheck_dbuser]}"/)}
-      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD="#{params[:galera_clustercheck_dbpassword]}"/)}
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME='#{params[:galera_clustercheck_dbuser]}'/)}
+      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD='#{params[:galera_clustercheck_dbpassword]}'/)}
       it { should contain_file('/etc/xinetd.d/mysqlchk').with_content(/bind            = #{params[:galera_clustercheck_ipaddress]}/)}
 
     end # configure mysqlchk http replication
