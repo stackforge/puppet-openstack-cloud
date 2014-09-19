@@ -25,19 +25,14 @@ describe 'cloud::network::metadata' do
       "class { 'cloud::network':
         rabbit_hosts             => ['10.0.0.1'],
         rabbit_password          => 'secrete',
-        tunnel_eth               => '10.0.1.1',
         api_eth                  => '10.0.0.1',
         provider_vlan_ranges     => ['physnet1:1000:2999'],
-        provider_bridge_mappings => ['public:br-pub'],
         flat_networks            => ['public'],
-        external_int             => 'eth1',
         external_bridge          => 'br-pub',
-        manage_ext_network       => false,
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
-        tunnel_types             => ['vxlan'],
         tenant_network_types     => ['vxlan'],
         type_drivers             => ['gre', 'vlan', 'flat', 'vxlan'],
         log_facility             => 'LOG_LOCAL0' }"
@@ -75,12 +70,6 @@ describe 'cloud::network::metadata' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::agents::ovs').with(
-          :enable_tunneling => true,
-          :tunnel_types     => ['vxlan'],
-          :bridge_mappings  => ['public:br-pub'],
-          :local_ip         => '10.0.1.1'
-      )
       should contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
@@ -106,50 +95,12 @@ describe 'cloud::network::metadata' do
       )
       should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => 'https')
     end
-
-    context 'when using provider external network' do
-      let :pre_condition do
-        "class { 'cloud::network':
-          rabbit_hosts             => ['10.0.0.1'],
-          rabbit_password          => 'secrete',
-          tunnel_eth               => '10.0.1.1',
-          api_eth                  => '10.0.0.1',
-          provider_vlan_ranges     => ['physnet1:1000:2999'],
-          provider_bridge_mappings => ['public:br-pub'],
-          flat_networks            => ['public'],
-          external_int             => 'eth1',
-          external_bridge          => 'br-pub',
-          manage_ext_network       => true,
-          verbose                  => true,
-          debug                    => true,
-          use_syslog               => true,
-          dhcp_lease_duration      => '10',
-          log_facility             => 'LOG_LOCAL0' }"
-      end
-
-      it 'configure br-pub bridge' do
-        should contain_vs_bridge('br-pub')
-      end
-      it 'configure eth1 in br-pub' do
-        should contain_vs_port('eth1').with(
-          :ensure => 'present',
-          :bridge => 'br-pub'
-        )
-      end
-      it 'should not configure provider external network' do
-        should_not contain__neutron_network('public')
-      end
-    end
   end
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily       => 'Debian',
         :processorcount => '8' }
-    end
-
-    let :platform_params do
-      { :gre_module_name => 'gre' }
     end
 
     it_configures 'openstack network metadata'
@@ -159,10 +110,6 @@ describe 'cloud::network::metadata' do
     let :facts do
       { :osfamily       => 'RedHat',
         :processorcount => '8' }
-    end
-
-    let :platform_params do
-      { :gre_module_name => 'ip_gre' }
     end
 
     it_configures 'openstack network metadata'

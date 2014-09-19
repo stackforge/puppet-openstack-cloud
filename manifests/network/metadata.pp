@@ -31,6 +31,7 @@ class cloud::network::metadata(
 ) {
 
   include 'cloud::network'
+  include 'cloud::network::vswitch'
 
   class { 'neutron::agents::metadata':
     enabled          => $enabled,

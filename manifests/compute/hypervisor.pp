@@ -53,6 +53,7 @@ class cloud::compute::hypervisor(
   include 'cloud::compute'
   include 'cloud::telemetry'
   include 'cloud::network'
+  include 'cloud::network::vswitch'
 
   if $libvirt_type == 'kvm' and ! $::vtx {
     fail('libvirt_type is set to KVM and VTX seems to be disabled on this node.')
