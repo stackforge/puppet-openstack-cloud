@@ -350,8 +350,14 @@
 #   (optional) Amount of time a token should remain valid (in seconds)
 #   Defaults to '3600' (1 hour)
 #
+# [*trove_enabled*]
+#   (optional) Enable or not Trove (Database as a Service)
+#   Experimental feature.
+#   Defaults to false
+#
 class cloud::identity (
   $swift_enabled                = true,
+  $trove_enabled                = false,
   $identity_roles_addons        = ['SwiftOperator', 'ResellerAdmin'],
   $keystone_db_host             = '127.0.0.1',
   $keystone_db_user             = 'keystone',
@@ -623,16 +629,18 @@ class cloud::identity (
     password          => $ks_heat_password
   }
 
-  class {'trove::keystone::auth':
-    admin_address     => $ks_trove_admin_host,
-    internal_address  => $ks_trove_internal_host,
-    public_address    => $ks_trove_public_host,
-    public_protocol   => $ks_trove_public_proto,
-    admin_protocol    => $ks_trove_admin_proto,
-    internal_protocol => $ks_trove_internal_proto,
-    port              => $ks_trove_public_port,
-    region            => $region,
-    password          => $ks_trove_password
+  if $trove_enabled {
+    class {'trove::keystone::auth':
+      admin_address     => $ks_trove_admin_host,
+      internal_address  => $ks_trove_internal_host,
+      public_address    => $ks_trove_public_host,
+      public_protocol   => $ks_trove_public_proto,
+      admin_protocol    => $ks_trove_admin_proto,
+      internal_protocol => $ks_trove_internal_proto,
+      port              => $ks_trove_public_port,
+      region            => $region,
+      password          => $ks_trove_password
+    }
   }
 
   # Purge expored tokens every days at midnight
