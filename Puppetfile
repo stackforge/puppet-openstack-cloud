@@ -113,6 +113,9 @@ mod 'kwalify',
 mod 'libvirt',
   :git => 'git://github.com/enovance/puppetlabs-libvirt.git',
   :ref => '05808874715ca3e899861a0af139e6a48255d3cb'
+mod 'logrotate',
+  :git => 'git://github.com/enovance/puppet-logrotate.git',
+  :ref => 'f4d12356301fa2992f51dc7225037bb07556cb28'
 mod 'memcached',
   :git => 'git://github.com/enovance/puppet-memcached.git',
   :ref => 'd009260de3c7623003318555ec5ca61217ea3ca1'

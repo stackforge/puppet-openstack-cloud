@@ -63,6 +63,9 @@ fixtures:
     'fluentd':
       repo: 'git://github.com/enovance/puppet-fluentd.git'
       ref: 'd073a97002c569d8bfc38ac814ee33ed2cb13ca6'
+    'logrotate':
+      repo: 'git://github.com/enovance/puppet-logrotate.git'
+      ref: 'f4d12356301fa2992f51dc7225037bb07556cb28'
     'haproxy':
       repo: 'git://github.com/enovance/puppetlabs-haproxy.git'
       ref: 'fc1166f28d411dfd4f59d4bfd6936595c014a11b'
