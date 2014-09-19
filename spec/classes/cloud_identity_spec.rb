@@ -211,18 +211,8 @@ describe 'cloud::identity' do
       )
     end
 
-    it 'configure trove endpoints' do
-      should contain_class('trove::keystone::auth').with(
-        :admin_address     => '10.0.0.1',
-        :internal_address  => '10.0.0.1',
-        :password          => 'secrete',
-        :port              => '8779',
-        :public_address    => '10.0.0.1',
-        :public_protocol   => 'https',
-        :admin_protocol    => 'https',
-        :internal_protocol => 'https',
-        :region            => 'BigCloud'
-      )
+    it 'should not configure trove endpoint by default' do
+      should_not contain_class('trove::keystone::auth')
     end
 
     it 'configure nova endpoints' do
@@ -332,6 +322,25 @@ describe 'cloud::identity' do
       it 'should not configure swift endpoints and users' do
         should_not contain_class('swift::keystone::auth')
         should_not contain_class('swift::keystone::dispersion')
+      end
+    end
+
+    context 'with Trove' do
+      before :each do
+        params.merge!(:trove_enabled => true)
+      end
+      it 'configure trove endpoints' do
+        should contain_class('trove::keystone::auth').with(
+          :admin_address     => '10.0.0.1',
+          :internal_address  => '10.0.0.1',
+          :password          => 'secrete',
+          :port              => '8779',
+          :public_address    => '10.0.0.1',
+          :public_protocol   => 'https',
+          :admin_protocol    => 'https',
+          :internal_protocol => 'https',
+          :region            => 'BigCloud'
+        )
       end
     end
 
