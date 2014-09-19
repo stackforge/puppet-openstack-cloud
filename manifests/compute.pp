@@ -23,6 +23,11 @@
 #   (optional) Hostname or IP address to connect to nova database
 #   Defaults to '127.0.0.1'
 #
+# [*nova_db_use_slave*]
+#   (optional) Enable slave connection for nova, this assume
+#   the haproxy is used and mysql loadbalanced port for read operation is 3307
+#   Defaults to false
+#
 # [*nova_db_user*]
 #   (optional) Username to connect to nova database
 #   Defaults to 'nova'
@@ -70,6 +75,7 @@
 
 class cloud::compute(
   $nova_db_host             = '127.0.0.1',
+  $nova_db_use_slave        = false,
   $nova_db_user             = 'nova',
   $nova_db_password         = 'novapassword',
   $rabbit_hosts             = ['127.0.0.1:5672'],
@@ -126,6 +132,12 @@ class cloud::compute(
     log_facility        => $log_facility,
     use_syslog          => $use_syslog,
     nova_shell          => '/bin/bash',
+  }
+
+  if $nova_db_use_slave {
+    nova_config {'database/slave_connection': value => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}:3307/nova?charset=utf8" }
+  } else {
+    nova_config {'database/slave_connection': ensure => absent }
   }
 
   class { 'nova::network::neutron':

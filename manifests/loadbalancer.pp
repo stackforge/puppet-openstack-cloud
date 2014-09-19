@@ -233,6 +233,7 @@ class cloud::loadbalancer(
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $galera_ip                        = ['127.0.0.1'],
+  $galera_slave                     = false,
   # Deprecated parameters
   $keepalived_interface             = false,
   $keepalived_ipvs                  = false,
@@ -499,6 +500,21 @@ class cloud::loadbalancer(
       'timeout server' => '400s',
     },
     bind_options => $galera_bind_options,
+  }
+  if $galera_slave {
+    haproxy::listen { 'galera_readonly_cluster':
+      ipaddress    => $galera_ip,
+      ports        => 3307,
+      options      => {
+        'maxconn'        => '1000',
+        'mode'           => 'tcp',
+        'balance'        => 'roundrobin',
+        'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
+        'timeout client' => '400s',
+        'timeout server' => '400s',
+      },
+      bind_options => $galera_bind_options,
+    }
   }
 
   # Allow HAProxy to bind to a non-local IP address

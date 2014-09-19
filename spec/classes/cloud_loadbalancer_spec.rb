@@ -66,6 +66,7 @@ describe 'cloud::loadbalancer' do
         :spice_port                        => '6082',
         :vip_public_ip                     => '10.0.0.1',
         :galera_ip                         => '10.0.0.2',
+        :galera_slave                      => false,
         :horizon_ssl                       => false,
         :horizon_ssl_port                  => false,
         :ks_ceilometer_public_port         => '8777',
@@ -201,10 +202,32 @@ describe 'cloud::loadbalancer' do
       )}
     end # configure monitor haproxy listen
 
-    context 'configure monitor haproxy listen' do
+    context 'configure galera haproxy listen' do
       it { should contain_haproxy__listen('galera_cluster').with(
         :ipaddress => params[:galera_ip],
         :ports     => '3306',
+        :options   => {
+          'maxconn'        => '1000',
+          'mode'           => 'tcp',
+          'balance'        => 'roundrobin',
+          'option'         => ['tcpka','tcplog','httpchk'],
+          'timeout client' => '400s',
+          'timeout server' => '400s'
+        }
+      )}
+    end # configure monitor haproxy listen
+
+    context 'not configure galera slave haproxy listen' do
+      it { should_not contain_haproxy__listen('galera_readonly_cluster') }
+    end # configure monitor haproxy listen
+
+    context 'configure galera slave haproxy listen' do
+      before do
+        params.merge!( :galera_slave => true )
+      end
+      it { should contain_haproxy__listen('galera_readonly_cluster').with(
+        :ipaddress => params[:galera_ip],
+        :ports     => '3307',
         :options   => {
           'maxconn'        => '1000',
           'mode'           => 'tcp',
