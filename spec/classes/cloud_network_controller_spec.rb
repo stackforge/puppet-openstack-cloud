@@ -25,19 +25,14 @@ describe 'cloud::network::controller' do
       "class { 'cloud::network':
         rabbit_hosts             => ['10.0.0.1'],
         rabbit_password          => 'secrete',
-        tunnel_eth               => '10.0.1.1',
         api_eth                  => '10.0.0.1',
         provider_vlan_ranges     => ['physnet1:1000:2999'],
-        provider_bridge_mappings => ['public:br-pub'],
         flat_networks            => ['public'],
-        external_int             => 'eth1',
         external_bridge          => 'br-pub',
-        manage_ext_network       => false,
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
-        tunnel_types             => ['vxlan'],
         tenant_network_types     => ['vxlan'],
         type_drivers             => ['gre', 'vlan', 'flat', 'vxlan'],
         log_facility             => 'LOG_LOCAL0' }"
@@ -57,6 +52,7 @@ describe 'cloud::network::controller' do
         :nova_admin_tenant_name   => 'services',
         :nova_admin_password      => 'novapassword',
         :nova_region_name         => 'RegionOne',
+        :manage_ext_network       => false,
         :api_eth                  => '10.0.0.1' }
     end
 
@@ -79,12 +75,6 @@ describe 'cloud::network::controller' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::agents::ovs').with(
-          :enable_tunneling => true,
-          :tunnel_types     => ['vxlan'],
-          :bridge_mappings  => ['public:br-pub'],
-          :local_ip         => '10.0.1.1'
-      )
       should contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
@@ -94,7 +84,6 @@ describe 'cloud::network::controller' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
     end
 
     it 'configure neutron server' do
@@ -121,7 +110,7 @@ describe 'cloud::network::controller' do
     end
     it 'checks if Neutron DB is populated' do
       should contain_exec('neutron_db_sync').with(
-        :command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+        :command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
         :path    => '/usr/bin',
         :user    => 'neutron',
         :unless  => '/usr/bin/mysql neutron -h 10.0.0.1 -u neutron -psecrete -e "show tables" | /bin/grep Tables',
@@ -130,54 +119,16 @@ describe 'cloud::network::controller' do
       )
     end
 
-    context 'when using provider external network' do
-      let :pre_condition do
-        "class { 'cloud::network':
-          rabbit_hosts             => ['10.0.0.1'],
-          rabbit_password          => 'secrete',
-          tunnel_eth               => '10.0.1.1',
-          api_eth                  => '10.0.0.1',
-          provider_vlan_ranges     => ['physnet1:1000:2999'],
-          provider_bridge_mappings => ['public:br-pub'],
-          flat_networks            => ['public'],
-          external_int             => 'eth1',
-          external_bridge          => 'br-pub',
-          manage_ext_network       => true,
-          verbose                  => true,
-          debug                    => true,
-          use_syslog               => true,
-          dhcp_lease_duration      => '10',
-          log_facility             => 'LOG_LOCAL0' }"
-      end
-
-      it 'configure br-pub bridge' do
-        should contain_vs_bridge('br-pub')
-      end
-      it 'configure eth1 in br-pub' do
-        should contain_vs_port('eth1').with(
-          :ensure => 'present',
-          :bridge => 'br-pub'
-        )
-      end
-      it 'configure provider external network' do
-        should contain_neutron_network('public').with(
-          :provider_network_type     => 'flat',
-          :provider_physical_network => 'public',
-          :shared                    => true,
-          :router_external           => true
-        )
-      end
+    it 'should not configure provider external network' do
+      should_not contain__neutron_network('public')
     end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily      => 'Debian',
         :processorcount => '2' }
-    end
-
-    let :platform_params do
-      { :gre_module_name => 'gre' }
     end
 
     it_configures 'openstack network controller'
@@ -187,10 +138,6 @@ describe 'cloud::network::controller' do
     let :facts do
       { :osfamily       => 'RedHat',
         :processorcount => '2' }
-    end
-
-    let :platform_params do
-      { :gre_module_name => 'ip_gre' }
     end
 
     it_configures 'openstack network controller'

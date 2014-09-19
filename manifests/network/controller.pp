@@ -15,6 +15,10 @@
 #
 # Network Controller node (API + Scheduler)
 #
+# [*manage_ext_network*]
+#   (optionnal) Manage or not external network with provider network API
+#   Defaults to false.
+#
 
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
@@ -32,7 +36,8 @@ class cloud::network::controller(
   $nova_admin_username     = 'nova',
   $nova_admin_tenant_name  = 'services',
   $nova_admin_password     = 'novapassword',
-  $nova_region_name        = 'RegionOne'
+  $nova_region_name        = 'RegionOne',
+  $manage_ext_network      = false,
 ) {
 
   include 'cloud::network'
@@ -60,12 +65,21 @@ class cloud::network::controller(
     nova_region_name       => $nova_region_name
   }
 
+  if $manage_ext_network {
+    neutron_network {'public':
+      provider_network_type     => 'flat',
+      provider_physical_network => 'public',
+      shared                    => true,
+      router_external           => true
+    }
+  }
+
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Neutron DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
   Neutron_config<| |> ->
   exec {'neutron_db_sync':
-    command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head',
+    command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
     path    => '/usr/bin',
     user    => 'neutron',
     unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables",

@@ -13,13 +13,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::network::l3 class
+# Unit tests for cloud::network::vswitch class
 #
 require 'spec_helper'
 
-describe 'cloud::network::l3' do
+describe 'cloud::network::vswitch' do
 
-  shared_examples_for 'openstack network l3' do
+  shared_examples_for 'openstack network vswitch' do
 
     let :pre_condition do
       "class { 'cloud::network':
@@ -39,8 +39,7 @@ describe 'cloud::network::l3' do
     end
 
     let :params do
-      { :debug        => true,
-        :external_int => 'eth1' }
+      { :tunnel_eth => '10.0.1.1' }
     end
 
     it 'configure neutron common' do
@@ -71,65 +70,36 @@ describe 'cloud::network::l3' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
     end
 
-    it 'configure neutron l3' do
-      should contain_class('neutron::agents::l3').with(
-          :debug                   => true,
-          :external_network_bridge => 'br-ex'
-      )
-    end
-    it 'configure br-ex bridge' do
-      should_not contain__vs_bridge('br-ex')
-    end
-
-    it 'configure neutron metering agent' do
-      should contain_class('neutron::agents::metering').with(
-          :debug => true
-      )
-    end
-
-    context 'without TSO/GSO/GRO on Red Hat systems' do
-      before :each do
-        facts.merge!( :osfamily => 'RedHat')
-      end
-
-      it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
-          :command => '/usr/sbin/chkconfig disable-tso on',
-          :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
-        )
-      end
-      it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
-          :command => '/etc/init.d/disable-tso start',
-          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
-          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
+    context 'when running ML2 plugin with OVS driver' do
+      it 'configure neutron vswitch' do
+        should contain_class('neutron::agents::ml2::ovs').with(
+            :enable_tunneling => true,
+            :tunnel_types     => ['gre'],
+            :bridge_mappings  => ['public:br-pub'],
+            :local_ip         => '10.0.1.1'
         )
       end
     end
 
-    context 'without TSO/GSO/GRO on Debian systems' do
-      before :each do
-        facts.merge!( :osfamily => 'Debian')
+    context 'when using provider external network' do
+      before do
+       params.merge!(
+         :manage_ext_network=> true,
+       )
       end
 
-      it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
-          :command => '/usr/sbin/update-rc.d disable-tso defaults',
-          :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
+      it 'configure br-pub bridge' do
+        should contain_vs_bridge('br-pub')
+      end
+      it 'configure eth1 in br-pub' do
+        should contain_vs_port('eth1').with(
+          :ensure => 'present',
+          :bridge => 'br-pub'
         )
       end
-      it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
-          :command => '/etc/init.d/disable-tso start',
-          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
-          :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
-        )
-      end
+
     end
   end
 
@@ -138,7 +108,7 @@ describe 'cloud::network::l3' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'openstack network l3'
+    it_configures 'openstack network vswitch'
   end
 
   context 'on RedHat platforms' do
@@ -146,7 +116,7 @@ describe 'cloud::network::l3' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'openstack network l3'
+    it_configures 'openstack network vswitch'
   end
 
 end

@@ -23,6 +23,7 @@ class cloud::network::l3(
 ) {
 
   include 'cloud::network'
+  include 'cloud::network::vswitch'
 
   if ! $ext_provider_net {
     vs_bridge{'br-ex':
