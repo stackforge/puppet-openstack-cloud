@@ -28,11 +28,19 @@ describe 'cloud::logging::agent' do
     end
 
     let :common_params do {
-      :server => '127.0.0.1',
-      :sources => {
+      :plugins        => {},
+      :matches        => {},
+      :sources        => {
         'apache' => {'type' => 'tail', 'configfile' => 'apache'},
         'syslog' => {'type' => 'tail', 'configfile' => 'syslog'}
-      }
+      },
+      :logrotate_rule => {
+        'td-agent' => {
+          'path'     => '/var/log/td-agent/td-agent.log',
+          'rotate'   => '30',
+          'compress' => 'true',
+        }
+      },
     }
     end
 
@@ -80,6 +88,42 @@ describe 'cloud::logging::agent' do
           :group  => 'td-agent',
         })
       end
+
+      it 'has a logrotate rule for td-agent.log' do
+        it should contain_logrotate__rule('td-agent').with({
+          :path     => '/var/log/td-agent/td-agent.log',
+          :rotate   => '30',
+          :compress => 'true',
+        })
+      end
+
+    end
+
+    context 'logrotate rule with default parameters' do
+
+      it 'has a logrotate rule for td-agent.log' do
+        it should contain_logrotate__rule('td-agent').with({
+          :path     => '/var/log/td-agent/td-agent.log',
+          :rotate   => '30',
+          :compress => 'true',
+        })
+      end
+
+    end
+
+    context 'logrotate rule with custom parameters' do
+      let :params do
+        common_params.merge!( {:logrotate_rule => { 'td-agent' => { 'path' => '/foo/bar', 'rotate' => '5', 'compress' => 'false'} }} )
+      end
+
+      it 'has a logrotate rule for td-agent.log' do
+        it should contain_logrotate__rule('td-agent').with({
+          :path     => '/foo/bar',
+          :rotate   => '5',
+          :compress => 'false',
+        })
+      end
+
     end
 
   end

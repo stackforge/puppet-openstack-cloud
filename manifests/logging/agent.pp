@@ -35,12 +35,17 @@
 #   (optional) Fluentd plugins to install
 #   Defaults to empty hash
 #
+# [*logrotate_rule*]
+#   (optional) A log rotate rule for the logging agent
+#   Defaults to empty hash
+#
 class cloud::logging::agent(
-  $syslog_enable = false,
-  $sources       = {},
-  $matches       = {},
-  $plugins       = {},
-){
+  $syslog_enable  = false,
+  $sources        = {},
+  $matches        = {},
+  $plugins        = {},
+  $logrotate_rule = $cloud::params::logging_agent_logrotate_rule,
+) inherits cloud::params {
 
   include cloud::logging
 
@@ -63,5 +68,6 @@ class cloud::logging::agent(
   create_resources('fluentd::source', $sources, {'require' => 'File[/var/db/td-agent]', 'notify' => 'Service[td-agent]'})
   create_resources('fluentd::match', $matches, {'notify'   => 'Service[td-agent]'})
   create_resources('fluentd::install_plugin', $plugins)
+  create_resources('logrotate::rule', $logrotate_rule)
 
 }
