@@ -20,6 +20,7 @@ class cloud::network::l3(
   $external_int     = 'eth1',
   $ext_provider_net = false,
   $debug            = true,
+  $manage_tso       = true,
 ) {
 
   include 'cloud::network'
@@ -47,23 +48,25 @@ class cloud::network::l3(
   }
 
   # Disabling TSO/GSO/GRO
-  if $::osfamily == 'Debian' {
-    ensure_resource ('exec','enable-tso-script', {
-      'command' => '/usr/sbin/update-rc.d disable-tso defaults',
-      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-      'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
-    })
-  } elsif $::osfamily == 'RedHat' {
-    ensure_resource ('exec','enable-tso-script', {
-      'command' => '/usr/sbin/chkconfig disable-tso on',
-      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+  if $manage_tso {
+    if $::osfamily == 'Debian' {
+      ensure_resource ('exec','enable-tso-script', {
+        'command' => '/usr/sbin/update-rc.d disable-tso defaults',
+        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+        'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+      })
+    } elsif $::osfamily == 'RedHat' {
+      ensure_resource ('exec','enable-tso-script', {
+        'command' => '/usr/sbin/chkconfig disable-tso on',
+        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+        'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+      })
+    }
+    ensure_resource ('exec','start-tso-script', {
+      'command' => '/etc/init.d/disable-tso start',
+      'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
       'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
     })
   }
-  ensure_resource ('exec','start-tso-script', {
-    'command' => '/etc/init.d/disable-tso start',
-    'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
-    'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
-  })
 
 }
