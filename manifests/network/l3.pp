@@ -65,7 +65,7 @@ class cloud::network::l3(
     }
     ensure_resource ('exec','start-tso-script', {
       'command' => '/etc/init.d/disable-tso start',
-      'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
+      'unless'  => '/usr/bin/test -f /var/run/disable-tso.pid',
       'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
     })
   }

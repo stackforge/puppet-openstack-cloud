@@ -105,7 +105,7 @@ describe 'cloud::network::l3' do
       it 'start TSO script' do
         should contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
-          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
+          :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
@@ -126,7 +126,7 @@ describe 'cloud::network::l3' do
       it 'start TSO script' do
         should contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
-          :unless  => '/usr/bin/test -f /tmp/disable-tso-lock',
+          :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
