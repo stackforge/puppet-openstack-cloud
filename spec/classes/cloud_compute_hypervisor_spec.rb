@@ -308,6 +308,18 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
+    context 'when not managing TSO/GSO/GRO' do
+      before :each do
+        params.merge!( :manage_tso => false)
+      end
+      it 'ensure TSO script is not managed at boot' do
+        should_not contain_exec('enable-tso-script')
+      end
+      it 'do not start TSO script' do
+        should_not contain_exec('start-tso-script')
+      end
+    end
+
     context 'with RBD backend for instances and volumes on Debian plaforms' do
       before :each do
         facts.merge!( :osfamily => 'Debian',

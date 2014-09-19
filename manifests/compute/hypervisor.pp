@@ -19,15 +19,19 @@
 #
 # === Parameters:
 #
-# [*vm_rbd]
+# [*vm_rbd*]
 #   (optional) Enable or not ceph capabilities on compute node to store
 #   nova instances on ceph storage.
 #   Default to false.
 #
-# [*volume_rbd]
+# [*volume_rbd*]
 #   (optional) Enable or not ceph capabilities on compute node to attach
 #   cinder volumes backend by ceph on nova instances.
 #   Default to false.
+#
+# [*manage_tso*]
+#   (optional) Allow to manage or not TSO issue.
+#   Default to true.
 #
 
 class cloud::compute::hypervisor(
@@ -43,6 +47,7 @@ class cloud::compute::hypervisor(
   $nova_rbd_secret_uuid       = undef,
   $vm_rbd                     = false,
   $volume_rbd                 = false,
+  $manage_tso                 = true,
   # set to false to keep backward compatibility
   $ks_spice_public_proto      = false,
   $ks_spice_public_host       = false,
@@ -145,25 +150,26 @@ Host *
   }
 
   # Disabling TSO/GSO/GRO
-  if $::osfamily == 'Debian' {
-    ensure_resource ('exec','enable-tso-script', {
-      'command' => '/usr/sbin/update-rc.d disable-tso defaults',
-      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
-      'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
-    })
-  } elsif $::osfamily == 'RedHat' {
-    ensure_resource ('exec','enable-tso-script', {
-      'command' => '/usr/sbin/chkconfig disable-tso on',
-      'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+  if $manage_tso {
+    if $::osfamily == 'Debian' {
+      ensure_resource ('exec','enable-tso-script', {
+        'command' => '/usr/sbin/update-rc.d disable-tso defaults',
+        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+        'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+      })
+    } elsif $::osfamily == 'RedHat' {
+      ensure_resource ('exec','enable-tso-script', {
+        'command' => '/usr/sbin/chkconfig disable-tso on',
+        'unless'  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
+        'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
+      })
+    }
+    ensure_resource ('exec','start-tso-script', {
+      'command' => '/etc/init.d/disable-tso start',
+      'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
       'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
     })
   }
-  ensure_resource ('exec','start-tso-script', {
-    'command' => '/etc/init.d/disable-tso start',
-    'unless'  => '/usr/bin/test -f /tmp/disable-tso-lock',
-    'onlyif'  => '/usr/bin/test -f /etc/init.d/disable-tso'
-  })
-
 
   if $::operatingsystem == 'Ubuntu' {
     service { 'dbus':

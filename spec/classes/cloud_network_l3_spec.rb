@@ -131,6 +131,18 @@ describe 'cloud::network::l3' do
         )
       end
     end
+
+    context 'when not managing TSO/GSO/GRO' do
+      before :each do
+        params.merge!( :manage_tso => false)
+      end
+      it 'ensure TSO script is not enabled at boot' do
+        should_not contain_exec('enable-tso-script')
+      end
+      it 'do not start TSO script' do
+        should_not contain_exec('start-tso-script')
+      end
+    end
   end
 
   context 'on Debian platforms' do
