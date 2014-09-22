@@ -41,7 +41,7 @@ fixtures:
       ref: '58682faf74cdfc6c8d921d2be9322368c8a96cf9'
     'ceph':
       repo: 'git://github.com/enovance/puppet-ceph.git'
-      ref: '581f7380b7b2fdeef9d7147b13156567ecfde074'
+      ref: '803e5b8ebd290e0564bd0c148a750bbc0135d8c7'
     'concat':
       repo: 'git://github.com/enovance/puppet-concat.git'
       ref: '04356974f72b90a1d0f57346a00e95a717924e43'
