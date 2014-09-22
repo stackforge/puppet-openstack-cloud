@@ -26,6 +26,7 @@ describe 'cloud::compute::api' do
       "class { 'cloud::compute':
         availability_zone       => 'MyZone',
         nova_db_host            => '10.0.0.1',
+        nova_db_use_slave       => false,
         nova_db_user            => 'nova',
         nova_db_password        => 'secrete',
         rabbit_hosts            => ['10.0.0.1'],
@@ -73,6 +74,24 @@ describe 'cloud::compute::api' do
       should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
       should contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
+    end
+
+    it 'does not configure nova db slave' do
+        should contain_nova_config('database/slave_connection').with('ensure' => 'absent')
+    end
+
+    context "when enabling nova db slave" do
+      let :pre_condition do
+        "class { 'cloud::compute':
+          nova_db_host            => '10.0.0.1',
+          nova_db_use_slave       => true,
+          nova_db_user            => 'nova',
+          nova_db_password        => 'secrete' }"
+      end
+      it 'configure nova db slave' do
+          should contain_nova_config('database/slave_connection').with(
+              'value' => 'mysql://nova:secrete@10.0.0.1:3307/nova?charset=utf8')
+      end
     end
 
     it 'configure neutron on compute node' do

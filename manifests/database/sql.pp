@@ -342,4 +342,12 @@ class cloud::database::sql (
       inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname != @galera_master_name -%>backup<% end %>')
   }
 
+  @@haproxy::balancermember{"${::fqdn}-readonly":
+    listening_service => 'galera_readonly_cluster',
+    server_names      => $::hostname,
+    ipaddresses       => $api_eth,
+    ports             => '3306',
+    options           =>
+      inline_template('check inter 2000 rise 2 fall 5 port 9200 <% if @hostname == @galera_master_name -%>backup<% end %>')
+  }
 }
