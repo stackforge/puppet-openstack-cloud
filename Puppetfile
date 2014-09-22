@@ -25,7 +25,7 @@ mod 'ceilometer',
   :ref => '957c2120d0ee0b9db08bfddcce996686ba61d97d'
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => '77092bbc333e6e5fb512e7c5e88ad979435a23fd'
+  :ref => '2da616a4a52d3086fe3a291b9199fc7313575504'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
   :ref => '78042d76c0854e16a55aaf05c03696d4d422e3c5'
@@ -40,7 +40,7 @@ mod 'keystone',
   :ref => 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => '3445712b1818160899862e8cf114604cb946813f'
+  :ref => 'ef3ca7f93c29ebe6fbf40788cc4d4bc72182e2a2'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
   :ref => 'ae171f93ed8dc60e6597ec03a7cfd7c7b70e65ed'
