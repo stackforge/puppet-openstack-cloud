@@ -33,7 +33,6 @@
 #   (optional) Allow to manage or not TSO issue.
 #   Default to true.
 #
-
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
   $libvirt_type               = 'kvm',
@@ -260,7 +259,7 @@ Host *
     'libvirt/inject_key':            value => false;
     'libvirt/inject_partition':      value => '-2';
     'libvirt/live_migration_flag':   value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
-    'libvirt/block_migration_flag':  value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_DOMAIN_BLOCK_REBASE_COPY,VIR_DOMAIN_BLOCK_REBASE_SHALLOW';
+    'libvirt/block_migration_flag':  value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC';
   }
 
   class { 'ceilometer::agent::compute': }
