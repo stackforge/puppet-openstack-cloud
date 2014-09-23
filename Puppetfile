@@ -68,6 +68,9 @@ mod 'ceph',
 mod 'cloud',
   :git => 'git://github.com/enovance/puppet-openstack-cloud.git',
   :ref => 'master'
+mod 'common',
+  :git => 'git://github.com/enovance/puppet-module-common.git',
+  :ref => '2d0606fce1078222dd483e731ec32807f5b4ca53'
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => '04356974f72b90a1d0f57346a00e95a717924e43'
@@ -125,6 +128,11 @@ mod 'mongodb',
 mod 'mysql',
   :git => 'git://github.com/enovance/puppetlabs-mysql.git',
   :ref => '8b814d4d2cb5786a15e8e37fb3b7444d5d5f0d3f'
+# TODO(EmilienM) Come back to upstream after
+# https://github.com/ghoneycutt/puppet-module-nfs/pull/43 got merged.
+mod 'nfs',
+  :git => 'git://github.com/enovance/puppet-module-nfs.git',
+  :ref => '65086bcc5fc5cd9ff617a425505326619a0887fc'
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
@@ -137,6 +145,9 @@ mod 'rabbitmq',
 mod 'rhnreg_ks',
   :git => 'git://github.com/enovance/puppet-rhnreg_ks.git',
   :ref => '8fdc051992b44a09f39d3b510d7cd6db5ed5ff66'
+mod 'rpcbind',
+  :git => 'git://github.com/enovance/puppet-module-rpcbind.git',
+  :ref => 'da943d26f09f9658159c1190e058bf1af88f465d'
 mod 'rsync',
   :git => 'git://github.com/enovance/puppetlabs-rsync.git',
   :ref => '7122983d89bf68bc4170415cc03212f6a8a4636e'
@@ -154,6 +165,9 @@ mod 'stdlib',
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'
+mod 'types',
+  :git => 'git://github.com/enovance/puppet-module-types.git',
+  :ref => '4c58ae8b6cdb1a9da3da9654a35375e274019dfb'
 mod 'vswitch',
   :git => 'git://github.com/enovance/puppet-vswitch.git',
   :ref => '49dbaff15e8f017dbe365ebf08eb505472b695a1'

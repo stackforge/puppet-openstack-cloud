@@ -123,11 +123,23 @@ fixtures:
     'ssh':
       repo: 'git://github.com/enovance/puppet-ssh.git'
       ref: '10675c0d80511a8cdd514af67b695887fa97ec40'
+    'rpcbind':
+      repo: 'git://github.com/enovance/puppet-module-rpcbind.git'
+      ref: 'da943d26f09f9658159c1190e058bf1af88f465d'
     'rsyslog':
       repo: 'git://github.com/enovance/puppet-rsyslog.git'
       ref: '67c7c501b916ebd1a27a8a218d49602339526c4f'
     'rsync':
       repo: 'git://github.com/enovance/puppetlabs-rsync.git'
       ref: '7122983d89bf68bc4170415cc03212f6a8a4636e'
+    'nfs':
+      repo: 'git://github.com/enovance/puppet-module-nfs.git'
+      ref: '65086bcc5fc5cd9ff617a425505326619a0887fc'
+    'common':
+      repo: 'git://github.com/enovance/puppet-module-common.git'
+      ref: '2d0606fce1078222dd483e731ec32807f5b4ca53'
+    'types':
+      repo: 'git://github.com/enovance/puppet-module-types.git'
+      ref: '4c58ae8b6cdb1a9da3da9654a35375e274019dfb'
   symlinks:
     'cloud': '#{source_dir}'
