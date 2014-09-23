@@ -19,19 +19,9 @@
 #
 # [*driver*]
 #   (optional) Neutron vswitch driver
-#   Currently, only ml2_ovs is supported.
+#   Supported values: 'ml2_ovs', 'n1kv_vem'.
+#   Note: 'n1kv_vem' currently works only on Red Hat systems.
 #   Defaults to 'ml2_ovs'
-#
-# [*tunnel_eth*]
-#   (optional) Interface IP used to build the tunnels
-#   Defaults to '127.0.0.1'
-#
-# [*tunnel_typeis]
-#   (optional) List of types of tunnels to use when utilizing tunnels
-#   Defaults to ['gre']
-#
-# [*provider_bridge_mappings*]
-#   (optional) List of <physical_network>:<bridge>
 #
 # [*external_int*]
 #   (optionnal) Network interface to bind the external provider network
@@ -45,15 +35,111 @@
 #   (optionnal) Manage or not external network with provider network API
 #   Defaults to false.
 #
-
+# [*tunnel_eth*]
+#   (optional) Interface IP used to build the tunnels
+#   Defaults to '127.0.0.1'
+#
+# [*tunnel_typeis]
+#   (optional) List of types of tunnels to use when utilizing tunnels
+#   Defaults to ['gre']
+#
+# [*provider_bridge_mappings*]
+#   (optional) List of <physical_network>:<bridge>
+#
+# [*n1kv_vsm_ip*]
+#   (required) N1KV VSM (Virtual Supervisor Module) VM's IP.
+#   Defaults to 127.0.0.1
+#
+# [*n1kv_vsm_domainid*]
+#   (required) N1KV VSM DomainID.
+#   Defaults to 1000
+#
+# [*host_mgmt_intf*]
+#   (required) Management Interface of node where VEM will be installed.
+#   Defaults to eth1
+#
+# [*uplink_profile*]
+#   (optional) Uplink Interfaces that will be managed by VEM. The uplink
+#      port-profile that configures these interfaces should also be specified.
+#   (format)
+#    $uplink_profile = { 'eth1' => 'profile1',
+#                        'eth2' => 'profile2'
+#                       },
+#   Defaults to empty
+#
+# [*vtep_config*]
+#   (optional) Virtual tunnel interface configuration.
+#              Eg:VxLAN tunnel end-points.
+#   (format)
+#   $vtep_config = { 'vtep1' => { 'profile' => 'virtprof1',
+#                                 'ipmode'  => 'dhcp'
+#                               },
+#                    'vtep2' => { 'profile'   => 'virtprof2',
+#                                 'ipmode'    => 'static',
+#                                 'ipaddress' => '192.168.1.1',
+#                                 'netmask'   => '255.255.255.0'
+#                               }
+#                  },
+#   Defaults to empty
+#
+# [*node_type*]
+#   (optional). Specify the type of node: 'compute' (or) 'network'.
+#   Defaults to 'compute'
+#
+# All the above parameter values will be used in the config file: n1kv.conf
+#
+# [*vteps_in_same_subnet*]
+#   (optional)
+#   The VXLAN tunnel interfaces created on VEM can belong to same IP-subnet.
+#   In such case, set this parameter to true. This results in below
+#   'sysctl:ipv4' values to be modified.
+#     rp_filter (reverse path filtering) set to 2(Loose).Default is 1(Strict)
+#     arp_ignore (arp reply mode) set to 1:reply only if target ip matches
+#                                that of incoming interface. Default is 0
+#   Please refer Linux Documentation for detailed description
+#   http://lxr.free-electrons.com/source/Documentation/networking/ip-sysctl.txt
+#
+#   If the tunnel interfaces are not in same subnet set this parameter to false.
+#   Note that setting to false causes no change in the sysctl settings and does
+#   not revert the changes made if it was originally set to true on a previous
+#   catalog run.
+#
+#   Defaults to false
+#
+# [*n1kv_source*]
+#   (optional)
+#     n1kv_source ==> VEM package location. One of below
+#       A)URL of yum repository that hosts VEM package.
+#       B)VEM RPM/DPKG file name, If present locally in 'files' folder
+#       C)If not specified, assumes that VEM image is available in
+#         default enabled repositories.
+#   Defaults to empty
+#
+# [*n1kv_version*]
+#   (optional). Specify VEM package version to be installed.
+#       Not applicable if 'n1kv_source' is a file. (Option-B above)
+#   Defaults to 'present'
+#
 class cloud::network::vswitch(
+  # common
   $driver                   = 'ml2_ovs',
-  $tunnel_types             = ['gre'],
-  $provider_bridge_mappings = ['public:br-pub'],
-  $tunnel_eth               = '127.0.0.1',
   $manage_ext_network       = false,
   $external_int             = 'eth1',
   $external_bridge          = 'br-pub',
+  # ml2_ovs
+  $tunnel_types             = ['gre'],
+  $provider_bridge_mappings = ['public:br-pub'],
+  $tunnel_eth               = '127.0.0.1',
+  # n1kv_vem
+  $n1kv_vsm_ip              = '127.0.0.1',
+  $n1kv_vsm_domain_id       = 1000,
+  $host_mgmt_intf           = 'eth1',
+  $uplink_profile           = {},
+  $vtep_config              = {},
+  $node_type                = 'compute',
+  $vteps_in_same_subnet     = false,
+  $n1kv_source              = '',
+  $n1kv_version             = 'present',
 ) {
 
   include 'cloud::network'
@@ -71,13 +157,28 @@ class cloud::network::vswitch(
     if $::osfamily == 'RedHat' {
       kmod::load { 'ip_gre': }
     }
+  }
 
-    if $manage_ext_network {
-      vs_port {$external_int:
-        ensure => present,
-        bridge => $external_bridge
-      }
+  if $driver == 'n1kv_vem' {
+    # We don't check if we are on Red Hat system
+    # (already done by puppet-neutron)
+    class { 'neutron::agents::n1kv_vem':
+      n1kv_vsm_ip          => $n1kv_vsm_ip,
+      n1kv_vsm_domain_id   => $n1kv_vsm_domain_id,
+      host_mgmt_intf       => $host_mgmt_intf,
+      uplink_profile       => $uplink_profile,
+      vtep_config          => $vtep_config,
+      node_type            => $node_type,
+      vteps_in_same_subnet => $vteps_in_same_subnet,
+      n1kv_source          => $n1kv_source,
+      n1kv_version         => $n1kv_version,
     }
   }
 
+  if $manage_ext_network {
+    vs_port {$external_int:
+      ensure => present,
+      bridge => $external_bridge
+    }
+  }
 }
