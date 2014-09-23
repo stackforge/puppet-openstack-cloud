@@ -55,6 +55,12 @@ describe 'cloud::volume::storage' do
               'netapp_login'           => 'joe',
               'netapp_password'        => 'secret'
             }
+          },
+          'iscsi' => {
+            'fast' => {
+              'iscsi_ip_address' => '10.0.0.1',
+              'volume_group'     => 'fast-vol'
+            }
           }
         },
         :ks_keystone_internal_proto => 'http',
@@ -132,6 +138,19 @@ describe 'cloud::volume::storage' do
       end
     end
 
+    context 'with iSCSI backend' do
+      it 'configures iSCSI volume driver' do
+        should contain_cinder_config('fast/volume_backend_name').with_value('fast')
+        should contain_cinder_config('fast/iscsi_ip_address').with_value('10.0.0.1')
+        should contain_cinder_config('fast/volume_group').with_value('fast-vol')
+        should contain_cinder__type('fast').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'fast',
+          :notify    => 'Service[cinder-volume]'
+        )
+      end
+    end
+
     context 'with two RBD backends' do
       before :each do
         params.merge!(
@@ -185,7 +204,7 @@ describe 'cloud::volume::storage' do
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
         should contain_class('cinder::backends').with(
-          :enabled_backends => ['lowcost', 'premium']
+          :enabled_backends => ['lowcost', 'premium', 'fast']
         )
       end
     end
