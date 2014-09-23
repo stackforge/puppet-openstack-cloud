@@ -40,6 +40,10 @@ Cinder has multi-backend support:
 * NetAPP
 * iSCSI
 * EMC VNX direct
+* NFS
+Neutron supports:
+* ML2 plugin with OVS agent (GRE + VXLAN supported)
+* Cisco plugin with N1KV agent (non-ML2)
 Trove support is now experimental.
 
 [Puppet Modules](http://docs.puppetlabs.com/learning/modules1.html#modules) are a collection of related contents that can be used to model the configuration of a discrete service.

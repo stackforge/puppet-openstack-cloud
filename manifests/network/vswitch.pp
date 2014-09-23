@@ -144,34 +144,43 @@ class cloud::network::vswitch(
 
   include 'cloud::network'
 
-  if $driver == 'ml2_ovs' {
-    class { 'neutron::agents::ml2::ovs':
-      enable_tunneling => true,
-      l2_population    => true,
-      polling_interval => '15',
-      tunnel_types     => $tunnel_types,
-      bridge_mappings  => $provider_bridge_mappings,
-      local_ip         => $tunnel_eth
+  case $driver {
+    'ml2_ovs': {
+      class { 'neutron::agents::ml2::ovs':
+        enable_tunneling => true,
+        l2_population    => true,
+        polling_interval => '15',
+        tunnel_types     => $tunnel_types,
+        bridge_mappings  => $provider_bridge_mappings,
+        local_ip         => $tunnel_eth
+      }
+
+      if $::osfamily == 'RedHat' {
+        kmod::load { 'ip_gre': }
+      }
     }
 
-    if $::osfamily == 'RedHat' {
-      kmod::load { 'ip_gre': }
+    'n1kv_vem': {
+      # We don't check if we are on Red Hat system
+      # (already done by puppet-neutron)
+      class { 'neutron::agents::n1kv_vem':
+        n1kv_vsm_ip          => $n1kv_vsm_ip,
+        n1kv_vsm_domain_id   => $n1kv_vsm_domain_id,
+        host_mgmt_intf       => $host_mgmt_intf,
+        uplink_profile       => $uplink_profile,
+        vtep_config          => $vtep_config,
+        node_type            => $node_type,
+        vteps_in_same_subnet => $vteps_in_same_subnet,
+        n1kv_source          => $n1kv_source,
+        n1kv_version         => $n1kv_version,
+      }
+      ensure_resource('package', 'nexus1000v', {
+        ensure => present
+      })
     }
-  }
 
-  if $driver == 'n1kv_vem' {
-    # We don't check if we are on Red Hat system
-    # (already done by puppet-neutron)
-    class { 'neutron::agents::n1kv_vem':
-      n1kv_vsm_ip          => $n1kv_vsm_ip,
-      n1kv_vsm_domain_id   => $n1kv_vsm_domain_id,
-      host_mgmt_intf       => $host_mgmt_intf,
-      uplink_profile       => $uplink_profile,
-      vtep_config          => $vtep_config,
-      node_type            => $node_type,
-      vteps_in_same_subnet => $vteps_in_same_subnet,
-      n1kv_source          => $n1kv_source,
-      n1kv_version         => $n1kv_version,
+    default: {
+      err "${driver} driver is not supported."
     }
   }
 

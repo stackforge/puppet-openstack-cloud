@@ -99,6 +99,11 @@ describe 'cloud::network::vswitch' do
           :node_type          => 'compute'
         )
       end
+      it 'ensure cisco VEM package is present' do
+        should contain_package('nexus1000v').with(
+          :ensure => 'present'
+        )
+      end
     end
 
     context 'when using provider external network' do
@@ -118,6 +123,13 @@ describe 'cloud::network::vswitch' do
         )
       end
 
+    end
+
+    context 'with unsupported Neutron driver' do
+      before :each do
+        params.merge!(:driver => 'Something')
+      end
+      it { should compile.and_raise_error(/Something plugin is not supported./) }
     end
   end
 
