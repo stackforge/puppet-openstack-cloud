@@ -106,6 +106,34 @@ describe 'cloud::image::api' do
       end
     end
 
+    context 'with NFS Glance backend' do
+      before :each do
+        params.merge!(:backend                  => 'nfs',
+                      :filesystem_store_datadir => '/srv/images/',
+                      :nfs_device               => 'nfs.example.com:/vol1' )
+      end
+
+      it 'configure Glance with NFS backend' do
+        should contain_class('glance::backend::file')
+        should_not contain_class('glance::backend::rbd')
+        should contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
+        should contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+        should contain_mount('/srv/images/').with({
+          'ensure' => 'present',
+          'fstype' => 'nfs',
+          'device' => 'nfs.example.com:/vol1',
+        })
+      end
+    end
+
+    context 'with missing parameter when using Glance NFS backend' do
+      before :each do
+        params.merge!(:backend    => 'nfs',
+                      :nfs_device => false )
+      end
+      it { should compile.and_raise_error(/When running NFS backend, you need to provide nfs_device parameter./) }
+    end
+
     context 'with wrong Glance backend' do
       before :each do
         params.merge!(:backend => 'Something')
@@ -116,7 +144,9 @@ describe 'cloud::image::api' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily  => 'Debian',
+        # required for rpcbind module
+        :lsbdistid => 'Debian' }
     end
 
     it_configures 'openstack image api'
@@ -124,7 +154,9 @@ describe 'cloud::image::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily          => 'RedHat',
+        # required for nfs module
+        :lsbmajdistrelease => '7' }
     end
 
     it_configures 'openstack image api'

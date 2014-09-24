@@ -69,8 +69,14 @@
 #
 # [*backend*]
 #   (optionnal) Backend to use to store images
-#   Can be 'rbd' or 'file'.
+#   Can be 'rbd', 'file' or 'nfs'.
 #   Defaults to 'rbd' to maintain backward compatibility
+#
+# [*nfs_device*]
+#   (optionnal) NFS device to mount
+#   Example: 'nfs.example.com:/vol1'
+#   Required when running 'nfs' backend.
+#   Defaults to false
 #
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
@@ -94,7 +100,8 @@ class cloud::image::api(
   $log_facility                      = 'LOG_LOCAL0',
   $use_syslog                        = true,
   $backend                           = 'rbd',
-  $filesystem_store_datadir          = undef
+  $filesystem_store_datadir          = undef,
+  $nfs_device                        = false,
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -169,6 +176,27 @@ class cloud::image::api(
   } elsif ($backend == 'file') {
     class { 'glance::backend::file':
       filesystem_store_datadir => $filesystem_store_datadir
+    }
+  } elsif ($backend == 'nfs') {
+    # There is no NFS backend in Glance.
+    # We mount the NFS share in filesystem_store_datadir to fake the
+    # backend.
+    if $nfs_device {
+      class { 'glance::backend::file':
+        filesystem_store_datadir => $filesystem_store_datadir
+      }
+      $nfs_mount = {
+        "${filesystem_store_datadir}" => {
+          'ensure' => 'present',
+          'fstype' => 'nfs',
+          'device' => $nfs_device
+        }
+      }
+      ensure_resource('class', 'nfs', {
+        mounts => $nfs_mount
+      })
+    } else {
+      fail('When running NFS backend, you need to provide nfs_device parameter.')
     }
   } else {
     fail("${backend} is not a Glance supported backend.")

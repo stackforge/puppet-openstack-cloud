@@ -12,6 +12,8 @@ PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('disable_80chars')
 # for manifest loadbalancer.pp +39 (default value as an array of variables)
 PuppetLint.configuration.send('disable_class_parameter_defaults')
+# manifests/image/api.pp - WARNING: string containing only a variable on line 189
+PuppetLint.configuration.send('disable_only_variable_string')
 # For stonith-enabled (it's a string not a bool)
 PuppetLint.configuration.send('disable_quoted_booleans')
 # Ignore all upstream modules
