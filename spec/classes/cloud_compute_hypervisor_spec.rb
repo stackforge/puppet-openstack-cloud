@@ -469,6 +469,41 @@ describe 'cloud::compute::hypervisor' do
           )
       end
     end
+
+    context 'when storing instances on a NFS share' do
+      before :each do
+        params.merge!(
+          :nfs_enabled => true,
+          :nfs_device  => 'nfs.example.com:/vol1' )
+      end
+      it 'configure nova instances path and NFS mount' do
+        should contain_nova_config('DEFAULT/instances_path').with('value' => '/var/lib/nova/instances')
+        should contain_mount('/var/lib/nova/instances').with({
+          'ensure' => 'present',
+          'fstype' => 'nfs',
+          'device' => 'nfs.example.com:/vol1',
+        })
+      end
+    end
+
+    context 'when storing instances on a NFS share without nfs_device' do
+      before :each do
+        params.merge!(
+          :nfs_enabled => true,
+          :nfs_device  => false )
+      end
+      it_raises 'a Puppet::Error', /When running NFS backend, you need to provide nfs_device parameter./
+    end
+
+    context 'when storing instances on a NFS share with vm_rbd enabled' do
+      before :each do
+        params.merge!(
+          :nfs_enabled => true,
+          :vm_rbd      => true,
+          :nfs_device  => 'nfs.example.com:/vol1' )
+      end
+      it_raises 'a Puppet::Error', /When running NFS backend, vm_rbd parameter cannot be set to true./
+    end
  end
 
   context 'on Debian platforms' do
@@ -476,7 +511,9 @@ describe 'cloud::compute::hypervisor' do
       { :osfamily        => 'Debian',
         :operatingsystem => 'Debian',
         :vtx             => true,
-        :concat_basedir  => '/var/lib/puppet/concat'
+        :concat_basedir  => '/var/lib/puppet/concat',
+        # required for rpcbind module
+        :lsbdistid       => 'Debian'
       }
     end
 
@@ -485,9 +522,11 @@ describe 'cloud::compute::hypervisor' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
-        :vtx             => true,
-        :concat_basedir => '/var/lib/puppet/concat'
+      { :osfamily          => 'RedHat',
+        :vtx               => true,
+        :concat_basedir    => '/var/lib/puppet/concat',
+        # required for nfs module
+        :lsbmajdistrelease => '7'
       }
     end
 

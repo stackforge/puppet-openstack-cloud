@@ -33,6 +33,22 @@
 #   (optional) Allow to manage or not TSO issue.
 #   Default to true.
 #
+# [*nfs_enabled*]
+#   (optional) Store (or not) instances on a NFS share.
+#   Defaults to false
+#
+# [*nfs_device*]
+#   (optional) NFS device to mount
+#   Example: 'nfs.example.com:/vol1'
+#   Required when nfs_enabled is at true.
+#   Defaults to false
+#
+# [*filesystem_store_datadir*]
+#   (optional) Full path of data directory to store the instances.
+#   Don't modify this parameter if you don't know what you do.
+#   You may have side effects (SElinux for example).
+#   Defaults to '/var/lib/nova/instances'
+#
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
   $libvirt_type               = 'kvm',
@@ -47,6 +63,10 @@ class cloud::compute::hypervisor(
   $vm_rbd                     = false,
   $volume_rbd                 = false,
   $manage_tso                 = true,
+  # when using NFS storage backend
+  $nfs_enabled                = false,
+  $nfs_device                 = false,
+  $filesystem_store_datadir   = '/var/lib/nova/instances',
   # set to false to keep backward compatibility
   $ks_spice_public_proto      = false,
   $ks_spice_public_host       = false,
@@ -82,6 +102,35 @@ class cloud::compute::hypervisor(
     $ks_spice_public_host_real = $ks_spice_public_host
   } else {
     $ks_spice_public_host_real = $ks_nova_public_host
+  }
+
+  if $nfs_enabled {
+    if ! $vm_rbd {
+      # There is no NFS backend in Nova.
+      # We mount the NFS share in filesystem_store_datadir to fake the
+      # backend.
+      if $nfs_device {
+        nova_config { 'DEFAULT/instances_path': value => $filesystem_store_datadir; }
+        $nfs_mount = {
+          "${filesystem_store_datadir}" => {
+            'ensure' => 'present',
+            'fstype' => 'nfs',
+            'device' => $nfs_device
+          }
+        }
+        ensure_resource('class', 'nfs', {
+          mounts => $nfs_mount
+        })
+        # Not using /var/lib/nova/instances may cause side effects.
+        if $filesystem_store_datadir != '/var/lib/nova/instances' {
+          warning('filesystem_store_datadir is not /var/lib/nova/instances so you may have side effects (SElinux, etc)')
+        }
+      } else {
+        fail('When running NFS backend, you need to provide nfs_device parameter.')
+      }
+    } else {
+      fail('When running NFS backend, vm_rbd parameter cannot be set to true.')
+    }
   }
 
   file{ '/var/lib/nova/.ssh':
