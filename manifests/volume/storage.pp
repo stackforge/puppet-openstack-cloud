@@ -83,8 +83,16 @@ class cloud::volume::storage(
       $netapp_backends = { }
     }
 
+    if has_key($cinder_backends, 'iscsi') {
+      $iscsi_backends = $cinder_backends['iscsi']
+      create_resources('cloud::volume::backend::iscsi', $iscsi_backends)
+    }
+    else {
+      $iscsi_backends = { }
+    }
+
     class { 'cinder::backends':
-      enabled_backends => keys(merge($rbd_backends, $netapp_backends))
+      enabled_backends => keys(merge($rbd_backends, $netapp_backends, $iscsi_backends))
     }
 
     # Manage Volume types.
