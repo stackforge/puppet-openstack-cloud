@@ -133,21 +133,21 @@ define cloud::volume::backend::netapp (
 
 
   cinder::backend::netapp { $name:
-    netapp_server_hostname       => $netapp_server_hostname,
-    netapp_login                 => $netapp_login,
-    netapp_password              => $netapp_password,
-    netapp_server_port           => $netapp_server_port,
-    netapp_size_multiplier       => $netapp_size_multiplier,
-    netapp_storage_family        => $netapp_storage_family,
-    netapp_storage_protocol      => $netapp_storage_protocol,
-    netapp_transport_type        => $netapp_transport_type,
-    netapp_vfiler                => $netapp_vfiler,
-    netapp_volume_list           => $netapp_volume_list,
-    netapp_vserver               => $netapp_vserver,
-    expiry_thres_minutes         => $expiry_thres_minutes,
-    thres_avl_size_perc_start    => $thres_avl_size_perc_start,
-    thres_avl_size_perc_stop     => $thres_avl_size_perc_stop,
-    nfs_shares_config            => $nfs_shares_config,
+    netapp_server_hostname    => $netapp_server_hostname,
+    netapp_login              => $netapp_login,
+    netapp_password           => $netapp_password,
+    netapp_server_port        => $netapp_server_port,
+    netapp_size_multiplier    => $netapp_size_multiplier,
+    netapp_storage_family     => $netapp_storage_family,
+    netapp_storage_protocol   => $netapp_storage_protocol,
+    netapp_transport_type     => $netapp_transport_type,
+    netapp_vfiler             => $netapp_vfiler,
+    netapp_volume_list        => $netapp_volume_list,
+    netapp_vserver            => $netapp_vserver,
+    expiry_thres_minutes      => $expiry_thres_minutes,
+    thres_avl_size_perc_start => $thres_avl_size_perc_start,
+    thres_avl_size_perc_stop  => $thres_avl_size_perc_stop,
+    nfs_shares_config         => $nfs_shares_config,
   }
 
   @cinder::type { $volume_backend_name:

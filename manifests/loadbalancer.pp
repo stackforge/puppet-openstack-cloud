@@ -359,16 +359,16 @@ class cloud::loadbalancer(
     bind_options => $metadata_bind_options,
   }
   cloud::loadbalancer::binding { 'spice_cluster':
-    ip                 => $spice,
-    port               => $spice_port,
-    options            => {
+    ip           => $spice,
+    port         => $spice_port,
+    options      => {
       'mode'           => 'tcp',
       'option'         => ['tcpka', 'tcplog', 'forwardfor'],
       'balance'        => 'source',
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
-    bind_options       => $spice_bind_options,
+    bind_options => $spice_bind_options,
   }
   cloud::loadbalancer::binding { 'trove_api_cluster':
     ip           => $trove_api,
@@ -376,16 +376,16 @@ class cloud::loadbalancer(
     bind_options => $trove_bind_options,
   }
   cloud::loadbalancer::binding { 'glance_api_cluster':
-    ip                 => $glance_api,
-    options            => {
+    ip           => $glance_api,
+    options      => {
       'mode'           => 'tcp',
       'balance'        => 'source',
       'option'         => ['tcpka', 'tcplog', 'forwardfor'],
       'timeout server' => '120m',
       'timeout client' => '120m',
     },
-    port               => $ks_glance_api_public_port,
-    bind_options       => $glance_api_bind_options,
+    port         => $ks_glance_api_public_port,
+    bind_options => $glance_api_bind_options,
   }
   cloud::loadbalancer::binding { 'glance_registry_cluster':
     ip           => $glance_registry,

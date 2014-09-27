@@ -58,10 +58,10 @@ class cloud::spof(
       disable => true
     }
     file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-      source  => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
+      source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
+      mode   => '0755',
+      owner  => 'root',
+      group  => 'root',
     } ->
     exec {'pcmk_ceilometer_agent_central':
       command => 'pcs resource create ceilometer-agent-central ocf:heartbeat:ceilometer-agent-central',
@@ -91,10 +91,10 @@ class cloud::spof(
       'cluster-recheck-interval': value => '5min';
     } ->
     file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-      source  => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
-      mode    => '0755',
-      owner   => 'root',
-      group   => 'root',
+      source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
+      mode   => '0755',
+      owner  => 'root',
+      group  => 'root',
     } ->
     cs_primitive { 'ceilometer-agent-central':
       primitive_class => 'ocf',
