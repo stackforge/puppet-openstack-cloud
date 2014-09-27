@@ -91,8 +91,16 @@ class cloud::volume::storage(
       $iscsi_backends = { }
     }
 
+    if has_key($cinder_backends, 'emc_vnx') {
+      $emc_vnx_backends = $cinder_backends['emc_vnx']
+      create_resources('cloud::volume::backend::emc_vnx', $emc_vnx_backends)
+    }
+    else {
+      $emc_vnx_backends = { }
+    }
+
     class { 'cinder::backends':
-      enabled_backends => keys(merge($rbd_backends, $netapp_backends, $iscsi_backends))
+      enabled_backends => keys(merge($rbd_backends, $netapp_backends, $iscsi_backends, $emc_vnx_backends))
     }
 
     # Manage Volume types.

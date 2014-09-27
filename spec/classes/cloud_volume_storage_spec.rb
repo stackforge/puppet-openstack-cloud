@@ -61,6 +61,14 @@ describe 'cloud::volume::storage' do
               'iscsi_ip_address' => '10.0.0.1',
               'volume_group'     => 'fast-vol'
             }
+          },
+          'emc_vnx' => {
+            'very-fast' => {
+              'iscsi_ip_address'      => '10.0.0.1',
+              'san_ip'                => '10.0.0.2',
+              'san_password'          => 'secrete',
+              'storage_vnx_pool_name' => 'emc-volumes',
+            }
           }
         },
         :ks_keystone_internal_proto => 'http',
@@ -151,6 +159,21 @@ describe 'cloud::volume::storage' do
       end
     end
 
+    context 'with EMC VNX backend' do
+      it 'configures EMC VNX volume driver' do
+        should contain_cinder_config('very-fast/volume_backend_name').with_value('very-fast')
+        should contain_cinder_config('very-fast/iscsi_ip_address').with_value('10.0.0.1')
+        should contain_cinder_config('very-fast/san_ip').with_value('10.0.0.2')
+        should contain_cinder_config('very-fast/san_password').with_value('secrete')
+        should contain_cinder_config('very-fast/storage_vnx_pool_name').with_value('emc-volumes')
+        should contain_cinder__type('very-fast').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'very-fast',
+          :notify    => 'Service[cinder-volume]'
+        )
+      end
+    end
+
     context 'with two RBD backends' do
       before :each do
         params.merge!(
@@ -204,7 +227,7 @@ describe 'cloud::volume::storage' do
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
         is_expected.to contain_class('cinder::backends').with(
-          :enabled_backends => ['lowcost', 'premium', 'fast']
+          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast']
         )
       end
     end
