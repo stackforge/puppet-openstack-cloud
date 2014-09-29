@@ -190,7 +190,7 @@ mod 'vswitch',
   :git => 'git://github.com/enovance/puppet-vswitch.git',
   :ref => '49dbaff15e8f017dbe365ebf08eb505472b695a1'
 mod 'wget',
-  :git => 'git://github.com/enovance/puppet-wget.git'
+  :git => 'git://github.com/enovance/puppet-wget.git',
   :ref => '1c3ea6f1c822a99b52defb87305ea5977cba4293'
 mod 'xinetd',
   :git => 'git://github.com/enovance/puppetlabs-xinetd.git',
