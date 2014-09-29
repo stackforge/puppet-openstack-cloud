@@ -41,6 +41,10 @@ class cloud::messaging(
   # we ensure having an array
   $array_rabbit_names = any2array($rabbit_names)
 
+  Class['rabbitmq'] -> Rabbitmq_vhost <<| |>>
+  Class['rabbitmq'] -> Rabbitmq_user <<| |>>
+  Class['rabbitmq'] -> Rabbitmq_user_permissions <<| |>>
+
   # Packaging issue: https://bugzilla.redhat.com/show_bug.cgi?id=1033305
   if $::osfamily == 'RedHat' {
     file {'/usr/sbin/rabbitmq-plugins':

@@ -80,9 +80,15 @@ mod 'corosync',
 mod 'dnsclient',
   :git => 'git://github.com/enovance/puppet-module-dnsclient.git',
   :ref => '4158b30f4660623f98dcdbd1ce9b482556180b57'
+mod 'datacat',
+  :git => 'git://github.com/enovance/puppet-datacat.git',
+  :ref => '6a2017b31a8808de35b89d90b9e2b681ef9a0918'
 mod 'elasticsearch',
   :git => 'git://github.com/enovance/puppet-elasticsearch.git',
   :ref => '6d08442e8382f0f47388d4185122992c2d73cd9b'
+mod 'gcc',
+  :git => 'git://github.com/enovance/puppetlabs-gcc.git',
+  :ref => '272e6595a2f4824dafa71a2b751960659c05c35d'
 mod 'git',
   :git => 'git://github.com/enovance/puppetlabs-git.git',
   :ref => '0df1f62130a7752c728efb7555f2b07ca178ee5b'
@@ -139,9 +145,15 @@ mod 'ntp',
 mod 'pacemaker',
   :git => 'git://github.com/enovance/puppet-pacemaker.git',
   :ref => '56bbb3580bb7fa62bf57c2ed7a30b938e42b8cc3'
+mod 'puppetdbquery',
+  :git => 'git://github.com/enovance/puppet-puppetdbquery.git',
+  :ref =>  '89194917744f929bb600c31d7d6f822b529f5f03'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
   :ref => '25420cb3c26c9a8432ab519d43c094d614d4fec4'
+mod 'redis',
+  :git => 'git://github.com/enovance/puppet-redis.git',
+  :ref => '1b2b2cea8c9acc08cfa01b42e47fad17f3c4d03d'
 mod 'rhnreg_ks',
   :git => 'git://github.com/enovance/puppet-rhnreg_ks.git',
   :ref => '8fdc051992b44a09f39d3b510d7cd6db5ed5ff66'
@@ -151,6 +163,9 @@ mod 'rpcbind',
 mod 'rsync',
   :git => 'git://github.com/enovance/puppetlabs-rsync.git',
   :ref => '7122983d89bf68bc4170415cc03212f6a8a4636e'
+mod 'sensu',
+  :git => 'git://github.com/enovance/sensu-puppet.git',
+  :ref => '4a16ebf3503bfc9ae6192ae3120cb29b9e5c8445'
 mod 'ssh',
   :git => 'git://github.com/enovance/puppet-ssh.git',
   :ref => '10675c0d80511a8cdd514af67b695887fa97ec40'
@@ -168,9 +183,15 @@ mod 'sysctl',
 mod 'types',
   :git => 'git://github.com/enovance/puppet-module-types.git',
   :ref => '4c58ae8b6cdb1a9da3da9654a35375e274019dfb'
+mod 'uchiwa',
+  :git => 'git://github.com/enovance/yelp-uchiwa.git',
+  :ref =>  '8eafd8167ff7d4f1cd696e4d098e3e1497c28279'
 mod 'vswitch',
   :git => 'git://github.com/enovance/puppet-vswitch.git',
   :ref => '49dbaff15e8f017dbe365ebf08eb505472b695a1'
+mod 'wget',
+  :git => 'git://github.com/enovance/puppet-wget.git'
+  :ref => '1c3ea6f1c822a99b52defb87305ea5977cba4293'
 mod 'xinetd',
   :git => 'git://github.com/enovance/puppetlabs-xinetd.git',
   :ref => '7557af0e418d1a587df04fe7d01322ff2473c32e'
