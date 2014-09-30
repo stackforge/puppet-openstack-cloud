@@ -81,6 +81,7 @@ describe 'cloud::compute::hypervisor' do
         :ks_spice_public_host                 => '10.0.0.2',
         :vm_rbd                               => false,
         :volume_rbd                           => false,
+        :nova_shell                           => false,
         :ks_nova_public_host                  => '10.0.0.1' }
     end
 
@@ -224,6 +225,10 @@ describe 'cloud::compute::hypervisor' do
       is_expected.to contain_class('ceilometer::agent::compute')
     end
 
+    it 'do not configure nova shell' do
+      is_expected.not_to contain_user('nova')
+    end
+
     it 'should not configure nova-compute for RBD backend' do
       is_expected.not_to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
       is_expected.not_to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
@@ -317,6 +322,21 @@ describe 'cloud::compute::hypervisor' do
       end
       it 'do not start TSO script' do
         is_expected.not_to contain_exec('start-tso-script')
+      end
+    end
+
+    context 'when managing nova shell' do
+      before :each do
+        params.merge!( :nova_shell => '/bin/bash')
+      end
+      it 'ensure nova shell is configured by Puppet' do
+        is_expected.to contain_user('nova').with(
+          :ensure     => 'present',
+          :system     => true,
+          :home       => '/var/lib/nova',
+          :managehome => false,
+          :shell      => '/bin/bash'
+        )
       end
     end
 

@@ -49,6 +49,13 @@
 #   You may have side effects (SElinux for example).
 #   Defaults to '/var/lib/nova/instances'
 #
+# [*nova_shell*]
+#   (optional) Full path of shell to run for nova user.
+#   To disable live migration & resize, set it to '/bin/nologin' or false.
+#   Otherwise, set the value to '/bin/bash'.
+#   Need to be a valid shell path.
+#   Defaults to false
+#
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
   $libvirt_type               = 'kvm',
@@ -63,6 +70,7 @@ class cloud::compute::hypervisor(
   $vm_rbd                     = false,
   $volume_rbd                 = false,
   $manage_tso                 = true,
+  $nova_shell                 = false,
   # when using NFS storage backend
   $nfs_enabled                = false,
   $nfs_device                 = false,
@@ -163,6 +171,16 @@ class cloud::compute::hypervisor(
 Host *
     StrictHostKeyChecking no
 "
+  }
+
+  if $nova_shell {
+    ensure_resource ('user', 'nova', {
+      'ensure'     => 'present',
+      'system'     => true,
+      'home'       => '/var/lib/nova',
+      'managehome' => false,
+      'shell'      => $nova_shell,
+    })
   }
 
   class { 'nova::compute':
