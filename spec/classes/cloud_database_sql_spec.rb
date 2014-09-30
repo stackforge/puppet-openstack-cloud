@@ -231,8 +231,8 @@ describe 'cloud::database::sql' do
     end
 
     let :platform_params do
-      { :mysql_server_package_name => 'MariaDB-Galera-server',
-        :mysql_client_package_name => 'MariaDB-client',
+      { :mysql_server_package_name => 'mariadb-galera-server',
+        :mysql_client_package_name => 'mariadb',
         :mysql_server_config_file => '/etc/my.cnf',
         :wsrep_provider      => '/usr/lib64/galera/libgalera_smm.so' }
     end
