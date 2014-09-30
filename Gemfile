@@ -6,10 +6,7 @@ group :development, :test do
   gem 'rake', '10.1.1'
   gem 'puppet-syntax'
   gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
-  # rspec-puppet fetch the latest rspec (3.0.0)
-  # this version is a bit incompat. with older specs...
-  # http://myronmars.to/n/dev-blog/2014/05/notable-changes-in-rspec-3
-  gem 'rspec', '< 2.99'
+  gem 'rspec'
   gem 'json'
   gem 'webmock'
 end
