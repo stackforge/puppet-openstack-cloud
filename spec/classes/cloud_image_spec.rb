@@ -44,7 +44,7 @@ describe 'cloud::image' do
   shared_examples_for 'openstack image' do
 
     it 'configure glance-api' do
-      should contain_class('glance::api').with(
+      is_expected.to contain_class('glance::api').with(
         :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
         :keystone_password     => 'secrete',
         :registry_host         => '10.0.0.42',
@@ -65,7 +65,7 @@ describe 'cloud::image' do
     end
 
     it 'configure glance-registry' do
-      should contain_class('glance::registry').with(
+      is_expected.to contain_class('glance::registry').with(
         :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
         :keystone_password     => 'secrete',
         :keystone_tenant       => 'services',
@@ -92,22 +92,22 @@ describe 'cloud::image' do
     #       :rabbit_host     => '10.0.0.1'
     #     )
     # end
-    it { should contain_glance_api_config('DEFAULT/notifier_driver').with_value('noop') }
+    it { is_expected.to contain_glance_api_config('DEFAULT/notifier_driver').with_value('noop') }
 
     it 'configure glance rbd backend' do
-      should contain_class('glance::backend::rbd').with(
+      is_expected.to contain_class('glance::backend::rbd').with(
           :rbd_store_pool => 'images',
           :rbd_store_user => 'glance'
         )
     end
 
     it 'configure crontab to clean glance cache' do
-      should contain_class('glance::cache::cleaner')
-      should contain_class('glance::cache::pruner')
+      is_expected.to contain_class('glance::cache::cleaner')
+      is_expected.to contain_class('glance::cache::pruner')
     end
 
     it 'checks if Glance DB is populated' do
-      should contain_exec('glance_db_sync').with(
+      is_expected.to contain_exec('glance_db_sync').with(
         :command => 'glance-manage db_sync',
         :user    => 'glance',
         :path    => '/usr/bin',

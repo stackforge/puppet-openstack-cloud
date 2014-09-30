@@ -36,7 +36,7 @@ describe 'cloud::storage::rbd::osd' do
     end
 
     it 'configure ceph common' do
-      should contain_class('ceph::conf').with(
+      is_expected.to contain_class('ceph::conf').with(
         :fsid            => '123',
         :auth_type       => 'cephx',
         :cluster_network => '10.0.0.0/24',
@@ -46,11 +46,11 @@ describe 'cloud::storage::rbd::osd' do
     end
 
     it 'configure ceph osd' do
-      should contain_class('ceph::osd').with(
+      is_expected.to contain_class('ceph::osd').with(
         :public_address  => '10.0.0.1',
         :cluster_address => '192.168.0.1'
       )
-      should contain_ceph__osd__device('/dev/sdb','/dev/sdc','/dev/sdd')
+      is_expected.to contain_ceph__osd__device('/dev/sdb','/dev/sdc','/dev/sdd')
     end
 
   end

@@ -57,7 +57,7 @@ describe 'cloud::network::controller' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -75,7 +75,7 @@ describe 'cloud::network::controller' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -87,7 +87,7 @@ describe 'cloud::network::controller' do
     end
 
     it 'configure neutron server' do
-      should contain_class('neutron::server').with(
+      is_expected.to contain_class('neutron::server').with(
           :auth_password       => 'secrete',
           :auth_host           => '10.0.0.1',
           :auth_port           => '5000',
@@ -99,7 +99,7 @@ describe 'cloud::network::controller' do
     end
 
     it 'configure neutron server notifications to nova' do
-      should contain_class('neutron::server::notifications').with(
+      is_expected.to contain_class('neutron::server::notifications').with(
         :nova_url                => 'http://127.0.0.1:8774/v2',
         :nova_admin_auth_url     => 'http://127.0.0.1:5000/v2.0',
         :nova_admin_username     => 'nova',
@@ -109,7 +109,7 @@ describe 'cloud::network::controller' do
       )
     end
     it 'checks if Neutron DB is populated' do
-      should contain_exec('neutron_db_sync').with(
+      is_expected.to contain_exec('neutron_db_sync').with(
         :command => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugin.ini upgrade head',
         :path    => '/usr/bin',
         :user    => 'neutron',
@@ -120,7 +120,7 @@ describe 'cloud::network::controller' do
     end
 
     it 'should not configure provider external network' do
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
   end

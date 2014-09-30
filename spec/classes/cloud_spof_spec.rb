@@ -35,20 +35,20 @@ describe 'cloud::spof' do
       end
 
       it 'configure pacemaker/corosync' do
-        should contain_class('corosync').with(
+        is_expected.to contain_class('corosync').with(
           :enable_secauth    => false,
           :authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
           :bind_address      => '10.0.0.1',
           :multicast_address => '239.1.1.2',
         )
-        should contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
+        is_expected.to contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
           :source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
           :mode   => '0755',
           :owner  => 'root',
           :group  => 'root'
         )
-        should contain_class('cloud::telemetry::centralagent').with(:enabled => false)
-        should contain_exec('cleanup_ceilometer_agent_central').with(
+        is_expected.to contain_class('cloud::telemetry::centralagent').with(:enabled => false)
+        is_expected.to contain_exec('cleanup_ceilometer_agent_central').with(
           :command => 'crm resource cleanup ceilometer-agent-central',
           :path    => ['/usr/sbin', '/bin'],
           :user    => 'root',
@@ -64,28 +64,28 @@ describe 'cloud::spof' do
       end
 
       it 'configure pacemaker/corosync' do
-        should contain_class('pacemaker').with(:hacluster_pwd => 'verysecrete')
-        should contain_class('pacemaker::stonith').with(:disable => true)
-        should contain_class('pacemaker::corosync').with(
+        is_expected.to contain_class('pacemaker').with(:hacluster_pwd => 'verysecrete')
+        is_expected.to contain_class('pacemaker::stonith').with(:disable => true)
+        is_expected.to contain_class('pacemaker::corosync').with(
           :cluster_name     => 'openstack',
           :settle_timeout   => 10,
           :settle_tries     => 2,
           :settle_try_sleep => 5,
           :manage_fw        => false,
           :cluster_members  => 'srv1 srv2 srv3')
-        should contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
+        is_expected.to contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
           :source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
           :mode   => '0755',
           :owner  => 'root',
           :group  => 'root'
         )
-        should contain_exec('pcmk_ceilometer_agent_central').with(
+        is_expected.to contain_exec('pcmk_ceilometer_agent_central').with(
           :command => 'pcs resource create ceilometer-agent-central ocf:heartbeat:ceilometer-agent-central',
           :path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
           :user    => 'root',
           :unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
         )
-        should contain_class('cloud::telemetry::centralagent').with(:enabled => false)
+        is_expected.to contain_class('cloud::telemetry::centralagent').with(:enabled => false)
       end
     end
 
@@ -94,7 +94,7 @@ describe 'cloud::spof' do
         facts.merge!( :osfamily => 'RedHat' )
         params.merge!( :cluster_members => false)
       end
-      it { should compile.and_raise_error(/cluster_members is a required parameter./) }
+      it { is_expected.to compile.and_raise_error(/cluster_members is a required parameter./) }
     end
   end
 

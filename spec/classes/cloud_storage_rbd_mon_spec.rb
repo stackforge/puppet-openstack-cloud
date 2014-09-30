@@ -35,7 +35,7 @@ describe 'cloud::storage::rbd::monitor' do
     end
 
     it 'configure ceph common' do
-      should contain_class('ceph::conf').with(
+      is_expected.to contain_class('ceph::conf').with(
         :fsid            => '123',
         :auth_type       => 'cephx',
         :cluster_network => '10.0.0.0/24',
@@ -45,7 +45,7 @@ describe 'cloud::storage::rbd::monitor' do
     end
 
     it 'configure ceph mon' do
-      should contain_ceph__mon('123').with(
+      is_expected.to contain_ceph__mon('123').with(
         :monitor_secret => 'secret',
         :mon_port       => '6789',
         :mon_addr       => '10.0.0.1'

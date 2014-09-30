@@ -31,7 +31,7 @@ describe 'cloud::messaging' do
     end
 
     it 'configure rabbitmq-server with default values' do
-      should contain_class('rabbitmq').with(
+      is_expected.to contain_class('rabbitmq').with(
           :delete_guest_user        => true,
           :config_cluster           => true,
           :cluster_nodes            => params[:rabbit_names],
@@ -46,7 +46,7 @@ describe 'cloud::messaging' do
       end
 
       it 'configure rabbitmq-server in RAM mode' do
-       should contain_class('rabbitmq').with( :cluster_node_type => 'ram' )
+       is_expected.to contain_class('rabbitmq').with( :cluster_node_type => 'ram' )
       end
     end
 
@@ -70,11 +70,11 @@ describe 'cloud::messaging' do
     it_configures 'openstack messaging'
 
     it 'should create rabbitmq binaries symbolic links' do
-      should contain_file('/usr/sbin/rabbitmq-plugins').with(
+      is_expected.to contain_file('/usr/sbin/rabbitmq-plugins').with(
         :ensure => 'link',
         :target => '/usr/lib/rabbitmq/bin/rabbitmq-plugins'
       )
-      should contain_file('/usr/sbin/rabbitmq-env').with(
+      is_expected.to contain_file('/usr/sbin/rabbitmq-env').with(
         :ensure => 'link',
         :target => '/usr/lib/rabbitmq/bin/rabbitmq-env'
       )

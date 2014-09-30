@@ -117,7 +117,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure keystone server' do
-      should contain_class('keystone').with(
+      is_expected.to contain_class('keystone').with(
         :enabled             => true,
         :admin_token         => 'SECRETE',
         :compute_port        => '8774',
@@ -137,13 +137,13 @@ describe 'cloud::identity' do
         :log_file            => false,
         :admin_endpoint      => 'https://10.0.0.1:35357/v2.0'
       )
-      should contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
-      should contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
-      should contain_keystone_config('DEFAULT/log_dir').with_ensure('absent')
+      is_expected.to contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
+      is_expected.to contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
+      is_expected.to contain_keystone_config('DEFAULT/log_dir').with_ensure('absent')
     end
 
     it 'checks if Keystone DB is populated' do
-      should contain_exec('keystone_db_sync').with(
+      is_expected.to contain_exec('keystone_db_sync').with(
         :command => 'keystone-manage db_sync',
         :path    => '/usr/bin',
         :user    => 'keystone',
@@ -152,7 +152,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure keystone admin role' do
-      should contain_class('keystone::roles::admin').with(
+      is_expected.to contain_class('keystone::roles::admin').with(
         :email        => 'admin@openstack.org',
         :password     => 'secrete',
         :admin_tenant => 'admin'
@@ -171,7 +171,7 @@ describe 'cloud::identity' do
     #  end
 
     it 'configure keystone endpoint' do
-      should contain_class('keystone::endpoint').with(
+      is_expected.to contain_class('keystone::endpoint').with(
         :public_url   => 'https://10.0.0.1:5000',
         :admin_url    => 'https://10.0.0.1:35357',
         :internal_url => 'https://10.0.0.1:5000',
@@ -180,7 +180,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure swift endpoints' do
-      should contain_class('swift::keystone::auth').with(
+      is_expected.to contain_class('swift::keystone::auth').with(
         :password          => 'secrete',
         :public_address    => '10.0.0.1',
         :public_port       => '8080',
@@ -194,11 +194,11 @@ describe 'cloud::identity' do
     end
 
     it 'configure swift dispersion' do
-      should contain_class('swift::keystone::dispersion').with( :auth_pass => 'secrete' )
+      is_expected.to contain_class('swift::keystone::dispersion').with( :auth_pass => 'secrete' )
     end
 
     it 'configure ceilometer endpoints' do
-      should contain_class('ceilometer::keystone::auth').with(
+      is_expected.to contain_class('ceilometer::keystone::auth').with(
         :admin_address     => '10.0.0.1',
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
@@ -212,11 +212,11 @@ describe 'cloud::identity' do
     end
 
     it 'should not configure trove endpoint by default' do
-      should_not contain_class('trove::keystone::auth')
+      is_expected.not_to contain_class('trove::keystone::auth')
     end
 
     it 'configure nova endpoints' do
-      should contain_class('nova::keystone::auth').with(
+      is_expected.to contain_class('nova::keystone::auth').with(
         :admin_address     => '10.0.0.1',
         :cinder            => true,
         :internal_address  => '10.0.0.1',
@@ -232,7 +232,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure neutron endpoints' do
-      should contain_class('neutron::keystone::auth').with(
+      is_expected.to contain_class('neutron::keystone::auth').with(
         :admin_address     => '10.0.0.1',
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
@@ -246,7 +246,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure cinder endpoints' do
-      should contain_class('cinder::keystone::auth').with(
+      is_expected.to contain_class('cinder::keystone::auth').with(
         :admin_address    => '10.0.0.1',
         :internal_address => '10.0.0.1',
         :password         => 'secrete',
@@ -257,7 +257,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure glance endpoints' do
-      should contain_class('glance::keystone::auth').with(
+      is_expected.to contain_class('glance::keystone::auth').with(
         :admin_address     => '10.0.0.1',
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
@@ -271,7 +271,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure heat endpoints' do
-      should contain_class('heat::keystone::auth').with(
+      is_expected.to contain_class('heat::keystone::auth').with(
         :admin_address     => '10.0.0.1',
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
@@ -285,7 +285,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure heat cloudformation endpoints' do
-      should contain_class('heat::keystone::auth_cfn').with(
+      is_expected.to contain_class('heat::keystone::auth_cfn').with(
         :admin_address     => '10.0.0.1',
         :internal_address  => '10.0.0.1',
         :password          => 'secrete',
@@ -299,7 +299,7 @@ describe 'cloud::identity' do
     end
 
     it 'configure a crontab to purge tokens every days at midnight' do
-      should contain_class('keystone::cron::token_flush')
+      is_expected.to contain_class('keystone::cron::token_flush')
     end
 
     context 'without syslog' do
@@ -307,7 +307,7 @@ describe 'cloud::identity' do
         params.merge!(:use_syslog => false)
       end
       it 'configure keystone server' do
-        should contain_class('keystone').with(
+        is_expected.to contain_class('keystone').with(
           :use_syslog          => false,
           :log_dir             => '/var/log/keystone',
           :log_file            => 'keystone.log'
@@ -320,8 +320,8 @@ describe 'cloud::identity' do
         params.merge!(:swift_enabled => false)
       end
       it 'should not configure swift endpoints and users' do
-        should_not contain_class('swift::keystone::auth')
-        should_not contain_class('swift::keystone::dispersion')
+        is_expected.not_to contain_class('swift::keystone::auth')
+        is_expected.not_to contain_class('swift::keystone::dispersion')
       end
     end
 
@@ -330,7 +330,7 @@ describe 'cloud::identity' do
         params.merge!(:trove_enabled => true)
       end
       it 'configure trove endpoints' do
-        should contain_class('trove::keystone::auth').with(
+        is_expected.to contain_class('trove::keystone::auth').with(
           :admin_address     => '10.0.0.1',
           :internal_address  => '10.0.0.1',
           :password          => 'secrete',

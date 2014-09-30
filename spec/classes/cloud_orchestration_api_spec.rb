@@ -52,7 +52,7 @@ describe 'cloud::orchestration::api' do
     end
 
     it 'configure heat common' do
-      should contain_class('heat').with(
+      is_expected.to contain_class('heat').with(
           :verbose                 => true,
           :debug                   => true,
           :log_facility            => 'LOG_LOCAL0',
@@ -71,17 +71,17 @@ describe 'cloud::orchestration::api' do
     end
 
     it 'configure heat api' do
-      should contain_class('heat::api').with(
+      is_expected.to contain_class('heat::api').with(
           :bind_host => '10.0.0.1',
           :bind_port => '8004',
           :workers   => '8'
         )
-      should contain_class('heat::api_cfn').with(
+      is_expected.to contain_class('heat::api_cfn').with(
           :bind_host => '10.0.0.1',
           :bind_port => '8000',
           :workers   => '8'
         )
-      should contain_class('heat::api_cloudwatch').with(
+      is_expected.to contain_class('heat::api_cloudwatch').with(
           :bind_host => '10.0.0.1',
           :bind_port => '8003',
           :workers   => '8'
@@ -89,7 +89,7 @@ describe 'cloud::orchestration::api' do
     end
 
     it 'checks if Heat DB is populated' do
-      should contain_exec('heat_db_sync').with(
+      is_expected.to contain_exec('heat_db_sync').with(
         :command => 'heat-manage --config-file /etc/heat/heat.conf db_sync',
         :user    => 'heat',
         :path    => '/usr/bin',

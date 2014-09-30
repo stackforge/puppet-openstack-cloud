@@ -29,9 +29,9 @@ describe 'cloud::database::nosql' do
     end
 
     it 'configure mongodb server' do
-      should contain_class('mongodb::globals').with( :manage_package_repo => platform_params[:manage_package_repo])
-      should contain_class('mongodb::globals').with_before('Class[Mongodb]')
-      should contain_class('mongodb').with(
+      is_expected.to contain_class('mongodb::globals').with( :manage_package_repo => platform_params[:manage_package_repo])
+      is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
+      is_expected.to contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
         :nojournal => false,
         :logpath   => '/var/log/mongodb/mongod.log',
@@ -39,16 +39,16 @@ describe 'cloud::database::nosql' do
     end
 
     it 'configure mongodb replicasets' do
-      should contain_exec('check_mongodb').with(
+      is_expected.to contain_exec('check_mongodb').with(
         :command => "/usr/bin/mongo 10.0.0.1:27017",
         :logoutput => false,
         :tries => 60,
         :try_sleep => 5
       )
-      should contain_mongodb_replset('ceilometer').with(
+      is_expected.to contain_mongodb_replset('ceilometer').with(
         :members => ['node1', 'node2', 'node3']
       )
-      should contain_anchor('mongodb setup done')
+      is_expected.to contain_anchor('mongodb setup done')
     end
   end
 

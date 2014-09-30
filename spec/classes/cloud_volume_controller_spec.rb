@@ -52,7 +52,7 @@ describe 'cloud::volume::controller' do
     end
 
     it 'configure cinder common' do
-      should contain_class('cinder').with(
+      is_expected.to contain_class('cinder').with(
           :verbose                   => true,
           :debug                     => true,
           :rabbit_userid             => 'cinder',
@@ -64,12 +64,12 @@ describe 'cloud::volume::controller' do
           :log_dir                   => false,
           :storage_availability_zone => 'nova'
         )
-      should contain_class('cinder::ceilometer')
-      should contain_cinder_config('DEFAULT/nova_catalog_info').with('value' => 'compute:nova:internalURL')
+      is_expected.to contain_class('cinder::ceilometer')
+      is_expected.to contain_cinder_config('DEFAULT/nova_catalog_info').with('value' => 'compute:nova:internalURL')
     end
 
     it 'checks if Cinder DB is populated' do
-      should contain_exec('cinder_db_sync').with(
+      is_expected.to contain_exec('cinder_db_sync').with(
         :command => 'cinder-manage db sync',
         :user    => 'cinder',
         :path    => '/usr/bin',
@@ -78,7 +78,7 @@ describe 'cloud::volume::controller' do
     end
 
     it 'configure cinder scheduler without multi-backend' do
-      should contain_class('cinder::scheduler').with(
+      is_expected.to contain_class('cinder::scheduler').with(
         :scheduler_driver => false
       )
     end
@@ -91,10 +91,10 @@ describe 'cloud::volume::controller' do
         )
       end
       it 'configure cinder scheduler with multi-backend' do
-        should contain_class('cinder::scheduler').with(
+        is_expected.to contain_class('cinder::scheduler').with(
           :scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler'
         )
-        should contain_class('cinder::api').with(:default_volume_type => 'ceph')
+        is_expected.to contain_class('cinder::api').with(:default_volume_type => 'ceph')
       end
     end
 
@@ -106,12 +106,12 @@ describe 'cloud::volume::controller' do
         )
       end
       xit 'should raise an error and fail' do
-        should compile.and_raise_error(/when using multi-backend, you should define a default_volume_type value in cloud::volume::controller/)
+        is_expected.to compile.and_raise_error(/when using multi-backend, you should define a default_volume_type value in cloud::volume::controller/)
       end
     end
 
     it 'configure cinder glance backend' do
-      should contain_class('cinder::glance').with(
+      is_expected.to contain_class('cinder::glance').with(
           :glance_api_servers     => 'http://10.0.0.2:9292',
           :glance_request_timeout => '10',
           :glance_num_retries     => '10'
@@ -119,13 +119,13 @@ describe 'cloud::volume::controller' do
     end
 
     it 'configure cinder api' do
-      should contain_class('cinder::api').with(
+      is_expected.to contain_class('cinder::api').with(
           :keystone_password      => 'secrete',
           :keystone_auth_host     => '10.0.0.1',
           :keystone_auth_protocol => 'https',
           :bind_host              => '10.0.0.1'
         )
-      should contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
+      is_expected.to contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
     end
 
     # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA

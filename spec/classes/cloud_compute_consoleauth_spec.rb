@@ -44,7 +44,7 @@ describe 'cloud::compute::consoleauth' do
     end
 
     it 'configure nova common' do
-      should contain_class('nova').with(
+      is_expected.to contain_class('nova').with(
           :verbose                 => true,
           :debug                   => true,
           :use_syslog              => true,
@@ -58,14 +58,14 @@ describe 'cloud::compute::consoleauth' do
           :glance_api_servers      => 'http://10.0.0.1:9292',
           :log_dir                 => false
         )
-      should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
-      should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
-      should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
-      should contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
+      is_expected.to contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
+      is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
+      is_expected.to contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
+      is_expected.to contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
     end
 
     it 'configure neutron on compute node' do
-      should contain_class('nova::network::neutron').with(
+      is_expected.to contain_class('nova::network::neutron').with(
           :neutron_admin_password => 'secrete',
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
           :neutron_region_name    => 'MyRegion',
@@ -74,7 +74,7 @@ describe 'cloud::compute::consoleauth' do
     end
 
     it 'checks if Nova DB is populated' do
-      should contain_exec('nova_db_sync').with(
+      is_expected.to contain_exec('nova_db_sync').with(
         :command => 'nova-manage db sync',
         :user    => 'nova',
         :path    => '/usr/bin',
@@ -83,7 +83,7 @@ describe 'cloud::compute::consoleauth' do
     end
 
     it 'configure nova-consoleauth' do
-      should contain_class('nova::consoleauth').with(:enabled => true)
+      is_expected.to contain_class('nova::consoleauth').with(:enabled => true)
     end
 
   end

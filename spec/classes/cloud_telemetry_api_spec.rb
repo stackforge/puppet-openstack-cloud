@@ -47,7 +47,7 @@ describe 'cloud::telemetry::api' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -58,7 +58,7 @@ describe 'cloud::telemetry::api' do
           :log_facility            => 'LOG_LOCAL0',
           :log_dir                 => false
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
@@ -66,7 +66,7 @@ describe 'cloud::telemetry::api' do
     end
 
     it 'configure ceilometer-api' do
-      should contain_class('ceilometer::api').with(
+      is_expected.to contain_class('ceilometer::api').with(
           :keystone_password => 'rabbitpassword',
           :keystone_host     => '127.0.0.1',
           :keystone_protocol => 'http',
@@ -75,7 +75,7 @@ describe 'cloud::telemetry::api' do
     end
 
     it 'configure ceilometer-expirer' do
-      should contain_class('ceilometer::expirer').with(
+      is_expected.to contain_class('ceilometer::expirer').with(
           :time_to_live => '2592000',
           :minute       => '0',
           :hour         => '0'

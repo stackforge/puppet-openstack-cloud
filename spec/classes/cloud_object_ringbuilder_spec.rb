@@ -14,7 +14,7 @@ describe 'cloud::object::ringbuilder' do
     end
 
     it 'create the three rings' do
-      should contain_class('swift::ringbuilder').with({
+      is_expected.to contain_class('swift::ringbuilder').with({
         'part_power'     => '15',
         'replicas'       => '3',
         'min_part_hours' => '24',
@@ -22,7 +22,7 @@ describe 'cloud::object::ringbuilder' do
     end
 
     it 'create the ring rsync server' do
-      should contain_class('swift::ringserver').with({
+      is_expected.to contain_class('swift::ringserver').with({
         'local_net_ip'    => '127.0.0.1',
         'max_connections' => '5',
       })
@@ -35,7 +35,7 @@ describe 'cloud::object::ringbuilder' do
         )
       end
       it 'should not configure swift ring builder' do
-        should_not contain_class('swift::ringbuilder')
+        is_expected.not_to contain_class('swift::ringbuilder')
       end
     end
   end

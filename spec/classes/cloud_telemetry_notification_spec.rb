@@ -39,7 +39,7 @@ describe 'cloud::telemetry::notification' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -50,7 +50,7 @@ describe 'cloud::telemetry::notification' do
           :log_facility            => 'LOG_LOCAL0',
           :log_dir                 => false
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
@@ -58,7 +58,7 @@ describe 'cloud::telemetry::notification' do
     end
 
     it 'configure ceilometer notification agent' do
-      should contain_class('ceilometer::agent::notification')
+      is_expected.to contain_class('ceilometer::agent::notification')
     end
 
   end

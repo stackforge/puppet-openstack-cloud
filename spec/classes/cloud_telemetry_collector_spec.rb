@@ -43,7 +43,7 @@ describe 'cloud::telemetry::collector' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -54,7 +54,7 @@ describe 'cloud::telemetry::collector' do
           :log_facility            => 'LOG_LOCAL0',
           :log_dir                 => false
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
@@ -62,11 +62,11 @@ describe 'cloud::telemetry::collector' do
     end
 
     it 'configure ceilometer collector' do
-      should contain_class('ceilometer::collector')
+      is_expected.to contain_class('ceilometer::collector')
     end
 
     it 'synchronize ceilometer db indexes' do
-      should contain_class('ceilometer::db').with(
+      is_expected.to contain_class('ceilometer::db').with(
         :sync_db             => true,
         :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
         )

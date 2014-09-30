@@ -43,7 +43,7 @@ describe 'cloud::network::vswitch' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -61,7 +61,7 @@ describe 'cloud::network::vswitch' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -74,7 +74,7 @@ describe 'cloud::network::vswitch' do
 
     context 'when running ML2 plugin with OVS driver' do
       it 'configure neutron vswitch' do
-        should contain_class('neutron::agents::ml2::ovs').with(
+        is_expected.to contain_class('neutron::agents::ml2::ovs').with(
             :enable_tunneling => true,
             :tunnel_types     => ['gre'],
             :bridge_mappings  => ['public:br-pub'],
@@ -91,10 +91,10 @@ describe 'cloud::network::vswitch' do
       end
 
       it 'configure br-pub bridge' do
-        should contain_vs_bridge('br-pub')
+        is_expected.to contain_vs_bridge('br-pub')
       end
       it 'configure eth1 in br-pub' do
-        should contain_vs_port('eth1').with(
+        is_expected.to contain_vs_port('eth1').with(
           :ensure => 'present',
           :bridge => 'br-pub'
         )

@@ -47,7 +47,7 @@ describe 'cloud::image::api' do
   shared_examples_for 'openstack image api' do
 
     it 'configure glance-api' do
-      should contain_class('glance::api').with(
+      is_expected.to contain_class('glance::api').with(
         :database_connection      => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
         :keystone_password        => 'secrete',
         :registry_host            => '10.0.0.42',
@@ -79,18 +79,18 @@ describe 'cloud::image::api' do
     #       :rabbit_host     => '10.0.0.1'
     #     )
     # end
-    it { should contain_glance_api_config('DEFAULT/notifier_driver').with_value('noop') }
+    it { is_expected.to contain_glance_api_config('DEFAULT/notifier_driver').with_value('noop') }
 
     it 'configure glance rbd backend' do
-      should contain_class('glance::backend::rbd').with(
+      is_expected.to contain_class('glance::backend::rbd').with(
           :rbd_store_pool => 'images',
           :rbd_store_user => 'glance'
         )
     end
 
     it 'configure crontab to clean glance cache' do
-      should contain_class('glance::cache::cleaner')
-      should contain_class('glance::cache::pruner')
+      is_expected.to contain_class('glance::cache::cleaner')
+      is_expected.to contain_class('glance::cache::pruner')
     end
 
     context 'with file Glance backend' do
@@ -99,10 +99,10 @@ describe 'cloud::image::api' do
       end
 
       it 'configure Glance with file backend' do
-        should contain_class('glance::backend::file')
-        should_not contain_class('glance::backend::rbd')
-        should contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/var/lib/glance/images/')
-        should contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+        is_expected.to contain_class('glance::backend::file')
+        is_expected.not_to contain_class('glance::backend::rbd')
+        is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/var/lib/glance/images/')
+        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
       end
     end
 
@@ -114,11 +114,11 @@ describe 'cloud::image::api' do
       end
 
       it 'configure Glance with NFS backend' do
-        should contain_class('glance::backend::file')
-        should_not contain_class('glance::backend::rbd')
-        should contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
-        should contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
-        should contain_mount('/srv/images/').with({
+        is_expected.to contain_class('glance::backend::file')
+        is_expected.not_to contain_class('glance::backend::rbd')
+        is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
+        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+        is_expected.to contain_mount('/srv/images/').with({
           'ensure' => 'present',
           'fstype' => 'nfs',
           'device' => 'nfs.example.com:/vol1',
@@ -131,14 +131,14 @@ describe 'cloud::image::api' do
         params.merge!(:backend    => 'nfs',
                       :nfs_device => false )
       end
-      it { should compile.and_raise_error(/When running NFS backend, you need to provide nfs_device parameter./) }
+      it { is_expected.to compile.and_raise_error(/When running NFS backend, you need to provide nfs_device parameter./) }
     end
 
     context 'with wrong Glance backend' do
       before :each do
         params.merge!(:backend => 'Something')
       end
-      it { should compile.and_raise_error(/Something is not a Glance supported backend./) }
+      it { is_expected.to compile.and_raise_error(/Something is not a Glance supported backend./) }
     end
   end
 
