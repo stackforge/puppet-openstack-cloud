@@ -71,6 +71,19 @@ describe 'cloud::telemetry::collector' do
         :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
         )
     end
+
+    context 'without replica set' do
+      before :each do
+        params.merge!( :replicaset_enabled => false,
+                       :mongo_nodes        => ['node1'] )
+      end
+      it 'do not configure mongodb replicasets' do
+        is_expected.to contain_class('ceilometer::db').with(
+          :sync_db             => true,
+          :database_connection => 'mongodb://node1/ceilometer'
+          )
+      end
+    end
   end
 
   context 'on Debian platforms' do

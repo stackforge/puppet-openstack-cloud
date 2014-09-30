@@ -32,6 +32,7 @@
 # [*replset_members*]
 #   (optional) Ceilometer Replica set members hostnames
 #   Should be an array. Example: ['node1', 'node2', node3']
+#   If set to false, the setup won't be HA and no replicaset will be created.
 #   Defaults to hostname
 #
 
@@ -72,13 +73,14 @@ class cloud::database::nosql(
     require   => Service['mongodb'],
   }
 
-  mongodb_replset{'ceilometer':
-    members => $array_replset_members,
-    before  => Anchor['mongodb setup done'],
+  if $replset_members {
+    mongodb_replset{'ceilometer':
+      members => $array_replset_members,
+      before  => Anchor['mongodb setup done'],
+    }
   }
 
   anchor {'mongodb setup done' :
     require => Exec['check_mongodb'],
   }
-
 }
