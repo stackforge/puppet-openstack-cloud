@@ -50,6 +50,15 @@ describe 'cloud::database::nosql' do
       )
       is_expected.to contain_anchor('mongodb setup done')
     end
+
+    context 'without replica set' do
+      before :each do
+        params.merge!( :replset_members => false)
+      end
+      it 'do not configure mongodb replicasets' do
+        is_expected.not_to contain_mongodb_replset('ceilometer')
+      end
+    end
   end
 
   context 'on Debian platforms' do
