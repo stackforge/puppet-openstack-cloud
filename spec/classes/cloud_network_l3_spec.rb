@@ -44,7 +44,7 @@ describe 'cloud::network::l3' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -62,7 +62,7 @@ describe 'cloud::network::l3' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -71,21 +71,21 @@ describe 'cloud::network::l3' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron l3' do
-      should contain_class('neutron::agents::l3').with(
+      is_expected.to contain_class('neutron::agents::l3').with(
           :debug                   => true,
           :external_network_bridge => 'br-ex'
       )
     end
     it 'configure br-ex bridge' do
-      should_not contain__vs_bridge('br-ex')
+      is_expected.not_to contain__vs_bridge('br-ex')
     end
 
     it 'configure neutron metering agent' do
-      should contain_class('neutron::agents::metering').with(
+      is_expected.to contain_class('neutron::agents::metering').with(
           :debug => true
       )
     end
@@ -96,14 +96,14 @@ describe 'cloud::network::l3' do
       end
 
       it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
+        is_expected.to contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/chkconfig disable-tso on',
           :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
       it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
+        is_expected.to contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
           :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
@@ -117,14 +117,14 @@ describe 'cloud::network::l3' do
       end
 
       it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
+        is_expected.to contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/update-rc.d disable-tso defaults',
           :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
       it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
+        is_expected.to contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
           :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
@@ -137,10 +137,10 @@ describe 'cloud::network::l3' do
         params.merge!( :manage_tso => false)
       end
       it 'ensure TSO script is not enabled at boot' do
-        should_not contain_exec('enable-tso-script')
+        is_expected.not_to contain_exec('enable-tso-script')
       end
       it 'do not start TSO script' do
-        should_not contain_exec('start-tso-script')
+        is_expected.not_to contain_exec('start-tso-script')
       end
     end
   end

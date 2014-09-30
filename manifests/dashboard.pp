@@ -124,7 +124,9 @@ class cloud::dashboard(
     keystone_url            => $keystone_url,
     cache_server_ip         => false,
     django_debug            => $debug,
-    neutron_options         => { 'enable_lb'  => true },
+    neutron_options         => {
+      'enable_lb' => true
+    },
     listen_ssl              => $listen_ssl,
     horizon_cert            => $horizon_cert,
     horizon_key             => $horizon_key,

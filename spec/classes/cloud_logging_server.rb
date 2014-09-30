@@ -28,15 +28,15 @@ describe 'cloud::logging::server' do
     end
 
     it 'configure logging common' do
-      it should contain_concat("/etc/td-agent/config.d/forward.conf")
+      it is_expected.to contain_concat("/etc/td-agent/config.d/forward.conf")
     end
 
     it 'configure kibana' do
-      should contain_class('kibana3').with(:ws_port => '8001')
+      is_expected.to contain_class('kibana3').with(:ws_port => '8001')
     end
 
     it 'configure an elasticsearch instance' do
-      should contain_elasticsearch__instance('fluentd')
+      is_expected.to contain_elasticsearch__instance('fluentd')
     end
   end
 

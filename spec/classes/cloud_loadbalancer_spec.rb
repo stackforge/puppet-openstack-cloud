@@ -87,15 +87,15 @@ describe 'cloud::loadbalancer' do
     end
 
     it 'configure haproxy server' do
-      should contain_class('haproxy')
+      is_expected.to contain_class('haproxy')
     end # configure haproxy server
 
     it 'configure keepalived server' do
-      should contain_class('keepalived')
+      is_expected.to contain_class('keepalived')
     end # configure keepalived server
 
     it 'configure sysctl to allow HAproxy to bind to a non-local IP address' do
-      should contain_exec('exec_sysctl_net.ipv4.ip_nonlocal_bind').with_command(
+      is_expected.to contain_exec('exec_sysctl_net.ipv4.ip_nonlocal_bind').with_command(
         'sysctl -w net.ipv4.ip_nonlocal_bind=1'
       )
     end
@@ -105,7 +105,7 @@ describe 'cloud::loadbalancer' do
         params.merge!(:keepalived_internal_ipvs => ['192.168.0.1'])
       end
       it 'configure an internal VRRP instance' do
-        should contain_keepalived__instance('2').with({
+        is_expected.to contain_keepalived__instance('2').with({
           'interface'     => 'eth1',
           'virtual_ips'   => ['192.168.0.1 dev eth1'],
           'track_script'  => ['haproxy'],
@@ -127,7 +127,7 @@ describe 'cloud::loadbalancer' do
         )
       end
       it 'configure a public VRRP instance with deprecated parameters' do
-        should contain_keepalived__instance('1').with({
+        is_expected.to contain_keepalived__instance('1').with({
           'interface'     => 'eth3',
           'virtual_ips'   => ['192.168.0.2 dev eth3'],
           'track_script'  => ['haproxy'],
@@ -144,7 +144,7 @@ describe 'cloud::loadbalancer' do
         params.merge!(:keepalived_vrrp_interface => 'eth2')
       end
       it 'configure keepalived with a dedicated interface for vrrp' do
-        should contain_keepalived__instance('1').with({
+        is_expected.to contain_keepalived__instance('1').with({
           'interface' => 'eth2',
         })
       end
@@ -152,7 +152,7 @@ describe 'cloud::loadbalancer' do
 
     context 'when keepalived and HAproxy are in backup' do
       it 'configure vrrp_instance with BACKUP state' do
-        should contain_keepalived__instance('1').with({
+        is_expected.to contain_keepalived__instance('1').with({
           'interface'     => params[:keepalived_public_interface],
           'virtual_ips'   => ['10.0.0.1 dev eth0', '10.0.0.2 dev eth0'],
           'track_script'  => ['haproxy'],
@@ -163,7 +163,7 @@ describe 'cloud::loadbalancer' do
         })
       end # configure vrrp_instance with BACKUP state
       it 'configure haproxy server without service managed' do
-        should contain_class('haproxy').with(:service_manage => true)
+        is_expected.to contain_class('haproxy').with(:service_manage => true)
       end # configure haproxy server
     end # configure keepalived in backup
 
@@ -172,7 +172,7 @@ describe 'cloud::loadbalancer' do
         params.merge!( :keepalived_state => 'MASTER' )
       end
       it 'configure vrrp_instance with MASTER state' do
-        should contain_keepalived__instance('1').with({
+        is_expected.to contain_keepalived__instance('1').with({
           'interface'     => params[:keepalived_public_interface],
           'track_script'  => ['haproxy'],
           'state'         => 'MASTER',
@@ -182,12 +182,12 @@ describe 'cloud::loadbalancer' do
         })
       end
       it 'configure haproxy server with service managed' do
-        should contain_class('haproxy').with(:service_manage => true)
+        is_expected.to contain_class('haproxy').with(:service_manage => true)
       end # configure haproxy server
     end # configure keepalived in master
 
     context 'configure logrotate file' do
-      it { should contain_file('/etc/logrotate.d/haproxy').with(
+      it { is_expected.to contain_file('/etc/logrotate.d/haproxy').with(
         :source => 'puppet:///modules/cloud/logrotate/haproxy',
         :mode   => '0644',
         :owner  => 'root',
@@ -196,14 +196,14 @@ describe 'cloud::loadbalancer' do
     end # configure logrotate file
 
     context 'configure monitor haproxy listen' do
-      it { should contain_haproxy__listen('monitor').with(
+      it { is_expected.to contain_haproxy__listen('monitor').with(
         :ipaddress => params[:vip_public_ip],
         :ports     => '9300'
       )}
     end # configure monitor haproxy listen
 
     context 'configure galera haproxy listen' do
-      it { should contain_haproxy__listen('galera_cluster').with(
+      it { is_expected.to contain_haproxy__listen('galera_cluster').with(
         :ipaddress => params[:galera_ip],
         :ports     => '3306',
         :options   => {
@@ -218,14 +218,14 @@ describe 'cloud::loadbalancer' do
     end # configure monitor haproxy listen
 
     context 'not configure galera slave haproxy listen' do
-      it { should_not contain_haproxy__listen('galera_readonly_cluster') }
+      it { is_expected.not_to contain_haproxy__listen('galera_readonly_cluster') }
     end # configure monitor haproxy listen
 
     context 'configure galera slave haproxy listen' do
       before do
         params.merge!( :galera_slave => true )
       end
-      it { should contain_haproxy__listen('galera_readonly_cluster').with(
+      it { is_expected.to contain_haproxy__listen('galera_readonly_cluster').with(
         :ipaddress => params[:galera_ip],
         :ports     => '3307',
         :options   => {
@@ -241,7 +241,7 @@ describe 'cloud::loadbalancer' do
 
     # test backward compatibility
     context 'configure OpenStack binding on public network only' do
-      it { should contain_haproxy__listen('spice_cluster').with(
+      it { is_expected.to contain_haproxy__listen('spice_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '6082',
         :options   => {
@@ -265,7 +265,7 @@ describe 'cloud::loadbalancer' do
           :keepalived_internal_ipvs => ['192.168.0.1', '192.168.0.2']
         )
       end
-      it { should contain_haproxy__listen('nova_api_cluster').with(
+      it { is_expected.to contain_haproxy__listen('nova_api_cluster').with(
         :ipaddress => ['172.16.0.1', '192.168.0.1'],
         :ports     => '8774'
       )}
@@ -282,7 +282,7 @@ describe 'cloud::loadbalancer' do
           :keepalived_internal_ipvs => ['192.168.0.1', '192.168.0.2']
         )
       end
-      it { should contain_haproxy__listen('nova_api_cluster').with(
+      it { is_expected.to contain_haproxy__listen('nova_api_cluster').with(
         :ipaddress => ['172.16.0.1', '2001:0db8:85a3:0000:0000:8a2e:0370:7334', '192.168.0.1'],
         :ports     => '8774'
       )}
@@ -292,7 +292,7 @@ describe 'cloud::loadbalancer' do
       before do
         params.merge!(:metadata_api => false)
       end
-      it { should_not contain_haproxy__listen('metadata_api_cluster') }
+      it { is_expected.not_to contain_haproxy__listen('metadata_api_cluster') }
     end
 
     context 'should fail to configure OpenStack binding when vip_public_ip and vip_internal_ip are missing' do
@@ -359,7 +359,7 @@ describe 'cloud::loadbalancer' do
           :nova_bind_options => ['ssl', 'crt']
         )
       end
-      it { should contain_haproxy__listen('nova_api_cluster').with(
+      it { is_expected.to contain_haproxy__listen('nova_api_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8774',
         :options   => {
@@ -378,7 +378,7 @@ describe 'cloud::loadbalancer' do
           :cinder_bind_options => 'something not secure',
         )
       end
-      it { should contain_haproxy__listen('cinder_api_cluster').with(
+      it { is_expected.to contain_haproxy__listen('cinder_api_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8776',
         :options   => {
@@ -392,7 +392,7 @@ describe 'cloud::loadbalancer' do
     end
 
     context 'configure OpenStack Horizon' do
-      it { should contain_haproxy__listen('horizon_cluster').with(
+      it { is_expected.to contain_haproxy__listen('horizon_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '80',
         :options   => {
@@ -414,7 +414,7 @@ describe 'cloud::loadbalancer' do
           :horizon_bind_options => ['ssl', 'crt']
         )
       end
-      it { should contain_haproxy__listen('horizon_cluster').with(
+      it { is_expected.to contain_haproxy__listen('horizon_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '443',
         :options   => {
@@ -436,7 +436,7 @@ describe 'cloud::loadbalancer' do
           :horizon_ssl_port => '443'
         )
       end
-      it { should contain_haproxy__listen('horizon_ssl_cluster').with(
+      it { is_expected.to contain_haproxy__listen('horizon_ssl_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '443',
         :options   => {
@@ -454,7 +454,7 @@ describe 'cloud::loadbalancer' do
           :heat_api_bind_options => ['ssl', 'crt']
         )
       end
-      it { should contain_haproxy__listen('heat_api_cluster').with(
+      it { is_expected.to contain_haproxy__listen('heat_api_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8004',
         :options   => {

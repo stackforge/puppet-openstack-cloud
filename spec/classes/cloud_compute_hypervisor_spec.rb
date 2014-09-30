@@ -85,7 +85,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure nova common' do
-      should contain_class('nova').with(
+      is_expected.to contain_class('nova').with(
           :verbose                 => true,
           :debug                   => true,
           :use_syslog              => true,
@@ -100,14 +100,14 @@ describe 'cloud::compute::hypervisor' do
           :log_dir                 => false,
           :nova_shell              => '/bin/bash'
         )
-      should contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
-      should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
-      should contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
-      should contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
+      is_expected.to contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
+      is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
+      is_expected.to contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
+      is_expected.to contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
     end
 
     it 'configure neutron on compute node' do
-      should contain_class('nova::network::neutron').with(
+      is_expected.to contain_class('nova::network::neutron').with(
           :neutron_admin_password => 'secrete',
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
           :neutron_region_name    => 'MyRegion',
@@ -116,7 +116,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -126,14 +126,14 @@ describe 'cloud::compute::hypervisor' do
           :use_syslog              => true,
           :log_facility            => 'LOG_LOCAL0'
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
       )
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -150,7 +150,7 @@ describe 'cloud::compute::hypervisor' do
           :log_dir                 => false,
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre','vlan','flat'],
           :tenant_network_types   => ['gre'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -159,11 +159,11 @@ describe 'cloud::compute::hypervisor' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron on compute node' do
-      should contain_class('nova::network::neutron').with(
+      is_expected.to contain_class('nova::network::neutron').with(
           :neutron_admin_password => 'secrete',
           :neutron_admin_auth_url => 'http://10.0.0.1:35357/v2.0',
           :neutron_region_name    => 'MyRegion',
@@ -172,7 +172,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -182,14 +182,14 @@ describe 'cloud::compute::hypervisor' do
           :use_syslog              => true,
           :log_facility            => 'LOG_LOCAL0'
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0'
         )
     end
 
     it 'checks if Nova DB is populated' do
-      should contain_exec('nova_db_sync').with(
+      is_expected.to contain_exec('nova_db_sync').with(
         :command => 'nova-manage db sync',
         :path    => '/usr/bin',
         :user    => 'nova',
@@ -198,7 +198,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure nova-compute' do
-      should contain_class('nova::compute').with(
+      is_expected.to contain_class('nova::compute').with(
           :enabled                       => true,
           :vnc_enabled                   => false,
           :virtio_nic                    => false,
@@ -207,7 +207,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure spice console' do
-      should contain_class('nova::compute::spice').with(
+      is_expected.to contain_class('nova::compute::spice').with(
           :server_listen              => '0.0.0.0',
           :server_proxyclient_address => '7.0.0.1',
           :proxy_host                 => '10.0.0.2',
@@ -217,20 +217,20 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure nova compute with neutron' do
-      should contain_class('nova::compute::neutron')
+      is_expected.to contain_class('nova::compute::neutron')
     end
 
     it 'configure ceilometer agent compute' do
-      should contain_class('ceilometer::agent::compute')
+      is_expected.to contain_class('ceilometer::agent::compute')
     end
 
     it 'should not configure nova-compute for RBD backend' do
-      should_not contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
-      should_not contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+      is_expected.not_to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+      is_expected.not_to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
     end
 
     it 'configure libvirt driver without disk cachemodes' do
-      should contain_class('nova::compute::libvirt').with(
+      is_expected.to contain_class('nova::compute::libvirt').with(
           :libvirt_type      => 'kvm',
           :vncserver_listen  => '0.0.0.0',
           :migration_support => true,
@@ -239,11 +239,11 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it 'configure nova-compute with extra parameters' do
-      should contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
-      should contain_nova_config('libvirt/inject_key').with('value' => false)
-      should contain_nova_config('libvirt/inject_partition').with('value' => '-2')
-      should contain_nova_config('libvirt/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
-      should contain_nova_config('libvirt/block_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC')
+      is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
+      is_expected.to contain_nova_config('libvirt/inject_key').with('value' => false)
+      is_expected.to contain_nova_config('libvirt/inject_partition').with('value' => '-2')
+      is_expected.to contain_nova_config('libvirt/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
+      is_expected.to contain_nova_config('libvirt/block_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC')
     end
 
     context 'with dbus on Ubuntu' do
@@ -256,7 +256,7 @@ describe 'cloud::compute::hypervisor' do
       end
 
       it 'ensure dbus is running and started at boot' do
-        should contain_service('dbus').with(
+        is_expected.to contain_service('dbus').with(
           :ensure => 'running',
           :enable => 'true'
         )
@@ -271,14 +271,14 @@ describe 'cloud::compute::hypervisor' do
                       :concat_basedir   => '/var/lib/puppet/concat' )
       end
       it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
+        is_expected.to contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/update-rc.d disable-tso defaults',
           :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
       it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
+        is_expected.to contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
           :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
@@ -293,14 +293,14 @@ describe 'cloud::compute::hypervisor' do
                       :concat_basedir   => '/var/lib/puppet/concat' )
       end
       it 'ensure TSO script is enabled at boot' do
-        should contain_exec('enable-tso-script').with(
+        is_expected.to contain_exec('enable-tso-script').with(
           :command => '/usr/sbin/chkconfig disable-tso on',
           :unless  => '/bin/ls /etc/rc*.d | /bin/grep disable-tso',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
         )
       end
       it 'start TSO script' do
-        should contain_exec('start-tso-script').with(
+        is_expected.to contain_exec('start-tso-script').with(
           :command => '/etc/init.d/disable-tso start',
           :unless  => '/usr/bin/test -f /var/run/disable-tso.pid',
           :onlyif  => '/usr/bin/test -f /etc/init.d/disable-tso'
@@ -313,10 +313,10 @@ describe 'cloud::compute::hypervisor' do
         params.merge!( :manage_tso => false)
       end
       it 'ensure TSO script is not managed at boot' do
-        should_not contain_exec('enable-tso-script')
+        is_expected.not_to contain_exec('enable-tso-script')
       end
       it 'do not start TSO script' do
-        should_not contain_exec('start-tso-script')
+        is_expected.not_to contain_exec('start-tso-script')
       end
     end
 
@@ -333,20 +333,20 @@ describe 'cloud::compute::hypervisor' do
       end
 
       it 'configure nova-compute to support RBD backend' do
-        should contain_nova_config('libvirt/images_type').with('value' => 'rbd')
-        should contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
-        should contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
-        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
-        should contain_group('cephkeyring').with(:ensure => 'present')
-        should contain_exec('add-nova-to-group').with(
+        is_expected.to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        is_expected.to contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        is_expected.to contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+        is_expected.to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        is_expected.to contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        is_expected.to contain_group('cephkeyring').with(:ensure => 'present')
+        is_expected.to contain_exec('add-nova-to-group').with(
           :command => 'usermod -a -G cephkeyring nova',
           :unless  => 'groups nova | grep cephkeyring'
         )
       end
 
       it 'configure libvirt driver' do
-        should contain_class('nova::compute::libvirt').with(
+        is_expected.to contain_class('nova::compute::libvirt').with(
             :libvirt_type      => 'kvm',
             :vncserver_listen  => '0.0.0.0',
             :migration_support => true,
@@ -367,19 +367,19 @@ describe 'cloud::compute::hypervisor' do
       end
 
       it 'configure nova-compute to support RBD backend' do
-        should_not contain_nova_config('libvirt/images_type').with('value' => 'rbd')
-        should_not contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
-        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
-        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
-        should contain_group('cephkeyring').with(:ensure => 'present')
-        should contain_exec('add-nova-to-group').with(
+        is_expected.not_to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        is_expected.not_to contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        is_expected.to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        is_expected.to contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        is_expected.to contain_group('cephkeyring').with(:ensure => 'present')
+        is_expected.to contain_exec('add-nova-to-group').with(
           :command => 'usermod -a -G cephkeyring nova',
           :unless  => 'groups nova | grep cephkeyring'
         )
       end
 
       it 'configure libvirt driver' do
-        should contain_class('nova::compute::libvirt').with(
+        is_expected.to contain_class('nova::compute::libvirt').with(
             :libvirt_type      => 'kvm',
             :vncserver_listen  => '0.0.0.0',
             :migration_support => true,
@@ -400,20 +400,20 @@ describe 'cloud::compute::hypervisor' do
       end
 
       it 'configure nova-compute to support RBD backend' do
-        should contain_nova_config('libvirt/images_type').with('value' => 'rbd')
-        should contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
-        should contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-        should contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
-        should contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
-        should contain_group('cephkeyring').with(:ensure => 'present')
-        should contain_exec('add-nova-to-group').with(
+        is_expected.to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
+        is_expected.to contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
+        is_expected.to contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
+        is_expected.to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
+        is_expected.to contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
+        is_expected.to contain_group('cephkeyring').with(:ensure => 'present')
+        is_expected.to contain_exec('add-nova-to-group').with(
           :command => 'usermod -a -G cephkeyring nova',
           :unless  => 'groups nova | grep cephkeyring'
         )
       end
 
       it 'configure libvirt driver' do
-        should contain_class('nova::compute::libvirt').with(
+        is_expected.to contain_class('nova::compute::libvirt').with(
             :libvirt_type      => 'kvm',
             :vncserver_listen  => '0.0.0.0',
             :migration_support => true,
@@ -460,7 +460,7 @@ describe 'cloud::compute::hypervisor' do
           :ks_spice_public_host  => false )
       end
       it 'configure spice console with nova parameters' do
-        should contain_class('nova::compute::spice').with(
+        is_expected.to contain_class('nova::compute::spice').with(
             :server_listen              => '0.0.0.0',
             :server_proxyclient_address => '7.0.0.1',
             :proxy_host                 => '10.0.0.1',
@@ -477,8 +477,8 @@ describe 'cloud::compute::hypervisor' do
           :nfs_device  => 'nfs.example.com:/vol1' )
       end
       it 'configure nova instances path and NFS mount' do
-        should contain_nova_config('DEFAULT/instances_path').with('value' => '/var/lib/nova/instances')
-        should contain_mount('/var/lib/nova/instances').with({
+        is_expected.to contain_nova_config('DEFAULT/instances_path').with('value' => '/var/lib/nova/instances')
+        is_expected.to contain_mount('/var/lib/nova/instances').with({
           'ensure' => 'present',
           'fstype' => 'nfs',
           'device' => 'nfs.example.com:/vol1',

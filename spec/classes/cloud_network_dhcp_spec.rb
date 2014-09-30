@@ -44,7 +44,7 @@ describe 'cloud::network::dhcp' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -62,7 +62,7 @@ describe 'cloud::network::dhcp' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -71,24 +71,24 @@ describe 'cloud::network::dhcp' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron dhcp' do
-      should contain_class('neutron::agents::dhcp').with(
+      is_expected.to contain_class('neutron::agents::dhcp').with(
           :debug                    => true,
           :dnsmasq_config_file      => '/etc/neutron/dnsmasq-neutron.conf',
           :enable_isolated_metadata => true
       )
 
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_ensure('absent')
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_ensure('absent')
 
-      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
+      is_expected.to contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
         :mode => '0755',
         :owner => 'root',
         :group => 'root'
       )
-      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
+      is_expected.to contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
     end
   end
 
@@ -116,20 +116,20 @@ describe 'cloud::network::dhcp' do
     end
 
     it 'configure neutron dhcp' do
-      should contain_class('neutron::agents::dhcp').with(
+      is_expected.to contain_class('neutron::agents::dhcp').with(
           :debug => true
       )
 
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
-      should contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(true)
-      should contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_value('1.2.3.4')
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_config_file').with_value('/etc/neutron/dnsmasq-neutron.conf')
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/enable_isolated_metadata').with_value(true)
+      is_expected.to contain_neutron_dhcp_agent_config('DEFAULT/dnsmasq_dns_server').with_value('1.2.3.4')
 
-      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
+      is_expected.to contain_file('/etc/neutron/dnsmasq-neutron.conf').with(
         :mode => '0755',
         :owner => 'root',
         :group => 'root'
       )
-      should contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
+      is_expected.to contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
     end
   end
 

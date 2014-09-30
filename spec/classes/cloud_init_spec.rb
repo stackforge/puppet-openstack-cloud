@@ -38,13 +38,13 @@ describe 'cloud' do
       }
     end
 
-    it {should contain_class('ntp')}
+    it {is_expected.to contain_class('ntp')}
 
-    it {should contain_file('/etc/motd').with(
+    it {is_expected.to contain_file('/etc/motd').with(
       {:ensure => 'file'}.merge(file_defaults)
     )}
 
-    it { should contain_service('cron').with({
+    it { is_expected.to contain_service('cron').with({
       :name   => platform_params[:cron_service_name],
       :ensure => 'running',
       :enable => true
@@ -84,7 +84,7 @@ describe 'cloud' do
 
     #it_configures 'private cloud node'
 
-    xit { should contain_rhn_register('rhn-redhat1') }
+    xit { is_expected.to contain_rhn_register('rhn-redhat1') }
   end
 
   context 'on other platforms' do
@@ -92,7 +92,7 @@ describe 'cloud' do
       { :osfamily => 'Solaris' }
     end
 
-    it { should compile.and_raise_error(/module puppet-openstack-cloud only support/) }
+    it { is_expected.to compile.and_raise_error(/module puppet-openstack-cloud only support/) }
 
   end
 end

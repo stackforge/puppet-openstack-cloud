@@ -44,7 +44,7 @@ describe 'cloud::network::lbaas' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -62,7 +62,7 @@ describe 'cloud::network::lbaas' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -71,11 +71,11 @@ describe 'cloud::network::lbaas' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron lbaas' do
-      should contain_class('neutron::agents::lbaas').with(
+      is_expected.to contain_class('neutron::agents::lbaas').with(
           :debug                  => true,
           :manage_haproxy_package => true
       )
@@ -101,8 +101,8 @@ describe 'cloud::network::lbaas' do
         params.merge!(:manage_haproxy_pkg => false)
       end
       it 'configure neutron lbaas agent without managing haproxy package' do
-        should contain_class('neutron::agents::lbaas').with(:manage_haproxy_package => false)
-        should contain_package('haproxy').with(:ensure => 'present')
+        is_expected.to contain_class('neutron::agents::lbaas').with(:manage_haproxy_package => false)
+        is_expected.to contain_package('haproxy').with(:ensure => 'present')
       end
     end
   end

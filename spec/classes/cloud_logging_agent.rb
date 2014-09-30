@@ -51,15 +51,15 @@ describe 'cloud::logging::agent' do
       end
 
       it 'include cloud::loging' do
-        it should contain_class('cloud::logging')
+        it is_expected.to contain_class('cloud::logging')
       end
 
       it 'include rsyslog::client' do
-        it should contain_class('rsyglog::client')
+        it is_expected.to contain_class('rsyglog::client')
       end
 
       it 'create /var/db/td-agent' do
-        it should contain_file('/var/db/td-agent').with({
+        it is_expected.to contain_file('/var/db/td-agent').with({
           :ensure => 'directory',
           :owner  => 'td-agent',
           :group  => 'td-agent',
@@ -74,15 +74,15 @@ describe 'cloud::logging::agent' do
       end
 
       it 'include cloud::loging' do
-        it should contain_class('cloud::logging')
+        it is_expected.to contain_class('cloud::logging')
       end
 
       it 'include rsyslog::client' do
-        it should_not contain_class('rsyglog::client')
+        it is_expected.not_to contain_class('rsyglog::client')
       end
 
       it 'create /var/db/td-agent' do
-        it should contain_file('/var/db/td-agent').with({
+        it is_expected.to contain_file('/var/db/td-agent').with({
           :ensure => 'directory',
           :owner  => 'td-agent',
           :group  => 'td-agent',
@@ -90,7 +90,7 @@ describe 'cloud::logging::agent' do
       end
 
       it 'has a logrotate rule for td-agent.log' do
-        it should contain_logrotate__rule('td-agent').with({
+        it is_expected.to contain_logrotate__rule('td-agent').with({
           :path     => '/var/log/td-agent/td-agent.log',
           :rotate   => '30',
           :compress => 'true',
@@ -102,7 +102,7 @@ describe 'cloud::logging::agent' do
     context 'logrotate rule with default parameters' do
 
       it 'has a logrotate rule for td-agent.log' do
-        it should contain_logrotate__rule('td-agent').with({
+        it is_expected.to contain_logrotate__rule('td-agent').with({
           :path     => '/var/log/td-agent/td-agent.log',
           :rotate   => '30',
           :compress => 'true',
@@ -117,7 +117,7 @@ describe 'cloud::logging::agent' do
       end
 
       it 'has a logrotate rule for td-agent.log' do
-        it should contain_logrotate__rule('td-agent').with({
+        it is_expected.to contain_logrotate__rule('td-agent').with({
           :path     => '/foo/bar',
           :rotate   => '5',
           :compress => 'false',

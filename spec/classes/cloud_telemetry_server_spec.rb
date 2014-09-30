@@ -48,7 +48,7 @@ describe 'cloud::telemetry::server' do
     end
 
     it 'configure ceilometer common' do
-      should contain_class('ceilometer').with(
+      is_expected.to contain_class('ceilometer').with(
           :verbose                 => true,
           :debug                   => true,
           :rabbit_userid           => 'ceilometer',
@@ -59,7 +59,7 @@ describe 'cloud::telemetry::server' do
           :log_facility            => 'LOG_LOCAL0',
           :log_dir                 => false
         )
-      should contain_class('ceilometer::agent::auth').with(
+      is_expected.to contain_class('ceilometer::agent::auth').with(
           :auth_password => 'secrete',
           :auth_url      => 'http://10.0.0.1:5000/v2.0',
           :auth_region   => 'MyRegion'
@@ -67,23 +67,23 @@ describe 'cloud::telemetry::server' do
     end
 
     it 'configure ceilometer collector' do
-      should contain_class('ceilometer::collector')
+      is_expected.to contain_class('ceilometer::collector')
     end
 
     it 'configure ceilometer notification agent' do
-      should contain_class('ceilometer::agent::notification')
+      is_expected.to contain_class('ceilometer::agent::notification')
     end
 
     it 'configure ceilometer alarm evaluator' do
-      should contain_class('ceilometer::alarm::evaluator')
+      is_expected.to contain_class('ceilometer::alarm::evaluator')
     end
 
     it 'configure ceilometer alarm notifier' do
-      should contain_class('ceilometer::alarm::notifier')
+      is_expected.to contain_class('ceilometer::alarm::notifier')
     end
 
     it 'configure ceilometer-api' do
-      should contain_class('ceilometer::api').with(
+      is_expected.to contain_class('ceilometer::api').with(
           :keystone_password => 'secrete',
           :keystone_host     => '10.0.0.1',
           :keystone_protocol => 'http',
@@ -92,7 +92,7 @@ describe 'cloud::telemetry::server' do
     end
 
     it 'configure ceilometer-expirer' do
-      should contain_class('ceilometer::expirer').with(
+      is_expected.to contain_class('ceilometer::expirer').with(
           :time_to_live => '2592000',
           :minute       => '0',
           :hour         => '0'
@@ -100,7 +100,7 @@ describe 'cloud::telemetry::server' do
     end
 
     it 'synchronize ceilometer db indexes' do
-      should contain_class('ceilometer::db').with(
+      is_expected.to contain_class('ceilometer::db').with(
         :sync_db             => true,
         :database_connection => 'mongodb://node1,node2,node3/ceilometer?replicaSet=ceilometer'
         )

@@ -52,7 +52,7 @@ describe 'cloud::network::metadata' do
     end
 
     it 'configure neutron common' do
-      should contain_class('neutron').with(
+      is_expected.to contain_class('neutron').with(
           :allow_overlapping_ips   => true,
           :dhcp_agents_per_network => '2',
           :verbose                 => true,
@@ -70,7 +70,7 @@ describe 'cloud::network::metadata' do
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
       )
-      should contain_class('neutron::plugins::ml2').with(
+      is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
           :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
@@ -79,11 +79,11 @@ describe 'cloud::network::metadata' do
           :flat_networks          => ['public'],
           :enable_security_group  => true
       )
-      should_not contain__neutron_network('public')
+      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron metadata' do
-      should contain_class('neutron::agents::metadata').with(
+      is_expected.to contain_class('neutron::agents::metadata').with(
           :debug            => true,
           :enabled          => true,
           :shared_secret    => 'secrete',
@@ -93,7 +93,7 @@ describe 'cloud::network::metadata' do
           :auth_region      => 'MyRegion',
           :metadata_workers => '8'
       )
-      should contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => 'https')
+      is_expected.to contain_neutron_metadata_agent_config('DEFAULT/nova_metadata_protocol').with(:value => 'https')
     end
   end
 

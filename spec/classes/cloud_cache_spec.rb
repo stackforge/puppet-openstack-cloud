@@ -27,7 +27,7 @@ describe 'cloud::cache' do
     end
 
     it 'configure memcached with some params' do
-      should contain_class('memcached').with(
+      is_expected.to contain_class('memcached').with(
           :listen_ip           => '10.0.0.1',
           :max_memory          => '60%'
         )

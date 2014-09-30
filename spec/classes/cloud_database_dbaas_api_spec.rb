@@ -46,7 +46,7 @@ describe 'cloud::database::dbaas::api' do
     end
 
     it 'configure trove common' do
-      should contain_class('trove').with(
+      is_expected.to contain_class('trove').with(
           :rabbit_userid                => 'trove',
           :rabbit_hosts                 => ['10.0.0.1'],
           :rabbit_password              => 'secrete',
@@ -59,7 +59,7 @@ describe 'cloud::database::dbaas::api' do
     end
 
     it 'configure trove api' do
-      should contain_class('trove::api').with(
+      is_expected.to contain_class('trove::api').with(
         :verbose           => true,
         :debug             => true,
         :use_syslog        => true,
@@ -71,7 +71,7 @@ describe 'cloud::database::dbaas::api' do
     end
 
     it 'checks if Trove DB is populated' do
-      should contain_exec('trove_db_sync').with(
+      is_expected.to contain_exec('trove_db_sync').with(
         :command => 'trove-manage db_sync',
         :user    => 'trove',
         :path    => '/usr/bin',

@@ -102,9 +102,9 @@ class cloud::storage::rbd::pools(
       }
 
       @@exec { 'set_secret_value_virsh':
-        command      => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder}",
-        tag          => 'ceph_compute_set_secret',
-        refreshonly  =>  true,
+        command     => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder}",
+        tag         => 'ceph_compute_set_secret',
+        refreshonly =>  true,
       }
 
     } # !empty($::ceph_admin_key)

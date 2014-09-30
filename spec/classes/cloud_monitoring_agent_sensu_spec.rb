@@ -23,7 +23,7 @@ describe 'cloud::monitoring::agent::sensu' do
   shared_examples_for 'openstack sensu monitoring agent' do
 
     it 'include ::sensu' do
-      should  contain_class('sensu')
+      is_expected.to  contain_class('sensu')
     end
 
   end

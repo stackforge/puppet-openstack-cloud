@@ -70,28 +70,28 @@ describe 'cloud::database::sql' do
     end
 
     it 'configure mysql galera server' do
-      should contain_class('mysql::client').with(
+      is_expected.to contain_class('mysql::client').with(
           :package_name => platform_params[:mysql_client_package_name]
       )
 
-      should contain_class('mysql::server').with(
+      is_expected.to contain_class('mysql::server').with(
           :package_name     => platform_params[:mysql_server_package_name],
           :override_options => { 'mysqld' => { 'bind-address' => '10.0.0.1' } },
           :notify           => 'Service[xinetd]'
       )
 
-      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_cluster_name\s*= "galera_cluster"$/)
-      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_address\s*= "#{params[:api_eth]}"$/)
-      should contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_incoming_address\s*= "#{params[:api_eth]}"$/)
+      is_expected.to contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_cluster_name\s*= "galera_cluster"$/)
+      is_expected.to contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_address\s*= "#{params[:api_eth]}"$/)
+      is_expected.to contain_file(platform_params[:mysql_server_config_file]).with_content(/^wsrep_node_incoming_address\s*= "#{params[:api_eth]}"$/)
 
     end # configure mysql galera server
 
     context 'configure mysqlchk http replication' do
-      it { should contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
-      it { should contain_file('/usr/bin/clustercheck').with_mode('0755') }
-      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME='#{params[:galera_clustercheck_dbuser]}'/)}
-      it { should contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD='#{params[:galera_clustercheck_dbpassword]}'/)}
-      it { should contain_file('/etc/xinetd.d/mysqlchk').with_content(/bind            = #{params[:galera_clustercheck_ipaddress]}/)}
+      it { is_expected.to contain_file('/etc/xinetd.d/mysqlchk').with_mode('0755') }
+      it { is_expected.to contain_file('/usr/bin/clustercheck').with_mode('0755') }
+      it { is_expected.to contain_file('/usr/bin/clustercheck').with_content(/MYSQL_USERNAME='#{params[:galera_clustercheck_dbuser]}'/)}
+      it { is_expected.to contain_file('/usr/bin/clustercheck').with_content(/MYSQL_PASSWORD='#{params[:galera_clustercheck_dbpassword]}'/)}
+      it { is_expected.to contain_file('/etc/xinetd.d/mysqlchk').with_content(/bind            = #{params[:galera_clustercheck_ipaddress]}/)}
 
     end # configure mysqlchk http replication
 
@@ -102,7 +102,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure mysql server' do
-        should contain_class('mysql::server').with(
+        is_expected.to contain_class('mysql::server').with(
             :package_name     => platform_params[:mysql_server_package_name],
             :root_password    => 'secrete',
             :override_options => { 'mysqld' => { 'bind-address' => '10.0.0.1' } },
@@ -111,7 +111,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure keystone database' do
-        should contain_class('keystone::db::mysql').with(
+        is_expected.to contain_class('keystone::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'keystone',
             :user          => 'keystone',
@@ -121,7 +121,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure glance database' do
-        should contain_class('glance::db::mysql').with(
+        is_expected.to contain_class('glance::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'glance',
             :user          => 'glance',
@@ -131,7 +131,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure nova database' do
-        should contain_class('nova::db::mysql').with(
+        is_expected.to contain_class('nova::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'nova',
             :user          => 'nova',
@@ -141,7 +141,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure cinder database' do
-        should contain_class('cinder::db::mysql').with(
+        is_expected.to contain_class('cinder::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'cinder',
             :user          => 'cinder',
@@ -151,7 +151,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure neutron database' do
-        should contain_class('neutron::db::mysql').with(
+        is_expected.to contain_class('neutron::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'neutron',
             :user          => 'neutron',
@@ -161,7 +161,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure heat database' do
-        should contain_class('heat::db::mysql').with(
+        is_expected.to contain_class('heat::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'heat',
             :user          => 'heat',
@@ -171,7 +171,7 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure trove database' do
-        should contain_class('trove::db::mysql').with(
+        is_expected.to contain_class('trove::db::mysql').with(
             :mysql_module  => '2.2',
             :dbname        => 'trove',
             :user          => 'trove',
@@ -181,15 +181,15 @@ describe 'cloud::database::sql' do
       end
 
       it 'configure monitoring database' do
-        should contain_mysql_database('monitoring').with(
+        is_expected.to contain_mysql_database('monitoring').with(
           :ensure   => 'present',
           :charset  => 'utf8'
         )
-        should contain_mysql_user("#{params[:galera_clustercheck_dbuser]}@localhost").with(
+        is_expected.to contain_mysql_user("#{params[:galera_clustercheck_dbuser]}@localhost").with(
           :ensure        => 'present',
           :password_hash => '*FDC68394456829A7344C2E9D4CDFD43DCE2EFD8F'
         )
-        should contain_mysql_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
+        is_expected.to contain_mysql_grant("#{params[:galera_clustercheck_dbuser]}@localhost/monitoring").with(
           :privileges => 'ALL'
         )
       end # configure monitoring database
@@ -200,7 +200,7 @@ describe 'cloud::database::sql' do
         facts.merge!( :osfamily => 'RedHat' )
       end
       it 'configure mysql database' do
-        should contain_exec('bootstrap-mysql').with(
+        is_expected.to contain_exec('bootstrap-mysql').with(
           :command => '/usr/bin/mysql_install_db --rpm --user=mysql',
           :unless  => "test -d /var/lib/mysql/mysql",
           :before  => 'Service[mysqld]'

@@ -38,7 +38,7 @@ describe 'cloud::dashboard' do
     end
 
     it 'configure horizon' do
-      should contain_class('horizon').with(
+      is_expected.to contain_class('horizon').with(
           :listen_ssl              => false,
           :secret_key              => '/etc/ssl/secret',
           :can_set_mount_point     => 'False',
@@ -56,7 +56,7 @@ describe 'cloud::dashboard' do
           },
           :openstack_endpoint_type => 'internalURL'
         )
-      should contain_class('apache').with(:default_vhost => false)
+      is_expected.to contain_class('apache').with(:default_vhost => false)
     end
   end
 

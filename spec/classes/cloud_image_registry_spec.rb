@@ -39,7 +39,7 @@ describe 'cloud::image::registry' do
   shared_examples_for 'openstack image registry' do
 
     it 'configure glance-registry' do
-      should contain_class('glance::registry').with(
+      is_expected.to contain_class('glance::registry').with(
         :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
         :keystone_password     => 'secrete',
         :keystone_tenant       => 'services',
@@ -58,7 +58,7 @@ describe 'cloud::image::registry' do
     end
 
     it 'checks if Glance DB is populated' do
-      should contain_exec('glance_db_sync').with(
+      is_expected.to contain_exec('glance_db_sync').with(
         :command => 'glance-manage db_sync',
         :user    => 'glance',
         :path    => '/usr/bin',

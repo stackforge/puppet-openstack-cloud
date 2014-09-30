@@ -56,7 +56,7 @@ describe 'cloud::orchestration::engine' do
     end
 
     it 'configure heat common' do
-      should contain_class('heat').with(
+      is_expected.to contain_class('heat').with(
           :verbose                 => true,
           :debug                   => true,
           :log_facility            => 'LOG_LOCAL0',
@@ -72,11 +72,11 @@ describe 'cloud::orchestration::engine' do
           :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat?charset=utf8',
           :log_dir                 => false
         )
-      should contain_heat_config('clients/endpoint_type').with('value' => 'internalURL')
+      is_expected.to contain_heat_config('clients/endpoint_type').with('value' => 'internalURL')
     end
 
     it 'configure heat engine' do
-      should contain_class('heat::engine').with(
+      is_expected.to contain_class('heat::engine').with(
           :enabled                       => true,
           :auth_encryption_key           => 'secrete',
           :heat_metadata_server_url      => 'http://10.0.0.1:8000',

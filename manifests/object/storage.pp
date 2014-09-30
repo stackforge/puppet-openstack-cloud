@@ -84,17 +84,17 @@ allow_versions = on
   ensure_resource('cloud::object::set_io_scheduler', keys($device_config_hash))
 
   @@ring_container_device { "${storage_eth}:${container_port}/${ring_container_device}":
-    zone        => $swift_zone,
-    weight      => '100.0',
+    zone   => $swift_zone,
+    weight => '100.0',
   }
   @@ring_account_device { "${storage_eth}:${account_port}/${ring_account_device}":
-    zone        => $swift_zone,
-    weight      => '100.0',
+    zone   => $swift_zone,
+    weight => '100.0',
   }
   $object_urls = prefix(keys($device_config_hash), "${storage_eth}:${object_port}/")
   @@ring_object_device {$object_urls:
-    zone        => $swift_zone,
-    weight      => '100.0',
+    zone   => $swift_zone,
+    weight => '100.0',
   }
 
   Swift::Ringsync<<| |>> ->

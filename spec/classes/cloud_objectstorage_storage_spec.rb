@@ -35,11 +35,11 @@ describe 'cloud::object::storage' do
 
     it 'create and configure storage server' do
 
-      should contain_class('swift::storage').with({
+      is_expected.to contain_class('swift::storage').with({
         'storage_local_net_ip' => '127.0.0.1',
       })
 
-      should contain_swift__storage__server('6000').with({
+      is_expected.to contain_swift__storage__server('6000').with({
         'type'                   => 'object',
         'config_file_path'       => 'object-server.conf',
         'log_facility'           => 'LOG_LOCAL6',
@@ -52,7 +52,7 @@ describe 'cloud::object::storage' do
         'require'                => 'Class[Swift]',
       })
 
-      should contain_swift__storage__server('6001').with({
+      is_expected.to contain_swift__storage__server('6001').with({
         'type'                   => 'container',
         'config_file_path'       => 'container-server.conf',
         'log_facility'           => 'LOG_LOCAL4',
@@ -65,7 +65,7 @@ describe 'cloud::object::storage' do
         'require'                => 'Class[Swift]',
       })
 
-      should contain_swift__storage__server('6002').with({
+      is_expected.to contain_swift__storage__server('6002').with({
         'type'                   => 'account',
         'config_file_path'       => 'account-server.conf',
         'log_facility'           => 'LOG_LOCAL2',
@@ -81,16 +81,16 @@ describe 'cloud::object::storage' do
     end
 
     it 'create and configure the hard drive' do
-      should contain_swift__storage__xfs('sdc')
-      should contain_swift__storage__xfs('sdd')
-      should contain_cloud__object__set_io_scheduler('sdc')
-      should contain_cloud__object__set_io_scheduler('sdd')
+      is_expected.to contain_swift__storage__xfs('sdc')
+      is_expected.to contain_swift__storage__xfs('sdd')
+      is_expected.to contain_cloud__object__set_io_scheduler('sdc')
+      is_expected.to contain_cloud__object__set_io_scheduler('sdd')
     end
 
     ['account', 'container', 'object'].each do |swift_component|
       it "configures #{swift_component} filter" do
-        should contain_swift__storage__filter__recon(swift_component)
-        should contain_swift__storage__filter__healthcheck(swift_component)
+        is_expected.to contain_swift__storage__filter__recon(swift_component)
+        is_expected.to contain_swift__storage__filter__healthcheck(swift_component)
       end
     end
 

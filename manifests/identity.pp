@@ -508,10 +508,10 @@ class cloud::identity (
   keystone_role { $identity_roles_addons: ensure => present }
 
   class {'keystone::endpoint':
-    public_url        => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}",
-    internal_url      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}",
-    admin_url         => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}",
-    region            => $region,
+    public_url   => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}",
+    internal_url => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}",
+    admin_url    => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}",
+    region       => $region,
   }
 
   # TODO(EmilienM) Disable WSGI - bug #98
@@ -556,29 +556,29 @@ class cloud::identity (
   }
 
   class { 'nova::keystone::auth':
-    cinder             => true,
-    admin_address      => $ks_nova_admin_host,
-    internal_address   => $ks_nova_internal_host,
-    public_address     => $ks_nova_public_host,
-    compute_port       => $ks_nova_public_port,
-    public_protocol    => $ks_nova_public_proto,
-    admin_protocol     => $ks_nova_admin_proto,
-    internal_protocol  => $ks_nova_internal_proto,
-    ec2_port           => $ks_ec2_public_port,
-    region             => $region,
-    password           => $ks_nova_password
+    cinder            => true,
+    admin_address     => $ks_nova_admin_host,
+    internal_address  => $ks_nova_internal_host,
+    public_address    => $ks_nova_public_host,
+    compute_port      => $ks_nova_public_port,
+    public_protocol   => $ks_nova_public_proto,
+    admin_protocol    => $ks_nova_admin_proto,
+    internal_protocol => $ks_nova_internal_proto,
+    ec2_port          => $ks_ec2_public_port,
+    region            => $region,
+    password          => $ks_nova_password
   }
 
   class { 'neutron::keystone::auth':
-    admin_address      => $ks_neutron_admin_host,
-    internal_address   => $ks_neutron_internal_host,
-    public_address     => $ks_neutron_public_host,
-    public_protocol    => $ks_neutron_public_proto,
-    internal_protocol  => $ks_neutron_internal_proto,
-    admin_protocol     => $ks_neutron_admin_proto,
-    port               => $ks_neutron_public_port,
-    region             => $region,
-    password           => $ks_neutron_password
+    admin_address     => $ks_neutron_admin_host,
+    internal_address  => $ks_neutron_internal_host,
+    public_address    => $ks_neutron_public_host,
+    public_protocol   => $ks_neutron_public_proto,
+    internal_protocol => $ks_neutron_internal_proto,
+    admin_protocol    => $ks_neutron_admin_proto,
+    port              => $ks_neutron_public_port,
+    region            => $region,
+    password          => $ks_neutron_password
   }
 
   class { 'cinder::keystone::auth':

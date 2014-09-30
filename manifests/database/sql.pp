@@ -267,7 +267,11 @@ class cloud::database::sql (
     config_file        => $mysql_server_config_file,
     package_name       => $mysql_server_package_name,
     service_name       => $mysql_service_name,
-    override_options   => { 'mysqld' => { 'bind-address' => $api_eth } },
+    override_options   => {
+      'mysqld' => {
+        'bind-address' => $api_eth
+      }
+    },
     root_password      => $mysql_root_password_real,
     notify             => Service['xinetd'],
   }

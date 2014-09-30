@@ -62,10 +62,10 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # Strong root password for all servers
   user { 'root':
-    ensure           => 'present',
-    gid              => '0',
-    password         => $root_password,
-    uid              => '0',
+    ensure   => 'present',
+    gid      => '0',
+    password => $root_password,
+    uid      => '0',
   }
 
   $cron_service_name = $::osfamily ? {

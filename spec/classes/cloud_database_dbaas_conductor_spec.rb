@@ -44,7 +44,7 @@ describe 'cloud::database::dbaas::conductor' do
     end
 
     it 'configure trove common' do
-      should contain_class('trove').with(
+      is_expected.to contain_class('trove').with(
           :rabbit_userid                => 'trove',
           :rabbit_hosts                 => ['10.0.0.1'],
           :rabbit_password              => 'secrete',
@@ -57,7 +57,7 @@ describe 'cloud::database::dbaas::conductor' do
     end
 
     it 'configure trove conductor' do
-      should contain_class('trove::conductor').with(
+      is_expected.to contain_class('trove::conductor').with(
         :verbose           => true,
         :debug             => true,
         :use_syslog        => true,

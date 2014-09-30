@@ -70,7 +70,7 @@ describe 'cloud::volume::storage' do
     end
 
     it 'configure cinder common' do
-      should contain_class('cinder').with(
+      is_expected.to contain_class('cinder').with(
           :verbose                   => true,
           :debug                     => true,
           :rabbit_userid             => 'cinder',
@@ -83,12 +83,12 @@ describe 'cloud::volume::storage' do
           :storage_availability_zone => 'nova'
         )
 
-      should contain_cinder_config('DEFAULT/notification_driver').with('value' => 'cinder.openstack.common.notifier.rpc_notifier')
+      is_expected.to contain_cinder_config('DEFAULT/notification_driver').with('value' => 'cinder.openstack.common.notifier.rpc_notifier')
 
     end
 
     it 'checks if Cinder DB is populated' do
-      should contain_exec('cinder_db_sync').with(
+      is_expected.to contain_exec('cinder_db_sync').with(
         :command => 'cinder-manage db sync',
         :user    => 'cinder',
         :path    => '/usr/bin',
@@ -97,17 +97,17 @@ describe 'cloud::volume::storage' do
     end
 
     it 'configure cinder volume service' do
-      should contain_class('cinder::volume')
+      is_expected.to contain_class('cinder::volume')
     end
 
     context 'with RBD backend' do
       it 'configures rbd volume driver' do
-        should contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
-        should contain_cinder_config('lowcost/rbd_pool').with_value('ceph_cinder')
-        should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
-        should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
-        should contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
-        should contain_cinder__type('lowcost').with(
+        is_expected.to contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
+        is_expected.to contain_cinder_config('lowcost/rbd_pool').with_value('ceph_cinder')
+        is_expected.to contain_cinder_config('lowcost/rbd_user').with_value('cinder')
+        is_expected.to contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
+        is_expected.to contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
+        is_expected.to contain_cinder__type('lowcost').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'lowcost',
           :os_tenant_name => 'services',
@@ -115,8 +115,8 @@ describe 'cloud::volume::storage' do
           :os_password    => 'secret',
           :os_auth_url    => 'http://keystone.host:5000/v2.0'
         )
-        should contain_group('cephkeyring').with(:ensure => 'present')
-        should contain_exec('add-cinder-to-group').with(
+        is_expected.to contain_group('cephkeyring').with(:ensure => 'present')
+        is_expected.to contain_exec('add-cinder-to-group').with(
           :command => 'usermod -a -G cephkeyring cinder',
           :path    => ['/usr/sbin', '/usr/bin', '/bin', '/sbin'],
           :unless  => 'groups cinder | grep cephkeyring'
@@ -126,11 +126,11 @@ describe 'cloud::volume::storage' do
 
     context 'with NetApp backend' do
       it 'configures netapp volume driver' do
-        should contain_cinder_config('premium/volume_backend_name').with_value('premium')
-        should contain_cinder_config('premium/netapp_login').with_value('joe')
-        should contain_cinder_config('premium/netapp_password').with_value('secret')
-        should contain_cinder_config('premium/netapp_server_hostname').with_value('netapp-server.host')
-        should contain_cinder__type('premium').with(
+        is_expected.to contain_cinder_config('premium/volume_backend_name').with_value('premium')
+        is_expected.to contain_cinder_config('premium/netapp_login').with_value('joe')
+        is_expected.to contain_cinder_config('premium/netapp_password').with_value('secret')
+        is_expected.to contain_cinder_config('premium/netapp_server_hostname').with_value('netapp-server.host')
+        is_expected.to contain_cinder__type('premium').with(
           :set_key   => 'volume_backend_name',
           :set_value => 'premium',
           :notify    => 'Service[cinder-volume]'
@@ -140,10 +140,10 @@ describe 'cloud::volume::storage' do
 
     context 'with iSCSI backend' do
       it 'configures iSCSI volume driver' do
-        should contain_cinder_config('fast/volume_backend_name').with_value('fast')
-        should contain_cinder_config('fast/iscsi_ip_address').with_value('10.0.0.1')
-        should contain_cinder_config('fast/volume_group').with_value('fast-vol')
-        should contain_cinder__type('fast').with(
+        is_expected.to contain_cinder_config('fast/volume_backend_name').with_value('fast')
+        is_expected.to contain_cinder_config('fast/iscsi_ip_address').with_value('10.0.0.1')
+        is_expected.to contain_cinder_config('fast/volume_group').with_value('fast-vol')
+        is_expected.to contain_cinder__type('fast').with(
           :set_key   => 'volume_backend_name',
           :set_value => 'fast',
           :notify    => 'Service[cinder-volume]'
@@ -172,12 +172,12 @@ describe 'cloud::volume::storage' do
       end
 
       it 'configures two rbd volume backends' do
-        should contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
-        should contain_cinder_config('lowcost/rbd_pool').with_value('low')
-        should contain_cinder_config('lowcost/rbd_user').with_value('cinder')
-        should contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
-        should contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
-        should contain_cinder__type('lowcost').with(
+        is_expected.to contain_cinder_config('lowcost/volume_backend_name').with_value('lowcost')
+        is_expected.to contain_cinder_config('lowcost/rbd_pool').with_value('low')
+        is_expected.to contain_cinder_config('lowcost/rbd_user').with_value('cinder')
+        is_expected.to contain_cinder_config('lowcost/rbd_secret_uuid').with_value('secret')
+        is_expected.to contain_cinder_config('lowcost/volume_tmp_dir').with_value('/tmp')
+        is_expected.to contain_cinder__type('lowcost').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'lowcost',
           :os_tenant_name => 'services',
@@ -185,12 +185,12 @@ describe 'cloud::volume::storage' do
           :os_password    => 'secret',
           :os_auth_url    => 'http://keystone.host:5000/v2.0'
         )
-        should contain_cinder_config('normal/volume_backend_name').with_value('normal')
-        should contain_cinder_config('normal/rbd_pool').with_value('normal')
-        should contain_cinder_config('normal/rbd_user').with_value('cinder')
-        should contain_cinder_config('normal/rbd_secret_uuid').with_value('secret')
-        should contain_cinder_config('normal/volume_tmp_dir').with_value('/tmp')
-        should contain_cinder__type('normal').with(
+        is_expected.to contain_cinder_config('normal/volume_backend_name').with_value('normal')
+        is_expected.to contain_cinder_config('normal/rbd_pool').with_value('normal')
+        is_expected.to contain_cinder_config('normal/rbd_user').with_value('cinder')
+        is_expected.to contain_cinder_config('normal/rbd_secret_uuid').with_value('secret')
+        is_expected.to contain_cinder_config('normal/volume_tmp_dir').with_value('/tmp')
+        is_expected.to contain_cinder__type('normal').with(
           :set_key        => 'volume_backend_name',
           :set_value      => 'normal',
           :os_tenant_name => 'services',
@@ -203,7 +203,7 @@ describe 'cloud::volume::storage' do
 
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
-        should contain_class('cinder::backends').with(
+        is_expected.to contain_class('cinder::backends').with(
           :enabled_backends => ['lowcost', 'premium', 'fast']
         )
       end
@@ -214,7 +214,7 @@ describe 'cloud::volume::storage' do
         params.merge!(:cinder_backends => false)
       end
       it 'configure rbd volume driver without multi-backend' do
-        should contain_cinder__backend__rbd('DEFAULT').with(
+        is_expected.to contain_cinder__backend__rbd('DEFAULT').with(
           :rbd_pool                         => 'ceph_cinder',
           :rbd_user                         => 'cinder',
           :rbd_secret_uuid                  => 'secret',
