@@ -83,10 +83,28 @@ describe 'cloud::network::vswitch' do
       end
     end
 
+    context 'when running Cisco N1KV plugin with VEM driver' do
+      before do
+       facts.merge!( :osfamily => 'RedHat' )
+       params.merge!(
+         :driver      => 'n1kv_vem',
+         :n1kv_vsm_ip => '10.0.1.1'
+       )
+      end
+      it 'configure neutron n1kv agent' do
+        should contain_class('neutron::agents::n1kv_vem').with(
+          :n1kv_vsm_ip        => '10.0.1.1',
+          :n1kv_vsm_domain_id => '1000',
+          :host_mgmt_intf     => 'eth1',
+          :node_type          => 'compute'
+        )
+      end
+    end
+
     context 'when using provider external network' do
       before do
        params.merge!(
-         :manage_ext_network=> true,
+         :manage_ext_network => true,
        )
       end
 
