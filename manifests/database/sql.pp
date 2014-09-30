@@ -166,8 +166,8 @@ class cloud::database::sql (
   case $::osfamily {
     'RedHat': {
       # Specific to Red Hat
-      $mysql_server_package_name = 'MariaDB-Galera-server'
-      $mysql_client_package_name = 'MariaDB-client'
+      $mysql_server_package_name = 'mariadb-galera-server'
+      $mysql_client_package_name = 'mariadb'
       $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
       $mysql_server_config_file = '/etc/my.cnf'
 
@@ -194,7 +194,7 @@ class cloud::database::sql (
         command => '/usr/bin/mysql_install_db --rpm --user=mysql',
         unless  => 'test -d /var/lib/mysql/mysql',
         before  => Service['mysqld'],
-        require => [Package['mysql-server'], File[$mysql_server_config_file]]
+        require => [Package[$mysql_server_package_name], File[$mysql_server_config_file]]
       }
 
     } # RedHat
@@ -245,7 +245,7 @@ class cloud::database::sql (
     mode    => '0755',
     group   => 'root',
     notify  => Service['mysqld'],
-    before  => Package['mysql-server'],
+    before  => Package[$mysql_server_package_name],
   }
 
   if($::osfamily == 'Debian'){
@@ -257,7 +257,7 @@ class cloud::database::sql (
       line    => 'MYSQLD_STARTUP_TIMEOUT=120',
       path    => '/etc/init.d/mysql',
       after   => '^CONF=',
-      require => Package['mysql-server'],
+      require => Package[$mysql_server_package_name],
       notify  => Service['mysqld'],
     }
   }
@@ -282,7 +282,7 @@ class cloud::database::sql (
     owner   => 'root',
     group   => 'root',
     notify  => [Service['mysqld'],Exec['clean-mysql-binlog']],
-    require => Package['mysql-server'],
+    require => Package[$mysql_server_package_name],
   }
 
   class { 'mysql::client':
