@@ -9,6 +9,7 @@ group :development, :test do
   gem 'rspec'
   gem 'json'
   gem 'webmock'
+  gem 'r10k'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
