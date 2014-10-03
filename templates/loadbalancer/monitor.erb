@@ -38,6 +38,10 @@ monitor fail if metadata_api_dead
 acl spice_dead nbsrv(spice_cluster) lt 1
 monitor fail if spice_dead
 <%- end -%>
+<%- if @rabbitmq -%>
+acl rabbitmq_dead nbsrv(rabbitmq_cluster) lt 1
+monitor fail if rabbitmq_dead
+<%- end -%>
 <%- if @glance_api -%>
 acl glance_api_dead nbsrv(glance_api_cluster) lt 1
 monitor fail if glance_api_dead
