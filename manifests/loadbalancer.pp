@@ -150,6 +150,13 @@
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
+# [*rabbitmq*]
+#   (optional) Enable or not RabbitMQ binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure (default for backward compatibility)
+#   Defaults to false
+#
 # [*keystone_api_admin*]
 #   (optional) Enable or not Keystone admin binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
@@ -184,6 +191,7 @@ class cloud::loadbalancer(
   $trove_api                        = true,
   $horizon                          = true,
   $horizon_ssl                      = false,
+  $rabbitmq                         = false,
   $spice                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
@@ -211,6 +219,7 @@ class cloud::loadbalancer(
   $spice_bind_options               = [],
   $horizon_bind_options             = [],
   $horizon_ssl_bind_options         = [],
+  $rabbitmq_bind_options            = [],
   $galera_bind_options              = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
@@ -227,6 +236,7 @@ class cloud::loadbalancer(
   $ks_nova_public_port              = 8774,
   $ks_swift_public_port             = 8080,
   $ks_trove_public_port             = 8779,
+  $rabbitmq_port                    = 5672,
   $horizon_port                     = 80,
   $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
@@ -369,6 +379,16 @@ class cloud::loadbalancer(
       'timeout client' => '120m',
     },
     bind_options => $spice_bind_options,
+  }
+  cloud::loadbalancer::binding { 'rabbitmq_cluster':
+    ip           => $rabbitmq,
+    port         => $rabbitmq_port,
+    options      => {
+      'mode'    => 'tcp',
+      'option'  => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance' => 'roundrobin',
+    },
+    bind_options => $rabbitmq_bind_options,
   }
   cloud::loadbalancer::binding { 'trove_api_cluster':
     ip           => $trove_api,
