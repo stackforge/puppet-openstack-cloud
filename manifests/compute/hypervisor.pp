@@ -43,6 +43,11 @@
 #   Required when nfs_enabled is at true.
 #   Defaults to false
 #
+# [*nfs_options*]
+#   (optional) NFS mount options
+#   Example: 'nfsvers=3,noacl'
+#   Defaults to 'defaults'
+#
 # [*filesystem_store_datadir*]
 #   (optional) Full path of data directory to store the instances.
 #   Don't modify this parameter if you don't know what you do.
@@ -74,6 +79,7 @@ class cloud::compute::hypervisor(
   # when using NFS storage backend
   $nfs_enabled                = false,
   $nfs_device                 = false,
+  $nfs_options                = 'defaults',
   $filesystem_store_datadir   = '/var/lib/nova/instances',
   # set to false to keep backward compatibility
   $ks_spice_public_proto      = false,
@@ -121,14 +127,15 @@ class cloud::compute::hypervisor(
         nova_config { 'DEFAULT/instances_path': value => $filesystem_store_datadir; }
         $nfs_mount = {
           "${filesystem_store_datadir}" => {
-            'ensure' => 'present',
-            'fstype' => 'nfs',
-            'device' => $nfs_device
+            'ensure'  => 'present',
+            'fstype'  => 'nfs',
+            'device'  => $nfs_device,
+            'options' => $nfs_options
           }
         }
-        ensure_resource('class', 'nfs', {
-          mounts => $nfs_mount
-        })
+        ensure_resource('class', 'nfs', {})
+        create_resources('types::mount', $nfs_mount)
+
         # Not using /var/lib/nova/instances may cause side effects.
         if $filesystem_store_datadir != '/var/lib/nova/instances' {
           warning('filesystem_store_datadir is not /var/lib/nova/instances so you may have side effects (SElinux, etc)')

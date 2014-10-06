@@ -494,14 +494,16 @@ describe 'cloud::compute::hypervisor' do
       before :each do
         params.merge!(
           :nfs_enabled => true,
-          :nfs_device  => 'nfs.example.com:/vol1' )
+          :nfs_device  => 'nfs.example.com:/vol1',
+          :nfs_options => 'noacl,fsid=123' )
       end
       it 'configure nova instances path and NFS mount' do
         is_expected.to contain_nova_config('DEFAULT/instances_path').with('value' => '/var/lib/nova/instances')
         is_expected.to contain_mount('/var/lib/nova/instances').with({
-          'ensure' => 'present',
-          'fstype' => 'nfs',
-          'device' => 'nfs.example.com:/vol1',
+          'ensure'  => 'present',
+          'fstype'  => 'nfs',
+          'device'  => 'nfs.example.com:/vol1',
+          'options' => 'noacl,fsid=123'
         })
       end
     end
