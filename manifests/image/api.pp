@@ -78,6 +78,11 @@
 #   Required when running 'nfs' backend.
 #   Defaults to false
 #
+# [*nfs_options*]
+#   (optional) NFS mount options
+#   Example: 'nfsvers=3,noacl'
+#   Defaults to 'defaults'
+#
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
   $glance_db_user                    = 'glance',
@@ -102,6 +107,7 @@ class cloud::image::api(
   $backend                           = 'rbd',
   $filesystem_store_datadir          = undef,
   $nfs_device                        = false,
+  $nfs_options                       = 'defaults',
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -187,14 +193,14 @@ class cloud::image::api(
       }
       $nfs_mount = {
         "${filesystem_store_datadir}" => {
-          'ensure' => 'present',
-          'fstype' => 'nfs',
-          'device' => $nfs_device
+          'ensure'  => 'present',
+          'fstype'  => 'nfs',
+          'device'  => $nfs_device,
+          'options' => $nfs_options
         }
       }
-      ensure_resource('class', 'nfs', {
-        mounts => $nfs_mount
-      })
+      ensure_resource('class', 'nfs', {})
+      create_resources('types::mount', $nfs_mount)
     } else {
       fail('When running NFS backend, you need to provide nfs_device parameter.')
     }

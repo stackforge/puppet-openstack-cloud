@@ -110,7 +110,8 @@ describe 'cloud::image::api' do
       before :each do
         params.merge!(:backend                  => 'nfs',
                       :filesystem_store_datadir => '/srv/images/',
-                      :nfs_device               => 'nfs.example.com:/vol1' )
+                      :nfs_device               => 'nfs.example.com:/vol1',
+                      :nfs_options              => 'noacl,fsid=123' )
       end
 
       it 'configure Glance with NFS backend' do
@@ -119,9 +120,10 @@ describe 'cloud::image::api' do
         is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
         is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
         is_expected.to contain_mount('/srv/images/').with({
-          'ensure' => 'present',
-          'fstype' => 'nfs',
-          'device' => 'nfs.example.com:/vol1',
+          'ensure'  => 'present',
+          'fstype'  => 'nfs',
+          'device'  => 'nfs.example.com:/vol1',
+          'options' => 'noacl,fsid=123',
         })
       end
     end
