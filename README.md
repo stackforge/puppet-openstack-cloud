@@ -35,7 +35,11 @@ Cinder, Glance and Nova can use Ceph as backend storage, using [puppet-ceph](htt
 
 Only KVM and QEMU are supported as hypervisors, for now.
 Neutron use ML2 plugin with GRE and Open-vSwitch drivers.
-Cinder has multi-backend support with Ceph used by default and NetApp as an option.
+Cinder has multi-backend support:
+* RBD (default)
+* NetAPP
+* iSCSI
+* EMC VNX direct
 Trove support is now experimental.
 
 [Puppet Modules](http://docs.puppetlabs.com/learning/modules1.html#modules) are a collection of related contents that can be used to model the configuration of a discrete service.

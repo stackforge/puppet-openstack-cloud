@@ -5,7 +5,7 @@ fixtures:
       ref: 'c374bed10f8af6000601fa407ebaef0833e1999c'
     'cinder':
       repo: 'git://github.com/enovance/puppet-cinder'
-      ref: '2da616a4a52d3086fe3a291b9199fc7313575504'
+      ref: 'ef0aaab38452f46eb2fc1ee1f2c4d85ccb149d52'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
       ref: 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
