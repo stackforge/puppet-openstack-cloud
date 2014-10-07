@@ -69,6 +69,17 @@ describe 'cloud::volume::storage' do
               'san_password'          => 'secrete',
               'storage_vnx_pool_name' => 'emc-volumes',
             }
+          },
+          'nfs' => {
+            'freenas' => {
+              'nfs_servers'          => ['10.0.0.1:/myshare'],
+              'nfs_mount_options'    => 'defaults',
+              'nfs_disk_util'        => 'df',
+              'nfs_mount_point_base' => '/mnt/shares',
+              'nfs_shares_config'    => '/etc/cinder/shares.conf',
+              'nfs_used_ratio'       => '0.6',
+              'nfs_oversub_ratio'    => '1.0'
+            }
           }
         },
         :ks_keystone_internal_proto => 'http',
@@ -174,6 +185,24 @@ describe 'cloud::volume::storage' do
       end
     end
 
+    context 'with NFS backend' do
+      it 'configures NFS volume driver' do
+        is_expected.to contain_cinder_config('freenas/volume_backend_name').with_value('freenas')
+        is_expected.to contain_cinder_config('freenas/nfs_mount_options').with_value('defaults')
+        is_expected.to contain_cinder_config('freenas/nfs_mount_point_base').with_value('/mnt/shares')
+        is_expected.to contain_cinder_config('freenas/nfs_disk_util').with_value('df')
+        is_expected.to contain_cinder_config('freenas/nfs_shares_config').with_value('/etc/cinder/shares.conf')
+        is_expected.to contain_cinder_config('freenas/nfs_used_ratio').with_value('0.6')
+        is_expected.to contain_cinder_config('freenas/nfs_oversub_ratio').with_value('1.0')
+        is_expected.to contain_cinder__type('freenas').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'freenas',
+          :notify    => 'Service[cinder-volume]'
+        )
+        should contain_file('/etc/cinder/shares.conf').with_content(/^10.0.0.1:\/myshare$/)
+      end
+    end
+
     context 'with two RBD backends' do
       before :each do
         params.merge!(
@@ -227,7 +256,7 @@ describe 'cloud::volume::storage' do
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
         is_expected.to contain_class('cinder::backends').with(
-          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast']
+          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast', 'freenas']
         )
       end
     end
