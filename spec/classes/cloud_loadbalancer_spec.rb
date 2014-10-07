@@ -62,6 +62,8 @@ describe 'cloud::loadbalancer' do
         :keepalived_vrrp_interface         => false,
         :keepalived_public_interface       => 'eth0',
         :keepalived_public_ipvs            => ['10.0.0.1', '10.0.0.2'],
+        :keepalived_auth_type              => 'PASS',
+        :keepalived_auth_pass              => 'secret',
         :horizon_port                      => '80',
         :spice_port                        => '6082',
         :vip_public_ip                     => '10.0.0.1',
@@ -106,13 +108,15 @@ describe 'cloud::loadbalancer' do
       end
       it 'configure an internal VRRP instance' do
         is_expected.to contain_keepalived__instance('2').with({
-          'interface'     => 'eth1',
-          'virtual_ips'   => ['192.168.0.1 dev eth1'],
-          'track_script'  => ['haproxy'],
-          'state'         => 'BACKUP',
-          'priority'      => params[:keepalived_priority],
-          'notify_master' => '"/etc/init.d/haproxy start"',
-          'notify_backup' => '"/etc/init.d/haproxy stop"',
+          'interface'            => 'eth1',
+          'virtual_ips'          => ['192.168.0.1 dev eth1'],
+          'track_script'         => ['haproxy'],
+          'state'                => 'BACKUP',
+          'priority'             => params[:keepalived_priority],
+          'auth_type'            => 'PASS',
+          'auth_pass'            => 'secret',
+          'notify_master'        => '"/etc/init.d/haproxy start"',
+          'notify_backup'        => '"/etc/init.d/haproxy stop"',
         })
       end
     end
@@ -128,13 +132,15 @@ describe 'cloud::loadbalancer' do
       end
       it 'configure a public VRRP instance with deprecated parameters' do
         is_expected.to contain_keepalived__instance('1').with({
-          'interface'     => 'eth3',
-          'virtual_ips'   => ['192.168.0.2 dev eth3'],
-          'track_script'  => ['haproxy'],
-          'state'         => 'BACKUP',
-          'priority'      => params[:keepalived_priority],
-          'notify_master' => '"/etc/init.d/haproxy start"',
-          'notify_backup' => '"/etc/init.d/haproxy stop"',
+          'interface'            => 'eth3',
+          'virtual_ips'          => ['192.168.0.2 dev eth3'],
+          'track_script'         => ['haproxy'],
+          'state'                => 'BACKUP',
+          'priority'             => params[:keepalived_priority],
+          'auth_type'            => 'PASS',
+          'auth_pass'            => 'secret',
+          'notify_master'        => '"/etc/init.d/haproxy start"',
+          'notify_backup'        => '"/etc/init.d/haproxy stop"',
         })
       end
     end
@@ -153,13 +159,15 @@ describe 'cloud::loadbalancer' do
     context 'when keepalived and HAproxy are in backup' do
       it 'configure vrrp_instance with BACKUP state' do
         is_expected.to contain_keepalived__instance('1').with({
-          'interface'     => params[:keepalived_public_interface],
-          'virtual_ips'   => ['10.0.0.1 dev eth0', '10.0.0.2 dev eth0'],
-          'track_script'  => ['haproxy'],
-          'state'         => params[:keepalived_state],
-          'priority'      => params[:keepalived_priority],
-          'notify_master' => '"/etc/init.d/haproxy start"',
-          'notify_backup' => '"/etc/init.d/haproxy stop"',
+          'interface'            => params[:keepalived_public_interface],
+          'virtual_ips'          => ['10.0.0.1 dev eth0', '10.0.0.2 dev eth0'],
+          'track_script'         => ['haproxy'],
+          'state'                => params[:keepalived_state],
+          'priority'             => params[:keepalived_priority],
+          'auth_type'            => 'PASS',
+          'auth_pass'            => 'secret',
+          'notify_master'        => '"/etc/init.d/haproxy start"',
+          'notify_backup'        => '"/etc/init.d/haproxy stop"',
         })
       end # configure vrrp_instance with BACKUP state
       it 'configure haproxy server without service managed' do
@@ -173,12 +181,14 @@ describe 'cloud::loadbalancer' do
       end
       it 'configure vrrp_instance with MASTER state' do
         is_expected.to contain_keepalived__instance('1').with({
-          'interface'     => params[:keepalived_public_interface],
-          'track_script'  => ['haproxy'],
-          'state'         => 'MASTER',
-          'priority'      => params[:keepalived_priority],
-          'notify_master' => '"/etc/init.d/haproxy start"',
-          'notify_backup' => '"/etc/init.d/haproxy stop"',
+          'interface'            => params[:keepalived_public_interface],
+          'track_script'         => ['haproxy'],
+          'state'                => 'MASTER',
+          'priority'             => params[:keepalived_priority],
+          'auth_type'            => 'PASS',
+          'auth_pass'            => 'secret',
+          'notify_master'        => '"/etc/init.d/haproxy start"',
+          'notify_backup'        => '"/etc/init.d/haproxy stop"',
         })
       end
       it 'configure haproxy server with service managed' do

@@ -52,6 +52,16 @@
 #   Should be an array.
 #   Defaults to false (disabled)
 #
+# [*keepalived_auth_type*]
+#   (optional) Authentication method.
+#   Supported methods are simple Passwd (PASS) or IPSEC AH (AH).
+#   Defaults to undef
+#
+# [*keepalived_auth_pass*]
+#   (optional) Authentication password.
+#   Password string (up to 8 characters).
+#   Defaults to undef
+#
 # [*swift_api*]
 #   (optional) Enable or not Swift public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
@@ -193,6 +203,8 @@ class cloud::loadbalancer(
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = [],
+  $keepalived_auth_type             = undef,
+  $keepalived_auth_pass             = undef,
   $ceilometer_bind_options          = [],
   $cinder_bind_options              = [],
   $ec2_bind_options                 = [],
@@ -286,6 +298,8 @@ class cloud::loadbalancer(
     state         => $keepalived_state,
     track_script  => ['haproxy'],
     priority      => $keepalived_priority,
+    auth_type     => $keepalived_auth_type,
+    auth_pass     => $keepalived_auth_pass,
     notify_master => '"/etc/init.d/haproxy start"',
     notify_backup => '"/etc/init.d/haproxy stop"',
   }
@@ -302,6 +316,8 @@ class cloud::loadbalancer(
       state         => $keepalived_state,
       track_script  => ['haproxy'],
       priority      => $keepalived_priority,
+      auth_type     => $keepalived_auth_type,
+      auth_pass     => $keepalived_auth_pass,
       notify_master => '"/etc/init.d/haproxy start"',
       notify_backup => '"/etc/init.d/haproxy stop"',
     }
