@@ -86,32 +86,43 @@
 #   Defaults to ['gre', 'vlan', 'flat']
 #   Possible value ['local', 'flat', 'vlan', 'gre', 'vxlan']
 #
-# [*ml2_enabled*]
-#   (optional) Enable or not ML2 plugin
-#   Defaults to true
+# [*plugin*]
+#   (optional) Neutron plugin name
+#   Supported values: 'ml2', 'n1kv'.
+#   Defaults to 'ml2'
 #
 
 class cloud::network(
-  $verbose                  = true,
-  $debug                    = true,
-  $rabbit_hosts             = ['127.0.0.1:5672'],
-  $rabbit_password          = 'rabbitpassword',
-  $api_eth                  = '127.0.0.1',
-  $provider_vlan_ranges     = ['physnet1:1000:2999'],
-  $use_syslog               = true,
-  $log_facility             = 'LOG_LOCAL0',
-  $dhcp_lease_duration      = '120',
-  $flat_networks            = ['public'],
-  $tenant_network_types     = ['gre'],
-  $type_drivers             = ['gre', 'vlan', 'flat'],
-  $ml2_enabled              = true,
+  $verbose                    = true,
+  $debug                      = true,
+  $rabbit_hosts               = ['127.0.0.1:5672'],
+  $rabbit_password            = 'rabbitpassword',
+  $api_eth                    = '127.0.0.1',
+  $provider_vlan_ranges       = ['physnet1:1000:2999'],
+  $use_syslog                 = true,
+  $log_facility               = 'LOG_LOCAL0',
+  $dhcp_lease_duration        = '120',
+  $flat_networks              = ['public'],
+  $tenant_network_types       = ['gre'],
+  $type_drivers               = ['gre', 'vlan', 'flat'],
+  $plugin                     = 'ml2',
+  # only needed by cisco n1kv plugin
+  $n1kv_vsm_ip                = '127.0.0.1',
+  $n1kv_vsm_password          = 'secrete',
+  $neutron_db_host            = '127.0.0.1',
+  $neutron_db_user            = 'neutron',
+  $neutron_db_password        = 'neutronpassword',
+  $ks_keystone_admin_host     = '127.0.0.1',
+  $ks_keystone_admin_proto    = 'http',
+  $ks_keystone_admin_port     = 35357,
+  $ks_keystone_admin_password = 'secrete',
   # DEPRECATED PARAMETERS
-  $tunnel_eth               = false,
-  $tunnel_types             = false,
-  $provider_bridge_mappings = false,
-  $external_int             = false,
-  $external_bridge          = false,
-  $manage_ext_network       = false,
+  $tunnel_eth                 = false,
+  $tunnel_types               = false,
+  $provider_bridge_mappings   = false,
+  $external_int               = false,
+  $external_bridge            = false,
+  $manage_ext_network         = false,
 ) {
 
   # Deprecated parameters warning
@@ -132,16 +143,41 @@ class cloud::network(
     $log_dir = '/var/log/neutron'
   }
 
-  if $ml2_enabled {
-    $core_plugin = 'neutron.plugins.ml2.plugin.Ml2Plugin'
-    class { 'neutron::plugins::ml2':
-      type_drivers          => $type_drivers,
-      tenant_network_types  => $tenant_network_types,
-      network_vlan_ranges   => $provider_vlan_ranges,
-      tunnel_id_ranges      => ['1:10000'],
-      flat_networks         => $flat_networks,
-      mechanism_drivers     => ['openvswitch','l2population'],
-      enable_security_group => true
+  case $plugin {
+    'ml2': {
+      $core_plugin = 'neutron.plugins.ml2.plugin.Ml2Plugin'
+      class { 'neutron::plugins::ml2':
+        type_drivers          => $type_drivers,
+        tenant_network_types  => $tenant_network_types,
+        network_vlan_ranges   => $provider_vlan_ranges,
+        tunnel_id_ranges      => ['1:10000'],
+        flat_networks         => $flat_networks,
+        mechanism_drivers     => ['openvswitch','l2population'],
+        enable_security_group => true
+      }
+    }
+
+    'n1kv': {
+      $core_plugin = 'neutron.plugins.cisco.network_plugin.PluginV2'
+      class { 'neuton::plugins::cisco':
+        database_user     => $neutron_db_user,
+        database_password => $neutron_db_password,
+        database_host     => $neutron_db_host,
+        keystone_auth_url => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0/",
+        keystone_password => $ks_keystone_admin_password,
+        vswitch_plugin    => 'neutron.plugins.cisco.n1kv.n1kv_neutron_plugin.N1kvNeutronPluginV2',
+      }
+      neutron_plugin_cisco {
+        'securitygroup/firewall_driver': value => 'neutron.agent.firewall.NoopFirewallDriver';
+        "N1KV:${n1kv_vsm_ip}/username":  value  => 'admin';
+        "N1KV:${n1kv_vsm_ip}/password":  value  => $n1kv_vsm_password;
+        # TODO (EmilienM) not sure about this one:
+        'database/connection':           value => "mysql://${neutron_db_user}:${neutron_db_password}@${neutron_db_host}/neutron";
+      }
+    }
+
+    default: {
+      err "${plugin} plugin is not supported."
     }
   }
 
