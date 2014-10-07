@@ -34,7 +34,8 @@ describe 'cloud::dashboard' do
         :api_eth                    => '10.0.0.1',
         :ssl_forward                => true,
         :servername                 => 'horizon.openstack.org',
-        :os_endpoint_type           => 'internalURL' }
+        :os_endpoint_type           => 'internalURL',
+        :allowed_hosts              => 'horizon.openstack.org'}
     end
 
     it 'configure horizon' do
@@ -54,10 +55,40 @@ describe 'cloud::dashboard' do
               'add_listen' => true ,
               'setenvif'     => ['X-Forwarded-Proto https HTTPS=1']
           },
-          :openstack_endpoint_type => 'internalURL'
+          :openstack_endpoint_type => 'internalURL',
+          :allowed_hosts           => 'horizon.openstack.org'
         )
       is_expected.to contain_class('apache').with(:default_vhost => false)
     end
+
+    context 'with multiple allowed_hosts' do
+      before do
+        params.merge!(:allowed_hosts => ['horizon.openstack.org', 'vip.openstack.org'])
+      end
+
+      it 'configure horizon with multiple allowed hosts' do
+        is_expected.to contain_class('horizon').with(
+          :listen_ssl              => false,
+          :secret_key              => '/etc/ssl/secret',
+          :can_set_mount_point     => 'False',
+          :fqdn                    => '10.0.0.1',
+          :bind_address            => '10.0.0.1',
+          :servername              => 'horizon.openstack.org',
+          :swift                   => true,
+          :cache_server_ip         => false,
+          :keystone_url            => 'http://keystone.openstack.org:5000/v2.0',
+          :django_debug            => true,
+          :neutron_options         => { 'enable_lb' => true },
+          :vhost_extra_params      => {
+              'add_listen' => true ,
+              'setenvif'     => ['X-Forwarded-Proto https HTTPS=1']
+          },
+          :openstack_endpoint_type => 'internalURL',
+          :allowed_hosts           => ['horizon.openstack.org', 'vip.openstack.org']
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

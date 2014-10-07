@@ -91,7 +91,8 @@ class cloud::dashboard(
   $horizon_key               = undef,
   $horizon_ca                = undef,
   $ssl_forward               = false,
-  $os_endpoint_type          = undef
+  $os_endpoint_type          = undef,
+  $allowed_hosts             = $::fqdn,
 ) {
 
   # We build the param needed for horizon class
@@ -133,6 +134,7 @@ class cloud::dashboard(
     horizon_ca              => $horizon_ca,
     vhost_extra_params      => $vhost_extra_params,
     openstack_endpoint_type => $os_endpoint_type,
+    allowed_hosts           => $allowed_hosts,
   }
 
   if ($::osfamily == 'Debian') {
