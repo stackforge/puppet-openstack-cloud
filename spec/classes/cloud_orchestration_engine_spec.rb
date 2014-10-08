@@ -69,6 +69,7 @@ describe 'cloud::orchestration::engine' do
           :keystone_protocol       => 'http',
           :keystone_password       => 'secrete',
           :auth_uri                => 'http://10.0.0.1:5000/v2.0',
+          :keystone_ec2_uri        => 'http://10.0.0.1:5000/v2.0/ec2tokens',
           :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat?charset=utf8',
           :log_dir                 => false
         )
