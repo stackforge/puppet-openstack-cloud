@@ -94,7 +94,7 @@ mod 'git',
   :git => 'git://github.com/enovance/puppetlabs-git.git',
   :ref => '0df1f62130a7752c728efb7555f2b07ca178ee5b'
 mod 'firewall',
-  :git => 'git@github.com:enovance/puppetlabs-firewall.git',
+  :git => 'git://github.com/enovance/puppetlabs-firewall.git',
   :ref => '6540b31b0ca0727094ddf44436274436d2853d6d'
 mod 'fluentd',
   :git => 'git://github.com/enovance/puppet-fluentd.git',
