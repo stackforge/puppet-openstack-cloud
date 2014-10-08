@@ -490,7 +490,8 @@ class cloud::identity (
     admin_port       => $ks_keystone_admin_port,
     token_driver     => $token_driver,
     token_expiration => $ks_token_expiration,
-    admin_endpoint   => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0"
+    admin_endpoint   => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
+    public_endpoint  => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}/v2.0"
   }
 
   keystone_config {
