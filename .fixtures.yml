@@ -23,13 +23,13 @@ fixtures:
       ref: '3ea00440361ff2452561d2cce808d938e39cce56'
     'neutron':
       repo: 'git://github.com/enovance/puppet-neutron'
-      ref: 'ef3ca7f93c29ebe6fbf40788cc4d4bc72182e2a2'
+      ref: 'cefbdc897d70fd1c1fc44e372f05336674efd940'
     'ceilometer':
       repo: 'git://github.com/enovance/puppet-ceilometer'
       ref: '957c2120d0ee0b9db08bfddcce996686ba61d97d'
     'heat':
       repo: 'git://github.com/enovance/puppet-heat'
-      ref: 'a95a9435dcb5f4b24b2e53213fe05b5466b46d6a'
+      ref: '0e6d7eacecd70819384ac61ea3b9df38b90411b0'
     'trove':
       repo: 'git://github.com/enovance/puppet-trove'
       ref: '7d9db32423b25dcc227ea6a6d43c90c63fde0d58'
