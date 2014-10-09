@@ -64,6 +64,7 @@ describe 'cloud::image::api' do
         :bind_host                => '10.0.0.1',
         :bind_port                => '9292',
         :use_syslog               => true,
+        :pipeline                 => 'keystone',
         :log_dir                  => false,
         :log_file                 => false
       )
