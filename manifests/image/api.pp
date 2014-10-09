@@ -83,6 +83,11 @@
 #   Example: 'nfsvers=3,noacl'
 #   Defaults to 'defaults'
 #
+# [*pipeline*]
+#   (optional) Partial name of a pipeline in your paste configuration file with the
+#   service name removed.
+#   Defaults to 'keystone'.
+#
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
   $glance_db_user                    = 'glance',
@@ -108,6 +113,7 @@ class cloud::image::api(
   $filesystem_store_datadir          = undef,
   $nfs_device                        = false,
   $nfs_options                       = 'defaults',
+  $pipeline                          = 'keystone',
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -150,6 +156,7 @@ class cloud::image::api(
     bind_host                => $api_eth,
     bind_port                => $ks_glance_api_internal_port,
     use_syslog               => $use_syslog,
+    pipeline                 => 'keystone',
   }
 
   # TODO(EmilienM) Disabled for now
