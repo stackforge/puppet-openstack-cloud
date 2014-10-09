@@ -72,6 +72,10 @@
 #   Can be 'rbd', 'file' or 'nfs'.
 #   Defaults to 'rbd' to maintain backward compatibility
 #
+# [*filesystem_store_datadir*]
+#   (optional) Full path of data directory to store the images.
+#   Defaults to '/var/lib/glance/images/'
+#
 # [*nfs_device*]
 #   (optionnal) NFS device to mount
 #   Example: 'nfs.example.com:/vol1'
@@ -105,7 +109,7 @@ class cloud::image::api(
   $log_facility                      = 'LOG_LOCAL0',
   $use_syslog                        = true,
   $backend                           = 'rbd',
-  $filesystem_store_datadir          = undef,
+  $filesystem_store_datadir          = '/var/lib/glance/images/',
   $nfs_device                        = false,
   $nfs_options                       = 'defaults',
 ) {
