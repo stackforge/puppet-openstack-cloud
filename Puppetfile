@@ -32,7 +32,7 @@ mod 'glance',
   :ref => '78042d76c0854e16a55aaf05c03696d4d422e3c5'
 mod 'heat',
   :git => 'git://github.com/enovance/puppet-heat.git',
-  :ref => 'a95a9435dcb5f4b24b2e53213fe05b5466b46d6a'
+  :ref => '0e6d7eacecd70819384ac61ea3b9df38b90411b0'
 mod 'horizon',
   :git => 'git://github.com/enovance/puppet-horizon.git',
   :ref => '16b482ea21a70d8dd06ab4c98ac5a218399b0213'
