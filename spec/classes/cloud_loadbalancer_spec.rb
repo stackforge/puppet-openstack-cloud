@@ -477,6 +477,20 @@ describe 'cloud::loadbalancer' do
         :bind_options => ['ssl', 'crt']
       )}
     end
+    context 'configure RabbitMQ binding' do
+      before do
+        params.merge!( :rabbitmq => true )
+      end
+      it { is_expected.to contain_haproxy__listen('rabbitmq_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '5672',
+        :options   => {
+          'mode'           => 'tcp',
+          'balance'        => 'roundrobin',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+        }
+      )}
+    end
   end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do

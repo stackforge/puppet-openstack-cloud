@@ -36,7 +36,8 @@ describe 'cloud::messaging' do
           :config_cluster           => true,
           :cluster_nodes            => params[:rabbit_names],
           :wipe_db_on_cookie_change => true,
-          :cluster_node_type        => 'disc'
+          :cluster_node_type        => 'disc',
+          :port                     => '5672',
         )
     end
 

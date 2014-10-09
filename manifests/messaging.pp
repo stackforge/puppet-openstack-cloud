@@ -28,14 +28,30 @@
 #   Defaults to 'rabbitpassword'
 #
 # [*cluster_node_type*]
-#   (optionnal) Store the queues on the disc or in the RAM.
+#   (optional) Store the queues on the disc or in the RAM.
 #   Could be set to 'disk' or 'ram'.
 #   Defaults to 'disc'
-
+#
+# [*haproxy_binding*]
+#   (optional) Enable or not HAproxy binding for load-balancing.
+#   Defaults to false
+#
+# [*rabbitmq_ip*]
+#   (optional) IP address of RabbitMQ interface.
+#   Required when using HAproxy binding.
+#   Defaults to $::ipaddress
+#
+# [*rabbitmq_port*]
+#   (optional) Port of RabbitMQ service.
+#   Defaults to '5672'
+#
 class cloud::messaging(
   $cluster_node_type = 'disc',
   $rabbit_names      = $::hostname,
-  $rabbit_password   = 'rabbitpassword'
+  $rabbit_password   = 'rabbitpassword',
+  $haproxy_binding   = false,
+  $rabbitmq_ip       = $::ipaddress,
+  $rabbitmq_port     = '5672',
 ){
 
   # we ensure having an array
@@ -63,7 +79,8 @@ class cloud::messaging(
     config_cluster           => true,
     cluster_nodes            => $array_rabbit_names,
     wipe_db_on_cookie_change => true,
-    cluster_node_type        => $cluster_node_type
+    cluster_node_type        => $cluster_node_type,
+    port                     => $rabbitmq_port,
   }
 
   rabbitmq_vhost { '/':
@@ -89,6 +106,16 @@ class cloud::messaging(
     write_permission     => '.*',
     read_permission      => '.*',
     provider             => 'rabbitmqctl',
+  }
+
+  if $haproxy_binding {
+    @@haproxy::balancermember{"${::fqdn}-rabbitmq":
+      listening_service => 'rabbitmq_cluster',
+      server_names      => $::hostname,
+      ipaddresses       => $rabbitmq_ip,
+      ports             => $rabbitmq_port,
+      options           => 'check inter 5s rise 2 fall 3'
+    }
   }
 
 }
