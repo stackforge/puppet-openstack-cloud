@@ -121,7 +121,7 @@ describe 'cloud::image::api' do
         is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
         is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
         is_expected.to contain_mount('/srv/images/').with({
-          'ensure'  => 'present',
+          'ensure'  => 'mounted',
           'fstype'  => 'nfs',
           'device'  => 'nfs.example.com:/vol1',
           'options' => 'noacl,fsid=123',
