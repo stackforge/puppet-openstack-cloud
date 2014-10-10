@@ -261,6 +261,22 @@ class cloud::loadbalancer(
   $keepalived_ipvs                  = false,
 ){
 
+  case $::osfamily {
+    'RedHat': {
+      # Specific to Red Hat
+      $start_haproxy_service = '"/usr/bin/systemctl start haproxy"'
+      $stop_haproxy_service  = '"/usr/bin/systemctl stop haproxy"'
+    } # RedHat
+    'Debian': {
+      # Specific to Debian / Ubuntu
+      $start_haproxy_service = '"/etc/init.d/haproxy start"'
+      $stop_haproxy_service  = '"/etc/init.d/haproxy stop"'
+    } # Debian
+    default: {
+      err "${::osfamily} not supported yet"
+    }
+  }
+
   # Manage deprecation when using old parameters
   if $keepalived_interface {
     warning('keepalived_interface parameter is deprecated. Use internal/external parameters instead.')
@@ -310,8 +326,8 @@ class cloud::loadbalancer(
     priority      => $keepalived_priority,
     auth_type     => $keepalived_auth_type,
     auth_pass     => $keepalived_auth_pass,
-    notify_master => '"/etc/init.d/haproxy start"',
-    notify_backup => '"/etc/init.d/haproxy stop"',
+    notify_master => $start_haproxy_service,
+    notify_backup => $stop_haproxy_service,
   }
 
   if !empty($keepalived_internal_ipvs) {
@@ -328,8 +344,8 @@ class cloud::loadbalancer(
       priority      => $keepalived_priority,
       auth_type     => $keepalived_auth_type,
       auth_pass     => $keepalived_auth_pass,
-      notify_master => '"/etc/init.d/haproxy start"',
-      notify_backup => '"/etc/init.d/haproxy stop"',
+      notify_master => $start_haproxy_service,
+      notify_backup => $stop_haproxy_service,
     }
   }
 
