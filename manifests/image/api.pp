@@ -204,7 +204,7 @@ class cloud::image::api(
       }
       $nfs_mount = {
         "${filesystem_store_datadir}" => {
-          'ensure'  => 'present',
+          'ensure'  => 'mounted',
           'fstype'  => 'nfs',
           'device'  => $nfs_device,
           'options' => $nfs_options
