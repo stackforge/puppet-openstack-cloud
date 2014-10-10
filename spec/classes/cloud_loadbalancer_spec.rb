@@ -115,8 +115,8 @@ describe 'cloud::loadbalancer' do
           'priority'             => params[:keepalived_priority],
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
-          'notify_master'        => '"/etc/init.d/haproxy start"',
-          'notify_backup'        => '"/etc/init.d/haproxy stop"',
+          'notify_master'        => "#{platform_params[:start_haproxy_service]}",
+          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end
     end
@@ -139,8 +139,9 @@ describe 'cloud::loadbalancer' do
           'priority'             => params[:keepalived_priority],
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
-          'notify_master'        => '"/etc/init.d/haproxy start"',
-          'notify_backup'        => '"/etc/init.d/haproxy stop"',
+          'notify_master'        => "#{platform_params[:start_haproxy_service]}",
+          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
+
         })
       end
     end
@@ -166,8 +167,8 @@ describe 'cloud::loadbalancer' do
           'priority'             => params[:keepalived_priority],
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
-          'notify_master'        => '"/etc/init.d/haproxy start"',
-          'notify_backup'        => '"/etc/init.d/haproxy stop"',
+          'notify_master'        => "#{platform_params[:start_haproxy_service]}",
+          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end # configure vrrp_instance with BACKUP state
       it 'configure haproxy server without service managed' do
@@ -187,8 +188,8 @@ describe 'cloud::loadbalancer' do
           'priority'             => params[:keepalived_priority],
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
-          'notify_master'        => '"/etc/init.d/haproxy start"',
-          'notify_backup'        => '"/etc/init.d/haproxy stop"',
+          'notify_master'        => "#{platform_params[:start_haproxy_service]}",
+          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end
       it 'configure haproxy server with service managed' do
@@ -501,7 +502,10 @@ describe 'cloud::loadbalancer' do
     end
 
     let :platform_params do
-      { :auth_url       => 'horizon' }
+      { :auth_url              => 'horizon',
+        :start_haproxy_service => '"/etc/init.d/haproxy start"',
+        :stop_haproxy_service  => '"/etc/init.d/haproxy stop"',
+      }
     end
 
     it_configures 'openstack loadbalancer'
@@ -515,8 +519,12 @@ describe 'cloud::loadbalancer' do
     end
 
     let :platform_params do
-      { :auth_url       => 'dashboard' }
+      { :auth_url              => 'dashboard',
+        :start_haproxy_service => '"/usr/bin/systemctl start haproxy"',
+        :stop_haproxy_service  => '"/usr/bin/systemctl stop haproxy"',
+      }
     end
+
 
     it_configures 'openstack loadbalancer'
   end
