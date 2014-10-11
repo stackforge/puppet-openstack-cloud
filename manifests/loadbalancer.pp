@@ -183,6 +183,7 @@
 #  (optional) Array or string for internal VIP
 #  Should be part of keepalived_internal_ips
 #  Defaults to false (backward compatibility)
+#
 class cloud::loadbalancer(
   $swift_api                        = true,
   $ceilometer_api                   = true,
@@ -261,21 +262,7 @@ class cloud::loadbalancer(
   $keepalived_ipvs                  = false,
 ){
 
-  case $::osfamily {
-    'RedHat': {
-      # Specific to Red Hat
-      $start_haproxy_service = '"/usr/bin/systemctl start haproxy"'
-      $stop_haproxy_service  = '"/usr/bin/systemctl stop haproxy"'
-    } # RedHat
-    'Debian': {
-      # Specific to Debian / Ubuntu
-      $start_haproxy_service = '"/etc/init.d/haproxy start"'
-      $stop_haproxy_service  = '"/etc/init.d/haproxy stop"'
-    } # Debian
-    default: {
-      err "${::osfamily} not supported yet"
-    }
-  }
+  include cloud::params
 
   # Manage deprecation when using old parameters
   if $keepalived_interface {
@@ -326,8 +313,8 @@ class cloud::loadbalancer(
     priority      => $keepalived_priority,
     auth_type     => $keepalived_auth_type,
     auth_pass     => $keepalived_auth_pass,
-    notify_master => $start_haproxy_service,
-    notify_backup => $stop_haproxy_service,
+    notify_master => $::cloud::params::start_haproxy_service,
+    notify_backup => $::cloud::params::stop_haproxy_service,
   }
 
   if !empty($keepalived_internal_ipvs) {
@@ -344,8 +331,8 @@ class cloud::loadbalancer(
       priority      => $keepalived_priority,
       auth_type     => $keepalived_auth_type,
       auth_pass     => $keepalived_auth_pass,
-      notify_master => $start_haproxy_service,
-      notify_backup => $stop_haproxy_service,
+      notify_master => $::cloud::params::start_haproxy_service,
+      notify_backup => $::cloud::params::stop_haproxy_service,
     }
   }
 
@@ -496,12 +483,6 @@ class cloud::loadbalancer(
     options      => $heat_cloudwatch_options
   }
 
-  if $::osfamily == 'RedHat' {
-    $horizon_auth_url = 'dashboard'
-  } else {
-    $horizon_auth_url = 'horizon'
-  }
-
   $horizon_ssl_options = {
     'mode'    => 'tcp',
     'cookie'  => 'sessionid prefix',
@@ -524,7 +505,7 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'horizon_cluster':
     ip           => $horizon,
     port         => $horizon_port,
-    httpchk      => "httpchk GET  /${horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\"",
+    httpchk      => "httpchk GET  /${::cloud::params::horizon_auth_url}  \"HTTP/1.0\\r\\nUser-Agent: HAproxy-${::hostname}\"",
     options      => $horizon_options,
     bind_options => $horizon_bind_options,
   }

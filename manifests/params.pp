@@ -36,4 +36,21 @@ class cloud::params {
     }
   }
 
+  case $::osfamily {
+    'RedHat': {
+      # Specific to Red Hat
+      $start_haproxy_service = '"/usr/bin/systemctl start haproxy"'
+      $stop_haproxy_service  = '"/usr/bin/systemctl stop haproxy"'
+      $horizon_auth_url      = 'dashboard'
+    } # RedHat
+    'Debian': {
+      # Specific to Debian / Ubuntu
+      $start_haproxy_service = '"/etc/init.d/haproxy start"'
+      $stop_haproxy_service  = '"/etc/init.d/haproxy stop"'
+      $horizon_auth_url      = 'horizon'
+    } # Debian
+    default: {
+      fail("Unsupported osfamily (${::osfamily})")
+    }
+  }
 }
