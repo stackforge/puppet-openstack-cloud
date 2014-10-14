@@ -31,8 +31,7 @@ describe 'cloud::storage::rbd::osd' do
 
     let :params do
       { :public_address  => '10.0.0.1',
-        :cluster_address => '192.168.0.1',
-        :devices         => ['sdb','sdc','sdd'] }
+        :cluster_address => '192.168.0.1' }
     end
 
     it 'configure ceph common' do
@@ -50,7 +49,16 @@ describe 'cloud::storage::rbd::osd' do
         :public_address  => '10.0.0.1',
         :cluster_address => '192.168.0.1'
       )
-      is_expected.to contain_ceph__osd__device('/dev/sdb','/dev/sdc','/dev/sdd')
+    end
+
+    context 'without specified journal' do
+      before :each do
+        params.merge!( :devices => ['sdb','sdc','sdd'] )
+      end
+
+      it 'configure ceph osd with a mixed full-qualified and short device name' do
+        is_expected.to contain_ceph__osd__device('/dev/sdb','/dev/sdc','sdd')
+      end
     end
 
   end
@@ -61,7 +69,6 @@ describe 'cloud::storage::rbd::osd' do
         :concat_basedir => '/var/lib/puppet/concat',
         :uniqueid       => '123' }
     end
-
     it_configures 'ceph osd'
   end
 

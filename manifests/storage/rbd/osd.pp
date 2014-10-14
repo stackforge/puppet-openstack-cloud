@@ -16,7 +16,7 @@
 class cloud::storage::rbd::osd (
   $public_address  = '127.0.0.1',
   $cluster_address = '127.0.0.1',
-  $devices         = ['sdb','sdc'],
+  $devices         = ['sdb','/dev/sdc'],
 ) {
 
   include 'cloud::storage::rbd'
@@ -26,7 +26,16 @@ class cloud::storage::rbd::osd (
     cluster_address => $cluster_address,
   }
 
-  $osd_ceph = prefix($devices,'/dev/')
-  ceph::osd::device { $osd_ceph: }
-
+  if is_array($devices) {
+    if '/dev/' in $devices {
+      ceph::osd::device { $devices: }
+    }
+    else {
+      $osd_ceph = prefix($devices,'/dev/')
+      ceph::osd::device { $osd_ceph: }
+    }
+  }
+  elsif is_hash($devices) {
+    create_resources('ceph::osd::device', $devices)
+  }
 }
