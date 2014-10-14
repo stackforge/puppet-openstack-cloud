@@ -540,6 +540,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it_configures 'openstack compute hypervisor'
+    it { should contain_file_line('/etc/default/libvirtd libvirtd opts').with(:line => 'libvirtd_opts="-d -l"') }
   end
 
   context 'on RedHat platforms' do
@@ -553,6 +554,7 @@ describe 'cloud::compute::hypervisor' do
     end
 
     it_configures 'openstack compute hypervisor'
+    it { should contain_file_line('/etc/sysconfig/libvirtd libvirtd args').with(:line => 'LIBVIRTD_ARGS="--listen"') }
   end
 
 end
