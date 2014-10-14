@@ -139,7 +139,7 @@ mod 'mysql',
 # https://github.com/ghoneycutt/puppet-module-nfs/pull/43 got merged.
 mod 'nfs',
   :git => 'git://github.com/enovance/puppet-module-nfs.git',
-  :ref => '65086bcc5fc5cd9ff617a425505326619a0887fc'
+  :ref => '41ed7bda5ab385df6c27080d65d71ce0ba5decd2'
 mod 'ntp',
   :git => 'git://github.com/enovance/puppetlabs-ntp.git',
   :ref => 'eb02ba2937ce86fb609ae41499767244b78ec58d'
