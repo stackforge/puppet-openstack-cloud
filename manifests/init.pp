@@ -22,7 +22,8 @@ class cloud(
   $rhn_registration = undef,
   $root_password    = 'root',
   $dns_ips          = ['8.8.8.8', '8.8.4.4'],
-  $site_domain      = 'mydomain'
+  $site_domain      = 'mydomain',
+  $motd_title       = 'eNovance IT Operations',
 ) {
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
@@ -37,14 +38,13 @@ class cloud(
       mode    => '0644',
       content => "
 ############################################################################
-#                           eNovance IT Operations                         #
+# ${motd_title} #
 ############################################################################
 #                                                                          #
 #                         *** RESTRICTED ACCESS ***                        #
 #  Only the authorized users may access this system.                       #
-#  Any attempted unauthorized access or any action affecting the computer  #
-#  system of eNovance is punishable under articles 323-1 to 323-7 of       #
-#  French criminal law.                                                    #
+#  Any attempted unauthorized access or any action affecting this computer #
+#  system is punishable by the law of local country.                       #
 #                                                                          #
 ############################################################################
 This node is under the control of Puppet ${::puppetversion}.
