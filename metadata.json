@@ -14,7 +14,7 @@
     {"operatingsystem": "RedHat"}
   ],
   "requirements": [
-    {"name": "pe","version_requirement": "3.2.x"},
+    {"name": "pe","version_requirement": "3.6.x"},
     {"name": "puppet","version_requirement": "3.x"}
   ],
   "description": "Puppet module that pulls together all the individual components of Openstack, resulting is a complete and functional stack",
