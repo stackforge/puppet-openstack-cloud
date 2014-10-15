@@ -42,12 +42,21 @@ class cloud::params {
       $start_haproxy_service = '"/usr/bin/systemctl start haproxy"'
       $stop_haproxy_service  = '"/usr/bin/systemctl stop haproxy"'
       $horizon_auth_url      = 'dashboard'
+      $libvirt_service_name  = 'libvirtd'
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
       $start_haproxy_service = '"/etc/init.d/haproxy start"'
       $stop_haproxy_service  = '"/etc/init.d/haproxy stop"'
       $horizon_auth_url      = 'horizon'
+      case $::operatingsystem {
+        'Ubuntu': {
+          $libvirt_service_name = 'libvirt-bin'
+        }
+        default: {
+          $libvirt_service_name = 'libvirtd'
+        }
+      }
     } # Debian
     default: {
       fail("Unsupported osfamily (${::osfamily})")

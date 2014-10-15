@@ -86,9 +86,10 @@ class cloud::compute::hypervisor(
   $ks_spice_public_host       = false,
   # DEPRECATED
   $has_ceph                   = false
-) {
+) inherits cloud::params {
 
   include 'cloud::compute'
+  include 'cloud::params'
   include 'cloud::telemetry'
   include 'cloud::network'
   include 'cloud::network::vswitch'
@@ -325,7 +326,8 @@ Host *
     # Needed to support migration but we still use Spice:
     vncserver_listen        => '0.0.0.0',
     migration_support       => true,
-    libvirt_disk_cachemodes => $libvirt_disk_cachemodes_real
+    libvirt_disk_cachemodes => $libvirt_disk_cachemodes_real,
+    libvirt_service_name    => $::cloud::params::libvirt_service_name,
   }
 
   # Extra config for nova-compute
