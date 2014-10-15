@@ -23,10 +23,9 @@ mod 'openstacklib',
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
   :ref => '957c2120d0ee0b9db08bfddcce996686ba61d97d'
-# Custom branch until https://review.openstack.org/#/c/124561/ merged
 mod 'cinder',
   :git => 'git://github.com/enovance/puppet-cinder.git',
-  :ref => 'ef0aaab38452f46eb2fc1ee1f2c4d85ccb149d52'
+  :ref => 'c9271e02d0d5a317ab390cfce9928601208f6073'
 mod 'glance',
   :git => 'git://github.com/enovance/puppet-glance.git',
   :ref => '78042d76c0854e16a55aaf05c03696d4d422e3c5'
