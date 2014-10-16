@@ -62,6 +62,7 @@ describe 'cloud::loadbalancer' do
         :keepalived_vrrp_interface         => false,
         :keepalived_public_interface       => 'eth0',
         :keepalived_public_ipvs            => ['10.0.0.1', '10.0.0.2'],
+        :keepalived_internal_ipvs          => false,
         :keepalived_auth_type              => 'PASS',
         :keepalived_auth_pass              => 'secret',
         :horizon_port                      => '80',
@@ -100,6 +101,19 @@ describe 'cloud::loadbalancer' do
       is_expected.to contain_exec('exec_sysctl_net.ipv4.ip_nonlocal_bind').with_command(
         'sysctl -w net.ipv4.ip_nonlocal_bind=1'
       )
+    end
+
+    it 'do not configure an internal VRRP instance by default' do
+      is_expected.not_to contain_keepalived__instance('2')
+    end
+
+    context 'configure an internal VIP with the same VIP as public network' do
+      before do
+        params.merge!(:keepalived_internal_ipvs => ['10.0.0.1', '10.0.0.2'])
+      end
+      it 'shoult not configure an internal VRRP instance' do
+        is_expected.not_to contain_keepalived__instance('2')
+      end
     end
 
     context 'configure an internal VIP' do

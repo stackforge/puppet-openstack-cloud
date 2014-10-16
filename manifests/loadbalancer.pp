@@ -211,7 +211,7 @@ class cloud::loadbalancer(
   $keepalived_public_interface      = 'eth0',
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
-  $keepalived_internal_ipvs         = [],
+  $keepalived_internal_ipvs         = false,
   $keepalived_auth_type             = undef,
   $keepalived_auth_pass             = undef,
   $ceilometer_bind_options          = [],
@@ -317,7 +317,8 @@ class cloud::loadbalancer(
     notify_backup => $::cloud::params::stop_haproxy_service,
   }
 
-  if !empty($keepalived_internal_ipvs) {
+
+  if $keepalived_internal_ipvs and !empty(difference($keepalived_internal_ipvs, $keepalived_public_ipvs)) {
     if ! $keepalived_vrrp_interface {
       $keepalived_vrrp_interface_internal = $keepalived_internal_interface
     } else {
