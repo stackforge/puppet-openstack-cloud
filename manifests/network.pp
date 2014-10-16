@@ -115,7 +115,7 @@ class cloud::network(
   $ks_keystone_admin_host     = '127.0.0.1',
   $ks_keystone_admin_proto    = 'http',
   $ks_keystone_admin_port     = 35357,
-  $ks_keystone_admin_password = 'secrete',
+  $ks_neutron_password        = 'neutronpassword',
   # DEPRECATED PARAMETERS
   $tunnel_eth                 = false,
   $tunnel_types               = false,
@@ -164,7 +164,7 @@ class cloud::network(
         database_password => $neutron_db_password,
         database_host     => $neutron_db_host,
         keystone_auth_url => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0/",
-        keystone_password => $ks_keystone_admin_password,
+        keystone_password => $ks_neutron_password,
         vswitch_plugin    => 'neutron.plugins.cisco.n1kv.n1kv_neutron_plugin.N1kvNeutronPluginV2',
       }
       neutron_plugin_cisco {
