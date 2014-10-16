@@ -212,8 +212,8 @@ class cloud::loadbalancer(
   $keepalived_public_ipvs           = ['127.0.0.1'],
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = false,
-  $keepalived_auth_type             = undef,
-  $keepalived_auth_pass             = undef,
+  $keepalived_auth_type             = false,
+  $keepalived_auth_pass             = false,
   $ceilometer_bind_options          = [],
   $cinder_bind_options              = [],
   $ec2_bind_options                 = [],
@@ -318,22 +318,27 @@ class cloud::loadbalancer(
   }
 
 
-  if $keepalived_internal_ipvs and !empty(difference($keepalived_internal_ipvs, $keepalived_public_ipvs)) {
-    if ! $keepalived_vrrp_interface {
-      $keepalived_vrrp_interface_internal = $keepalived_internal_interface
-    } else {
-      $keepalived_vrrp_interface_internal = $keepalived_vrrp_interface
-    }
-    keepalived::instance { '2':
-      interface     => $keepalived_vrrp_interface_internal,
-      virtual_ips   => unique(split(join(flatten([$keepalived_internal_ipvs, ['']]), " dev ${keepalived_internal_interface},"), ',')),
-      state         => $keepalived_state,
-      track_script  => ['haproxy'],
-      priority      => $keepalived_priority,
-      auth_type     => $keepalived_auth_type,
-      auth_pass     => $keepalived_auth_pass,
-      notify_master => $::cloud::params::start_haproxy_service,
-      notify_backup => $::cloud::params::stop_haproxy_service,
+  # First we check if internal binding is enabled
+  if $keepalived_internal_ipvs {
+    # Then we validate this is not the same as public binding
+    if !empty(difference(any2array($keepalived_internal_ipvs), any2array($keepalived_public_ipvs))) {
+      if ! $keepalived_vrrp_interface {
+        $keepalived_vrrp_interface_internal = $keepalived_internal_interface
+      } else {
+        # Backward compatibility
+        $keepalived_vrrp_interface_internal = $keepalived_vrrp_interface
+      }
+      keepalived::instance { '2':
+        interface     => $keepalived_vrrp_interface_internal,
+        virtual_ips   => unique(split(join(flatten([$keepalived_internal_ipvs, ['']]), " dev ${keepalived_internal_interface},"), ',')),
+        state         => $keepalived_state,
+        track_script  => ['haproxy'],
+        priority      => $keepalived_priority,
+        auth_type     => $keepalived_auth_type,
+        auth_pass     => $keepalived_auth_pass,
+        notify_master => $::cloud::params::start_haproxy_service,
+        notify_backup => $::cloud::params::stop_haproxy_service,
+      }
     }
   }
 
