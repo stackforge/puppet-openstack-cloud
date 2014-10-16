@@ -28,20 +28,26 @@ task(:default).clear
 task :default => :test
 
 desc 'Run syntax, lint and spec tests'
-task :test => [:syntax,:lint,:validate_puppetfile,:spec]
+task :test => [:syntax,:lint,:validate_puppetfile,:validate_metadata_json,:spec]
 
 desc 'Run syntax, lint and spec tests (without fixture purge = train/airplane)'
-task :test_keep => [:syntax,:lint,:validate_puppetfile,:spec_prep,:spec_standalone]
+task :test_keep => [:syntax,:lint,:validate_puppetfile,:validate_metadata_json,:spec_prep,:spec_standalone]
 
 if ENV['COV']
   desc 'Run syntax, lint, spec tests and coverage'
-  task :cov => [:syntax,:lint,:validate_puppetfile,:spec_prep,:spec_standalone]
+  task :cov => [:syntax,:lint,:validate_puppetfile,:validate_metadata_json,:spec_prep,:spec_standalone]
 end
 
 desc "Validate the Puppetfile syntax"
 task :validate_puppetfile do
   $stderr.puts "---> syntax:puppetfile"
   sh "r10k puppetfile check"
+end
+
+desc "Validate the metadata.json syntax"
+task :validate_metadata_json do
+  $stderr.puts "---> syntax:metadata.json"
+  sh "metadata-json-lint metadata.json"
 end
 
 namespace :module do
