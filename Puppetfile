@@ -43,7 +43,7 @@ mod 'neutron',
   :ref => 'cefbdc897d70fd1c1fc44e372f05336674efd940'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => '93a0c27ac9f4a4eeec761250838aae2e321eb1b1'
+  :ref => '3ffc5a263113232230b69e621e1b6167f2148390'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => '3ea00440361ff2452561d2cce808d938e39cce56'

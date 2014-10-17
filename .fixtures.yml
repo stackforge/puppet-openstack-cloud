@@ -11,7 +11,7 @@ fixtures:
       ref: 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
-      ref: '93a0c27ac9f4a4eeec761250838aae2e321eb1b1'
+      ref: '3ffc5a263113232230b69e621e1b6167f2148390'
     'glance':
       repo: 'git://github.com/enovance/puppet-glance.git'
       ref: '78042d76c0854e16a55aaf05c03696d4d422e3c5'
