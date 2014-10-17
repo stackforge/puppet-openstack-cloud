@@ -171,6 +171,15 @@ describe 'cloud::loadbalancer' do
       end
     end
 
+    context 'configure keepalived with proper haproxy track script' do
+      it 'configure keepalived with a proper haproxy track script' do
+        is_expected.to contain_keepalived__vrrp_script('haproxy').with({
+          'name_is_process' => platform_params[:keepalived_name_is_process],
+          'script'          => platform_params[:keepalived_vrrp_script],
+        })
+      end
+    end
+
     context 'when keepalived and HAproxy are in backup' do
       it 'configure vrrp_instance with BACKUP state' do
         is_expected.to contain_keepalived__instance('1').with({
@@ -516,9 +525,11 @@ describe 'cloud::loadbalancer' do
     end
 
     let :platform_params do
-      { :auth_url              => 'horizon',
-        :start_haproxy_service => '"/etc/init.d/haproxy start"',
-        :stop_haproxy_service  => '"/etc/init.d/haproxy stop"',
+      { :auth_url                   => 'horizon',
+        :start_haproxy_service      => '"/etc/init.d/haproxy start"',
+        :stop_haproxy_service       => '"/etc/init.d/haproxy stop"',
+        :keepalived_name_is_process => 'true',
+        :keepalived_vrrp_script     => nil,
       }
     end
 
@@ -533,12 +544,13 @@ describe 'cloud::loadbalancer' do
     end
 
     let :platform_params do
-      { :auth_url              => 'dashboard',
-        :start_haproxy_service => '"/usr/bin/systemctl start haproxy"',
-        :stop_haproxy_service  => '"/usr/bin/systemctl stop haproxy"',
+      { :auth_url                   => 'dashboard',
+        :start_haproxy_service      => '"/usr/bin/systemctl start haproxy"',
+        :stop_haproxy_service       => '"/usr/bin/systemctl stop haproxy"',
+        :keepalived_name_is_process => 'false',
+        :keepalived_vrrp_script     => 'systemctl status haproxy.service',
       }
     end
-
 
     it_configures 'openstack loadbalancer'
   end

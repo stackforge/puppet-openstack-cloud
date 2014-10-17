@@ -170,6 +170,7 @@ class cloud::database::sql (
       $mysql_client_package_name = 'mariadb'
       $wsrep_provider = '/usr/lib64/galera/libgalera_smm.so'
       $mysql_server_config_file = '/etc/my.cnf'
+      $mysql_init_file = '/usr/lib/systemd/system/mysql-bootstrap.service'
 
       if $::hostname == $galera_master_name {
         $mysql_service_name = 'mysql-bootstrap'
@@ -204,6 +205,7 @@ class cloud::database::sql (
       $mysql_client_package_name = 'mariadb-client'
       $wsrep_provider = '/usr/lib/galera/libgalera_smm.so'
       $mysql_server_config_file = '/etc/mysql/my.cnf'
+      $mysql_init_file = '/etc/init.d/mysql-bootstrap'
 
       if $::hostname == $galera_master_name {
         $mysql_service_name = 'mysql-bootstrap'
@@ -239,7 +241,7 @@ class cloud::database::sql (
   # To check that the mysqld support the options you can :
   # strings `which mysqld` | grep wsrep-new-cluster
   # TODO: to be remove as soon as the API 25 is packaged, ie galera 3 ...
-  file { '/etc/init.d/mysql-bootstrap':
+  file { $mysql_init_file :
     content => template("cloud/database/etc_initd_mysql_${::osfamily}"),
     owner   => 'root',
     mode    => '0755',

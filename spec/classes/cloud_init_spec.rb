@@ -85,6 +85,27 @@ describe 'cloud' do
     #it_configures 'private cloud node'
 
     xit { is_expected.to contain_rhn_register('rhn-redhat1') }
+
+    context 'with SELinux set to enforcing' do
+      let :params do
+        { :selinux_mode      => 'enforcing',
+          :selinux_modules   => ['module1', 'module2'],
+          :selinux_booleans  => ['foo', 'bar'],
+          :selinux_directory => '/path/to/modules'}
+      end
+
+      it 'set SELINUX=enforcing' do
+        is_expected.to contain_class('cloud::selinux').with(
+          :mode      => params[:selinux_mode],
+          :booleans  => params[:selinux_booleans],
+          :modules   => params[:selinux_modules],
+          :directory => params[:selinux_directory],
+          :stage     => 'setup',
+        )
+      end
+
+    end
+
   end
 
   context 'on other platforms' do
