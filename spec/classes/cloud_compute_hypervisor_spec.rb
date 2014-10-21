@@ -340,10 +340,9 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with RBD backend for instances and volumes on Debian plaforms' do
+    context 'with RBD backend for instances and volumes' do
       before :each do
-        facts.merge!( :osfamily => 'Debian',
-                      :vtx      => true )
+        facts.merge!( :vtx => true )
         params.merge!(
           :vm_rbd               => true,
           :volume_rbd           => true,
@@ -375,10 +374,9 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with RBD support only for volumes on Debian plaforms' do
+    context 'with RBD support only for volumes' do
       before :each do
-        facts.merge!( :osfamily => 'Debian',
-                      :vtx      => true )
+        facts.merge!( :vtx => true )
         params.merge!(
           :vm_rbd               => false,
           :volume_rbd           => true,
@@ -408,10 +406,9 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with RBD backend on Debian plaforms using deprecated parameter' do
+    context 'with RBD backend plaforms using deprecated parameter' do
       before :each do
-        facts.merge!( :osfamily => 'Debian',
-                      :vtx      => true )
+        facts.merge!( :vtx => true )
         params.merge!(
           :has_ceph             => true,
           :cinder_rbd_user      => 'cinder',
@@ -442,16 +439,17 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'when trying to enable RBD backend on RedHat plaforms' do
+    context 'when trying to enable RBD backend on RedHat OSP < 7 plaforms' do
       before :each do
-        facts.merge!( :osfamily => 'RedHat' )
+        facts.merge!( :osfamily                  => 'RedHat',
+                      :operatingsystemmajrelease => '6' )
         params.merge!(
           :vm_rbd               => true,
           :cinder_rbd_user      => 'cinder',
           :nova_rbd_pool        => 'nova',
           :nova_rbd_secret_uuid => 'secrete' )
       end
-      it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
+      it_raises 'a Puppet::Error', /RBD image backend in Nova is not supported in RHEL 6./
     end
 
     context 'when running KVM libvirt driver without VTX enabled' do
@@ -463,14 +461,15 @@ describe 'cloud::compute::hypervisor' do
 
     context 'when trying to enable RBD backend with deprecated parameter on RedHat plaforms' do
       before :each do
-        facts.merge!( :osfamily => 'RedHat' )
+        facts.merge!( :osfamily                  => 'RedHat',
+                      :operatingsystemmajrelease => '6' )
         params.merge!(
           :has_ceph             => true,
           :cinder_rbd_user      => 'cinder',
           :nova_rbd_pool        => 'nova',
           :nova_rbd_secret_uuid => 'secrete' )
       end
-      it_raises 'a Puppet::Error', /Red Hat does not support RBD backend for VMs./
+      it_raises 'a Puppet::Error', /RBD image backend in Nova is not supported in RHEL 6./
     end
 
     context 'when configuring spice with backward compatibility' do
@@ -545,11 +544,13 @@ describe 'cloud::compute::hypervisor' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily          => 'RedHat',
-        :vtx               => true,
-        :concat_basedir    => '/var/lib/puppet/concat',
+      { :osfamily                  => 'RedHat',
+        :vtx                       => true,
+        :concat_basedir            => '/var/lib/puppet/concat',
+        # required for rbd support check
+        :operatingsystemmajrelease => '7',
         # required for nfs module
-        :lsbmajdistrelease => '7'
+        :lsbmajdistrelease         => '7'
       }
     end
 
