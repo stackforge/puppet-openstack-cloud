@@ -217,9 +217,9 @@ Host *
       mode   => '0644',
       notify => Service['libvirtd']
     }
-    # Nova support for RBD backend is not supported in Red Hat packages
-    if $has_ceph or $vm_rbd {
-      fail('Red Hat does not support RBD backend for VMs.')
+    # Nova support for RBD backend is not supported before RHEL 7 (OSP5).
+    if ($has_ceph or $vm_rbd) and ($::operatingsystemmajrelease < 7) {
+      fail("RBD image backend in Nova is not supported in RHEL ${::operatingsystemmajrelease}.")
     }
   }
 
