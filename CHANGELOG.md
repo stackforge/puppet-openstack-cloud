@@ -1,3 +1,34 @@
+##2014-10-24 - Features release 2.2.0
+###Summary
+* Sensu as first implementation of monitoring system
+* Glance now supports NFS image storage backend
+* Cinder now supports EMC VNX & iSCSI volume backends
+* Nova now supports NFS instance storage backend
+* Neutron now supports Cisco plugins with N1KV hardware (experimental)
+* RabbitMQ can now be load-balanced by HAproxy
+* Keystone roles for Heat are now created automatically
+* Support for keepalived authentification
+* MongoDB replicaset is now an option, so MongoDB can be standalone
+* MySQL Galera has been tweaked to have better performances at scale
+* Nova configuration has been tweaked to use read-only database feature and have better performances at scale
+* Trove has been disabled by default since it's still in experimental status
+* HAproxy: Allow user to bind multiple public/private IPs
+* keepalived: allow vrrp traffic on a dedicated interface
+* When running KVM, we check if VTX is really enabled
+* HAproxy checks have been improve for OpenStack services
+* Neutron: allow to specify tunnel type (i.e. VXLAN)
+* Horizon: ALLOWED_HOST can now be controlled by the module
+* Horizon: Allow user to speficy broader apache vhost settings
+* Nova/RBD: support for RHEL 7
+
+####Bugfixes
+* Fix correct Puppet Ceph dependencies which could lead to bootstrap issues
+* Fix issues with instance live migration support (nova configuration)
+* Fix HAproxy checks for Spice (TCP instead of HTTP)
+
+####Known Bugs
+* No known bugs
+
 ##2014-07-15 - Features release 2.1.0
 ###Summary
 * Advanced logging support with kibana3, elasticsearch and fluentd
