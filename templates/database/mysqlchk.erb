@@ -14,6 +14,7 @@ service mysqlchk
         user            = nobody
         server          = /usr/bin/clustercheck
         log_on_failure  += USERID
+        log_on_success  =
         #FIXME(sbadia) Security: Restrict this parameter to HAProxy pool.
         only_from       = 0.0.0.0/0
         bind            = <%= @galera_clustercheck_ipaddress %>
