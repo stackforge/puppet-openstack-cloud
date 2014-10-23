@@ -93,6 +93,7 @@ class cloud::dashboard(
   $ssl_forward               = false,
   $os_endpoint_type          = undef,
   $allowed_hosts             = $::fqdn,
+  $vhost_extra_params        = {},
 ) {
 
   # We build the param needed for horizon class
@@ -104,10 +105,12 @@ class cloud::dashboard(
   } else {
     $setenvif = []
   }
-  $vhost_extra_params = {
+  $extra_params = {
     'add_listen' => true,
     'setenvif'   => $setenvif
   }
+  $vhost_extra_params_real = merge ($vhost_extra_params, $extra_params)
+
   ensure_resource('class', 'apache', {
     default_vhost => false
   })
@@ -128,7 +131,7 @@ class cloud::dashboard(
     horizon_cert            => $horizon_cert,
     horizon_key             => $horizon_key,
     horizon_ca              => $horizon_ca,
-    vhost_extra_params      => $vhost_extra_params,
+    vhost_extra_params      => $vhost_extra_params_real,
     openstack_endpoint_type => $os_endpoint_type,
     allowed_hosts           => $allowed_hosts,
   }
