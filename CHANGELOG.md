@@ -18,6 +18,7 @@
 * HAproxy checks have been improve for OpenStack services
 * Neutron: allow to specify tunnel type (i.e. VXLAN)
 * Horizon: ALLOWED_HOST can now be controlled by the module
+* Horizon: Allow user to speficy broader apache vhost settings
 * Nova/RBD: support for RHEL 7
 
 ####Bugfixes
