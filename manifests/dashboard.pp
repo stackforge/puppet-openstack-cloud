@@ -74,7 +74,7 @@
 #   (optional) Forward HTTPS proto in the headers
 #   Useful when activating SSL binding on HAproxy and not in Horizon.
 #   Defaults to false
-
+#
 class cloud::dashboard(
   $ks_keystone_internal_host = '127.0.0.1',
   $secret_key                = 'secrete',

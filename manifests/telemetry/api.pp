@@ -15,7 +15,6 @@
 #
 # Telemetry API nodes
 #
-
 class cloud::telemetry::api(
   $ks_keystone_internal_host      = '127.0.0.1',
   $ks_keystone_internal_proto     = 'http',

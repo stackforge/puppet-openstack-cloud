@@ -111,7 +111,6 @@
 #   (optional) File with the list of available NFS shares
 #   Defaults to ''
 #
-
 define cloud::volume::backend::netapp (
   $netapp_login,
   $netapp_password,

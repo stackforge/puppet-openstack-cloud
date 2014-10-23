@@ -35,7 +35,6 @@
 #   If set to false, the setup won't be HA and no replicaset will be created.
 #   Defaults to hostname
 #
-
 class cloud::database::nosql(
   $bind_ip         = '127.0.0.1',
   $nojournal       = false,

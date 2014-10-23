@@ -15,7 +15,6 @@
 #
 # Swift tweaking
 #
-
 class cloud::object::tweaking {
   file {'/etc/sysctl.d/swift-tuning.conf':
     content => "

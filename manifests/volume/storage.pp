@@ -47,8 +47,6 @@
 #   }
 #   Defaults to undef to maintain backward compatibility.
 #
-
-
 class cloud::volume::storage(
   $cinder_backends                         = undef,
   $ks_keystone_internal_proto              = 'http',

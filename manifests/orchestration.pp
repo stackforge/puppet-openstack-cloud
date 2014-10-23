@@ -91,7 +91,6 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to 'LOG_LOCAL0'
 #
-
 class cloud::orchestration(
   $ks_keystone_internal_host  = '127.0.0.1',
   $ks_keystone_internal_port  = '5000',

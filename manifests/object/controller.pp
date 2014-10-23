@@ -15,7 +15,6 @@
 #
 # Swift Proxy node
 #
-
 class cloud::object::controller(
   $ks_keystone_admin_host       = '127.0.0.1',
   $ks_keystone_admin_port       = 35357,

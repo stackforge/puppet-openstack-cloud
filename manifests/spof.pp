@@ -30,7 +30,6 @@
 #   (optionnal) IP address used to send multicast traffic
 #   Defaults to '239.1.1.2'
 #
-
 class cloud::spof(
   $cluster_ip        = '127.0.0.1',
   $cluster_members   = false,

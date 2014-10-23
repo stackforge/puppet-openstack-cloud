@@ -16,7 +16,6 @@
 # Orchestration engine node (should be run once)
 # Could be managed by spof node as Active / Passive.
 #
-
 class cloud::orchestration::engine(
   $enabled                        = true,
   $ks_heat_public_host            = '127.0.0.1',

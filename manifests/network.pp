@@ -91,7 +91,6 @@
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
 #
-
 class cloud::network(
   $verbose                    = true,
   $debug                      = true,

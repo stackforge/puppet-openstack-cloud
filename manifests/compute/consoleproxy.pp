@@ -15,7 +15,6 @@
 #
 # Compute Proxy Console node
 #
-
 class cloud::compute::consoleproxy(
   $api_eth    = '127.0.0.1',
   $spice_port = '6082'

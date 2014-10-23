@@ -15,7 +15,6 @@
 #
 # Telemetry Alarm Notifier nodes
 #
-
 class cloud::telemetry::alarmnotifier(
 ){
 

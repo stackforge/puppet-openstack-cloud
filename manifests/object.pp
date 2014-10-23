@@ -22,7 +22,6 @@
 # [*swift_hash_suffix*]
 #   (required) String of text to be used as a salt when hashing to determine mappings in the ring.
 #
-
 class cloud::object(
   $swift_hash_suffix = undef
 ) {

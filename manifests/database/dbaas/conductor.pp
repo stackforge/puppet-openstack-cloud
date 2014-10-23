@@ -17,7 +17,7 @@
 #
 # Class to install Conductor service of OpenStack Database as a Service (Trove)
 #
-
+#
 class cloud::database::dbaas::conductor(
   $ks_keystone_internal_host  = '127.0.0.1',
   $ks_keystone_internal_port  = '5000',

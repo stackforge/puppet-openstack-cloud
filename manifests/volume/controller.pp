@@ -15,7 +15,6 @@
 #
 # Volume controller
 #
-
 class cloud::volume::controller(
   $ks_cinder_internal_port     = 8776,
   $ks_cinder_password          = 'cinderpassword',

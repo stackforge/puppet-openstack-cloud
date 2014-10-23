@@ -16,7 +16,6 @@
 # Telemetry Central Agent node (should be run once)
 # Could be managed by spof node as Active / Passive.
 #
-
 class cloud::telemetry::centralagent(
   $enabled = true,
 ){

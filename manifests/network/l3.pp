@@ -15,7 +15,6 @@
 #
 # Network L3 node
 #
-
 class cloud::network::l3(
   $external_int     = 'eth1',
   $ext_provider_net = false,

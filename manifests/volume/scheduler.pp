@@ -15,7 +15,6 @@
 #
 # Volume Scheduler node
 #
-
 class cloud::volume::scheduler(
   # Maintain backward compatibility for multi-backend
   $volume_multi_backend = false

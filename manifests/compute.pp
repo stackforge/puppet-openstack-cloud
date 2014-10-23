@@ -72,7 +72,6 @@
 #   (optionnal) Memcached servers used by Keystone. Should be an array.
 #   Defaults to ['127.0.0.1:11211']
 #
-
 class cloud::compute(
   $nova_db_host             = '127.0.0.1',
   $nova_db_use_slave        = false,

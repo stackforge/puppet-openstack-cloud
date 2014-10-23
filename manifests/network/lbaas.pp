@@ -15,7 +15,6 @@
 #
 # Network LBaaS node
 #
-
 class cloud::network::lbaas(
   $debug              = true,
   $manage_haproxy_pkg = true

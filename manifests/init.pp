@@ -17,7 +17,6 @@
 #
 # Installs the private cloud system requirements
 #
-
 class cloud(
   $rhn_registration = undef,
   $root_password    = 'root',

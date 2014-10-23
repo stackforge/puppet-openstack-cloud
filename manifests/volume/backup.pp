@@ -15,7 +15,6 @@
 #
 # Volume Backup node
 #
-
 class cloud::volume::backup(
   $backup_ceph_pool = 'backup',
   $backup_ceph_user = 'cinder'
