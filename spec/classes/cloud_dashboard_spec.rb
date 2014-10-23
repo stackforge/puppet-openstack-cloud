@@ -60,6 +60,25 @@ describe 'cloud::dashboard' do
       is_expected.to contain_class('apache').with(:default_vhost => false)
     end
 
+    context 'with custom apache2 vhost parameters' do
+      before do
+        params.merge!(
+          :vhost_extra_params => {
+            'ssl_protocol' => 'all -SSLv3 -SSLv2'
+          })
+      end
+
+      it 'configure horizon with custom vhost configuration' do
+        is_expected.to contain_class('horizon').with(
+          :vhost_extra_params => {
+              'add_listen'   => true ,
+              'setenvif'     => ['X-Forwarded-Proto https HTTPS=1'],
+              'ssl_protocol' => 'all -SSLv3 -SSLv2'
+          },
+        )
+      end
+    end
+
     context 'with multiple allowed_hosts' do
       before do
         params.merge!(:allowed_hosts => ['horizon.openstack.org', 'vip.openstack.org'])
