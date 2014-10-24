@@ -75,6 +75,11 @@
 #   Useful when activating SSL binding on HAproxy and not in Horizon.
 #   Defaults to false
 #
+# [*neutron_extra_options*]
+#   (optional) Enable optional services provided by neutron
+#   Useful when using cisco n1kv plugin, vpnaas or fwaas.
+#   Default to {}
+
 class cloud::dashboard(
   $ks_keystone_internal_host = '127.0.0.1',
   $secret_key                = 'secrete',
@@ -94,6 +99,7 @@ class cloud::dashboard(
   $os_endpoint_type          = undef,
   $allowed_hosts             = $::fqdn,
   $vhost_extra_params        = {},
+  $neutron_extra_options     = {},
 ) {
 
   # We build the param needed for horizon class
@@ -111,6 +117,11 @@ class cloud::dashboard(
   }
   $vhost_extra_params_real = merge ($vhost_extra_params, $extra_params)
 
+  $neutron_options = {
+    'enable_lb' => true
+  }
+  $neutron_options_real = merge ($neutron_options, $neutron_extra_options)
+
   ensure_resource('class', 'apache', {
     default_vhost => false
   })
@@ -124,9 +135,7 @@ class cloud::dashboard(
     keystone_url            => $keystone_url,
     cache_server_ip         => false,
     django_debug            => $debug,
-    neutron_options         => {
-      'enable_lb' => true
-    },
+    neutron_options         => $neutron_options_real,
     listen_ssl              => $listen_ssl,
     horizon_cert            => $horizon_cert,
     horizon_key             => $horizon_key,

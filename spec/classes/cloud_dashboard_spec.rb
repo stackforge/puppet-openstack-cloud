@@ -79,6 +79,24 @@ describe 'cloud::dashboard' do
       end
     end
 
+    context 'with cisco plugin enabled' do
+      before do
+        params.merge!(
+          :neutron_extra_options => {
+            'profile_support' => 'cisco'
+          })
+      end
+
+      it 'configure horizon with cisco support' do
+        is_expected.to contain_class('horizon').with(
+          :neutron_options => {
+              'enable_lb'        => true,
+              'profile_support'  => 'cisco'
+          },
+        )
+      end
+    end
+
     context 'with multiple allowed_hosts' do
       before do
         params.merge!(:allowed_hosts => ['horizon.openstack.org', 'vip.openstack.org'])
