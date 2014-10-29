@@ -68,7 +68,6 @@
 #   (optional) the keystone region of this node
 #   Defaults to 'RegionOne'
 #
-
 class cloud::telemetry(
   $ceilometer_secret          = 'ceilometersecret',
   $rabbit_hosts               = ['127.0.0.1:5672'],

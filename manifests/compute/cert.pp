@@ -15,7 +15,6 @@
 #
 # Compute Certificate node
 #
-
 class cloud::compute::cert {
 
   include 'cloud::compute'

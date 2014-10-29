@@ -23,7 +23,6 @@
 #   (optional) IP address on which memcached instance should listen
 #   Defaults to '127.0.0.1'
 #
-
 class cloud::cache (
   $listen_ip = '127.0.0.1',
 ){

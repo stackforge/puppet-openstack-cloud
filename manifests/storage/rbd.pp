@@ -13,7 +13,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-
 class cloud::storage::rbd (
   $fsid            = undef,
   $cluster_network = '127.0.0.1/24',

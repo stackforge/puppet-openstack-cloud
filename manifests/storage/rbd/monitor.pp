@@ -13,7 +13,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-
 class cloud::storage::rbd::monitor (
   $id             = $::uniqueid,
   $mon_addr       = '127.0.0.1',

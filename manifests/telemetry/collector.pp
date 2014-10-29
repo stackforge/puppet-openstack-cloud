@@ -15,7 +15,6 @@
 #
 # Telemetry Collector nodes
 #
-
 class cloud::telemetry::collector(
   $mongo_nodes        = ['127.0.0.1:27017'],
   $replicaset_enabled = true,

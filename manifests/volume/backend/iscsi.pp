@@ -25,7 +25,6 @@
 #   (optional) Cinder volume group name.
 #   Defaults to 'cinder-volumes'.
 #
-
 define cloud::volume::backend::iscsi (
   $iscsi_ip_address,
   $volume_group        = 'cinder-volumes',

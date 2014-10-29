@@ -17,7 +17,6 @@
 #
 # Configure common logging
 #
-
 class cloud::logging{
 
   include ::fluentd

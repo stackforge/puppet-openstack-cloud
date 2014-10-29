@@ -15,7 +15,6 @@
 #
 # Compute Authenfication Console node
 #
-
 class cloud::compute::consoleauth {
 
   include 'cloud::compute'

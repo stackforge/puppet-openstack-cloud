@@ -15,7 +15,6 @@
 #
 # Orchestration APIs node
 #
-
 class cloud::orchestration::api(
   $ks_heat_internal_port            = 8004,
   $ks_heat_cfn_internal_port        = 8000,

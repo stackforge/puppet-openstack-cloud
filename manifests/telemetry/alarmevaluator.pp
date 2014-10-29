@@ -15,7 +15,6 @@
 #
 # Telemetry Alarm Evaluator nodes
 #
-
 class cloud::telemetry::alarmevaluator(
 ){
 

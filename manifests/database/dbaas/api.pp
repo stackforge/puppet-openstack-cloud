@@ -17,7 +17,7 @@
 #
 # Class to install API service of OpenStack Database as a Service (Trove)
 #
-
+#
 class cloud::database::dbaas::api(
   $ks_trove_password          = 'trovepassword',
   $verbose                    = true,

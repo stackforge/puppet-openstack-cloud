@@ -15,7 +15,6 @@
 #
 # Compute API node
 #
-
 class cloud::compute::api(
   $ks_keystone_internal_host            = '127.0.0.1',
   $ks_keystone_internal_proto           = 'http',

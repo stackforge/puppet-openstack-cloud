@@ -15,7 +15,6 @@
 #
 # Compute controller node
 #
-
 class cloud::compute::controller(
   $ks_keystone_internal_host            = '127.0.0.1',
   $ks_nova_password                     = 'novapassword',

@@ -55,7 +55,6 @@
 #   destination will no longer be valid.
 #   Defaults to 1.0
 #
-
 define cloud::volume::backend::nfs(
   $volume_backend_name = $name,
   $nfs_servers = [],

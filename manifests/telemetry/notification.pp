@@ -15,7 +15,6 @@
 #
 # Telemetry Notifications nodes
 #
-
 class cloud::telemetry::notification {
 
   include 'cloud::telemetry'

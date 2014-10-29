@@ -15,7 +15,6 @@
 #
 # == Class: cloud::logging::server
 #
-
 class cloud::logging::server{
 
   include ::elasticsearch

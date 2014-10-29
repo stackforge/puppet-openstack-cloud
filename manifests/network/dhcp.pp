@@ -15,7 +15,6 @@
 #
 # Network DHCP node
 #
-
 class cloud::network::dhcp(
   $veth_mtu           = 1500,
   $debug              = true,

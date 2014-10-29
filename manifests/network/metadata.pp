@@ -16,7 +16,6 @@
 # Network Metadata node (need to be run once)
 # Could be managed by spof_node manifest
 #
-
 class cloud::network::metadata(
   $enabled                              = true,
   $debug                                = true,

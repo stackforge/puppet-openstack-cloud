@@ -50,7 +50,6 @@
 #   A value of zero disables cloning
 #   Defaults to '5'
 #
-
 define cloud::volume::backend::rbd (
   $rbd_pool,
   $rbd_user,

@@ -43,7 +43,6 @@
 #   (optional) Default max number of LUNs in a storage group.
 #   Defaults to: '256'
 #
-
 define cloud::volume::backend::emc_vnx (
   $iscsi_ip_address,
   $san_ip,

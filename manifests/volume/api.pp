@@ -15,7 +15,6 @@
 #
 # Volume API node
 #
-
 class cloud::volume::api(
   $ks_cinder_internal_port     = 8776,
   $ks_cinder_password          = 'cinderpassword',

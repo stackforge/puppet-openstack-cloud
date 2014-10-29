@@ -19,7 +19,6 @@
 #   (optionnal) Manage or not external network with provider network API
 #   Defaults to false.
 #
-
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
   $neutron_db_user         = 'neutron',

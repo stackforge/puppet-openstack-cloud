@@ -15,7 +15,6 @@
 #
 # Network VPNaaS node
 #
-
 class cloud::network::vpn{
 
   include 'cloud::network'

@@ -15,7 +15,6 @@
 #
 # Compute Conductor node
 #
-
 class cloud::compute::conductor {
 
   include 'cloud::compute'

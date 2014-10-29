@@ -51,7 +51,6 @@
 #   (optional) Admin tenant name used to connect to nova.
 #   Defaults to 'admin'
 #
-
 class cloud::database::dbaas(
   $trove_db_host                = '127.0.0.1',
   $trove_db_user                = 'trove',
