@@ -57,33 +57,37 @@ describe 'cloud::orchestration::engine' do
 
     it 'configure heat common' do
       is_expected.to contain_class('heat').with(
-          :verbose                 => true,
-          :debug                   => true,
-          :log_facility            => 'LOG_LOCAL0',
-          :use_syslog              => true,
-          :rabbit_userid           => 'heat',
-          :rabbit_hosts            => ['10.0.0.1'],
-          :rabbit_password         => 'secrete',
-          :keystone_host           => '10.0.0.1',
-          :keystone_port           => '5000',
-          :keystone_protocol       => 'http',
-          :keystone_password       => 'secrete',
-          :auth_uri                => 'http://10.0.0.1:5000/v2.0',
-          :keystone_ec2_uri        => 'http://10.0.0.1:5000/v2.0/ec2tokens',
-          :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat?charset=utf8',
-          :log_dir                 => false
-        )
+        :verbose                 => true,
+        :debug                   => true,
+        :log_facility            => 'LOG_LOCAL0',
+        :use_syslog              => true,
+        :rabbit_userid           => 'heat',
+        :rabbit_hosts            => ['10.0.0.1'],
+        :rabbit_password         => 'secrete',
+        :keystone_host           => '10.0.0.1',
+        :keystone_port           => '5000',
+        :keystone_protocol       => 'http',
+        :keystone_password       => 'secrete',
+        :auth_uri                => 'http://10.0.0.1:5000/v2.0',
+        :keystone_ec2_uri        => 'http://10.0.0.1:5000/v2.0/ec2tokens',
+        :sql_connection          => 'mysql://heat:secrete@10.0.0.1/heat?charset=utf8',
+        :log_dir                 => false
+      )
       is_expected.to contain_heat_config('clients/endpoint_type').with('value' => 'internalURL')
     end
 
     it 'configure heat engine' do
       is_expected.to contain_class('heat::engine').with(
-          :enabled                       => true,
-          :auth_encryption_key           => 'secrete',
-          :heat_metadata_server_url      => 'http://10.0.0.1:8000',
-          :heat_waitcondition_server_url => 'http://10.0.0.1:8000/v1/waitcondition',
-          :heat_watch_server_url         => 'http://10.0.0.1:8003'
-        )
+        :enabled                       => true,
+        :auth_encryption_key           => 'secrete',
+        :heat_metadata_server_url      => 'http://10.0.0.1:8000',
+        :heat_waitcondition_server_url => 'http://10.0.0.1:8000/v1/waitcondition',
+        :heat_watch_server_url         => 'http://10.0.0.1:8003'
+      )
+      is_expected.to contain_keystone_user_role('admin@admin').with(
+        :ensure => 'present',
+        :roles  => 'heat_stack_owner',
+      )
     end
 
   end

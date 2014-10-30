@@ -23,7 +23,8 @@ class cloud::orchestration::engine(
   $ks_heat_password               = 'heatpassword',
   $ks_heat_cfn_public_port        = 8000,
   $ks_heat_cloudwatch_public_port = 8003,
-  $auth_encryption_key            = 'secrete'
+  $auth_encryption_key            = 'secrete',
+  $ks_admin_tenant                = 'admin',
 ) {
 
   include 'cloud::orchestration'
@@ -34,6 +35,12 @@ class cloud::orchestration::engine(
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}",
     heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}/v1/waitcondition",
     heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cloudwatch_public_port}"
+  }
+
+  # to avoid bug https://bugs.launchpad.net/heat/+bug/1306665
+  keystone_user_role { "admin@${ks_admin_tenant}":
+    ensure => present,
+    roles  => 'heat_stack_owner',
   }
 
 }
