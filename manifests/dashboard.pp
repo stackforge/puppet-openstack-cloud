@@ -115,7 +115,7 @@ class cloud::dashboard(
     'add_listen' => true,
     'setenvif'   => $setenvif
   }
-  $vhost_extra_params_real = merge ($vhost_extra_params, $extra_params)
+  $vhost_extra_params_real = merge ($extra_params, $vhost_extra_params)
 
   $neutron_options = {
     'enable_lb' => true
