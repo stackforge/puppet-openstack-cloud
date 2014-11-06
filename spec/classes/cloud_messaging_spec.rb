@@ -24,9 +24,10 @@ describe 'cloud::messaging' do
 
     let :params do
       {
+        :cluster_node_type => 'disc',
         :rabbit_names      => ['foo','boo','zoo'],
         :rabbit_password   => 'secrete',
-        :cluster_node_type => 'disc'
+        :rabbitmq_ip       => '10.0.0.1',
       }
     end
 
@@ -36,7 +37,8 @@ describe 'cloud::messaging' do
           :config_cluster           => true,
           :cluster_nodes            => params[:rabbit_names],
           :wipe_db_on_cookie_change => true,
-          :cluster_node_type        => 'disc',
+          :cluster_node_type        => params[:cluster_node_type],
+          :node_ip_address          => params[:rabbitmq_ip],
           :port                     => '5672',
         )
     end
