@@ -80,6 +80,7 @@ class cloud::messaging(
     cluster_nodes            => $array_rabbit_names,
     wipe_db_on_cookie_change => true,
     cluster_node_type        => $cluster_node_type,
+    node_ip_address          => $rabbitmq_ip,
     port                     => $rabbitmq_port,
   }
 
