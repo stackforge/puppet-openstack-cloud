@@ -32,13 +32,42 @@ describe 'cloud::cache' do
           :max_memory          => '60%'
         )
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure memcached firewall rules' do
+        is_expected.to contain_firewall('100 allow memcached access').with(
+          :port   => '11211',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure memcached firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow memcached access').with(
+          :port   => '11211',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily               => 'Debian',
-        :memorysize             => '1000 MB',
-        :processorcount         => '1' }
+      { :osfamily => 'Debian' }
     end
 
     it_configures 'cache server'
@@ -46,9 +75,7 @@ describe 'cloud::cache' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat',
-        :memorysize             => '1000 MB',
-        :processorcount         => '1' }
+      { :osfamily => 'RedHat' }
     end
 
     it_configures 'cache server'

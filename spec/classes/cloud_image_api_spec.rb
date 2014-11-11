@@ -46,6 +46,10 @@ describe 'cloud::image::api' do
 
   shared_examples_for 'openstack image api' do
 
+    it 'should not configure firewall rule' do
+      is_expected.not_to contain_firewall('100 allow glance api access')
+    end
+
     it 'configure glance-api' do
       is_expected.to contain_class('glance::api').with(
         :database_connection      => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
@@ -143,6 +147,37 @@ describe 'cloud::image::api' do
       end
       it { is_expected.to compile.and_raise_error(/Something is not a Glance supported backend./) }
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure Glance API firewall rules' do
+        is_expected.to contain_firewall('100 allow glance-api access').with(
+          :port   => '9292',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure Glance API firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow glance-api access').with(
+          :port   => '9292',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::image::api
+#
 # Orchestration APIs node
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::orchestration::api(
   $ks_heat_internal_port            = 8004,
@@ -21,6 +30,7 @@ class cloud::orchestration::api(
   $ks_heat_cloudwatch_internal_port = 8003,
   $api_eth                          = '127.0.0.1',
   $workers                          = $::processorcount,
+  $firewall_settings                = {},
 ) {
 
   include 'cloud::orchestration'
@@ -41,6 +51,21 @@ class cloud::orchestration::api(
     bind_host => $api_eth,
     bind_port => $ks_heat_cloudwatch_internal_port,
     workers   => $workers
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow heat-api access':
+      port   => $ks_heat_internal_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow heat-cfn access':
+      port   => $ks_heat_cfn_internal_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow heat-cloudwatch access':
+      port   => $ks_heat_cloudwatch_internal_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-heat_api":

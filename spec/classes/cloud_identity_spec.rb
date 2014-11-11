@@ -345,6 +345,47 @@ describe 'cloud::identity' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure keystone firewall rules' do
+        is_expected.to contain_firewall('100 allow keystone access').with(
+          :port   => '5000',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow keystone admin access').with(
+          :port   => '35357',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure keystone firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow keystone access').with(
+          :port   => '5000',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow keystone admin access').with(
+          :port   => '35357',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
@@ -352,7 +393,6 @@ describe 'cloud::identity' do
       { :osfamily               => 'Debian',
         :operatingsystemrelease => '12.04',
         :processorcount         => '2',
-        :concat_basedir         => '/var/lib/puppet/concat',
         :fqdn                   => 'keystone.openstack.org' }
     end
 
@@ -364,7 +404,6 @@ describe 'cloud::identity' do
       { :osfamily               => 'RedHat',
         :operatingsystemrelease => '6',
         :processorcount         => '2',
-        :concat_basedir         => '/var/lib/puppet/concat',
         :fqdn                   => 'keystone.openstack.org' }
     end
 

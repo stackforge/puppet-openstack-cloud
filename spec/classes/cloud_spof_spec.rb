@@ -96,13 +96,68 @@ describe 'cloud::spof' do
       end
       it { is_expected.to compile.and_raise_error(/cluster_members is a required parameter./) }
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!( :cluster_members => 'srv1 srv2 srv3')
+      end
+      it 'configure pacemaker firewall rules' do
+        is_expected.to contain_firewall('100 allow vrrp access').with(
+          :port   => nil,
+          :proto  => 'vrrp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow corosync tcp access').with(
+          :port   => ['2224','3121','21064'],
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow corosync udp access').with(
+          :port   => ['5404','5405'],
+          :proto  => 'udp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(
+          :firewall_settings => { 'limit' => '50/sec' },
+          :cluster_members   => 'srv1 srv2 srv3'
+        )
+      end
+      it 'configure pacemaker firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow vrrp access').with(
+          :port   => nil,
+          :proto  => 'vrrp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow corosync tcp access').with(
+          :port   => ['2224','3121','21064'],
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow corosync udp access').with(
+          :port   => ['5404','5405'],
+          :proto  => 'udp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :uniqueid       => '123' }
+      { :osfamily => 'Debian' }
     end
 
     it_configures 'cloud spof'
@@ -110,9 +165,7 @@ describe 'cloud::spof' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily       => 'RedHat',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :uniqueid       => '123' }
+      { :osfamily => 'RedHat' }
     end
     it_configures 'cloud spof'
   end

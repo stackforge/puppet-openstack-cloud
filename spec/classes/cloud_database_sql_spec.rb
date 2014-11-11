@@ -208,6 +208,58 @@ describe 'cloud::database::sql' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure mysql firewall rules' do
+        is_expected.to contain_firewall('100 allow galera access').with(
+          :port   => ['3306', '4567', '4568', '4444'],
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow mysqlchk access').with(
+          :port   => '9200',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow mysql rsync access').with(
+          :port   => '873',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure mysql firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow galera access').with(
+          :port   => ['3306', '4567', '4568', '4444'],
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow mysqlchk access').with(
+          :port   => '9200',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow mysql rsync access').with(
+          :port   => '873',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end # openstack database sql
 
   context 'on Debian platforms' do

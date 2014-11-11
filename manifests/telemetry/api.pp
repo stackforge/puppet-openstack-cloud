@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::telemetry::api
+#
 # Telemetry API nodes
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::telemetry::api(
   $ks_keystone_internal_host      = '127.0.0.1',
@@ -21,6 +30,7 @@ class cloud::telemetry::api(
   $ks_ceilometer_internal_port    = '8777',
   $ks_ceilometer_password         = 'ceilometerpassword',
   $api_eth                        = '127.0.0.1',
+  $firewall_settings              = {},
 ){
 
   include 'cloud::telemetry'
@@ -43,6 +53,13 @@ class cloud::telemetry::api(
   }
 
   Cron <<| title == 'ceilometer-expirer' |>> { command => "sleep $((\$RANDOM % 86400)) && ${::ceilometer::params::expirer_command}" }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow ceilometer-api access':
+      port   => $ks_ceilometer_internal_port,
+      extras => $firewall_settings,
+    }
+  }
 
   @@haproxy::balancermember{"${::fqdn}-ceilometer_api":
     listening_service => 'ceilometer_api_cluster',

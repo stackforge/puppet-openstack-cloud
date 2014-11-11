@@ -515,13 +515,80 @@ describe 'cloud::loadbalancer' do
         }
       )}
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure haproxy firewall rules' do
+        # test the firewall rule in cloud::loadbalancer::binding
+        is_expected.to contain_firewall('100 allow horizon_cluster binding access').with(
+          :port   => '80',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        # test the firewall rules in cloud::loadbalancer
+        is_expected.to contain_firewall('100 allow galera binding access').with(
+          :port   => '3306',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow haproxy monitor access').with(
+          :port   => '9300',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow keepalived access').with(
+          :port   => nil,
+          :proto  => 'vrrp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure haproxy firewall rules with custom parameter' do
+        # test the firewall rule in cloud::loadbalancer::binding
+        is_expected.to contain_firewall('100 allow horizon_cluster binding access').with(
+          :port   => '80',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        # test the firewall rules in cloud::loadbalancer
+        is_expected.to contain_firewall('100 allow galera binding access').with(
+          :port   => '3306',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow haproxy monitor access').with(
+          :port   => '9300',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow keepalived access').with(
+          :port   => nil,
+          :proto  => 'vrrp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end # shared:: openstack loadbalancer
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily       => 'Debian',
-        :hostname       => 'myhost',
-        :concat_basedir => '/var/lib/puppet/concat' }
+        :hostname       => 'myhost' }
     end
 
     let :platform_params do
@@ -539,8 +606,7 @@ describe 'cloud::loadbalancer' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily       => 'RedHat',
-        :hostname       => 'myhost',
-        :concat_basedir => '/var/lib/puppet/concat' }
+        :hostname       => 'myhost' }
     end
 
     let :platform_params do

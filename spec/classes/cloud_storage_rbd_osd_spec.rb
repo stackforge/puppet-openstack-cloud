@@ -61,22 +61,48 @@ describe 'cloud::storage::rbd::osd' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure ceph osd firewall rules' do
+        is_expected.to contain_firewall('100 allow ceph-osd access').with(
+          :port   => '6800-6810',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure ceph osd firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow ceph-osd access').with(
+          :port   => '6800-6810',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :uniqueid       => '123' }
+      { :osfamily => 'Debian' }
     end
     it_configures 'ceph osd'
   end
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily       => 'RedHat',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :uniqueid       => '123' }
+      { :osfamily => 'RedHat' }
     end
     it_configures 'ceph osd'
   end

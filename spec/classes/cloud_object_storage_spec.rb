@@ -94,13 +94,74 @@ describe 'cloud::object::storage' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure swift-storage firewall rules' do
+        is_expected.to contain_firewall('100 allow swift-container access').with(
+          :port   => '6001',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow swift-account access').with(
+          :port   => '6002',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow swift-object access').with(
+          :port   => '6000',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow swift rsync access').with(
+          :port   => '873',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure swift-storage firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow swift-container access').with(
+          :port   => '6001',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow swift-account access').with(
+          :port   => '6002',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow swift-object access').with(
+          :port   => '6000',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow swift rsync access').with(
+          :port   => '873',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
       {
-        :concat_basedir  => '/tmp/',
-        :concat_basedir  => '/tmp/foo',
         :osfamily        => 'Debian' ,
       }
     end
@@ -111,8 +172,6 @@ describe 'cloud::object::storage' do
   context 'on RedHat platforms' do
     let :facts do
       {
-        :concat_basedir => '/tmp/',
-        :concat_basedir => '/tmp/foo',
         :osfamily       => 'RedHat'
       }
     end

@@ -23,13 +23,26 @@
 #   (optional) IP address on which memcached instance should listen
 #   Defaults to '127.0.0.1'
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::cache (
-  $listen_ip = '127.0.0.1',
+  $listen_ip         = '127.0.0.1',
+  $firewall_settings = {},
 ){
 
   class { 'memcached':
     listen_ip  => $listen_ip,
     max_memory => '60%',
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow memcached access':
+      port   => '11211',
+      extras => $firewall_settings,
+    }
   }
 
 }

@@ -15,18 +15,23 @@
 #
 # Class: cloud
 #
-# Installs the private cloud system requirements
+# Installs the system requirements
 #
 class cloud(
-  $rhn_registration  = undef,
-  $root_password     = 'root',
-  $dns_ips           = ['8.8.8.8', '8.8.4.4'],
-  $site_domain       = 'mydomain',
-  $motd_title        = 'eNovance IT Operations',
-  $selinux_mode      = 'permissive',
-  $selinux_directory = '/usr/share/selinux',
-  $selinux_booleans  = [],
-  $selinux_modules   = [],
+  $rhn_registration     = undef,
+  $root_password        = 'root',
+  $dns_ips              = ['8.8.8.8', '8.8.4.4'],
+  $site_domain          = 'mydomain',
+  $motd_title           = 'eNovance IT Operations',
+  $selinux_mode         = 'permissive',
+  $selinux_directory    = '/usr/share/selinux',
+  $selinux_booleans     = [],
+  $selinux_modules      = [],
+  $manage_firewall      = false,
+  $firewall_rules       = {},
+  $purge_firewall_rules = false,
+  $firewall_pre_extras  = {},
+  $firewall_post_extras = {},
 ) {
 
   include ::stdlib
@@ -100,4 +105,40 @@ This node is under the control of Puppet ${::puppetversion}.
       "rhn-${::hostname}" => $rhn_registration
     } )
   }
+
+  if $manage_firewall {
+
+    # Only purges IPv4 rules
+    if $purge_firewall_rules {
+      resources { 'firewall':
+        purge => true
+      }
+    }
+
+    # anyone can add your own rules
+    # example with Hiera:
+    #
+    # cloud::firewall::rules:
+    #   '300 allow custom application 1':
+    #     port: 999
+    #     proto: udp
+    #     action: accept
+    #   '301 allow custom application 2':
+    #     port: 8081
+    #     proto: tcp
+    #     action: accept
+    #
+    create_resources('cloud::firewall::rule', $firewall_rules)
+
+    ensure_resource('class', 'cloud::firewall::pre', {
+      'firewall_settings' => $firewall_pre_extras,
+      'stage'             => 'setup',
+    })
+
+    ensure_resource('class', 'cloud::firewall::post', {
+      'stage'             => 'runtime',
+      'firewall_settings' => $firewall_post_extras,
+    })
+  }
+
 }

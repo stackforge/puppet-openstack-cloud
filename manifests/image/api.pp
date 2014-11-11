@@ -92,6 +92,11 @@
 #   service name removed.
 #   Defaults to 'keystone'.
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
   $glance_db_user                    = 'glance',
@@ -118,6 +123,7 @@ class cloud::image::api(
   $nfs_device                        = false,
   $nfs_options                       = 'defaults',
   $pipeline                          = 'keystone',
+  $firewall_settings                 = {},
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -221,6 +227,13 @@ class cloud::image::api(
 
   class { 'glance::cache::cleaner': }
   class { 'glance::cache::pruner': }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow glance-api access':
+      port   => $ks_glance_api_internal_port,
+      extras => $firewall_settings,
+    }
+  }
 
   @@haproxy::balancermember{"${::fqdn}-glance_api":
     listening_service => 'glance_api_cluster',

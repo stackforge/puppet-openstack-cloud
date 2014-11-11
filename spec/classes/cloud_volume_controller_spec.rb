@@ -105,8 +105,8 @@ describe 'cloud::volume::controller' do
           :default_volume_type  => nil
         )
       end
-      xit 'should raise an error and fail' do
-        is_expected.to compile.and_raise_error(/when using multi-backend, you should define a default_volume_type value in cloud::volume::controller/)
+      it 'should raise an error and fail' do
+        is_expected.not_to compile
       end
     end
 
@@ -136,6 +136,36 @@ describe 'cloud::volume::controller' do
     #      :backup_ceph_pool => 'ceph_backup_cinder'
     #    )
     #end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure cinder firewall rules' do
+        is_expected.to contain_firewall('100 allow cinder-api access').with(
+          :port   => '8776',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure cinder firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow cinder-api access').with(
+          :port   => '8776',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
 
   end
 

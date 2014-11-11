@@ -17,9 +17,10 @@
 define cloud::loadbalancer::binding (
   $ip,
   $port,
-  $httpchk      = undef,
-  $options      = undef,
-  $bind_options = undef,
+  $httpchk           = undef,
+  $options           = undef,
+  $bind_options      = undef,
+  $firewall_settings = {},
 ){
 
   include cloud::loadbalancer
@@ -62,6 +63,14 @@ define cloud::loadbalancer::binding (
       listen_ip    => $listen_ip_real,
       bind_options => $bind_options;
     }
+
+    if $::cloud::manage_firewall {
+      cloud::firewall::rule{ "100 allow ${name} binding access":
+        port   => $port,
+        extras => $firewall_settings,
+      }
+    }
+
   }
 
 }

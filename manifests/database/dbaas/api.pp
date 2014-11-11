@@ -17,6 +17,12 @@
 #
 # Class to install API service of OpenStack Database as a Service (Trove)
 #
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::database::dbaas::api(
   $ks_trove_password          = 'trovepassword',
@@ -28,6 +34,7 @@ class cloud::database::dbaas::api(
   $ks_keystone_internal_host  = '127.0.0.1',
   $ks_keystone_internal_port  = '5000',
   $ks_keystone_internal_proto = 'http',
+  $firewall_settings          = {},
 ) {
 
   include 'cloud::database::dbaas'
@@ -40,6 +47,13 @@ class cloud::database::dbaas::api(
     bind_port         => $ks_trove_public_port,
     auth_url          => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
     keystone_password => $ks_trove_password,
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow trove-api access':
+      port   => $ks_trove_public_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-trove_api":

@@ -98,6 +98,58 @@ describe 'cloud::orchestration::api' do
       )
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure heat api firewall rules' do
+        is_expected.to contain_firewall('100 allow heat-api access').with(
+          :port   => '8004',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow heat-cfn access').with(
+          :port   => '8000',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow heat-cloudwatch access').with(
+          :port   => '8003',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure heat firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow heat-api access').with(
+          :port   => '8004',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow heat-cfn access').with(
+          :port   => '8000',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow heat-cloudwatch access').with(
+          :port   => '8003',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

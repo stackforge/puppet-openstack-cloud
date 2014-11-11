@@ -120,12 +120,18 @@
 #       Not applicable if 'n1kv_source' is a file. (Option-B above)
 #   Defaults to 'present'
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::network::vswitch(
   # common
   $driver                   = 'ml2_ovs',
   $manage_ext_network       = false,
   $external_int             = 'eth1',
   $external_bridge          = 'br-pub',
+  $firewall_settings        = {},
   # ml2_ovs
   $tunnel_types             = ['gre'],
   $provider_bridge_mappings = ['public:br-pub'],
@@ -190,4 +196,22 @@ class cloud::network::vswitch(
       bridge => $external_bridge
     }
   }
+
+  if $::cloud::manage_firewall {
+    if ('gre' in $tunnel_types) {
+      cloud::firewall::rule{ '100 allow gre access':
+        port   => undef,
+        proto  => 'gre',
+        extras => $firewall_settings,
+      }
+    }
+    if ('vxlan' in $tunnel_types) {
+      cloud::firewall::rule{ '100 allow vxlan access':
+        port   => '4789',
+        proto  => 'udp',
+        extras => $firewall_settings,
+      }
+    }
+  }
+
 }
