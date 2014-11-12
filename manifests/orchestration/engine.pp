@@ -33,7 +33,12 @@ class cloud::orchestration::engine(
     auth_encryption_key           => $auth_encryption_key,
     heat_metadata_server_url      => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}",
     heat_waitcondition_server_url => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cfn_public_port}/v1/waitcondition",
-    heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cloudwatch_public_port}"
+    heat_watch_server_url         => "${ks_heat_public_proto}://${ks_heat_public_host}:${ks_heat_cloudwatch_public_port}",
+    # TODO (EmilienM): Need to be updated in Juno
+    # The default deferred_auth_method of password is deprecated as of Icehouse, so although it is still the default, deployers are
+    # strongly encouraged to move to using deferred_auth_method=trusts, which is planned to become the default for Juno.
+    # 'trusts' requires Keystone API v3 enabled, otherwise we have to use 'password'.
+    deferred_auth_method          => 'password',
   }
 
 }

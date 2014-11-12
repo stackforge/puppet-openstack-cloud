@@ -82,7 +82,8 @@ describe 'cloud::orchestration::engine' do
           :auth_encryption_key           => 'secrete',
           :heat_metadata_server_url      => 'http://10.0.0.1:8000',
           :heat_waitcondition_server_url => 'http://10.0.0.1:8000/v1/waitcondition',
-          :heat_watch_server_url         => 'http://10.0.0.1:8003'
+          :heat_watch_server_url         => 'http://10.0.0.1:8003',
+          :deferred_auth_method          => 'password',
         )
     end
 
