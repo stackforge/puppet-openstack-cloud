@@ -135,8 +135,8 @@ describe 'cloud::identity' do
         :token_expiration    => '3600',
         :log_dir             => false,
         :log_file            => false,
-        :admin_endpoint      => 'https://10.0.0.1:35357/v2.0',
-        :public_endpoint     => 'https://10.0.0.1:5000/v2.0'
+        :admin_endpoint      => 'https://10.0.0.1:35357/',
+        :public_endpoint     => 'https://10.0.0.1:5000/'
       )
       is_expected.to contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
       is_expected.to contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
