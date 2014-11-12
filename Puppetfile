@@ -37,7 +37,7 @@ mod 'horizon',
   :ref => '16b482ea21a70d8dd06ab4c98ac5a218399b0213'
 mod 'keystone',
   :git => 'git://github.com/enovance/puppet-keystone.git',
-  :ref => 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
+  :ref => '45ac386600c0e79942834da8b69bf09a4809d7bd'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
   :ref => 'cefbdc897d70fd1c1fc44e372f05336674efd940'

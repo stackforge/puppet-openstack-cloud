@@ -8,7 +8,7 @@ fixtures:
       ref: 'c9271e02d0d5a317ab390cfce9928601208f6073'
     'keystone':
       repo: 'git://github.com/enovance/puppet-keystone.git'
-      ref: 'e381349c1b838301dd730aa3cd146ecacc75aa7c'
+      ref: '45ac386600c0e79942834da8b69bf09a4809d7bd'
     'nova':
       repo: 'git://github.com/enovance/puppet-nova.git'
       ref: '3ffc5a263113232230b69e621e1b6167f2148390'
