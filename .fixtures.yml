@@ -122,7 +122,7 @@ fixtures:
       ref: '1c3ea6f1c822a99b52defb87305ea5977cba4293'
     'stdlib':
       repo: 'git://github.com/enovance/puppetlabs-stdlib.git'
-      ref: '8a9b2dfc0e463bec39c00c82c30e0a8a8b7867f3'
+      ref: 'fb42396c75d90ce3a9473e2a7ed22682266ea03f'
     'xinetd':
       repo: 'git://github.com/enovance/puppetlabs-xinetd.git'
       ref: '7557af0e418d1a587df04fe7d01322ff2473c32e'
