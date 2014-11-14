@@ -125,7 +125,7 @@ fixtures:
       ref: 'fb42396c75d90ce3a9473e2a7ed22682266ea03f'
     'xinetd':
       repo: 'git://github.com/enovance/puppetlabs-xinetd.git'
-      ref: '7557af0e418d1a587df04fe7d01322ff2473c32e'
+      ref: '0740f5343b54523d9ed27f65c05f6c9f045f022b'
     'rhnreg_ks':
       repo: 'git://github.com/enovance/puppet-rhnreg_ks.git'
       ref: '8fdc051992b44a09f39d3b510d7cd6db5ed5ff66'

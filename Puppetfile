@@ -192,4 +192,4 @@ mod 'wget',
   :ref => '1c3ea6f1c822a99b52defb87305ea5977cba4293'
 mod 'xinetd',
   :git => 'git://github.com/enovance/puppetlabs-xinetd.git',
-  :ref => '7557af0e418d1a587df04fe7d01322ff2473c32e'
+  :ref => '0740f5343b54523d9ed27f65c05f6c9f045f022b'
