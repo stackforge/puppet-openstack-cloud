@@ -56,3 +56,21 @@ namespace :module do
     exec "rsync -rv --exclude-from=#{TDIR}/.forgeignore . /tmp/#{NAME};cd /tmp/#{NAME};puppet module build"
   end
 end
+
+Rake::Task[:spec_prep].clear
+desc "Create the fixtures directory"
+task :spec_prep do
+  FileUtils::mkdir_p("spec/fixtures/modules")
+  FileUtils::mkdir_p("spec/fixtures/manifests")
+  FileUtils::touch("spec/fixtures/manifests/site.pp")
+  sh "librarian-puppet install --path=spec/fixtures/modules"
+end
+
+Rake::Task[:spec_clean].clear
+desc "Clean up the fixtures directory"
+task :spec_clean do
+  sh "librarian-puppet clean --path=spec/fixtures/modules"
+  if File.zero?("spec/fixtures/manifests/site.pp")
+    FileUtils::rm_f("spec/fixtures/manifests/site.pp")
+  end
+end
