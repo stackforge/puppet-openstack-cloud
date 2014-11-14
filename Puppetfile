@@ -172,11 +172,9 @@ mod 'ssh',
 mod 'rsyslog',
   :git => 'git://github.com/enovance/puppet-rsyslog.git',
   :ref => '67c7c501b916ebd1a27a8a218d49602339526c4f'
-#TODO(Spredzy) come back to upstream after
-# https://github.com/puppetlabs/puppetlabs-stdlib/pull/319
 mod 'stdlib',
   :git => 'git://github.com/enovance/puppetlabs-stdlib.git',
-  :ref => '8a9b2dfc0e463bec39c00c82c30e0a8a8b7867f3'
+  :ref => 'fb42396c75d90ce3a9473e2a7ed22682266ea03f'
 mod 'sysctl',
   :git => 'git://github.com/enovance/puppet-sysctl.git',
   :ref => '4a463384e844f51b270428643a5b8beb3628e854'
