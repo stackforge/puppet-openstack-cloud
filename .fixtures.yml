@@ -155,7 +155,7 @@ fixtures:
       ref: '7122983d89bf68bc4170415cc03212f6a8a4636e'
     'nfs':
       repo: 'git://github.com/enovance/puppet-module-nfs.git'
-      ref: 'a806082ba5ed50fb6ed3c1a9791207e3a9189574'
+      ref: 'eced57eeedc55e30e8e1dd18332e192855f5f396'
     'common':
       repo: 'git://github.com/enovance/puppet-module-common.git'
       ref: '2d0606fce1078222dd483e731ec32807f5b4ca53'
