@@ -11,6 +11,7 @@ group :development, :test do
   gem 'json'
   gem 'webmock'
   gem 'r10k'
+  gem 'librarian-puppet-simple', '~> 0.0.3'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']
