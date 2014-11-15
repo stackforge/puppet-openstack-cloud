@@ -302,7 +302,8 @@ class cloud::loadbalancer(
   }
 
   keepalived::vrrp_script { 'haproxy':
-    name_is_process => true
+    name_is_process => $::cloud::params::keepalived_name_is_process,
+    script          => $::cloud::params::keepalived_vrrp_script,
   }
 
   keepalived::instance { '1':

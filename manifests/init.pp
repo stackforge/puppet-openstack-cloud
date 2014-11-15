@@ -18,12 +18,18 @@
 # Installs the private cloud system requirements
 #
 class cloud(
-  $rhn_registration = undef,
-  $root_password    = 'root',
-  $dns_ips          = ['8.8.8.8', '8.8.4.4'],
-  $site_domain      = 'mydomain',
-  $motd_title       = 'eNovance IT Operations',
+  $rhn_registration  = undef,
+  $root_password     = 'root',
+  $dns_ips           = ['8.8.8.8', '8.8.4.4'],
+  $site_domain       = 'mydomain',
+  $motd_title        = 'eNovance IT Operations',
+  $selinux_mode      = 'permissive',
+  $selinux_directory = '/usr/share/selinux',
+  $selinux_booleans  = [],
+  $selinux_modules   = [],
 ) {
+
+  include ::stdlib
 
   if ! ($::osfamily in [ 'RedHat', 'Debian' ]) {
     fail("OS family unsuppored yet (${::osfamily}), module puppet-openstack-cloud only support RedHat or Debian")
@@ -58,6 +64,17 @@ This node is under the control of Puppet ${::puppetversion}.
 
 # NTP
   include ::ntp
+
+# SELinux
+  if $::osfamily == 'RedHat' {
+    class {'cloud::selinux' :
+      mode      => $selinux_mode,
+      booleans  => $selinux_booleans,
+      modules   => $selinux_modules,
+      directory => $selinux_directory,
+      stage     => 'setup',
+    }
+  }
 
 # Strong root password for all servers
   user { 'root':

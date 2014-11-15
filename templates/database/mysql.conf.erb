@@ -63,7 +63,7 @@ wsrep_provider_options          = "gcache.size=<%= @galera_gcache %>;gcs.fc_mast
 # and wsrep_sst_xtrabackup take only one configuration file and use the last one
 # (/etc/mysql/my.cnf is not used)
 datadir                         = /var/lib/mysql
-tmpdir                          = /dev/shm
+tmpdir                          = /tmp/
 innodb_flush_method             = O_DIRECT
 innodb_log_buffer_size          = 32M
 innodb_log_file_size            = 256M
