@@ -17,18 +17,24 @@
 #
 Facter.add('edeploy_role_version') do
   setcode do
-    Facter::Util::Resolution.exec('/usr/sbin/edeploy version')
+    if File.executable?('/usr/sbin/edeploy')
+      Facter::Util::Resolution.exec('/usr/sbin/edeploy version')
+    end
   end
 end
 
 Facter.add('edeploy_role_name') do
   setcode do
-    Facter::Util::Resolution.exec('/usr/sbin/edeploy role')
+    if File.executable?('/usr/sbin/edeploy')
+      Facter::Util::Resolution.exec('/usr/sbin/edeploy role')
+    end
   end
 end
 
 Facter.add('edeploy_profile') do
   setcode do
-    Facter::Util::Resolution.exec('/usr/sbin/edeploy profile')
+    if File.executable?('/usr/sbin/edeploy')
+      Facter::Util::Resolution.exec('/usr/sbin/edeploy profile')
+    end
   end
 end
