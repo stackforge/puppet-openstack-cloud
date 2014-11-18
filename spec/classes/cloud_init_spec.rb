@@ -24,7 +24,7 @@ describe 'cloud' do
     { }
   end
 
-  shared_examples_for 'private cloud node' do
+  shared_examples_for 'cloud node' do
 
     let :pre_condition do
       '
@@ -50,27 +50,90 @@ describe 'cloud' do
       :enable => true
     }) }
 
+    context 'with firewall enabled' do
+      before :each do
+        params.merge!(
+          :manage_firewall => true,
+        )
+      end
+
+      it 'configure basic pre firewall rules' do
+        is_expected.to contain_firewall('000 accept related established rules').with(
+          :proto  => 'all',
+          :state  => ['RELATED', 'ESTABLISHED'],
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('001 accept all icmp').with(
+          :proto  => 'icmp',
+          :action => 'accept',
+          :state  => ['NEW'],
+        )
+        is_expected.to contain_firewall('002 accept all to lo interface').with(
+          :proto   => 'all',
+          :iniface => 'lo',
+          :action  => 'accept',
+          :state   => ['NEW'],
+        )
+        is_expected.to contain_firewall('003 accept ssh').with(
+          :port   => '22',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :state  => ['NEW'],
+        )
+      end
+
+      it 'configure basic post firewall rules' do
+        is_expected.to contain_firewall('999 drop all').with(
+          :proto  => 'all',
+          :action => 'drop',
+          :source => '0.0.0.0/0',
+        )
+      end
+    end
+
+    context 'with custom firewall rules' do
+      before :each do
+        params.merge!(
+          :manage_firewall     => true,
+          :firewall_rules => {
+            '300 add custom application 1' => {'port' => '999', 'proto' => 'udp', 'action' => 'accept'},
+            '301 add custom application 2' => {'port' => '8081', 'proto' => 'tcp', 'action' => 'accept'}
+          }
+        )
+      end
+      it 'configure custom firewall rules' do
+        is_expected.to contain_firewall('300 add custom application 1').with(
+          :port   => '999',
+          :proto  => 'udp',
+          :action => 'accept',
+          :state  => ['NEW'],
+        )
+        is_expected.to contain_firewall('301 add custom application 2').with(
+          :port   => '8081',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :state  => ['NEW'],
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily       => 'Debian',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :puppetversion  => '3.3' }
+      { :osfamily => 'Debian' }
     end
 
     let :platform_params do
       { :cron_service_name => 'cron'}
     end
 
-    it_configures 'private cloud node'
+    it_configures 'cloud node'
   end
 
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily       => 'RedHat',
-        :concat_basedir => '/var/lib/puppet/concat',
-        :puppetversion  => '3.3',
         :hostname       => 'redhat1' }
     end
 
@@ -82,7 +145,7 @@ describe 'cloud' do
       { :rhn_registration => { "username" => "rhn", "password" => "pass" } }
     end
 
-    #it_configures 'private cloud node'
+    it_configures 'cloud node'
 
     xit { is_expected.to contain_rhn_register('rhn-redhat1') }
 
@@ -103,7 +166,6 @@ describe 'cloud' do
           :stage     => 'setup',
         )
       end
-
     end
 
   end

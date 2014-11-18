@@ -13,26 +13,34 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class cloud::storage::rbd::monitor (
-  $id                = $::uniqueid,
-  $mon_addr          = '127.0.0.1',
-  $monitor_secret    = 'cephmonsecret',
-  $firewall_settings = {},
+# Define::
+#
+# cloud::firewall
+#
+define cloud::firewall::rule (
+  $port    = undef,
+  $proto   = 'tcp',
+  $action  = 'accept',
+  $state   = ['NEW'],
+  $source  = '0.0.0.0/0',
+  $iniface = undef,
+  $chain   = 'INPUT',
+  $extras  = {},
 ) {
 
-  include 'cloud::storage::rbd'
-
-  ceph::mon { $id:
-    monitor_secret => $monitor_secret,
-    mon_port       => 6789,
-    mon_addr       => $mon_addr,
+  $basic = {
+    'port'    => $port,
+    'proto'   => $proto,
+    'action'  => $action,
+    'state'   => $state,
+    'source'  => $source,
+    'iniface' => $iniface,
+    'chain'   => $chain,
   }
 
-  if $::cloud::manage_firewall {
-    cloud::firewall::rule{ '100 allow ceph-mon access':
-      port   => '6789',
-      extras => $firewall_settings,
-    }
-  }
+  $rule = merge($basic, $extras)
+  validate_hash($rule)
+
+  create_resources('firewall', { "${title}" => $rule })
 
 }

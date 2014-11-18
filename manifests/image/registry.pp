@@ -55,6 +55,11 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to 'LOG_LOCAL0'
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::image::registry(
   $glance_db_host                   = '127.0.0.1',
   $glance_db_user                   = 'glance',
@@ -68,7 +73,8 @@ class cloud::image::registry(
   $verbose                          = true,
   $debug                            = true,
   $log_facility                     = 'LOG_LOCAL0',
-  $use_syslog                       = true
+  $use_syslog                       = true,
+  $firewall_settings                 = {},
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -114,6 +120,13 @@ class cloud::image::registry(
     user    => 'glance',
     path    => '/usr/bin',
     unless  => "/usr/bin/mysql glance -h ${glance_db_host} -u ${encoded_glance_user} -p${encoded_glance_password} -e \"show tables\" | /bin/grep Tables"
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow glance-registry access':
+      port   => $ks_glance_registry_internal_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-glance_registry":

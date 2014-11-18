@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::object::storage
+#
 # Swift Storage node
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::object::storage (
   $storage_eth           = '127.0.0.1',
@@ -25,6 +34,7 @@ class cloud::object::storage (
   $device_config_hash    = {},
   $ring_container_device = 'sdb',
   $ring_account_device   = 'sdb',
+  $firewall_settings     = {},
 ) {
 
   include 'cloud::object'
@@ -101,5 +111,24 @@ allow_versions = on
     Swift::Storage::Server[$container_port] ->
     Swift::Storage::Server[$account_port] ->
     Swift::Storage::Server[$object_port]
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow swift-container access':
+      port   => $container_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow swift-account access':
+      port   => $account_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow swift-object access':
+      port   => $object_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow swift rsync access':
+      port   => '873',
+      extras => $firewall_settings,
+    }
+  }
 
 }

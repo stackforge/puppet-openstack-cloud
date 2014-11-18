@@ -18,7 +18,8 @@
 class cloud::network::dhcp(
   $veth_mtu           = 1500,
   $debug              = true,
-  $dnsmasq_dns_server = false
+  $dnsmasq_dns_server = false,
+  $firewall_settings  = {},
 ) {
 
   include 'cloud::network'
@@ -46,6 +47,20 @@ class cloud::network::dhcp(
     mode    => '0755',
     group   => 'root',
     notify  => Service['neutron-dhcp-agent']
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow dhcp in access':
+      port   => '67',
+      proto  => 'udp',
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow dhcp out access':
+      port   => '68',
+      proto  => 'udp',
+      chain  => 'OUTPUT',
+      extras => $firewall_settings,
+    }
   }
 
 }

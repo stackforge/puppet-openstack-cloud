@@ -16,8 +16,9 @@
 # Compute Proxy Console node
 #
 class cloud::compute::consoleproxy(
-  $api_eth    = '127.0.0.1',
-  $spice_port = '6082'
+  $api_eth           = '127.0.0.1',
+  $spice_port        = '6082',
+  $firewall_settings = {},
 ){
 
   include 'cloud::compute'
@@ -25,6 +26,13 @@ class cloud::compute::consoleproxy(
   class { 'nova::spicehtml5proxy':
     enabled => true,
     host    => $api_eth
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow spice access':
+      port   => $spice_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-compute_spice":

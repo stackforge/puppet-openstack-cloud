@@ -17,9 +17,14 @@
 #
 # === Parameters
 #
-#  [*galera_internal_ips*]
-#    Array of internal ip of the galera nodes.
-#    Defaults to ['127.0.0.1']
+# [*galera_internal_ips*]
+#   Array of internal ip of the galera nodes.
+#   Defaults to ['127.0.0.1']
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
@@ -59,7 +64,8 @@ class cloud::database::sql (
     $mysql_sys_maint_password       = 'sys_maint',
     $galera_clustercheck_dbuser     = 'clustercheckdbuser',
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
-    $galera_clustercheck_ipaddress  = '127.0.0.1'
+    $galera_clustercheck_ipaddress  = '127.0.0.1',
+    $firewall_settings              = {},
 ) {
 
   include 'xinetd'
@@ -337,6 +343,21 @@ class cloud::database::sql (
     notify      => Service['mysqld'],
     refreshonly => true,
     onlyif      => "stat ${::mysql::params::datadir}/ib_logfile0 && test `du -sh ${::mysql::params::datadir}/ib_logfile0 | cut -f1` != '256M'",
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow galera access':
+      port   => ['3306', '4567', '4568', '4444'],
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow mysqlchk access':
+      port   => '9200',
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow mysql rsync access':
+      port   => '873',
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{$::fqdn:

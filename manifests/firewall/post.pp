@@ -13,26 +13,29 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-class cloud::storage::rbd::monitor (
-  $id                = $::uniqueid,
-  $mon_addr          = '127.0.0.1',
-  $monitor_secret    = 'cephmonsecret',
+# == Class: cloud::firewall::post
+#
+# Firewall rules during 'post' Puppet stage
+#
+class cloud::firewall::post(
+  $debug             = false,
+  $log               = false,
   $firewall_settings = {},
-) {
+){
 
-  include 'cloud::storage::rbd'
-
-  ceph::mon { $id:
-    monitor_secret => $monitor_secret,
-    mon_port       => 6789,
-    mon_addr       => $mon_addr,
-  }
-
-  if $::cloud::manage_firewall {
-    cloud::firewall::rule{ '100 allow ceph-mon access':
-      port   => '6789',
+  if $debug {
+    warning('debug is enabled, the traffic is not blocked.')
+  } else {
+    firewall { '998 log all':
+      proto => 'all',
+      jump  => 'LOG',
+    }
+    cloud::firewall::rule{ '999 drop all':
+      proto  => 'all',
+      action => 'drop',
       extras => $firewall_settings,
     }
+    notice('At this stage, all network traffic is blocked.')
   }
 
 }

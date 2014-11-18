@@ -61,6 +61,11 @@
 #   Need to be a valid shell path.
 #   Defaults to false
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',
   $libvirt_type               = 'kvm',
@@ -76,6 +81,7 @@ class cloud::compute::hypervisor(
   $volume_rbd                 = false,
   $manage_tso                 = true,
   $nova_shell                 = false,
+  $firewall_settings          = {},
   # when using NFS storage backend
   $nfs_enabled                = false,
   $nfs_device                 = false,
@@ -339,5 +345,16 @@ Host *
   }
 
   class { 'ceilometer::agent::compute': }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow instances console access':
+      port   => '5900-5999',
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow instances migration access':
+      port   => ['16509', '49152-49215'],
+      extras => $firewall_settings,
+    }
+  }
 
 }

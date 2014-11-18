@@ -79,7 +79,12 @@
 #   (optional) Enable optional services provided by neutron
 #   Useful when using cisco n1kv plugin, vpnaas or fwaas.
 #   Default to {}
-
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::dashboard(
   $ks_keystone_internal_host = '127.0.0.1',
   $secret_key                = 'secrete',
@@ -100,6 +105,7 @@ class cloud::dashboard(
   $allowed_hosts             = $::fqdn,
   $vhost_extra_params        = {},
   $neutron_extra_options     = {},
+  $firewall_settings         = {},
 ) {
 
   # We build the param needed for horizon class
@@ -155,6 +161,13 @@ class cloud::dashboard(
     }
   }
 
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow horizon access':
+      port   => $horizon_port,
+      extras => $firewall_settings,
+    }
+  }
+
   @@haproxy::balancermember{"${::fqdn}-horizon":
     listening_service => 'horizon_cluster',
     server_names      => $::hostname,
@@ -164,6 +177,13 @@ class cloud::dashboard(
   }
 
   if $listen_ssl {
+
+    if $::cloud::manage_firewall {
+      cloud::firewall::rule{ '100 allow horizon ssl access':
+        port   => $horizon_ssl_port,
+        extras => $firewall_settings,
+      }
+    }
 
     @@haproxy::balancermember{"${::fqdn}-horizon-ssl":
       listening_service => 'horizon_ssl_cluster',

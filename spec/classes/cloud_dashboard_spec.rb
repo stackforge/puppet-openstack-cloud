@@ -124,15 +124,43 @@ describe 'cloud::dashboard' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure horizon firewall rules' do
+        is_expected.to contain_firewall('100 allow horizon access').with(
+          :port   => '80',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure horizon firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow horizon access').with(
+          :port   => '80',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily               => 'Debian',
         :operatingsystem        => 'Ubuntu',
-        :operatingsystemrelease => '12.04',
-        :processorcount         => '1',
-        :concat_basedir         => '/var/lib/puppet/concat' }
+        :operatingsystemrelease => '12.04' }
     end
 
     it_configures 'openstack dashboard'
@@ -141,9 +169,7 @@ describe 'cloud::dashboard' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat',
-        :operatingsystemrelease => '6',
-        :processorcount         => '1',
-        :concat_basedir         => '/var/lib/puppet/concat' }
+        :operatingsystemrelease => '6' }
     end
 
     it_configures 'openstack dashboard'

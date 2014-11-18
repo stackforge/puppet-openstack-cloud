@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::volume::api
+#
 # Volume API node
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::volume::api(
   $ks_cinder_internal_port     = 8776,
@@ -25,6 +34,7 @@ class cloud::volume::api(
   $api_eth                     = '127.0.0.1',
   $ks_glance_internal_proto    = 'http',
   $default_volume_type         = undef,
+  $firewall_settings           = {},
   # Maintain backward compatibility for multi-backend
   $volume_multi_backend        = false
 ) {
@@ -53,6 +63,13 @@ class cloud::volume::api(
     glance_api_servers     => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${ks_glance_api_internal_port}",
     glance_request_timeout => '10',
     glance_num_retries     => '10'
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow cinder-api access':
+      port   => $ks_cinder_internal_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-cinder_api":

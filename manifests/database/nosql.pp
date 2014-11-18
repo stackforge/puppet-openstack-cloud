@@ -35,10 +35,16 @@
 #   If set to false, the setup won't be HA and no replicaset will be created.
 #   Defaults to hostname
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::database::nosql(
-  $bind_ip         = '127.0.0.1',
-  $nojournal       = false,
-  $replset_members = $::hostname
+  $bind_ip           = '127.0.0.1',
+  $nojournal         = false,
+  $replset_members   = $::hostname,
+  $firewall_settings = {},
 ) {
 
   # should be an array
@@ -82,4 +88,12 @@ class cloud::database::nosql(
   anchor {'mongodb setup done' :
     require => Exec['check_mongodb'],
   }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow mongodb access':
+      port   => '27017',
+      extras => $firewall_settings,
+    }
+  }
+
 }

@@ -53,12 +53,45 @@ describe 'cloud::messaging' do
       end
     end
 
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure rabbitmq firewall rules' do
+        is_expected.to contain_firewall('100 allow rabbitmq access').with(
+          :port   => '5672',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow rabbitmq management access').with(
+          :port   => '55672',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure rabbitmq firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow rabbitmq management access').with(
+          :port   => '55672',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily      => 'Debian',
-        :puppetversion => '3.3' }
+      { :osfamily => 'Debian' }
     end
 
     it_configures 'openstack messaging'
@@ -66,8 +99,7 @@ describe 'cloud::messaging' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily      => 'RedHat',
-        :puppetversion => '3.3' }
+      { :osfamily => 'RedHat' }
     end
 
     it_configures 'openstack messaging'

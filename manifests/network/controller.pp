@@ -15,9 +15,16 @@
 #
 # Network Controller node (API + Scheduler)
 #
+# === Parameters:
+#
 # [*manage_ext_network*]
 #   (optionnal) Manage or not external network with provider network API
 #   Defaults to false.
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
@@ -37,6 +44,7 @@ class cloud::network::controller(
   $nova_admin_password     = 'novapassword',
   $nova_region_name        = 'RegionOne',
   $manage_ext_network      = false,
+  $firewall_settings       = {},
 ) {
 
   include 'cloud::network'
@@ -84,6 +92,13 @@ class cloud::network::controller(
     unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables",
     require => 'Neutron_config[DEFAULT/service_plugins]',
     notify  => Service['neutron-server']
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow neutron-server access':
+      port   => $ks_neutron_public_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-neutron_api":

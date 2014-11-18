@@ -256,7 +256,6 @@ describe 'cloud::compute::hypervisor' do
         { :osfamily        => 'Debian',
           :operatingsystem => 'Ubuntu',
           :vtx             => true,
-          :concat_basedir  => '/var/lib/puppet/concat'
         }
       end
 
@@ -272,8 +271,7 @@ describe 'cloud::compute::hypervisor' do
       before :each do
         facts.merge!( :osfamily         => 'Debian',
                       :operatingsystem  => 'Debian',
-                      :vtx              => true,
-                      :concat_basedir   => '/var/lib/puppet/concat' )
+                      :vtx              => true  )
       end
       it 'ensure TSO script is enabled at boot' do
         is_expected.to contain_exec('enable-tso-script').with(
@@ -294,8 +292,7 @@ describe 'cloud::compute::hypervisor' do
     context 'without TSO/GSO/GRO on Red Hat systems' do
       before :each do
         facts.merge!( :osfamily         => 'RedHat',
-                      :vtx              => true,
-                      :concat_basedir   => '/var/lib/puppet/concat' )
+                      :vtx              => true )
       end
       it 'ensure TSO script is enabled at boot' do
         is_expected.to contain_exec('enable-tso-script').with(
@@ -525,6 +522,48 @@ describe 'cloud::compute::hypervisor' do
       end
       it_raises 'a Puppet::Error', /When running NFS backend, vm_rbd parameter cannot be set to true./
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure compute firewall rules' do
+        is_expected.to contain_firewall('100 allow instances console access').with(
+          :port   => '5900-5999',
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow instances migration access').with(
+          :port   => ['16509', '49152-49215'],
+          :proto  => 'tcp',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure compute firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow instances console access').with(
+          :port   => '5900-5999',
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow instances migration access').with(
+          :port   => ['16509', '49152-49215'],
+          :proto  => 'tcp',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
  end
 
   context 'on Debian platforms' do
@@ -532,7 +571,6 @@ describe 'cloud::compute::hypervisor' do
       { :osfamily        => 'Debian',
         :operatingsystem => 'Debian',
         :vtx             => true,
-        :concat_basedir  => '/var/lib/puppet/concat',
         # required for rpcbind module
         :lsbdistid       => 'Debian'
       }
@@ -546,7 +584,6 @@ describe 'cloud::compute::hypervisor' do
     let :facts do
       { :osfamily                  => 'RedHat',
         :vtx                       => true,
-        :concat_basedir            => '/var/lib/puppet/concat',
         # required for rbd support check
         :operatingsystemmajrelease => '7',
         # required for nfs module

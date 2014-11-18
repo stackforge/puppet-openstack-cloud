@@ -131,6 +131,52 @@ describe 'cloud::network::dhcp' do
       )
       is_expected.to contain_file('/etc/neutron/dnsmasq-neutron.conf').with_content(/^dhcp-option-force=26,1400$/)
     end
+
+    context 'with default firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      it 'configure neutron-server firewall rules' do
+        is_expected.to contain_firewall('100 allow dhcp in access').with(
+          :port   => '67',
+          :proto  => 'udp',
+          :chain  => 'INPUT',
+          :action => 'accept',
+        )
+        is_expected.to contain_firewall('100 allow dhcp out access').with(
+          :port   => '68',
+          :proto  => 'udp',
+          :chain  => 'OUTPUT',
+          :action => 'accept',
+        )
+      end
+    end
+
+    context 'with custom firewall enabled' do
+      let :pre_condition do
+        "class { 'cloud': manage_firewall => true }"
+      end
+      before :each do
+        params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
+      end
+      it 'configure neutrons-server firewall rules with custom parameter' do
+        is_expected.to contain_firewall('100 allow dhcp in access').with(
+          :port   => '67',
+          :proto  => 'udp',
+          :chain  => 'INPUT',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+        is_expected.to contain_firewall('100 allow dhcp out access').with(
+          :port   => '68',
+          :proto  => 'udp',
+          :chain  => 'OUTPUT',
+          :action => 'accept',
+          :limit  => '50/sec',
+        )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

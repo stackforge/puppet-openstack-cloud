@@ -14,9 +14,10 @@
 # under the License.
 #
 class cloud::storage::rbd::osd (
-  $public_address  = '127.0.0.1',
-  $cluster_address = '127.0.0.1',
-  $devices         = ['sdb','/dev/sdc'],
+  $public_address    = '127.0.0.1',
+  $cluster_address   = '127.0.0.1',
+  $devices           = ['sdb','/dev/sdc'],
+  $firewall_settings = {},
 ) {
 
   include 'cloud::storage::rbd'
@@ -38,4 +39,12 @@ class cloud::storage::rbd::osd (
   elsif is_hash($devices) {
     create_resources('ceph::osd::device', $devices)
   }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow ceph-osd access':
+      port   => '6800-6810',
+      extras => $firewall_settings,
+    }
+  }
+
 }

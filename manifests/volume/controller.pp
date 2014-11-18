@@ -24,6 +24,7 @@ class cloud::volume::controller(
   $ks_glance_api_internal_port = 9292,
   $api_eth                     = '127.0.0.1',
   $default_volume_type         = undef,
+  $firewall_settings           = {},
   # Maintain backward compatibility for multi-backend
   $volume_multi_backend        = false
 ) {
@@ -43,7 +44,8 @@ class cloud::volume::controller(
     api_eth                     => $api_eth,
     default_volume_type         => $default_volume_type,
     # Maintain backward compatibility for multi-backend
-    volume_multi_backend        => $volume_multi_backend
+    volume_multi_backend        => $volume_multi_backend,
+    firewall_settings           => $firewall_settings,
   }
   class { 'cloud::volume::scheduler':
     volume_multi_backend => $volume_multi_backend

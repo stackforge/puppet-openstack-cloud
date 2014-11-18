@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Compute API node
+# == Class: cloud::compute::api
+#
+# Install a Nova-API node
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::compute::api(
   $ks_keystone_internal_host            = '127.0.0.1',
@@ -23,7 +32,8 @@ class cloud::compute::api(
   $api_eth                              = '127.0.0.1',
   $ks_nova_public_port                  = '8774',
   $ks_ec2_public_port                   = '8773',
-  $ks_metadata_public_port              = '8775'
+  $ks_metadata_public_port              = '8775',
+  $firewall_settings                    = {},
 ){
 
   include 'cloud::compute'
@@ -37,6 +47,21 @@ class cloud::compute::api(
     metadata_listen                      => $api_eth,
     neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
     osapi_v3                             => true,
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow nova-api access':
+      port   => $ks_nova_public_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow nova-metadata access':
+      port   => $ks_metadata_public_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow nova-ec2 access':
+      port   => $ks_ec2_public_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":

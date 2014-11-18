@@ -30,11 +30,17 @@
 #   (optionnal) IP address used to send multicast traffic
 #   Defaults to '239.1.1.2'
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::spof(
   $cluster_ip        = '127.0.0.1',
   $cluster_members   = false,
   $multicast_address = '239.1.1.2',
-  $cluster_password  = 'secrete'
+  $cluster_password  = 'secrete',
+  $firewall_settings = {},
 ) {
 
   if $::osfamily == 'RedHat' {
@@ -123,6 +129,23 @@ class cloud::spof(
   # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
   class { 'cloud::telemetry::centralagent':
     enabled => false,
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow vrrp access':
+      port   => undef,
+      proto  => 'vrrp',
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow corosync tcp access':
+      port   => ['2224','3121','21064'],
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow corosync udp access':
+      port   => ['5404','5405'],
+      proto  => 'udp',
+      extras => $firewall_settings,
+    }
   }
 
 }

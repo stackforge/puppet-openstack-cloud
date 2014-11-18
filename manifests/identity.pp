@@ -355,6 +355,11 @@
 #   Experimental feature.
 #   Defaults to false
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::identity (
   $swift_enabled                = true,
   $trove_enabled                = false,
@@ -450,7 +455,8 @@ class cloud::identity (
   $log_facility                 = 'LOG_LOCAL0',
   $use_syslog                   = true,
   $ks_token_expiration          = 3600,
-  $token_driver                 = 'keystone.token.backends.sql.Token'
+  $token_driver                 = 'keystone.token.backends.sql.Token',
+  $firewall_settings            = {},
 ){
 
   $encoded_user     = uriescape($keystone_db_user)
@@ -658,6 +664,17 @@ class cloud::identity (
     path    => '/usr/bin',
     user    => 'keystone',
     unless  => "/usr/bin/mysql keystone -h ${keystone_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow keystone access':
+      port   => $ks_keystone_public_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow keystone admin access':
+      port   => $ks_keystone_admin_port,
+      extras => $firewall_settings,
+    }
   }
 
   @@haproxy::balancermember{"${::fqdn}-keystone_api":

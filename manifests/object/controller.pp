@@ -13,7 +13,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::object::controller
+#
 # Swift Proxy node
+#
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::object::controller(
   $ks_keystone_admin_host       = '127.0.0.1',
@@ -29,6 +38,7 @@ class cloud::object::controller(
   $statsd_port                  = 4125,
   $memcache_servers             = ['127.0.0.1:11211'],
   $api_eth                      = '127.0.0.1',
+  $firewall_settings            = {},
 ) {
 
   include 'cloud::object'
@@ -112,6 +122,13 @@ cache = swift.cache')
   }
 
   Swift::Ringsync<<| |>> #~> Service["swift-proxy"]
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow swift-proxy access':
+      port   => $ks_swift_internal_port,
+      extras => $firewall_settings,
+    }
+  }
 
   @@haproxy::balancermember{"${::fqdn}-swift_api":
       listening_service => 'swift_api_cluster',

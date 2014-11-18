@@ -45,6 +45,11 @@
 #   (optional) Port of RabbitMQ service.
 #   Defaults to '5672'
 #
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::messaging(
   $cluster_node_type = 'disc',
   $rabbit_names      = $::hostname,
@@ -52,6 +57,7 @@ class cloud::messaging(
   $haproxy_binding   = false,
   $rabbitmq_ip       = $::ipaddress,
   $rabbitmq_port     = '5672',
+  $firewall_settings = {},
 ){
 
   # we ensure having an array
@@ -107,6 +113,17 @@ class cloud::messaging(
     write_permission     => '.*',
     read_permission      => '.*',
     provider             => 'rabbitmqctl',
+  }
+
+  if $::cloud::manage_firewall {
+    cloud::firewall::rule{ '100 allow rabbitmq access':
+      port   => $rabbitmq_port,
+      extras => $firewall_settings,
+    }
+    cloud::firewall::rule{ '100 allow rabbitmq management access':
+      port   => '55672',
+      extras => $firewall_settings,
+    }
   }
 
   if $haproxy_binding {
