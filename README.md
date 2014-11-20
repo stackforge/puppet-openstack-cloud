@@ -41,6 +41,11 @@ Cinder has multi-backend support:
 * iSCSI
 * EMC VNX direct
 * NFS
+Glance supports different backends:
+* RBD (default)
+* file
+* NFS (mount a NFS share by using file backend)
+* Swift
 Neutron supports:
 * ML2 plugin with OVS agent (GRE + VXLAN supported)
 * Cisco plugin with N1KV agent (non-ML2)

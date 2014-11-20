@@ -133,6 +133,22 @@ describe 'cloud::image::api' do
       end
     end
 
+    context 'with Swift backend' do
+      before :each do
+        params.merge!(:backend => 'swift')
+      end
+
+      it 'configure Glance with Glance backend' do
+        is_expected.not_to contain_class('glance::backend::file')
+        is_expected.not_to contain_class('glance::backend::rbd')
+        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'swift')
+        is_expected.to contain_glance_api_config('DEFAULT/swift_store_user').with('value' => 'services:glance')
+        is_expected.to contain_glance_api_config('DEFAULT/swift_store_key').with('value' => 'secrete')
+        is_expected.to contain_glance_api_config('DEFAULT/swift_store_auth_address').with('value' => 'https://10.0.0.1:35357/v2.0/')
+        is_expected.to contain_glance_api_config('DEFAULT/swift_store_create_container_on_put').with('value' => true)
+      end
+    end
+
     context 'with missing parameter when using Glance NFS backend' do
       before :each do
         params.merge!(:backend    => 'nfs',
