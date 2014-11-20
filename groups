@@ -1,2 +1,5 @@
-global:Registered-Users	Registered Users
+# UUID                                  	Group Name
+#
 0196c8be36097aafe80fd63c1600496fe9cffb50	puppet-manager-core
+2a10fed4af28ba84f5afa96e0c04c6a7e3ead5d7	packstack-core
+global:Registered-Users                 	Registered Users
