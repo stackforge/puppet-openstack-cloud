@@ -111,7 +111,7 @@ class cloud::volume(
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Cinder DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
-  # TODO(Gonéri)
+  # TODO(Goneri)
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'cinder_db_sync':

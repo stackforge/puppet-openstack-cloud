@@ -7,7 +7,7 @@
 #
 #      http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
+# Unless optional by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
@@ -17,18 +17,172 @@
 #
 # === Parameters
 #
+# [*api_eth*]
+#   (optional) Hostname or IP to bind MySQL daemon.
+#   Defaults to '127.0.0.1'
+#
+# [*galera_master_name*]
+#   (optional) Hostname or IP of the Galera master node, databases and users
+#   resources are created on this node and propagated on the cluster.
+#   Defaults to 'mgmt001'
+#
 # [*galera_internal_ips*]
-#   Array of internal ip of the galera nodes.
+#   (optional) Array of internal ip of the galera nodes.
 #   Defaults to ['127.0.0.1']
+#
+# [*galera_gcache*]
+#   (optional) Size of the Galera gcache
+#   wsrep_provider_options, for master/slave mode
+#   Defaults to '1G'
+#
+# [*keystone_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*keystone_db_user*]
+#   (optional) Name of keystone DB user.
+#   Defaults to trove
+#
+# [*keystone_db_password*]
+#   (optional) Password that will be used for the Keystone db user.
+#   Defaults to 'keystonepassword'
+#
+# [*keystone_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*cinder_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*cinder_db_user*]
+#   (optional) Name of cinder DB user.
+#   Defaults to trove
+#
+# [*cinder_db_password*]
+#   (optional) Password that will be used for the cinder db user.
+#   Defaults to 'cinderpassword'
+#
+# [*cinder_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*glance_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*glance_db_user*]
+#   (optional) Name of glance DB user.
+#   Defaults to trove
+#
+# [*glance_db_password*]
+#   (optional) Password that will be used for the glance db user.
+#   Defaults to 'glancepassword'
+#
+# [*glance_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*heat_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*heat_db_user*]
+#   (optional) Name of heat DB user.
+#   Defaults to trove
+#
+# [*heat_db_password*]
+#   (optional) Password that will be used for the heat db user.
+#   Defaults to 'heatpassword'
+#
+# [*heat_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*nova_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*nova_db_user*]
+#   (optional) Name of nova DB user.
+#   Defaults to trove
+#
+# [*nova_db_password*]
+#   (optional) Password that will be used for the nova db user.
+#   Defaults to 'novapassword'
+#
+# [*nova_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*neutron_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*neutron_db_user*]
+#   (optional) Name of neutron DB user.
+#   Defaults to trove
+#
+# [*neutron_db_password*]
+#   (optional) Password that will be used for the neutron db user.
+#   Defaults to 'neutronpassword'
+#
+# [*neutron_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*trove_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*trove_db_user*]
+#   (optional) Name of trove DB user.
+#   Defaults to trove
+#
+# [*trove_db_password*]
+#   (optional) Password that will be used for the trove db user.
+#   Defaults to 'trovepassword'
+#
+# [*trove_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*mysql_root_password*]
+#   (optional) The MySQL root password.
+#   Puppet will attempt to set the root password and update `/root/.my.cnf` with it.
+#   Defaults to 'rootpassword'
+#
+# [*mysql_sys_maint_password*]
+#   (optional) The MySQL debian-sys-maint password.
+#   Debian only parameter.
+#   Defaults to 'sys_maint'
+#
+# [*galera_clustercheck_dbuser*]
+#   (optional) The MySQL username for Galera cluster check (using monitoring database)
+#   Defaults to 'clustercheckdbuser'
+#
+# [*galera_clustercheck_dbpassword*]
+#   (optional) The MySQL password for Galera cluster check
+#   Defaults to 'clustercheckpassword'
+#
+# [*galera_clustercheck_ipaddress*]
+#   (optional) The name or ip address of host running monitoring database (clustercheck)
+#   Defaults to '127.0.0.1'
 #
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
 #   Default to {}
 #
+# ==== Deprecated parameters:
+#
+# [*service_provider*]
+#   Previously used to choose between sysv and systemd, yes suppressed
+#   because this subject is potentially a troll :-D
+#   Defaults to 'sysv'
+#
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
-    $service_provider               = 'sysv',
     $galera_master_name             = 'mgmt001',
     $galera_internal_ips            = ['127.0.0.1'],
     $galera_gcache                  = '1G',
@@ -66,6 +220,8 @@ class cloud::database::sql (
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
     $galera_clustercheck_ipaddress  = '127.0.0.1',
     $firewall_settings              = {},
+    # DEPRECATED PARAMETERS
+    $service_provider               = 'sysv',
 ) {
 
   include 'xinetd'
@@ -328,7 +484,7 @@ class cloud::database::sql (
 
   # The puppet-xinetd module do not correctly reload
   # the configuration on “notify”
-  # TODO(Gonéri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
+  # TODO(Goneri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
   # get merged
   exec{ 'reload_xinetd':
     command     => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',

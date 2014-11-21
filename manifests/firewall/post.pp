@@ -17,6 +17,21 @@
 #
 # Firewall rules during 'post' Puppet stage
 #
+# === Parameters:
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Defaults to false
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
+# ==== Deprecated parameters:
+#
+# [*log*] Unused parameter
+#
 class cloud::firewall::post(
   $debug             = false,
   $log               = false,

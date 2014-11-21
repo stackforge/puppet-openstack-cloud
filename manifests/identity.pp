@@ -35,6 +35,10 @@
 #   (optional) Password to connect to keystone database
 #   Defaults to 'keystonepassword'
 #
+# [*memcache_servers*]
+#   (optionnal) Memcached servers used by Keystone. Should be an array.
+#   Defaults to ['127.0.0.1:11211']
+#
 # [*ks_admin_email*]
 #   (optional) Email address of admin user in Keystone
 #   Defaults to 'no-reply@keystone.openstack'
@@ -194,44 +198,112 @@
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_swift_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_swift_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_ceilometer_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_ceilometer_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_ceilometer_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
 # [*ks_heat_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_heat_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_heat_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_public_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_nova_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_nova_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_nova_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
 # [*ks_neutron_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_neutron_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_neutron_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_trove_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_trove_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_trove_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
 # [*ks_glance_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_glance_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_glance_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_cinder_public_proto*]
 #   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
 #   Defaults to 'http'
 #
+# [*ks_cinder_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_cinder_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*ks_ceilometer_public_port*]
 #   (optional) TCP port to connect to Ceilometer API from public network
-#   Defaults to '8777'
-#
-# [*ks_ceilometer_admin_port*]
-#   (optional) TCP port to connect to Ceilometer API from admin network
-#   Defaults to '8777'
-#
-# [*ks_ceilometer_internal_port*]
-#   (optional) TCP port to connect to Ceilometer API from internal network
 #   Defaults to '8777'
 #
 # [*ks_keystone_internal_port*]
@@ -250,20 +322,8 @@
 #   (optional) TCP port to connect to Swift API from public network
 #   Defaults to '8080'
 #
-# [*ks_nova_internal_port*]
-#   (optional) TCP port to connect to Nova API from internal network
-#   Defaults to '8774'
-#
-# [*ks_trove_internal_port*]
-#   (optional) TCP port to connect to Trove API from internal network
-#   Defaults to '8779'
-#
 # [*ks_trove_public_port*]
 #   (optional) TCP port to connect to Trove API from public network
-#   Defaults to '8779'
-#
-# [*ks_trove_admin_port*]
-#   (optional) TCP port to connect to Trove API from admin network
 #   Defaults to '8779'
 #
 # [*ks_nova_public_port*]
@@ -274,48 +334,29 @@
 #   (optional) TCP port to connect to EC2 API from public network
 #   Defaults to '8773'
 #
-# [*ks_nova_admin_port*]
-#   (optional) TCP port to connect to Nova API from admin network
-#   Defaults to '8774'
-#
-# [*ks_cinder_internal_port*]
-#   (optional) TCP port to connect to Cinder API from internal network
-#   Defaults to '8776'
+# [*ks_swift_dispersion_password*]
+#   (optional) Password of the dispersion tenant, used for swift-dispersion-report
+#   and swift-dispersion-populate tools.
+#   Defaults to 'dispersion'
 #
 # [*ks_cinder_public_port*]
 #   (optional) TCP port to connect to Cinder API from public network
 #   Defaults to '8776'
 #
-# [*ks_cinder_admin_port*]
-#   (optional) TCP port to connect to Cinder API from admin network
-#   Defaults to '8776'
-#
-# [*ks_neutron_internal_port*]
-#   (optional) TCP port to connect to Neutron API from internal network
-#   Defaults to '9696'
-#
 # [*ks_neutron_public_port*]
 #   (optional) TCP port to connect to Neutron API from public network
 #   Defaults to '9696'
 #
-# [*ks_neutron_admin_port*]
-#   (optional) TCP port to connect to Neutron API from admin network
-#   Defaults to '9696'
-#
 # [*ks_heat_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8004'
+#
+# [*ks_heat_cfn_public_port*]
 #   (optional) TCP port to connect to Heat API from public network
 #   Defaults to '8000'
 #
-# [*ks_glance_api_internal_port*]
-#   (optional) TCP port to connect to Glance API from internal network
-#   Defaults to '9292'
-#
 # [*ks_glance_api_public_port*]
 #   (optional) TCP port to connect to Glance API from public network
-#   Defaults to '9292'
-#
-# [*ks_glance_api_admin_port*]
-#   (optional) TCP port to connect to Glance API from admin network
 #   Defaults to '9292'
 #
 # [*api_eth*]
@@ -354,6 +395,14 @@
 #   (optional) Enable or not Trove (Database as a Service)
 #   Experimental feature.
 #   Defaults to false
+#
+# [*swift_enabled*]
+#   (optional) Enable or not OpenStack Swift (Stockage as a Service)
+#   Defaults to true
+#
+# [*ks_token_expiration*]
+#   (optional) Amount of time a token should remain valid (seconds).
+#   Defaults to 3600 (1 hour).
 #
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
@@ -656,7 +705,7 @@ class cloud::identity (
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Keystone DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
-  # TODO(Gonéri)
+  # TODO(Goneri)
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'keystone_db_sync':
