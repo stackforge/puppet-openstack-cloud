@@ -47,6 +47,10 @@
 #   (optional) Admin tenant name in Keystone
 #   Defaults to 'admin'
 #
+# [*ks_admin_roles*]
+#   (optional) Admin roles names in Keystone
+#   Defaults to ['admin', 'heat_stack_owner']
+#
 # [*ks_admin_token*]
 #   (required) Admin token used by Keystone.
 #
@@ -371,6 +375,7 @@ class cloud::identity (
   $ks_admin_email               = 'no-reply@keystone.openstack',
   $ks_admin_password            = 'adminpassword',
   $ks_admin_tenant              = 'admin',
+  $ks_admin_roles               = ['admin', 'heat_stack_owner'],
   $ks_admin_token               = undef,
   $ks_ceilometer_admin_host     = '127.0.0.1',
   $ks_ceilometer_internal_host  = '127.0.0.1',
@@ -510,6 +515,7 @@ class cloud::identity (
     email        => $ks_admin_email,
     password     => $ks_admin_password,
     admin_tenant => $ks_admin_tenant,
+    admin_roles  => $ks_admin_roles,
   }
 
   keystone_role { $identity_roles_addons: ensure => present }

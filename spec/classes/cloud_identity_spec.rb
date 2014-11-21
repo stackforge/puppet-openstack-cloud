@@ -31,6 +31,7 @@ describe 'cloud::identity' do
         :ks_admin_email               => 'admin@openstack.org',
         :ks_admin_password            => 'secrete',
         :ks_admin_tenant              => 'admin',
+        :ks_admin_roles               => ['admin', 'heat_stack_owner'],
         :ks_admin_token               => 'SECRETE',
         :ks_ceilometer_admin_host     => '10.0.0.1',
         :ks_ceilometer_internal_host  => '10.0.0.1',
@@ -156,7 +157,8 @@ describe 'cloud::identity' do
       is_expected.to contain_class('keystone::roles::admin').with(
         :email        => 'admin@openstack.org',
         :password     => 'secrete',
-        :admin_tenant => 'admin'
+        :admin_tenant => 'admin',
+        :admin_roles  => ['admin', 'heat_stack_owner']
       )
     end
 
