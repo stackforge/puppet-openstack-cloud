@@ -19,6 +19,51 @@
 #
 # === Parameters:
 #
+# [*server_proxyclient_address*]
+#   (optional) Hostname or IP used to connect to Spice service.
+#   Defaults to '127.0.0.1'
+#
+# [*libvirt_type*]
+#   (optional) Libvirt domain type. Options are: kvm, lxc, qemu, uml, xen
+#   Replaces libvirt_type
+#   Defaults to 'kvm'
+#
+# [*ks_nova_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_nova_public_host*]
+#   (optional) Public Hostname or IP to connect to Nova API
+#   Defaults to '127.0.0.1'
+#
+# [*nova_ssh_public_key*]
+#   (optional) Install public key in .ssh/authorized_keys for the 'nova' user.
+#   Note: this parameter use the 'content' provider of Puppet, in consequence
+#   you must provide the entire ssh public key in this parameter.
+#   Defaults to undef
+#
+# [*nova_ssh_private_key*]
+#   (optional) Install private key into .ssh/id_rsa.
+#   Note: this parameter use the 'content' provider of Puppet, in consequence
+#   you must provide the entire ssh privatekey in this parameter.
+#   Defaults to undef
+#
+# [*spice_port*]
+#   (optional) TCP port to connect to Nova spicehtmlproxy service.
+#   Defaults to '6082'
+#
+# [*cinder_rbd_user*]
+#   (optional) The RADOS client name for accessing rbd volumes.
+#   Defaults to 'cinder'
+#
+# [*nova_rbd_pool*]
+#   (optional) The RADOS pool in which rbd volumes are stored.
+#   Defaults to 'vms'
+#
+# [*nova_rbd_secret_uuid*]
+#   (optional) The libvirt uuid of the secret for the cinder_rbd_user.
+#   Defaults to undef
+#
 # [*vm_rbd*]
 #   (optional) Enable or not ceph capabilities on compute node to store
 #   nova instances on ceph storage.
@@ -61,10 +106,23 @@
 #   Need to be a valid shell path.
 #   Defaults to false
 #
+# [*ks_spice_public_proto*]
+#   (optional) Protocol used to connect to Spice service.
+#   Defaults to false (use nova_public_proto)
+#
+# [*ks_spice_public_host*]
+#   (optional) Hostname or IP used to connect to Spice service.
+#   Defaults to false (use nova_public_host)
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
 #   Default to {}
+#
+# ==== Deprecated parameters:
+#
+# [*has_ceph*]
+#   Previously used to manage or not ceph rbd backend.
 #
 class cloud::compute::hypervisor(
   $server_proxyclient_address = '127.0.0.1',

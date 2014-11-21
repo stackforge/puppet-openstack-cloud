@@ -13,7 +13,43 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::compute::controller
+#
 # Compute controller node
+#
+# === Parameters:
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_nova_password*]
+#   (optional) Password used by Nova to connect to Keystone API
+#   Defaults to 'novapassword'
+#
+# [*neutron_metadata_proxy_shared_secret*]
+#   (optional) Shared secret to validate proxies Neutron metadata requests
+#   Defaults to 'metadatapassword'
+#
+# [*api_eth*]
+#   (optional) Hostname or IP to connect to bind Nova API.
+#   Defaults to '127.0.0.1'
+#
+# [*spice_port*]
+#   (optional) TCP port to connect to Nova spicehtmlproxy service.
+#   Defaults to '8774'
+#
+# [*ks_nova_public_port*]
+#   (optional) TCP port to connect to Nova API.
+#   Defaults to '8774'
+#
+# [*ks_ec2_public_port*]
+#   (optional) TCP port to connect to Nova EC2 API.
+#   Defaults to '8773'
+#
+# [*ks_metadata_public_port*]
+#   (optional) TCP port to connect to Nova metadata API.
+#   Defaults to '8775'
 #
 class cloud::compute::controller(
   $ks_keystone_internal_host            = '127.0.0.1',

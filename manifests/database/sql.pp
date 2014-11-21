@@ -21,6 +21,118 @@
 #   Array of internal ip of the galera nodes.
 #   Defaults to ['127.0.0.1']
 #
+# [*keystone_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*keystone_db_user*]
+#   (optional) Name of keystone DB user.
+#   Defaults to trove
+#
+# [*keystone_db_password*]
+#   (required) Password that will be used for the Keystone db user.
+#   Defaults to 'keystonepassword'
+#
+# [*keystone_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*cinder_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*cinder_db_user*]
+#   (optional) Name of cinder DB user.
+#   Defaults to trove
+#
+# [*cinder_db_password*]
+#   (required) Password that will be used for the cinder db user.
+#   Defaults to 'cinderpassword'
+#
+# [*cinder_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*glance_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*glance_db_user*]
+#   (optional) Name of glance DB user.
+#   Defaults to trove
+#
+# [*glance_db_password*]
+#   (required) Password that will be used for the glance db user.
+#   Defaults to 'glancepassword'
+#
+# [*glance_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*heat_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*heat_db_user*]
+#   (optional) Name of heat DB user.
+#   Defaults to trove
+#
+# [*heat_db_password*]
+#   (required) Password that will be used for the heat db user.
+#   Defaults to 'heatpassword'
+#
+# [*heat_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*nova_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*nova_db_user*]
+#   (optional) Name of nova DB user.
+#   Defaults to trove
+#
+# [*nova_db_password*]
+#   (required) Password that will be used for the nova db user.
+#   Defaults to 'novapassword'
+#
+# [*nova_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*neutron_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*neutron_db_user*]
+#   (optional) Name of neutron DB user.
+#   Defaults to trove
+#
+# [*neutron_db_password*]
+#   (required) Password that will be used for the neutron db user.
+#   Defaults to 'neutronpassword'
+#
+# [*neutron_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
+# [*trove_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*trove_db_user*]
+#   (optional) Name of trove DB user.
+#   Defaults to trove
+#
+# [*trove_db_password*]
+#   (required) Password that will be used for the trove db user.
+#   Defaults to 'trovepassword'
+#
+# [*trove_db_allowed_hosts*]
+#   (optional) Hosts allowed to use the database
+#   Defaults to ['127.0.0.1']
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -328,7 +440,7 @@ class cloud::database::sql (
 
   # The puppet-xinetd module do not correctly reload
   # the configuration on “notify”
-  # TODO(Gonéri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
+  # TODO(Goneri): remove this once https://github.com/puppetlabs/puppetlabs-xinetd/pull/9
   # get merged
   exec{ 'reload_xinetd':
     command     => '/usr/bin/pkill -F /var/run/xinetd.pid --signal HUP',

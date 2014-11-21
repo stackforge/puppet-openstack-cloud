@@ -48,6 +48,10 @@
 #   (optional) Internal Hostname or IP to connect to Glance API
 #   Defaults to '127.0.0.1'
 #
+# [*ks_glance_internal_proto*]
+#   (optional) Internal protocol to connect to Glance API
+#   Defaults to 'http'
+#
 # [*glance_api_port*]
 #   (optional) TCP port to connect to Glance API
 #   Defaults to '9292'
@@ -68,9 +72,33 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to 'LOG_LOCAL0'
 #
+# [*neutron_endpoint*]
+#   (optional) Host running auth service.
+#   Defaults to '127.0.0.1'
+#
+# [*neutron_protocol*]
+#   (optional) Protocol to connect to Neutron service.
+#   Defaults to 'http'
+#
+# [*neutron_password*]
+#   (optional) Password to connect to Neutron service.
+#   Defaults to 'neutronpassword'
+#
+# [*neutron_region_name*]
+#   (optional) Name of the Neutron Region.
+#   Defaults to 'RegionOne'
+#
 # [*memcache_servers*]
 #   (optionnal) Memcached servers used by Keystone. Should be an array.
 #   Defaults to ['127.0.0.1:11211']
+#
+# [*availability_zone*]
+#   (optional) Name of the default Nova availability zone.
+#   Defaults to 'RegionOne'
+#
+# [*cinder_endpoint_type*]
+#   (optional) Cinder endpoint type to use.
+#   Defaults to 'publicURL'
 #
 class cloud::compute(
   $nova_db_host             = '127.0.0.1',
@@ -157,7 +185,7 @@ class cloud::compute(
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Nova DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
-  # TODO(Gonéri)
+  # TODO(Goneri)
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'nova_db_sync':
