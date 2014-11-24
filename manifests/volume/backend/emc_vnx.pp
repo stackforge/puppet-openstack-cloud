@@ -68,4 +68,12 @@ define cloud::volume::backend::emc_vnx (
     set_value => $volume_backend_name,
     notify    => Service['cinder-volume']
   }
+
+  # When creating a volume type, export an anchor and collect it on all
+  # cinder-volume nodes where this backend is running with a notify on cinder-volume.
+  # It ensures we restart cinder-volume everywhere the backend is running.
+  @@anchor { "${volume_backend_name} volume type created":
+    require => Cinder::Type[$volume_backend_name],
+  }
+  Anchor <<| tag == "${volume_backend_name} volume type created" |> ~> Service['cinder-volume']
 }
