@@ -77,7 +77,7 @@ class cloud::spof(
   } else {
 
     class { 'corosync':
-      enable_secauth    => false,
+      enable_secauth    => true,
       authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
       bind_address      => $cluster_ip,
       multicast_address => $multicast_address

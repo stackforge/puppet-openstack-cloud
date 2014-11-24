@@ -36,7 +36,7 @@ describe 'cloud::spof' do
 
       it 'configure pacemaker/corosync' do
         is_expected.to contain_class('corosync').with(
-          :enable_secauth    => false,
+          :enable_secauth    => true,
           :authkey           => '/var/lib/puppet/ssl/certs/ca.pem',
           :bind_address      => '10.0.0.1',
           :multicast_address => '239.1.1.2',
