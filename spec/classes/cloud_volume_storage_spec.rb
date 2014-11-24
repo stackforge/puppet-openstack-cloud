@@ -70,6 +70,14 @@ describe 'cloud::volume::storage' do
               'storage_vnx_pool_name' => 'emc-volumes',
             }
           },
+          'eqlx' => {
+            'dell' => {
+              'san_ip'          => '10.0.0.1',
+              'san_login'       => 'admin',
+              'san_password'    => 'secrete',
+              'eqlx_group_name' => 'dell-volumes',
+            }
+          },
           'nfs' => {
             'freenas' => {
               'nfs_servers'          => ['10.0.0.1:/myshare'],
@@ -185,6 +193,21 @@ describe 'cloud::volume::storage' do
       end
     end
 
+    context 'with EQLX backend' do
+      it 'configures EQLX volume driver' do
+        should contain_cinder_config('dell/volume_backend_name').with_value('dell')
+        should contain_cinder_config('dell/san_ip').with_value('10.0.0.1')
+        should contain_cinder_config('dell/san_login').with_value('admin')
+        should contain_cinder_config('dell/san_password').with_value('secrete')
+        should contain_cinder_config('dell/eqlx_group_name').with_value('dell-volumes')
+        should contain_cinder__type('dell').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'dell',
+          :notify    => 'Service[cinder-volume]'
+        )
+      end
+    end
+
     context 'with NFS backend' do
       it 'configures NFS volume driver' do
         is_expected.to contain_cinder_config('freenas/volume_backend_name').with_value('freenas')
@@ -256,7 +279,7 @@ describe 'cloud::volume::storage' do
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
         is_expected.to contain_class('cinder::backends').with(
-          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast', 'freenas']
+          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast', 'dell', 'freenas']
         )
       end
     end
