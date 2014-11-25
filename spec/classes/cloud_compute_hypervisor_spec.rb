@@ -57,15 +57,10 @@ describe 'cloud::compute::hypervisor' do
         rabbit_hosts             => ['10.0.0.1'],
         rabbit_password          => 'secrete',
         api_eth                  => '10.0.0.1',
-        provider_vlan_ranges     => ['physnet1:1000:2999'],
-        flat_networks            => ['public'],
-        external_bridge          => 'br-pub',
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
-        tenant_network_types     => ['gre'],
-        type_drivers             => ['gre', 'vlan', 'flat'],
         log_facility             => 'LOG_LOCAL0' }"
     end
 
@@ -151,16 +146,6 @@ describe 'cloud::compute::hypervisor' do
           :log_dir                 => false,
           :report_interval         => '30'
       )
-      is_expected.to contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre','vlan','flat'],
-          :tenant_network_types   => ['gre'],
-          :mechanism_drivers      => ['openvswitch','l2population'],
-          :tunnel_id_ranges       => ['1:10000'],
-          :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :flat_networks          => ['public'],
-          :enable_security_group  => true
-      )
-      is_expected.not_to contain__neutron_network('public')
     end
 
     it 'configure neutron on compute node' do

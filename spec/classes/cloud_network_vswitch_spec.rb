@@ -26,20 +26,17 @@ describe 'cloud::network::vswitch' do
         rabbit_hosts             => ['10.0.0.1'],
         rabbit_password          => 'secrete',
         api_eth                  => '10.0.0.1',
-        provider_vlan_ranges     => ['physnet1:1000:2999'],
-        flat_networks            => ['public'],
-        external_bridge          => 'br-pub',
         verbose                  => true,
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
-        tenant_network_types     => ['vxlan'],
-        type_drivers             => ['gre', 'vlan', 'flat', 'vxlan'],
         log_facility             => 'LOG_LOCAL0' }"
     end
 
     let :params do
-      { :tunnel_eth => '10.0.1.1' }
+      {
+        :tunnel_eth => '10.0.1.1'
+      }
     end
 
     it 'configure neutron common' do
@@ -60,15 +57,6 @@ describe 'cloud::network::vswitch' do
           :log_dir                 => false,
           :dhcp_lease_duration     => '10',
           :report_interval         => '30'
-      )
-      is_expected.to contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
-          :tenant_network_types   => ['vxlan'],
-          :mechanism_drivers      => ['openvswitch','l2population'],
-          :tunnel_id_ranges       => ['1:10000'],
-          :network_vlan_ranges    => ['physnet1:1000:2999'],
-          :flat_networks          => ['public'],
-          :enable_security_group  => true
       )
     end
 
