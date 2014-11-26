@@ -19,7 +19,6 @@
 #
 class cloud::firewall::post(
   $debug             = false,
-  $log               = false,
   $firewall_settings = {},
 ){
 
