@@ -236,6 +236,16 @@ describe 'cloud::loadbalancer' do
       )}
     end # configure monitor haproxy listen
 
+    context 'configure monitor haproxy listen with another vip' do
+      before do
+        params.merge!( :vip_monitor_ip => ['192.168.0.1'] )
+      end
+      it { is_expected.to contain_haproxy__listen('monitor').with(
+        :ipaddress => ['192.168.0.1'],
+        :ports     => '9300'
+      )}
+    end # configure monitor haproxy listen
+
     context 'configure galera haproxy listen' do
       it { is_expected.to contain_haproxy__listen('galera_cluster').with(
         :ipaddress => params[:galera_ip],

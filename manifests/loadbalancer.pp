@@ -184,6 +184,10 @@
 #  Should be part of keepalived_internal_ips
 #  Defaults to false (backward compatibility)
 #
+# [*vip_monitor_ip*]
+#  (optional) Array or string for monitor VIP
+#  Defaults to false
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -260,6 +264,7 @@ class cloud::loadbalancer(
   $spice_port                       = 6082,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
+  $vip_monitor_ip                   = false,
   $galera_ip                        = ['127.0.0.1'],
   $galera_slave                     = false,
   $firewall_settings                = {},
@@ -357,8 +362,14 @@ class cloud::loadbalancer(
     mode    => '0644';
   }
 
+  if $vip_monitor_ip {
+    $vip_monitor_ip_real = $vip_monitor_ip
+  } else {
+    $vip_monitor_ip_real = $vip_public_ip
+  }
+
   haproxy::listen { 'monitor':
-    ipaddress => $vip_public_ip,
+    ipaddress => $vip_monitor_ip_real,
     ports     => '9300',
     options   => {
       'mode'        => 'http',
