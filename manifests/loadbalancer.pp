@@ -41,17 +41,6 @@
 #   Should be an array.
 #   Defaults to false (disabled)
 #
-# [*keepalived_interface*]
-#   (optional) Networking interface to bind the VIP connected to internal network.
-#   DEPRECATED: use keepalived_public_interface instead.
-#   Defaults to false (disabled)
-#
-# [*keepalived_ipvs*]
-#   (optional) IP address of the VIP connected to public network.
-#   DEPRECATED: use keepalived_public_ipvs instead.
-#   Should be an array.
-#   Defaults to false (disabled)
-#
 # [*keepalived_auth_type*]
 #   (optional) Authentication method.
 #   Supported methods are simple Passwd (PASS) or IPSEC AH (AH).
@@ -64,112 +53,112 @@
 #
 # [*swift_api*]
 #   (optional) Enable or not Swift public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*ceilometer_api*]
 #   (optional) Enable or not Ceilometer public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*cinder_api*]
 #   (optional) Enable or not Cinder public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*glance_api*]
 #   (optional) Enable or not Glance API public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*glance_registry*]
 #   (optional) Enable or not Glance Registry public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*neutron_api*]
 #   (optional) Enable or not Neutron public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_api*]
 #   (optional) Enable or not Heat public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_cfn_api*]
 #   (optional) Enable or not Heat CFN public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*heat_cloudwatch_api*]
 #   (optional) Enable or not Heat Cloudwatch public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*nova_api*]
 #   (optional) Enable or not Nova public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*trove_api*]
 #   (optional) Enable or not Trove public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*ec2_api*]
 #   (optional) Enable or not EC2 public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*keystone_api*]
 #   (optional) Enable or not Keystone public binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
 # [*rabbitmq*]
 #   (optional) Enable or not RabbitMQ binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
-#   If set to false, no binding will be configure (default for backward compatibility)
+#   If set to false, no binding will be configure.
 #   Defaults to false
 #
 # [*keystone_api_admin*]
 #   (optional) Enable or not Keystone admin binding.
-#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false (backward compatibility).
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
@@ -182,7 +171,7 @@
 # [*vip_internal_ip*]
 #  (optional) Array or string for internal VIP
 #  Should be part of keepalived_internal_ips
-#  Defaults to false (backward compatibility)
+#  Defaults to false
 #
 # [*vip_monitor_ip*]
 #  (optional) Array or string for monitor VIP
@@ -268,41 +257,24 @@ class cloud::loadbalancer(
   $galera_ip                        = ['127.0.0.1'],
   $galera_slave                     = false,
   $firewall_settings                = {},
-  # Deprecated parameters
-  $keepalived_interface             = false,
-  $keepalived_ipvs                  = false,
 ){
 
   include cloud::params
 
-  # Manage deprecation when using old parameters
-  if $keepalived_interface {
-    warning('keepalived_interface parameter is deprecated. Use internal/external parameters instead.')
-    $keepalived_public_interface_real = $keepalived_interface
-  } else {
-    $keepalived_public_interface_real = $keepalived_public_interface
-  }
-  if $keepalived_ipvs {
-    warning('keepalived_ipvs parameter is deprecated. Use internal/external parameters instead.')
-    $keepalived_public_ipvs_real = $keepalived_ipvs
-  } else {
-    $keepalived_public_ipvs_real = $keepalived_public_ipvs
-  }
   if $keepalived_vrrp_interface {
     $keepalived_vrrp_interface_real = $keepalived_vrrp_interface
   } else {
-    $keepalived_vrrp_interface_real = $keepalived_public_interface_real
+    $keepalived_vrrp_interface_real = $keepalived_public_interface
   }
-  # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
-  if $vip_public_ip and !(member(any2array($keepalived_public_ipvs_real), $vip_public_ip)) {
+  if $vip_public_ip and !(member(any2array($keepalived_public_ipvs), $vip_public_ip)) {
     fail('vip_public_ip should be part of keepalived_public_ipvs.')
   }
   if $vip_internal_ip and !(member(any2array($keepalived_internal_ipvs),$vip_internal_ip)) {
     fail('vip_internal_ip should be part of keepalived_internal_ipvs.')
   }
-  if $galera_ip and !((member(any2array($keepalived_public_ipvs_real),$galera_ip)) or (member(any2array($keepalived_internal_ipvs),$galera_ip))) {
+  if $galera_ip and !((member(any2array($keepalived_public_ipvs),$galera_ip)) or (member(any2array($keepalived_internal_ipvs),$galera_ip))) {
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
@@ -319,7 +291,7 @@ class cloud::loadbalancer(
 
   keepalived::instance { '1':
     interface     => $keepalived_vrrp_interface_real,
-    virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs_real, ['']]), " dev ${keepalived_public_interface_real},"), ',')),
+    virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs, ['']]), " dev ${keepalived_public_interface},"), ',')),
     state         => $keepalived_state,
     track_script  => ['haproxy'],
     priority      => $keepalived_priority,
@@ -330,6 +302,7 @@ class cloud::loadbalancer(
   }
 
 
+  # If using an internal VIP, allow to use a dedicated interface for VRRP traffic.
   # First we check if internal binding is enabled
   if $keepalived_internal_ipvs {
     # Then we validate this is not the same as public binding
@@ -337,7 +310,6 @@ class cloud::loadbalancer(
       if ! $keepalived_vrrp_interface {
         $keepalived_vrrp_interface_internal = $keepalived_internal_interface
       } else {
-        # Backward compatibility
         $keepalived_vrrp_interface_internal = $keepalived_vrrp_interface
       }
       keepalived::instance { '2':
@@ -561,7 +533,7 @@ class cloud::loadbalancer(
     firewall_settings => $firewall_settings,
   }
 
-  if (member(any2array($keepalived_public_ipvs_real), $galera_ip)) {
+  if (member(any2array($keepalived_public_ipvs), $galera_ip)) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
   haproxy::listen { 'galera_cluster':
