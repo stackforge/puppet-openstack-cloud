@@ -30,6 +30,10 @@ describe 'cloud::network::controller' do
         debug                    => true,
         use_syslog               => true,
         dhcp_lease_duration      => '10',
+        tenant_network_types     => ['vxlan'],
+        type_drivers             => ['gre', 'vlan', 'flat', 'vxlan'],
+        tunnel_id_ranges         => ['100:300'],
+        vni_ranges               => ['42:51','53:69'],
         log_facility             => 'LOG_LOCAL0' }"
     end
 
@@ -71,10 +75,11 @@ describe 'cloud::network::controller' do
           :report_interval         => '30'
       )
       is_expected.to contain_class('neutron::plugins::ml2').with(
-          :type_drivers           => ['gre', 'vlan', 'flat'],
-          :tenant_network_types   => ['gre'],
+          :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
+          :tenant_network_types   => ['vxlan'],
           :mechanism_drivers      => ['openvswitch','l2population'],
-          :tunnel_id_ranges       => ['1:10000'],
+          :tunnel_id_ranges       => ['100:300'],
+          :vni_ranges             => ['42:51','53:69'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :flat_networks          => ['public'],
           :enable_security_group  => true
