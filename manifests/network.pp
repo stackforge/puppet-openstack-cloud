@@ -91,6 +91,16 @@
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
 #
+# [*tunnel_id_ranges*]
+#   (optional) GRE tunnel id ranges
+#   List of colon-separated id ranges
+#   Defaults to ['1:10000']
+#
+# [*vni_ranges*]
+#   (optional) VxLan Network ID range
+#   List of colon-separated id ranges
+#   Defautls to ['1:10000']
+#
 class cloud::network(
   $verbose                    = true,
   $debug                      = true,
@@ -105,6 +115,8 @@ class cloud::network(
   $tenant_network_types       = ['gre'],
   $type_drivers               = ['gre', 'vlan', 'flat'],
   $plugin                     = 'ml2',
+  $tunnel_id_ranges           = ['1:10000'],
+  $vni_ranges                 = ['1:10000'],
   # only needed by cisco n1kv plugin
   $n1kv_vsm_ip                = '127.0.0.1',
   $n1kv_vsm_password          = 'secrete',
@@ -149,7 +161,8 @@ class cloud::network(
         type_drivers          => $type_drivers,
         tenant_network_types  => $tenant_network_types,
         network_vlan_ranges   => $provider_vlan_ranges,
-        tunnel_id_ranges      => ['1:10000'],
+        tunnel_id_ranges      => $tunnel_id_ranges,
+        vni_ranges            => $vni_ranges,
         flat_networks         => $flat_networks,
         mechanism_drivers     => ['openvswitch','l2population'],
         enable_security_group => true
