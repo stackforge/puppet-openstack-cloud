@@ -15,21 +15,12 @@
 #
 # Volume Scheduler node
 #
-class cloud::volume::scheduler(
-  # Maintain backward compatibility for multi-backend
-  $volume_multi_backend = false
-) {
+class cloud::volume::scheduler{
 
   include 'cloud::volume'
 
-  if ! $volume_multi_backend {
-    $scheduler_driver_real    = false
-  } else {
-    $scheduler_driver_real = 'cinder.scheduler.filter_scheduler.FilterScheduler'
-  }
-
   class { 'cinder::scheduler':
-    scheduler_driver => $scheduler_driver_real
+    scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler'
   }
 
 }
