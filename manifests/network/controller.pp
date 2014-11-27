@@ -41,6 +41,16 @@
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
 #
+# [*tunnel_id_ranges*]
+#   (optional) GRE tunnel id ranges. used by he ml2 plugin
+#   List of colon-separated id ranges
+#   Defaults to ['1:10000']
+#
+# [*vni_ranges*]
+#   (optional) VxLan Network ID range. used by the ml2 plugin
+#   List of colon-separated id ranges
+#   Defautls to ['1:10000']
+#
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
   $neutron_db_user         = 'neutron',
@@ -75,6 +85,9 @@ class cloud::network::controller(
   $ks_keystone_admin_proto    = 'http',
   $ks_keystone_admin_port     = 35357,
   $ks_neutron_password        = 'neutronpassword',
+  # only needed by ml2 plugin
+  $tunnel_id_ranges           = ['1:10000'],
+  $vni_ranges                 = ['1:10000'],
 ) {
 
   include 'cloud::network'
@@ -100,7 +113,8 @@ class cloud::network::controller(
         type_drivers          => $type_drivers,
         tenant_network_types  => $tenant_network_types,
         network_vlan_ranges   => $provider_vlan_ranges,
-        tunnel_id_ranges      => ['1:10000'],
+        tunnel_id_ranges      => $tunnel_id_ranges,
+        vni_ranges            => $vni_ranges,
         flat_networks         => $flat_networks,
         mechanism_drivers     => ['openvswitch','l2population'],
         enable_security_group => true
