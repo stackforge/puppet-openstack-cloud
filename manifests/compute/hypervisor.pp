@@ -87,11 +87,8 @@ class cloud::compute::hypervisor(
   $nfs_device                 = false,
   $nfs_options                = 'defaults',
   $filesystem_store_datadir   = '/var/lib/nova/instances',
-  # set to false to keep backward compatibility
-  $ks_spice_public_proto      = false,
-  $ks_spice_public_host       = false,
-  # DEPRECATED
-  $has_ceph                   = false
+  $ks_spice_public_proto      = 'http',
+  $ks_spice_public_host       = '127.0.0.1',
 ) inherits cloud::params {
 
   include 'cloud::compute'
@@ -102,27 +99,6 @@ class cloud::compute::hypervisor(
 
   if $libvirt_type == 'kvm' and ! $::vtx {
     fail('libvirt_type is set to KVM and VTX seems to be disabled on this node.')
-  }
-
-  # Backward compatibility
-  # if has_ceph was enabled, we consider deployments run Ceph for Nova & Cinder
-  if $has_ceph {
-    warning('has_ceph parameter is deprecated. Please use vm_rbd and volume_rbd parameters.')
-    $vm_rbd_real     = true
-    $volume_rbd_real = true
-  } else {
-    $vm_rbd_real     = $vm_rbd
-    $volume_rbd_real = $volume_rbd
-  }
-  if $ks_spice_public_proto {
-    $ks_spice_public_proto_real = $ks_spice_public_proto
-  } else {
-    $ks_spice_public_proto_real = $ks_nova_public_proto
-  }
-  if $ks_spice_public_host {
-    $ks_spice_public_host_real = $ks_spice_public_host
-  } else {
-    $ks_spice_public_host_real = $ks_nova_public_host
   }
 
   if $nfs_enabled {
@@ -208,8 +184,8 @@ Host *
   class { 'nova::compute::spice':
     server_listen              => '0.0.0.0',
     server_proxyclient_address => $server_proxyclient_address,
-    proxy_host                 => $ks_spice_public_host_real,
-    proxy_protocol             => $ks_spice_public_proto_real,
+    proxy_host                 => $ks_spice_public_host,
+    proxy_protocol             => $ks_spice_public_proto,
     proxy_port                 => $spice_port
 
   }
@@ -223,8 +199,7 @@ Host *
       mode   => '0644',
       notify => Service['libvirtd']
     }
-    # Nova support for RBD backend is not supported before RHEL 7 (OSP5).
-    if ($has_ceph or $vm_rbd) and ($::operatingsystemmajrelease < 7) {
+    if $vm_rbd and ($::operatingsystemmajrelease < 7) {
       fail("RBD image backend in Nova is not supported in RHEL ${::operatingsystemmajrelease}.")
     }
   }
@@ -265,14 +240,14 @@ Host *
 
   class { 'nova::compute::neutron': }
 
-  if $vm_rbd_real or $volume_rbd_real {
+  if $vm_rbd or $volume_rbd {
 
     include 'cloud::storage::rbd'
 
     $libvirt_disk_cachemodes_real = ['network=writeback']
 
     # when nova uses ceph for instances storage
-    if $vm_rbd_real {
+    if $vm_rbd {
       class { 'nova::compute::rbd':
         libvirt_rbd_user        => $cinder_rbd_user,
         libvirt_images_rbd_pool => $nova_rbd_pool

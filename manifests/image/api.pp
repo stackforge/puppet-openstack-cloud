@@ -70,7 +70,7 @@
 # [*backend*]
 #   (optionnal) Backend to use to store images
 #   Can be 'rbd', 'file', 'nfs' or 'swift'
-#   Defaults to 'rbd' to maintain backward compatibility
+#   Defaults to 'rbd'
 #
 # [*filesystem_store_datadir*]
 #   (optional) Full path of data directory to store the images.
