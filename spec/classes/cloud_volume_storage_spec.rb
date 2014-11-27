@@ -284,21 +284,6 @@ describe 'cloud::volume::storage' do
       end
     end
 
-    context 'with backward compatiblity (without multi-backend)' do
-      before :each do
-        params.merge!(:cinder_backends => false)
-      end
-      it 'configure rbd volume driver without multi-backend' do
-        is_expected.to contain_cinder__backend__rbd('DEFAULT').with(
-          :rbd_pool                         => 'ceph_cinder',
-          :rbd_user                         => 'cinder',
-          :rbd_secret_uuid                  => 'secret',
-          :rbd_ceph_conf                    => '/etc/ceph/ceph.conf',
-          :rbd_flatten_volume_from_snapshot => false,
-          :rbd_max_clone_depth              => '10'
-        )
-      end
-    end
   end
 
   context 'on Debian platforms' do
