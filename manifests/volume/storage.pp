@@ -45,7 +45,7 @@
 #        'premium' => { 'netapp_server_hostname' => 'netapp.host', 'netapp_login' => 'joe', 'netapp_password' => 'secret' }
 #     }
 #   }
-#   Defaults to undef to maintain backward compatibility.
+#   Defaults to undef
 #
 class cloud::volume::storage(
   $cinder_backends                         = undef,
@@ -59,8 +59,6 @@ class cloud::volume::storage(
   $cinder_rbd_conf                         = '/etc/ceph/ceph.conf',
   $cinder_rbd_flatten_volume_from_snapshot = false,
   $cinder_rbd_max_clone_depth              = '5',
-  # Deprecated parameters
-  $glance_api_version                      = '2',
 ) {
 
   include 'cloud::volume'
@@ -68,9 +66,13 @@ class cloud::volume::storage(
   include 'cinder::volume'
 
   if $cinder_backends {
-    $rbd_backends = has_key($cinder_backends, 'rbd') ? {
-      false   => merge({}, {}),
-      default => $cinder_backends['rbd']
+
+    if has_key($cinder_backends, 'rbd') {
+      $rbd_backends = $cinder_backends['rbd']
+      create_resources('cloud::volume::backend::rbd', $rbd_backends)
+    }
+    else {
+      $rbd_backends = { }
     }
 
     if has_key($cinder_backends, 'netapp') {
@@ -127,18 +129,5 @@ class cloud::volume::storage(
       os_auth_url    => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0"
     }
   }
-  # For backward compatibility when not using multi-backend
-  else {
-    $rbd_backends = { 'DEFAULT' => { } }
-  }
 
-  if ! empty($rbd_backends) {
-    create_resources('cloud::volume::backend::rbd', $rbd_backends,
-      { rbd_pool                         => $cinder_rbd_pool,
-        rbd_user                         => $cinder_rbd_user,
-        rbd_secret_uuid                  => $cinder_rbd_secret_uuid,
-        rbd_ceph_conf                    => $cinder_rbd_conf,
-        rbd_flatten_volume_from_snapshot => $cinder_rbd_flatten_volume_from_snapshot,
-        rbd_max_clone_depth              => $cinder_rbd_max_clone_depth })
-  }
 }
