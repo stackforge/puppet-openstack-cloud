@@ -135,31 +135,6 @@ describe 'cloud::loadbalancer' do
       end
     end
 
-    context 'configure keepalived with deprecated parameters' do
-      before do
-        params.merge!(
-          :keepalived_ipvs      => ['192.168.0.2'],
-          :vip_public_ip        => '192.168.0.2',
-          :galera_ip            => '192.168.0.2',
-          :keepalived_interface => 'eth3'
-        )
-      end
-      it 'configure a public VRRP instance with deprecated parameters' do
-        is_expected.to contain_keepalived__instance('1').with({
-          'interface'            => 'eth3',
-          'virtual_ips'          => ['192.168.0.2 dev eth3'],
-          'track_script'         => ['haproxy'],
-          'state'                => 'BACKUP',
-          'priority'             => params[:keepalived_priority],
-          'auth_type'            => 'PASS',
-          'auth_pass'            => 'secret',
-          'notify_master'        => "#{platform_params[:start_haproxy_service]}",
-          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
-
-        })
-      end
-    end
-
     context 'configure keepalived vrrp on dedicated interface' do
       before do
         params.merge!(:keepalived_vrrp_interface => 'eth2')

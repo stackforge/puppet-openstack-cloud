@@ -41,17 +41,6 @@
 #   Should be an array.
 #   Defaults to false (disabled)
 #
-# [*keepalived_interface*]
-#   (optional) Networking interface to bind the VIP connected to internal network.
-#   DEPRECATED: use keepalived_public_interface instead.
-#   Defaults to false (disabled)
-#
-# [*keepalived_ipvs*]
-#   (optional) IP address of the VIP connected to public network.
-#   DEPRECATED: use keepalived_public_ipvs instead.
-#   Should be an array.
-#   Defaults to false (disabled)
-#
 # [*keepalived_auth_type*]
 #   (optional) Authentication method.
 #   Supported methods are simple Passwd (PASS) or IPSEC AH (AH).
@@ -268,41 +257,25 @@ class cloud::loadbalancer(
   $galera_ip                        = ['127.0.0.1'],
   $galera_slave                     = false,
   $firewall_settings                = {},
-  # Deprecated parameters
-  $keepalived_interface             = false,
-  $keepalived_ipvs                  = false,
 ){
 
   include cloud::params
 
-  # Manage deprecation when using old parameters
-  if $keepalived_interface {
-    warning('keepalived_interface parameter is deprecated. Use internal/external parameters instead.')
-    $keepalived_public_interface_real = $keepalived_interface
-  } else {
-    $keepalived_public_interface_real = $keepalived_public_interface
-  }
-  if $keepalived_ipvs {
-    warning('keepalived_ipvs parameter is deprecated. Use internal/external parameters instead.')
-    $keepalived_public_ipvs_real = $keepalived_ipvs
-  } else {
-    $keepalived_public_ipvs_real = $keepalived_public_ipvs
-  }
   if $keepalived_vrrp_interface {
     $keepalived_vrrp_interface_real = $keepalived_vrrp_interface
   } else {
-    $keepalived_vrrp_interface_real = $keepalived_public_interface_real
+    $keepalived_vrrp_interface_real = $keepalived_public_interface
   }
   # end of deprecation support
 
   # Fail if OpenStack and Galera VIP are  not in the VIP list
-  if $vip_public_ip and !(member(any2array($keepalived_public_ipvs_real), $vip_public_ip)) {
+  if $vip_public_ip and !(member(any2array($keepalived_public_ipvs), $vip_public_ip)) {
     fail('vip_public_ip should be part of keepalived_public_ipvs.')
   }
   if $vip_internal_ip and !(member(any2array($keepalived_internal_ipvs),$vip_internal_ip)) {
     fail('vip_internal_ip should be part of keepalived_internal_ipvs.')
   }
-  if $galera_ip and !((member(any2array($keepalived_public_ipvs_real),$galera_ip)) or (member(any2array($keepalived_internal_ipvs),$galera_ip))) {
+  if $galera_ip and !((member(any2array($keepalived_public_ipvs),$galera_ip)) or (member(any2array($keepalived_internal_ipvs),$galera_ip))) {
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
@@ -319,7 +292,7 @@ class cloud::loadbalancer(
 
   keepalived::instance { '1':
     interface     => $keepalived_vrrp_interface_real,
-    virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs_real, ['']]), " dev ${keepalived_public_interface_real},"), ',')),
+    virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs, ['']]), " dev ${keepalived_public_interface},"), ',')),
     state         => $keepalived_state,
     track_script  => ['haproxy'],
     priority      => $keepalived_priority,
@@ -561,7 +534,7 @@ class cloud::loadbalancer(
     firewall_settings => $firewall_settings,
   }
 
-  if (member(any2array($keepalived_public_ipvs_real), $galera_ip)) {
+  if (member(any2array($keepalived_public_ipvs), $galera_ip)) {
     warning('Exposing Galera cluster to public network is a security issue.')
   }
   haproxy::listen { 'galera_cluster':
