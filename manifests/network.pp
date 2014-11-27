@@ -63,6 +63,16 @@
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
 #
+# [*tunnel_id_ranges*]
+#   (optional) GRE tunnel id ranges
+#   List of colon-separated id ranges
+#   Defaults to ['1:10000']
+#
+# [*vni_ranges*]
+#   (optional) VxLan Network ID range
+#   List of colon-separated id ranges
+#   Defautls to ['1:10000']
+#
 class cloud::network(
   $verbose                    = true,
   $debug                      = true,

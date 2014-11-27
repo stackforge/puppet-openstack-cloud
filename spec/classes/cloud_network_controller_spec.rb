@@ -75,6 +75,7 @@ describe 'cloud::network::controller' do
           :tenant_network_types   => ['gre'],
           :mechanism_drivers      => ['openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
+          :vni_ranges             => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :flat_networks          => ['public'],
           :enable_security_group  => true
@@ -144,6 +145,29 @@ describe 'cloud::network::controller' do
           :proto  => 'tcp',
           :action => 'accept',
           :limit  => '50/sec',
+        )
+      end
+    end
+
+    context 'with custom ml2 parameters' do
+      before :each do
+        params.merge!(
+          :tenant_network_types => ['vxlan'],
+          :type_drivers         => ['gre', 'vlan', 'flat', 'vxlan'],
+          :tunnel_id_ranges     => ['100:300'],
+          :vni_ranges           => ['42:51','53:69'],
+        )
+      end
+      it 'contains correct parameters' do
+        is_expected.to contain_class('neutron::plugins::ml2').with(
+          :type_drivers           => ['gre', 'vlan', 'flat', 'vxlan'],
+          :tenant_network_types   => ['vxlan'],
+          :mechanism_drivers      => ['openvswitch','l2population'],
+          :tunnel_id_ranges       => ['100:300'],
+          :vni_ranges             => ['42:51','53:69'],
+          :network_vlan_ranges    => ['physnet1:1000:2999'],
+          :flat_networks          => ['public'],
+          :enable_security_group  => true
         )
       end
     end
