@@ -78,6 +78,12 @@ describe 'cloud::volume::storage' do
               'eqlx_group_name' => 'dell-volumes',
             }
           },
+          'glusterfs' => {
+            'gluster' => {
+              'glusterfs_shares'        => ['/mnt/share'],
+              'glusterfs_shares_config' => 'glusterfs_shares_config',
+            }
+          },
           'nfs' => {
             'freenas' => {
               'nfs_servers'          => ['10.0.0.1:/myshare'],
@@ -208,6 +214,19 @@ describe 'cloud::volume::storage' do
       end
     end
 
+    context 'with GlusterFS backend' do
+      it 'configures GlusterFS volume driver' do
+        should contain_cinder_config('gluster/volume_backend_name').with_value('gluster')
+        should contain_cinder_config('gluster/glusterfs_shares').with_value(['/mnt/share'])
+        should contain_cinder_config('gluster/glusterfs_shares_config').with_value('/etc/cinder/shares-gluster.conf')
+        should contain_cinder__type('gluster').with(
+          :set_key   => 'volume_backend_name',
+          :set_value => 'gluster',
+          :notify    => 'Service[cinder-volume]'
+        )
+      end
+    end
+
     context 'with NFS backend' do
       it 'configures NFS volume driver' do
         is_expected.to contain_cinder_config('freenas/volume_backend_name').with_value('freenas')
@@ -279,7 +298,7 @@ describe 'cloud::volume::storage' do
     context 'with all backends enabled' do
       it 'configure all cinder backends' do
         is_expected.to contain_class('cinder::backends').with(
-          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast', 'dell', 'freenas']
+          :enabled_backends => ['lowcost', 'premium', 'fast', 'very-fast', 'dell', 'freenas', 'gluster']
         )
       end
     end
