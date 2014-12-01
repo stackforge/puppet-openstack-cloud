@@ -36,6 +36,8 @@ class cloud::params {
     }
   }
 
+  $puppetmaster_service_name = 'puppetmaster'
+
   case $::osfamily {
     'RedHat': {
       # Specific to Red Hat
@@ -45,6 +47,7 @@ class cloud::params {
       $libvirt_service_name       = 'libvirtd'
       $keepalived_name_is_process = false
       $keepalived_vrrp_script     = 'systemctl status haproxy.service'
+      $puppetmaster_package_name  = 'puppet-server'
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
@@ -53,6 +56,7 @@ class cloud::params {
       $horizon_auth_url           = 'horizon'
       $keepalived_name_is_process = true
       $keepalived_vrrp_script     = undef
+      $puppetmaster_package_name  = 'puppetmaster'
       case $::operatingsystem {
         'Ubuntu': {
           $libvirt_service_name = 'libvirt-bin'
@@ -66,4 +70,5 @@ class cloud::params {
       fail("Unsupported osfamily (${::osfamily})")
     }
   }
+
 }
