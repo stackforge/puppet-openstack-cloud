@@ -54,7 +54,7 @@ mod 'trove',
 # Dependency
 mod 'apache',
   :git => 'git://github.com/enovance/puppetlabs-apache.git',
-  :ref => '58682faf74cdfc6c8d921d2be9322368c8a96cf9'
+  :ref => '173967ab8dd21a93d6f2b47ff2641d0092f729b1'
 mod 'apt',
   :git => 'git://github.com/enovance/puppetlabs-apt.git',
   :ref => '9b001af8775c7231ea2656b7eb43d6141b536f49'
@@ -92,6 +92,9 @@ mod 'gcc',
 mod 'git',
   :git => 'git://github.com/enovance/puppetlabs-git.git',
   :ref => '0df1f62130a7752c728efb7555f2b07ca178ee5b'
+mod 'hiera',
+  :git => 'git://github.com/enovance/puppet-hiera.git',
+  :ref => '1d407be61d800034409e4595a6fb73004b10f70f'
 mod 'firewall',
   :git => 'git://github.com/enovance/puppetlabs-firewall.git',
   :ref => '4ed1b43e1629c1b6108133b0fc3be603d03ffe6c'
@@ -104,6 +107,9 @@ mod 'haproxy',
 mod 'inifile',
   :git => 'git://github.com/enovance/puppetlabs-inifile.git',
   :ref => 'ae23a4db97d2815ec305d0529912685f07746d3c'
+mod 'java',
+  :git => 'git://github.com/enovance/puppetlabs-java.git',
+  :ref => '5f60d5e2c041848b4c3e71c0aa6ba99b87774d4a'
 mod 'keepalived',
   :git => 'git://github.com/enovance/puppet-module-keepalived.git',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
@@ -148,6 +154,9 @@ mod 'pacemaker',
 mod 'puppetdbquery',
   :git => 'git://github.com/enovance/puppet-puppetdbquery.git',
   :ref =>  '89194917744f929bb600c31d7d6f822b529f5f03'
+mod 'puppetdb',
+  :git => 'git://github.com/enovance/puppetlabs-puppetdb.git',
+  :ref => 'ed6579b6eaf2c98c8220c41990850949e48b86b4'
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
   :ref => '25420cb3c26c9a8432ab519d43c094d614d4fec4'
