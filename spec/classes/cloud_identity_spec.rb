@@ -112,6 +112,7 @@ describe 'cloud::identity' do
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
         :token_driver                 => 'keystone.token.backends.sql.Token',
+        :token_flush_maxdelay         => '0',
         :ks_token_expiration          => '3600',
         :api_eth                      => '10.0.0.1' }
     end
@@ -300,7 +301,9 @@ describe 'cloud::identity' do
     end
 
     it 'configure a crontab to purge tokens every days at midnight' do
-      is_expected.to contain_class('keystone::cron::token_flush')
+      is_expected.to contain_class('keystone::cron::token_flush').with(
+        :maxdelay => 0,
+      )
     end
 
     context 'without syslog' do

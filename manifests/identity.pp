@@ -350,6 +350,11 @@
 #   (optional) Amount of time a token should remain valid (in seconds)
 #   Defaults to '3600' (1 hour)
 #
+# [*token_flush_maxdelay*]
+#   (optional) Seconds. Defaults to 0. Should be a positive integer.
+#   Induces a random delay before running the cronjob to avoid running all
+#   cron jobs at the same time on all hosts this job is configured. 
+#
 # [*trove_enabled*]
 #   (optional) Enable or not Trove (Database as a Service)
 #   Experimental feature.
@@ -455,6 +460,7 @@ class cloud::identity (
   $log_facility                 = 'LOG_LOCAL0',
   $use_syslog                   = true,
   $ks_token_expiration          = 3600,
+  $token_flush_maxdelay         = 0,
   $token_driver                 = 'keystone.token.backends.sql.Token',
   $firewall_settings            = {},
 ){
@@ -651,7 +657,9 @@ class cloud::identity (
   }
 
   # Purge expored tokens every days at midnight
-  class { 'keystone::cron::token_flush': }
+  class { 'keystone::cron::token_flush':
+    maxdelay => $token_flush_maxdelay,
+  }
 
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Keystone DB.
