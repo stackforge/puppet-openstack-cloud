@@ -19,7 +19,7 @@
 #
 # [*driver*]
 #   (optional) Neutron vswitch driver
-#   Supported values: 'ml2_ovs', 'n1kv_vem'.
+#   Supported values: 'ml2_ovs', 'ml2_lb', 'n1kv_vem'.
 #   Note: 'n1kv_vem' currently works only on Red Hat systems.
 #   Defaults to 'ml2_ovs'
 #
@@ -132,10 +132,11 @@ class cloud::network::vswitch(
   $external_int             = 'eth1',
   $external_bridge          = 'br-pub',
   $firewall_settings        = {},
-  # ml2_ovs
+  # common to ml2
   $tunnel_types             = ['gre'],
-  $provider_bridge_mappings = ['public:br-pub'],
   $tunnel_eth               = '127.0.0.1',
+  # ml2_ovs
+  $provider_bridge_mappings = ['public:br-pub'],
   # n1kv_vem
   $n1kv_vsm_ip              = '127.0.0.1',
   $n1kv_vsm_domain_id       = 1000,
@@ -158,6 +159,19 @@ class cloud::network::vswitch(
         polling_interval => '15',
         tunnel_types     => $tunnel_types,
         bridge_mappings  => $provider_bridge_mappings,
+        local_ip         => $tunnel_eth
+      }
+
+      if $::osfamily == 'RedHat' {
+        kmod::load { 'ip_gre': }
+      }
+    }
+
+    'ml2_lb': {
+      class { 'neutron::agents::ml2::linuxbridge':
+        l2_population    => true,
+        polling_interval => '15',
+        tunnel_types     => $tunnel_types,
         local_ip         => $tunnel_eth
       }
 

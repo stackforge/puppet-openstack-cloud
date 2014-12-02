@@ -102,7 +102,7 @@ class cloud::network::controller(
         network_vlan_ranges   => $provider_vlan_ranges,
         tunnel_id_ranges      => ['1:10000'],
         flat_networks         => $flat_networks,
-        mechanism_drivers     => ['openvswitch','l2population'],
+        mechanism_drivers     => ['linuxbridge','openvswitch','l2population'],
         enable_security_group => true
       }
     }

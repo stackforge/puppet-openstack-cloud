@@ -73,7 +73,7 @@ describe 'cloud::network::controller' do
       is_expected.to contain_class('neutron::plugins::ml2').with(
           :type_drivers           => ['gre', 'vlan', 'flat'],
           :tenant_network_types   => ['gre'],
-          :mechanism_drivers      => ['openvswitch','l2population'],
+          :mechanism_drivers      => ['linuxbridge','openvswitch','l2population'],
           :tunnel_id_ranges       => ['1:10000'],
           :network_vlan_ranges    => ['physnet1:1000:2999'],
           :flat_networks          => ['public'],
