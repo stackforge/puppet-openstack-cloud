@@ -19,7 +19,7 @@ forge 'http://forge.puppetlabs.com'
 # OpenStack projects
 mod 'openstacklib',
   :git => 'git://github.com/enovance/puppet-openstacklib.git',
-  :ref => 'c374bed10f8af6000601fa407ebaef0833e1999c'
+  :ref => '13a4f36174774eb77a551d6f001867d045b54a04'
 mod 'ceilometer',
   :git => 'git://github.com/enovance/puppet-ceilometer.git',
   :ref => '957c2120d0ee0b9db08bfddcce996686ba61d97d'
@@ -43,10 +43,13 @@ mod 'neutron',
   :ref => 'cefbdc897d70fd1c1fc44e372f05336674efd940'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
-  :ref => '3ffc5a263113232230b69e621e1b6167f2148390'
+  :ref => '181991927131206d4ea59a679e8108e36dc86c77'
 mod 'swift',
   :git => 'git://github.com/enovance/puppet-swift.git',
   :ref => '3ea00440361ff2452561d2cce808d938e39cce56'
+mod 'tempest',
+  :git => 'git://github.com/enovance/puppet-tempest.git',
+  :ref => '12cd4dcd68eb0a09a4d061325e708bc53bcf280f'
 mod 'trove',
   :git => 'git://github.com/enovance/puppet-trove.git',
   :ref => '7d9db32423b25dcc227ea6a6d43c90c63fde0d58'
