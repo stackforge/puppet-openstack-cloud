@@ -101,6 +101,7 @@ class cloud(
   $purge_firewall_rules = false,
   $firewall_pre_extras  = {},
   $firewall_post_extras = {},
+  $validate_services    = false,
 ) {
 
   include ::stdlib
