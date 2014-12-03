@@ -24,6 +24,22 @@
 #   Should be an hash.
 #   Default to {}
 #
+# [*validation_settings*]
+#   (optional) Service validation options
+#   Should be a hash of options defined in openstacklib::service_validation
+#   If empty, defaults values are taken from openstacklib function.
+#   Default command list nova flavors.
+#   Require validate set at True.
+#   Example:
+#   nova::api::validation_options:
+#     nova-api:
+#       command: check_nova.py
+#       path: /usr/bin:/bin:/usr/sbin:/sbin
+#       provider: shell
+#       tries: 5
+#       try_sleep: 10
+#   Defaults to {}
+#
 class cloud::compute::api(
   $ks_keystone_internal_host            = '127.0.0.1',
   $ks_keystone_internal_proto           = 'http',
@@ -34,9 +50,12 @@ class cloud::compute::api(
   $ks_ec2_public_port                   = '8773',
   $ks_metadata_public_port              = '8775',
   $firewall_settings                    = {},
+  $validation_settings                  = {},
 ){
 
   include 'cloud::compute'
+
+  $validation = pick($::cloud::validate_services, false)
 
   class { 'nova::api':
     enabled                              => true,
@@ -47,6 +66,8 @@ class cloud::compute::api(
     metadata_listen                      => $api_eth,
     neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
     osapi_v3                             => true,
+    validate                             => $validation,
+    validation_settings                  => $validation_settings,
   }
 
   if $::cloud::manage_firewall {
