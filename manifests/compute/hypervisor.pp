@@ -126,7 +126,7 @@ class cloud::compute::hypervisor(
   }
 
   if $nfs_enabled {
-    if ! $vm_rbd {
+    if ! $vm_rbd_real {
       # There is no NFS backend in Nova.
       # We mount the NFS share in filesystem_store_datadir to fake the
       # backend.
@@ -224,7 +224,7 @@ Host *
       notify => Service['libvirtd']
     }
     # Nova support for RBD backend is not supported before RHEL 7 (OSP5).
-    if ($has_ceph or $vm_rbd) and ($::operatingsystemmajrelease < 7) {
+    if ($vm_rbd_real) and ($::operatingsystemmajrelease < 7) {
       fail("RBD image backend in Nova is not supported in RHEL ${::operatingsystemmajrelease}.")
     }
   }
