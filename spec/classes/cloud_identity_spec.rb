@@ -138,6 +138,7 @@ describe 'cloud::identity' do
         :admin_endpoint      => 'https://10.0.0.1:35357/',
         :public_endpoint     => 'https://10.0.0.1:5000/'
       )
+      is_expected.to contain_exec('validate_keystone_connection')
       is_expected.to contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
       is_expected.to contain_keystone_config('DEFAULT/log_file').with_ensure('absent')
       is_expected.to contain_keystone_config('DEFAULT/log_dir').with_ensure('absent')
