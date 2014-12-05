@@ -25,6 +25,7 @@
 #   Default to {}
 #
 class cloud::volume::api(
+  $default_volume_type,
   $ks_cinder_internal_port     = 8776,
   $ks_cinder_password          = 'cinderpassword',
   $ks_keystone_internal_host   = '127.0.0.1',
@@ -33,22 +34,13 @@ class cloud::volume::api(
   $ks_glance_api_internal_port = 9292,
   $api_eth                     = '127.0.0.1',
   $ks_glance_internal_proto    = 'http',
-  $default_volume_type         = undef,
   $firewall_settings           = {},
-  # Maintain backward compatibility for multi-backend
-  $volume_multi_backend        = false
 ) {
 
   include 'cloud::volume'
 
-  if ! $volume_multi_backend {
-    $default_volume_type_real = undef
-  } else {
-    if ! $default_volume_type {
-      fail('when using multi-backend, you should define a default_volume_type value in cloud::volume::controller')
-    } else {
-      $default_volume_type_real = $default_volume_type
-    }
+  if ! $default_volume_type {
+    fail('default_volume_type should be defined when running Cinder Multi-Backend.')
   }
 
   class { 'cinder::api':
@@ -56,7 +48,7 @@ class cloud::volume::api(
     keystone_auth_host     => $ks_keystone_internal_host,
     keystone_auth_protocol => $ks_keystone_internal_proto,
     bind_host              => $api_eth,
-    default_volume_type    => $default_volume_type_real
+    default_volume_type    => $default_volume_type
   }
 
   class { 'cinder::glance':

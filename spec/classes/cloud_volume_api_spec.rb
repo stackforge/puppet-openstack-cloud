@@ -13,14 +13,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::volume::controller class
+# Unit tests for cloud::volume::api class
 #
 
 require 'spec_helper'
 
-describe 'cloud::volume::controller' do
+describe 'cloud::volume::api' do
 
-  shared_examples_for 'openstack volume controller' do
+  shared_examples_for 'openstack volume api' do
 
     let :pre_condition do
       "class { 'cloud::volume':
@@ -44,7 +44,7 @@ describe 'cloud::volume::controller' do
         :ks_keystone_internal_proto  => 'https',
         :ks_glance_internal_host     => '10.0.0.2',
         :ks_glance_api_internal_port => '9292',
-        :volume_multi_backend        => false,
+        :default_volume_type         => 'ceph',
         # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
         #:backup_ceph_user            => 'cinder',
         #:backup_ceph_pool            => 'ceph_backup_cinder',
@@ -77,39 +77,6 @@ describe 'cloud::volume::controller' do
       )
     end
 
-    it 'configure cinder scheduler without multi-backend' do
-      is_expected.to contain_class('cinder::scheduler').with(
-        :scheduler_driver => false
-      )
-    end
-
-    context 'with multi-backend' do
-      before :each do
-        params.merge!(
-          :volume_multi_backend => true,
-          :default_volume_type  => 'ceph'
-        )
-      end
-      it 'configure cinder scheduler with multi-backend' do
-        is_expected.to contain_class('cinder::scheduler').with(
-          :scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler'
-        )
-        is_expected.to contain_class('cinder::api').with(:default_volume_type => 'ceph')
-      end
-    end
-
-    context 'with multi-backend without default volume type' do
-      before :each do
-        params.merge!(
-          :volume_multi_backend => true,
-          :default_volume_type  => nil
-        )
-      end
-      it 'should raise an error and fail' do
-        is_expected.not_to compile
-      end
-    end
-
     it 'configure cinder glance backend' do
       is_expected.to contain_class('cinder::glance').with(
           :glance_api_servers     => 'http://10.0.0.2:9292',
@@ -123,9 +90,18 @@ describe 'cloud::volume::controller' do
           :keystone_password      => 'secrete',
           :keystone_auth_host     => '10.0.0.1',
           :keystone_auth_protocol => 'https',
-          :bind_host              => '10.0.0.1'
+          :bind_host              => '10.0.0.1',
+          :default_volume_type    => 'ceph',
         )
-      is_expected.to contain_cinder_config('DEFAULT/default_volume_type').with(:ensure => 'absent')
+    end
+
+    context 'without default volume type' do
+      before :each do
+        params.delete(:default_volume_type)
+      end
+      it 'should raise an error and fail' do
+        is_expected.not_to compile
+      end
     end
 
     # TODO(EmilienM) Disabled for now: http://git.io/kfTmcA
@@ -174,7 +150,7 @@ describe 'cloud::volume::controller' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'openstack volume controller'
+    it_configures 'openstack volume api'
   end
 
   context 'on RedHat platforms' do
@@ -182,7 +158,7 @@ describe 'cloud::volume::controller' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'openstack volume controller'
+    it_configures 'openstack volume api'
   end
 
 end

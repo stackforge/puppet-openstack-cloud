@@ -68,7 +68,6 @@ describe 'cloud::compute::hypervisor' do
       { :libvirt_type                         => 'kvm',
         :server_proxyclient_address           => '7.0.0.1',
         :spice_port                           => '6082',
-        :has_ceph                             => false,
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_public_proto                 => 'http',
@@ -388,39 +387,6 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with RBD backend plaforms using deprecated parameter' do
-      before :each do
-        facts.merge!( :vtx => true )
-        params.merge!(
-          :has_ceph             => true,
-          :cinder_rbd_user      => 'cinder',
-          :nova_rbd_pool        => 'nova',
-          :nova_rbd_secret_uuid => 'secrete' )
-      end
-
-      it 'configure nova-compute to support RBD backend' do
-        is_expected.to contain_nova_config('libvirt/images_type').with('value' => 'rbd')
-        is_expected.to contain_nova_config('libvirt/images_rbd_pool').with('value' => 'nova')
-        is_expected.to contain_nova_config('libvirt/images_rbd_ceph_conf').with('value' => '/etc/ceph/ceph.conf')
-        is_expected.to contain_nova_config('libvirt/rbd_user').with('value' => 'cinder')
-        is_expected.to contain_nova_config('libvirt/rbd_secret_uuid').with('value' => 'secrete')
-        is_expected.to contain_group('cephkeyring').with(:ensure => 'present')
-        is_expected.to contain_exec('add-nova-to-group').with(
-          :command => 'usermod -a -G cephkeyring nova',
-          :unless  => 'groups nova | grep cephkeyring'
-        )
-      end
-
-      it 'configure libvirt driver' do
-        is_expected.to contain_class('nova::compute::libvirt').with(
-            :libvirt_type      => 'kvm',
-            :vncserver_listen  => '0.0.0.0',
-            :migration_support => true,
-            :libvirt_disk_cachemodes => ['network=writeback']
-          )
-      end
-    end
-
     context 'when trying to enable RBD backend on RedHat OSP < 7 plaforms' do
       before :each do
         facts.merge!( :osfamily                  => 'RedHat',
@@ -439,36 +405,6 @@ describe 'cloud::compute::hypervisor' do
         facts.merge!( :vtx => false )
       end
       it_raises 'a Puppet::Error', /libvirt_type is set to KVM and VTX seems to be disabled on this node./
-    end
-
-    context 'when trying to enable RBD backend with deprecated parameter on RedHat plaforms' do
-      before :each do
-        facts.merge!( :osfamily                  => 'RedHat',
-                      :operatingsystemmajrelease => '6' )
-        params.merge!(
-          :has_ceph             => true,
-          :cinder_rbd_user      => 'cinder',
-          :nova_rbd_pool        => 'nova',
-          :nova_rbd_secret_uuid => 'secrete' )
-      end
-      it_raises 'a Puppet::Error', /RBD image backend in Nova is not supported in RHEL 6./
-    end
-
-    context 'when configuring spice with backward compatibility' do
-      before :each do
-        params.merge!(
-          :ks_spice_public_proto => false,
-          :ks_spice_public_host  => false )
-      end
-      it 'configure spice console with nova parameters' do
-        is_expected.to contain_class('nova::compute::spice').with(
-            :server_listen              => '0.0.0.0',
-            :server_proxyclient_address => '7.0.0.1',
-            :proxy_host                 => '10.0.0.1',
-            :proxy_protocol             => 'http',
-            :proxy_port                 => '6082'
-          )
-      end
     end
 
     context 'when storing instances on a NFS share' do
