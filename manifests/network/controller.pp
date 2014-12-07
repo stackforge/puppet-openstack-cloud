@@ -68,13 +68,7 @@ class cloud::network::controller(
   # only needed by cisco n1kv plugin
   $n1kv_vsm_ip                = '127.0.0.1',
   $n1kv_vsm_password          = 'secrete',
-  $neutron_db_host            = '127.0.0.1',
-  $neutron_db_user            = 'neutron',
-  $neutron_db_password        = 'neutronpassword',
-  $ks_keystone_admin_host     = '127.0.0.1',
-  $ks_keystone_admin_proto    = 'http',
   $ks_keystone_admin_port     = 35357,
-  $ks_neutron_password        = 'neutronpassword',
 ) {
 
   include 'cloud::network'
