@@ -28,7 +28,6 @@ describe 'cloud::database::sql' do
 
     let :params do
       {
-        :service_provider               => 'sysv',
         :api_eth                        => '10.0.0.1',
         :galera_master_name             => 'os-ci-test1',
         :galera_internal_ips            => ['10.0.0.1','10.0.0.2','10.0.0.3'],

@@ -28,7 +28,6 @@
 #
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
-    $service_provider               = 'sysv',
     $galera_master_name             = 'mgmt001',
     $galera_internal_ips            = ['127.0.0.1'],
     $galera_gcache                  = '1G',
