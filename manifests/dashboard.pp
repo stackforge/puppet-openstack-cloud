@@ -32,6 +32,10 @@
 #   (optional) Port used to connect to OpenStack Dashboard
 #   Defaults to '80'
 #
+# [*horizon_ssl_port*]
+#   (optional) Port used to connect to OpenStack Dashboard using SSL
+#   Defaults to '443'
+#
 # [*api_eth*]
 #   (optional) Which interface we bind the Horizon server.
 #   Defaults to '127.0.0.1'
@@ -74,6 +78,21 @@
 #   (optional) Forward HTTPS proto in the headers
 #   Useful when activating SSL binding on HAproxy and not in Horizon.
 #   Defaults to false
+#
+#  [*os_endpoint_type*]
+#    (optional) endpoint type to use for the endpoints in the Keystone
+#    service catalog. Defaults to 'undef'.
+#
+#  [*allowed_hosts*]
+#    (optional) List of hosts which will be set as value of ALLOWED_HOSTS
+#    parameter in settings_local.py. This is used by Django for
+#    security reasons. Can be set to * in environments where security is
+#    deemed unimportant.
+#    Defaults to ::fqdn.
+#
+#  [*vhost_extra_params*]
+#    (optionnal) extra parameter to pass to the apache::vhost class
+#    Defaults to {}
 #
 # [*neutron_extra_options*]
 #   (optional) Enable optional services provided by neutron
@@ -152,7 +171,7 @@ class cloud::dashboard(
   }
 
   if ($::osfamily == 'Debian') {
-    # TODO(Gonéri): HACK to ensure Horizon can cache its files
+    # TODO(Goneri): HACK to ensure Horizon can cache its files
     $horizon_var_dir = ['/var/lib/openstack-dashboard/static/js','/var/lib/openstack-dashboard/static/css']
     file {$horizon_var_dir:
       ensure => directory,

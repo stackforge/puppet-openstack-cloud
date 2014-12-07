@@ -18,6 +18,7 @@
 # Install Load-Balancer node (HAproxy + Keepalived)
 #
 # === Parameters:
+#
 # [*keepalived_vrrp_interface*]
 #  (optional) Networking interface to bind the vrrp traffic.
 #  Defaults to false (disabled)
@@ -128,12 +129,33 @@
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
+# [*horizon*]
+#   (optional) Enable or not Horizon public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
+#   Defaults to true
+#
+# [*horizon_ssl*]
+#   (optional) Enable or not Horizon SSL public binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure
+#   Defaults to true
+#
 # [*ec2_api*]
 #   (optional) Enable or not EC2 public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure
 #   Defaults to true
+#
+# [*spice*]
+#   (optional) Enable or not spice binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to false
 #
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
@@ -163,6 +185,194 @@
 #   If set to false, no binding will be configure
 #   Defaults to true
 #
+# [*haproxy_auth*]
+#  (optional) The HTTP sytle basic credentials (using login:password form)
+#  Defaults to 'admin:changeme'
+#
+# [*keepalived_state*]
+#  (optional) TODO
+#  Defaults to 'BACKUP'
+#
+# [*keepalived_priority*]
+#  (optional) TODO
+#  Defaults to '50'
+#
+# [*ceilometer_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*cinder_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*ec2_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*glance_api_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*glance_registry_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*heat_cfn_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*heat_cloudwatch_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*heat_api_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*keystone_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*keystone_admin_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*metadata_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*neutron_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*nova_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*trove_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*swift_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*spice_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*horizon_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*horizon_ssl_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*rabbitmq_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*galera_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*ks_ceilometer_public_port*]
+#   (optional) TCP port to connect to Ceilometer API from public network
+#   Defaults to '8777'
+#
+# [*ks_cinder_public_port*]
+#   (optional) TCP port to connect to Cinder API from public network
+#   Defaults to '8776'
+#
+# [*ks_ec2_public_port*]
+#   (optional) TCP port to connect to EC2 API from public network
+#   Defaults to '8773'
+#
+# [*ks_glance_api_public_port*]
+#   (optional) TCP port to connect to Glance API from public network
+#   Defaults to '9292'
+#
+# [*ks_glance_registry_internal_port*]
+#   (optional) TCP port to connect to Glance API from public network
+#   Defaults to '9191'
+#
+# [*ks_heat_cfn_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8000'
+#
+# [*ks_heat_cloudwatch_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8003'
+#
+# [*ks_heat_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8004'
+#
+# [*ks_keystone_admin_port*]
+#   (optional) TCP port to connect to Keystone Admin API from public network
+#   Defaults to '35357'
+#
+# [*ks_keystone_public_port*]
+#   (optional) TCP port to connect to Keystone API from public network
+#   Defaults to '5000'
+#
+# [*ks_metadata_public_port*]
+#   (optional) TCP port to connect to Keystone metadata API from public network
+#   Defaults to '8775'
+#
+# [*ks_swift_public_port*]
+#   (optional) TCP port to connect to Swift API from public network
+#   Defaults to '8080'
+#
+# [*ks_trove_public_port*]
+#   (optional) TCP port to connect to Trove API from public network
+#   Defaults to '8779'
+#
+# [*ks_nova_public_port*]
+#   (optional) TCP port to connect to Nova API from public network
+#   Defaults to '8774'
+#
+# [*ks_neutron_public_port*]
+#   (optional) TCP port to connect to Neutron API from public network
+#   Defaults to '9696'
+#
+# [*horizon_port*]
+#   (optional) Port used to connect to OpenStack Dashboard
+#   Defaults to '80'
+#
+# [*horizon_ssl_port*]
+#   (optional) Port used to connect to OpenStack Dashboard using SSL
+#   Defaults to '443'
+#
+# [*spice_port*]
+#   (optional) TCP port to connect to Nova spicehtmlproxy service.
+#   Defaults to '6082'
+#
+# [*rabbitmq_port*]
+#   (optional) Port of RabbitMQ service.
+#   Defaults to '5672'
+#
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
 #  Should be part of keepalived_public_ips
@@ -175,6 +385,14 @@
 #
 # [*vip_monitor_ip*]
 #  (optional) Array or string for monitor VIP
+#  Defaults to false
+#
+# [*galera_ip*]
+#  (optional) An array of Galera IP
+#  Defaults to ['127.0.0.1']
+#
+# [*galera_slave*]
+#  (optional) A boolean to configure galera slave
 #  Defaults to false
 #
 # [*firewall_settings*]

@@ -13,7 +13,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class:
+#
 # Network LBaaS node
+#
+# === Parameters:
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Defaults to true
+#
+# [*manage_haproxy_pkg*]
+#   (optional) Manage or not HAproxy package
+#   Defaults to true
 #
 class cloud::network::lbaas(
   $debug              = true,

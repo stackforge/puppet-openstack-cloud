@@ -19,6 +19,26 @@
 #
 # === Parameters:
 #
+# [*ks_heat_internal_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8004'
+#
+# [*ks_heat_cfn_internal_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8000'
+#
+# [*ks_heat_cloudwatch_internal_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8003'
+#
+# [*api_eth*]
+#   (optional) Which interface we bind the Heat server.
+#   Defaults to '127.0.0.1'
+#
+# [*workers*]
+#   (optional) The number of Heat API workers
+#   Defaults to $::processorcount
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

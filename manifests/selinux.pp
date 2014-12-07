@@ -29,7 +29,7 @@
 #   Defaults to '/usr/share/selinux'
 #
 # [*booleans*]
-#   (optional) Set of booleans to persistenly enables
+#   (optional) Set of booleans to persistently enables
 #   SELinux booleans are the one getsebool -a returns
 #   Defaults []
 #   Example: ['rsync_full_access', 'haproxy_connect_any']

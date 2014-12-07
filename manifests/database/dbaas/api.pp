@@ -19,6 +19,43 @@
 #
 # === Parameters:
 #
+# [*ks_trove_password*]
+#   (required) Password used by trove for Keystone authentication.
+#   Default: 'trovepassword'
+#
+# [*verbose*]
+#   (optional) Rather to log the trove api service at verbose level.
+#   Default: true
+#
+# [*debug*]
+#   (optional) Rather to log the trove api service at debug level.
+#   Default: true
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to true
+#
+# [*api_eth*]
+#   (optional) Hostname or IP to bind Trove API.
+#   Defaults to '127.0.0.1'
+#
+# [*ks_trove_public_port*]
+#   (optional) TCP public port used to connect to Trove API.
+#   Defaults to '8779'
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP internal port used to connect to Keystone API.
+#   Defaults to '5000'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol used to connect to Keystone API.
+#   Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

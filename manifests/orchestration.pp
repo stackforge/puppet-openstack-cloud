@@ -91,6 +91,10 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to 'LOG_LOCAL0'
 #
+# [*os_endpoint_type*]
+#   (optional) The type of the OpenStack endpoint (public/internal/admin) URL
+#   Defaults to 'publicURL'
+#
 class cloud::orchestration(
   $ks_keystone_internal_host  = '127.0.0.1',
   $ks_keystone_internal_port  = '5000',
@@ -151,7 +155,7 @@ class cloud::orchestration(
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Heat DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
-  # TODO(Gonéri)
+  # TODO(Goneri)
   # We have to do this only on the primary node of the galera cluster to avoid race condition
   # https://github.com/enovance/puppet-openstack-cloud/issues/156
   exec {'heat_db_sync':

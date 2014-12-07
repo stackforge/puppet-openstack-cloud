@@ -13,6 +13,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::storage::rbd::key
+#
+# === Parameters:
+#
+# [*enabled*]
+#   (optional) Configure or not the ceph admin keyring
+#   Defaults to true
+#
 class cloud::storage::rbd::key (
   $enabled = false
 ) {

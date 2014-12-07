@@ -13,7 +13,24 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::compute::consoleproxy
+#
 # Compute Proxy Console node
+#
+# === Parameters:
+#
+# [*api_eth*]
+#   (optional) Hostname or IP to bind Nova spicehtmlproxy service.
+#   Defaults to '127.0.0.1'
+#
+# [*spice_port*]
+#   (optional) TCP port to bind Nova spicehtmlproxy service.
+#   Defaults to '6082'
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::compute::consoleproxy(
   $api_eth           = '127.0.0.1',

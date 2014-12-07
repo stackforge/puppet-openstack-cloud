@@ -19,6 +19,26 @@
 #
 # === Parameters:
 #
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_ceilometer_password*]
+#   (optional) Password used by Ceilometer to connect to Keystone API
+#   Defaults to 'ceilometerpassword'
+#
+# [*ks_ceilometer_internal_port*]
+#   (optional) TCP port to connect to Ceilometer API from public network
+#   Defaults to '8777'
+#
+# [*api_eth*]
+#   (optional) Which interface we bind the Ceilometer API server.
+#   Defaults to '127.0.0.1'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

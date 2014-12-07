@@ -13,7 +13,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+#
+# == Class: cloud::telemetry::collector
+#
 # Telemetry Collector nodes
+#
+# === Parameters:
+#
+# [*mongo_nodes*]
+#   (optional) An array of mongo db nodes
+#   Defaults to ['127.0.0.1:27017']
+#
+# [*replicaset_enabled*]
+#   (optional) Enable or not mongo replicat (using ceilometer name)
+#   Defaults to true
 #
 class cloud::telemetry::collector(
   $mongo_nodes        = ['127.0.0.1:27017'],

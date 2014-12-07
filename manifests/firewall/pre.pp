@@ -17,6 +17,13 @@
 #
 # Firewall rules during 'pre' Puppet stage
 #
+# === Parameters:
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::firewall::pre(
   $firewall_settings = {},
 ){
