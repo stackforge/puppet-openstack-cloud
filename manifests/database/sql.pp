@@ -28,7 +28,6 @@
 #
 class cloud::database::sql (
     $api_eth                        = '127.0.0.1',
-    $service_provider               = 'sysv',
     $galera_master_name             = 'mgmt001',
     $galera_internal_ips            = ['127.0.0.1'],
     $galera_gcache                  = '1G',
@@ -66,9 +65,15 @@ class cloud::database::sql (
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
     $galera_clustercheck_ipaddress  = '127.0.0.1',
     $firewall_settings              = {},
+    # DEPRECATED PARAMETERS
+    $service_provider               = false,
 ) {
 
   include 'xinetd'
+
+  if $service_provider {
+    warning('The service_provider parameter is deprecated and does nothing. Please update your manifests.')
+  }
 
   $gcomm_definition = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
 
