@@ -19,12 +19,48 @@
 #
 # === Parameters:
 #
+# [*storage_eth*]
+#   (optional) IP or hostname of the Swift storage node
+#   Defaults to '127.0.0.1'
+#
+# [*swift_zone*]
+#   (optional) Name of the swift zone
+#   Defaults to undef
+#
+# [*object_port*]
+#   (optional) TCP port number of the Object middleware
+#   Defaults to '6000'
+#
+# [*container_port*]
+#   (optional) TCP port number of the container middleware
+#   Defaults to '6001'
+#
+# [*account_port*]
+#   (optional) TCP port number of the account middleware
+#   Defaults to '6002'
+#
+# [*fstype*]
+#   (optional) Name of the File-System type
+#   Defaults to 'xfs'
+#
+# [*device_config_hash*]
+#   (optional) A hash of options to pass to io scheduler
+#   Defaults to {}
+#
+# [*ring_container_device*]
+#   (optional) The name of the container device
+#   Defaults to 'sdb'
+#
+# [*ring_account_device*]
+#   (optional) The name of the account device
+#   Defaults to 'sdb'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
 #   Default to {}
 #
-class cloud::object::storage (
+class cloud::object::storage(
   $storage_eth           = '127.0.0.1',
   $swift_zone            = undef,
   $object_port           = '6000',

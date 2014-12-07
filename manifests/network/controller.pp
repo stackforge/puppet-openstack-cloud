@@ -17,6 +17,73 @@
 #
 # === Parameters:
 #
+# [*neutron_db_host*]
+#   (optional) Host where user should be allowed all privileges for database.
+#   Defaults to 127.0.0.1
+#
+# [*neutron_db_user*]
+#   (optional) Name of neutron DB user.
+#   Defaults to trove
+#
+# [*neutron_db_password*]
+#   (optional) Password that will be used for the neutron db user.
+#   Defaults to 'neutronpassword'
+#
+# [*ks_neutron_password*]
+#   (optional) Password used by Neutron to connect to Keystone API
+#   Defaults to 'neutronpassword'
+#
+# [*ks_keystone_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_public_port*]
+#   (optional) TCP port to connect to Keystone API from public network
+#   Defaults to '5000'
+#
+# [*ks_neutron_public_port*]
+#   (optional) TCP port to connect to Neutron API from public network
+#   Defaults to '9696'
+#
+# [*api_eth*]
+#   (optional) Which interface we bind the Neutron server.
+#   Defaults to '127.0.0.1'
+#
+# [*ks_admin_tenant*]
+#   (optional) Admin tenant name in Keystone
+#   Defaults to 'admin'
+#
+#
+# [*nova_url*]
+#   (optional) URL for connection to nova (Only supports one nova region
+#   currently).
+#   Defaults to 'http://127.0.0.1:8774/v2'
+#
+# [*nova_admin_auth_url*]
+#   (optional) Authorization URL for connection to nova in admin context.
+#   Defaults to 'http://127.0.0.1:5000/v2.0'
+#
+# [*nova_admin_username*]
+#   (optional) Username for connection to nova in admin context
+#   Defaults to 'nova'
+#
+# [*nova_admin_tenant_name*]
+#   (optional) The name of the admin nova tenant
+#   Defaults to 'services'
+#
+# [*nova_admin_password*]
+#   (optional) Password for connection to nova in admin context.
+#   Defaults to 'novapassword'
+#
+# [*nova_region_name*]
+#   (optional) Name of nova region to use. Useful if keystone manages more than
+#   one region.
+#   Defaults to 'RegionOne'
+#
 # [*manage_ext_network*]
 #   (optionnal) Manage or not external network with provider network API
 #   Defaults to false.
@@ -40,6 +107,29 @@
 #   (optional) Neutron plugin name
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
+#
+# [*ks_keystone_admin_port*]
+#   (optional) TCP port to connect to Keystone API from admin network
+#   Defaults to '35357'
+#
+# [*provider_vlan_ranges*]
+#   (optionnal) VLAN range for provider networks
+#   Defaults to ['physnet1:1000:2999']
+#
+# [*flat_networks*]
+#   (optionnal) List of physical_network names with which flat networks
+#   can be created. Use * to allow flat networks with arbitrary
+#   physical_network names.
+#   Should be an array.
+#   Default to ['public'].
+#
+# [*n1kv_vsm_ip*]
+#   (required) N1KV VSM (Virtual Supervisor Module) VM's IP.
+#   Defaults to 127.0.0.1
+#
+# [*n1kv_vsm_password*]
+#   (required) N1KV VSM (Virtual Supervisor Module) password.
+#   Defaults to secrete
 #
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',

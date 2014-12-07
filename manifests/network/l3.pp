@@ -13,7 +13,27 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class:
+#
 # Network L3 node
+#
+# === Parameters:
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Defaults to true
+#
+# [*ext_provider_net*]
+#   (optional) Manage L3 with another provider
+#   Defaults to false
+#
+# [*external_int*]
+#   (optional) The name of the external nic
+#   Defaults to eth1
+#
+# [*manage_tso*]
+#  (optional) Disable TSO on Neutron interfaces
+#  Defaults to true
 #
 class cloud::network::l3(
   $external_int     = 'eth1',

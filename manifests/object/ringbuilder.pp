@@ -13,13 +13,33 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::object::ringbuilder
+#
 # Swift ring builder node
 #
+# === Parameters:
+#
+# [*enabled*]
+#   (optional) Enable or not the Swift ringbuilder rsync server
+#   Defaults to false
+#
+# [*rsyncd_ipaddress*]
+#   (optional) Hostname or IP of the swift ringbuilder rsync daemon
+#   Defaults to '127.0.0.1'
+#
+# [*replicas*]
+#   (optional) Number of replicas to kept
+#   Defaults to '3'
+#
+# [*swift_rsync_max_connections*]
+#   (optional) Max number of connections to the rsync daemon
+#   Defaults to '5'
+#
 class cloud::object::ringbuilder(
-    $enabled                     = false,
-    $rsyncd_ipaddress            = '127.0.0.1',
-    $replicas                    = 3,
-    $swift_rsync_max_connections = 5,
+  $enabled                     = false,
+  $rsyncd_ipaddress            = '127.0.0.1',
+  $replicas                    = 3,
+  $swift_rsync_max_connections = 5,
 ) {
 
   include cloud::object

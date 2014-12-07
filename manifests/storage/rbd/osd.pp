@@ -13,6 +13,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::storage::rbd::osd
+#
+# Ceph OSD
+#
+# === Parameters:
+#
+# [*public_address*]
+#   (optional) Which interface we bind the Ceph OSD
+#   Defaults to '127.0.0.1'
+#
+# [*cluster_address*]
+#   (optional) Which interface we bind internal the Ceph OSD
+#   Defaults to '127.0.0.1'
+#
+# [*devices*]]
+#   (optional) An array of device, should be full-qualified or short.
+#   Defaults to ['sdb','/dev/sdc']
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
+
 class cloud::storage::rbd::osd (
   $public_address    = '127.0.0.1',
   $cluster_address   = '127.0.0.1',

@@ -35,6 +35,14 @@
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Defaults to '127.0.0.1'
 #
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_glance_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Glance
+#   Defaults to '127.0.0.1'
+#
 # [*ks_glance_registry_internal_port*]
 #   (optional) TCP port to connect to Glance Registry from internal network
 #   Defaults to '9191'
@@ -46,6 +54,14 @@
 # [*api_eth*]
 #   (optional) Which interface we bind the Glance API server.
 #   Defaults to '127.0.0.1'
+#
+# [*verbose*]
+#   (optional) Set log output to verbose output
+#   Defaults to true
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Defaults to true
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging

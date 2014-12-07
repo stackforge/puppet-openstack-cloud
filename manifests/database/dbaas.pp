@@ -39,17 +39,17 @@
 #   (optional) Password to connect to nova queues.
 #   Defaults to 'rabbitpassword'
 #
-# [*nova_proxy_admin_user*]
-#   (optional) Admin username used to connect to nova.
-#   Defaults to 'admin'
+# [*nova_admin_username*]
+#   (optional) Trove username used to connect to nova.
+#   Defaults to 'trove'
 #
-# [*nova_proxy_admin_pass*]
-#   (optional) Admin password used to connect to nova.
+# [*nova_admin_password*]
+#   (optional) Trove password used to connect to nova.
 #   Defaults to 'trovepassword'
 #
-# [*nova_proxy_admin_tenant_name*]
-#   (optional) Admin tenant name used to connect to nova.
-#   Defaults to 'admin'
+# [*nova_admin_tenant_name*]
+#   (optional) Trove tenant name used to connect to nova.
+#   Defaults to 'services'
 #
 class cloud::database::dbaas(
   $trove_db_host                = '127.0.0.1',

@@ -13,8 +13,40 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::orchestration::engine
+#
 # Orchestration engine node (should be run once)
 # Could be managed by spof node as Active / Passive.
+#
+# === Parameters:
+#
+# [*enabled*]
+#   (optional) State of the orchestration engine service.
+#   Defaults to true
+#
+# [*ks_heat_public_host*]
+#   (optional) Public Hostname or IP to connect to Heat API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_heat_public_proto*]
+#   (optional) Protocol used to connect to API. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_heat_password*]
+#   (optional) Password used by Heat to connect to Keystone API
+#   Defaults to 'heatpassword'
+#
+# [*ks_heat_cfn_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8000'
+#
+# [*ks_heat_cloudwatch_public_port*]
+#   (optional) TCP port to connect to Heat API from public network
+#   Defaults to '8003'
+#
+#  [*auth_encryption_key*]
+#    (optional) Encryption key used for authentication info in database
+#    Defaults to 'secrete'
 #
 class cloud::orchestration::engine(
   $enabled                        = true,
