@@ -13,7 +13,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class:
+#
 # Volume Backup node
+#
+# === Parameters
+#
+# [*backup_ceph_pool*]
+#   (optional) Name of the Ceph pool which which store the cinder backups
+#   Defaults to 'backup'
+#
+# [*backup_ceph_user*]
+#   (optional) User name used to acces to the backup rbd pool
+#   Defaults to 'cinder'
 #
 class cloud::volume::backup(
   $backup_ceph_pool = 'backup',

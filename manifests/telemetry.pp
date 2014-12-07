@@ -36,6 +36,14 @@
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Defaults to '127.0.0.1'
 #
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP port to connect to Keystone API from internal network
+#   Defaults to '5000'
+#
 # [*ks_keystone_admin_host*]
 #   (optional) Admin Hostname or IP to connect to Keystone API
 #   Defaults to '127.0.0.1'
@@ -67,6 +75,10 @@
 # [*region*]
 #   (optional) the keystone region of this node
 #   Defaults to 'RegionOne'
+#
+# [*os_endpoint_type*]
+#   (optional) The type of the OpenStack endpoint (public/internal/admin) URL
+#   Defaults to 'publicURL'
 #
 class cloud::telemetry(
   $ceilometer_secret          = 'ceilometersecret',

@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 group :development, :test do
   gem 'puppetlabs_spec_helper', :require => false
   gem 'puppet-lint'
+  gem 'puppet-lint-param-docs', '1.1.0'
   gem 'metadata-json-lint'
   gem 'rake', '10.1.1'
   gem 'puppet-syntax'

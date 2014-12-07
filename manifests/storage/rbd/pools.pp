@@ -13,6 +13,47 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::storage::rbd::pools
+#
+# Configure Ceph RBD pools (images,volumes,backup,nova)
+#
+# === Parameters:
+#
+# [*setup_pools*]
+#   (optional) Create or not Ceph pools
+#   Defaults to false
+#
+# [*glance_rbd_pool*]
+#   (optional) Name of the Ceph pool which which store the glance images
+#   Defaults to 'images'
+#
+# [*glance_rbd_user*]
+#   (optional) User name used to acces to the glance rbd pool
+#   Defaults to 'glance'
+#
+# [*ceph_fsid*] The cluster's fsid.
+#   Mandatory. Get one with `uuidgen -r`.
+#
+# [*cinder_backup_pool*]
+#   (optional) Name of the Ceph pool which which store the cinder backups
+#   Defaults to 'volumes'
+#
+# [*cinder_backup_user*]
+#   (optional) User name used to acces to the backup rbd pool
+#   Defaults to 'cinder'
+#
+# [*cinder_rbd_pool*]
+#   (optional) Name of the Ceph pool which which store the cinder images
+#   Defaults to 'volumes'
+#
+# [*cinder_rbd_user*]
+#   (optional) User name used to acces to the cinder rbd pool
+#   Defaults to 'cinder'
+#
+# [*nova_rbd_pool*]
+#   (optional) The RADOS pool in which rbd volumes are stored.
+#   Defaults to 'vms'
+#
 class cloud::storage::rbd::pools(
   $setup_pools          = false,
   $glance_rbd_user      = 'glance',

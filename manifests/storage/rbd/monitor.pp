@@ -13,6 +13,29 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::storage::rbd::monitor
+#
+# Ceph monitor
+#
+# === Parameters:
+#
+# [*id*]
+#   (optional) Then uuid of the cluster
+#   Defaults to $::uniqueid
+#
+# [*mon_addr*]
+#   (optional) Which interface we bind the Ceph monitor
+#   Defaults to '127.0.0.1'
+#
+# [*monitor_secret*]]
+#   (optional) Password of the Ceph monitor
+#   Defaults to 'cephsecret'
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::storage::rbd::monitor (
   $id                = $::uniqueid,
   $mon_addr          = '127.0.0.1',

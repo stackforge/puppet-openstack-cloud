@@ -19,6 +19,59 @@
 #
 # === Parameters:
 #
+# [*ks_keystone_admin_host*]
+#   (optional) Admin Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_admin_port*]
+#   (optional) TCP port to connect to Keystone API from admin network
+#   Defaults to '35357'
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP port to connect to Keystone API from internal network
+#   Defaults to '5000'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_keystone_admin_proto*]
+#   (optional) Protocol for admin endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_swift_internal_port*]
+#   (optional) TCP port to connect to Swift from internal network
+#   Defaults to '8080'
+#
+# [*ks_swift_password*]
+#   (optional) Password used by Swift to connect to Keystone API
+#   Defaults to 'swiftpassword'
+#
+# [*ks_swift_dispersion_password*]
+#   (optional) Password of the dispersion tenant, used for swift-dispersion-report
+#   and swift-dispersion-populate tools.
+#   Defaults to 'dispersion'
+#
+# [*api_eth*]
+#   (optional) Which interface we bind the Swift proxy server.
+#   Defaults to '127.0.0.1'
+#
+# [*memcache_servers*]
+#   (optionnal) Memcached servers used by Keystone. Should be an array.
+#   Defaults to ['127.0.0.1:11211']
+#
+# [*statsd_host*]
+#   (optional) Hostname or IP of the statd server.
+#   Defaults to '127.0.0.1'
+#
+# [*statsd_port*]
+#   (optional) TCP port of the statd server
+#   Defaults to '4125'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

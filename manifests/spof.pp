@@ -35,6 +35,10 @@
 #   Should be an hash.
 #   Default to {}
 #
+# [*cluster_password*]
+#   (optionnal) Password of the pacemaker cluster
+#   Defaults to 'secrete'
+#
 class cloud::spof(
   $cluster_ip        = '127.0.0.1',
   $cluster_members   = false,
