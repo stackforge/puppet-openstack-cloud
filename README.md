@@ -94,8 +94,9 @@ The swift portions of this module needs Puppet's [exported resources](http://doc
 ### Installing latest unstable cloud module from source
 
     cd /etc/puppet/modules
-    git clone git@github.com:enovance/puppet-openstack-cloud.git cloud
-    cd cloud
+    git clone git@github.com:redhat-openstack/openstack-puppet-modules.git modules
+    cd modules
+    git checkout -b puppet-openstack-cloud origin/enovance
     gem install --no-ri --no-rdoc r10k
     # a debian package is available in jessie
     PUPPETFILE=./Puppetfile PUPPETFILE_DIR=../ r10k --verbose 3 puppetfile install

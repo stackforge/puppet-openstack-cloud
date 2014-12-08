@@ -7,6 +7,7 @@ TDIR = File.expand_path(File.dirname(__FILE__))
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
+require 'net/http'
 
 PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.send('disable_80chars')
@@ -57,9 +58,18 @@ namespace :module do
   end
 end
 
+puppetfile_url = ENV['PUPPETFILE'] || 'https://raw.githubusercontent.com/redhat-openstack/openstack-puppet-modules/enovance/Puppetfile'
+
 Rake::Task[:spec_prep].clear
 desc 'Create the fixtures directory'
 task :spec_prep do
+  puts "Puppetfile: #{puppetfile_url}"
+  # If puppetfile exist on local fs, let use this file (provided by Puppetfile env arg)
+  if !File.exists?(puppetfile_url)
+    uri = URI.parse(puppetfile_url)
+    puppetfile = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https').request(Net::HTTP::Get.new(uri.request_uri)).body
+  end
+  File.open('Puppetfile', 'w') { |file| file.write(puppetfile) }
   FileUtils::mkdir_p('spec/fixtures/modules')
   FileUtils::mkdir_p('spec/fixtures/manifests')
   FileUtils::touch('spec/fixtures/manifests/site.pp')
