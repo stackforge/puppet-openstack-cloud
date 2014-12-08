@@ -16,10 +16,10 @@
 # Network DHCP node
 #
 class cloud::network::dhcp(
-  $veth_mtu           = 1500,
-  $debug              = true,
-  $dnsmasq_dns_server = false,
-  $firewall_settings  = {},
+  $veth_mtu            = 1500,
+  $debug               = true,
+  $dnsmasq_dns_servers = false,
+  $firewall_settings   = {},
 ) {
 
   include 'cloud::network'
@@ -31,12 +31,12 @@ class cloud::network::dhcp(
     enable_isolated_metadata => true
   }
 
-  if $dnsmasq_dns_server {
-    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_server':
-      value => $dnsmasq_dns_server
+  if $dnsmasq_dns_servers {
+    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_servers':
+      value => join($dnsmasq_dns_servers, ',')
     }
   } else {
-    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_server':
+    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_servers':
       ensure => absent
     }
   }
