@@ -35,16 +35,9 @@
 #   (optional) Set log output to debug output
 #   Defaults to true
 #
-# [*provider_vlan_ranges*]
-#   (optionnal) VLAN range for provider networks
-#   Defaults to ['physnet1:1000:2999']
-#
-# [*flat_networks*]
-#   (optionnal) List of physical_network names with which flat networks
-#   can be created. Use * to allow flat networks with arbitrary
-#   physical_network names.
-#   Should be an array.
-#   Default to ['public'].
+# [*api_eth*]
+#   (optional) Which interface we bind the Neutron API server.
+#   Defaults to '127.0.0.1'
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging

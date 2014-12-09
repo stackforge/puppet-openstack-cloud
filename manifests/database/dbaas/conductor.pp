@@ -17,6 +17,32 @@
 #
 # Class to install Conductor service of OpenStack Database as a Service (Trove)
 #
+# === Parameters:
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_port*]
+#   (optional) TCP internal port used to connect to Keystone API.
+#   Defaults to '5000'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol used to connect to Keystone API.
+#   Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*verbose*]
+#   (optional) Rather to log the trove api service at verbose level.
+#   Default: true
+#
+# [*debug*]
+#   (optional) Rather to log the trove api service at debug level.
+#   Default: true
+#
+# [*use_syslog*]
+#   (optional) Use syslog for logging.
+#   Defaults to true
 #
 class cloud::database::dbaas::conductor(
   $ks_keystone_internal_host  = '127.0.0.1',

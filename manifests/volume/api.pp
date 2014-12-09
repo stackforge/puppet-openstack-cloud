@@ -19,6 +19,44 @@
 #
 # === Parameters:
 #
+# [*default_volume_type*]
+#   (required) default volume type to use.
+#   This should contain the name of the default volume type to use.
+#   If not configured, it produces an error when creating a volume
+#   without specifying a type.
+#
+# [*ks_cinder_internal_port*]
+#   (optional) TCP port to connect to Cinder API from public network
+#   Defaults to '8776'
+#
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_glance_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Glance API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_cinder_password*]
+#   (optional) Password used by Cinder to connect to Keystone API
+#   Defaults to 'cinderpassword'
+#
+# [*ks_glance_api_internal_port*]
+#   (optional) TCP port to connect to Glance API from public network
+#   Defaults to '9292'
+#
+# [*api_eth*]
+#   (optional) Which interface we bind the Cinder API server.
+#   Defaults to '127.0.0.1'
+#
+# [*ks_glance_internal_proto*]
+#   (optional) Protocol for public endpoint. Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

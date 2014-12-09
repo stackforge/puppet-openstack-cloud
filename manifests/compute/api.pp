@@ -19,6 +19,39 @@
 #
 # === Parameters:
 #
+# [*ks_keystone_internal_host*]
+#   (optional) Internal Hostname or IP to connect to Keystone API
+#   Defaults to '127.0.0.1'
+#
+# [*ks_keystone_internal_proto*]
+#   (optional) Protocol used to connect to Keystone API.
+#   Could be 'http' or 'https'.
+#   Defaults to 'http'
+#
+# [*ks_nova_password*]
+#   (optional) Password used by Nova to connect to Keystone API
+#   Defaults to 'novapassword'
+#
+# [*neutron_metadata_proxy_shared_secret*]
+#   (optional) Shared secret to validate proxies Neutron metadata requests
+#   Defaults to 'metadatapassword'
+#
+# [*api_eth*]
+#   (optional) Hostname or IP to bind Nova API.
+#   Defaults to '127.0.0.1'
+#
+# [*ks_nova_public_port*]
+#   (optional) TCP port for bind Nova API.
+#   Defaults to '8774'
+#
+# [*ks_ec2_public_port*]
+#   (optional) TCP port for bind Nova EC2 API.
+#   Defaults to '8773'
+#
+# [*ks_metadata_public_port*]
+#   (optional) TCP port for bind Nova metadata API.
+#   Defaults to '8775'
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

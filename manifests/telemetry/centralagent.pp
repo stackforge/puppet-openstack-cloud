@@ -13,8 +13,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+#
+# == Class: cloud::telemetry::centralagent
+#
 # Telemetry Central Agent node (should be run once)
 # Could be managed by spof node as Active / Passive.
+#
+# === Parameters:
+#
+# [*enabled*]
+#   (optional) State of the telemetry central agent service.
+#   Defaults to true
 #
 class cloud::telemetry::centralagent(
   $enabled = true,

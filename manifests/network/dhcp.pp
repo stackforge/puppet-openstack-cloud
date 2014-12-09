@@ -13,7 +13,28 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class:
+#
 # Network DHCP node
+#
+# === Parameters:
+#
+# [*veth_mtu*]
+#   (optional) Enforce the default virtual interface MTU (option 26)
+#   Defaults to 1500
+#
+# [*debug*]
+#   (optional) Set log output to debug output
+#   Defaults to true
+#
+# [*dnsmasq_dns_servers*]
+#   (optional) An array of DNS IP used to configure Virtual server resolver
+#   Defaults to false
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
 #
 class cloud::network::dhcp(
   $veth_mtu            = 1500,

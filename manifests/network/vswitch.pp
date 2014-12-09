@@ -120,6 +120,15 @@
 #       Not applicable if 'n1kv_source' is a file. (Option-B above)
 #   Defaults to 'present'
 #
+# [*tunnel_types*]
+#   (optional) List of types of tunnels to use when utilizing tunnels.
+#   Supported tunnel types are: vxlan.
+#   Defaults to ['gre']
+#
+# [*n1kv_vsm_domain_id*]
+#   (optional) N1000 KV Domain ID (does nothing?)
+#   Defaults to 1000
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.

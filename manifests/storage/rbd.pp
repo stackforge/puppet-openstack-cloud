@@ -13,6 +13,21 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::storage::rbd
+#
+# === Parameters:
+#
+# [*fsid*] The cluster's fsid.
+#   Mandatory. Get one with `uuidgen -r`.
+#
+# [*cluster_network*]
+#   (optional) The cluster internal network
+#   Defaults to '127.0.0.1/24'
+#
+# [*public_network*]
+#   (optional) The cluster public (where clients are) network
+#   Defaults to '127.0.0.1/24'
+#
 class cloud::storage::rbd (
   $fsid            = undef,
   $cluster_network = '127.0.0.1/24',
