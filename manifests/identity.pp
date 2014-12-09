@@ -546,7 +546,8 @@ class cloud::identity (
     token_driver     => $token_driver,
     token_expiration => $ks_token_expiration,
     admin_endpoint   => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/",
-    public_endpoint  => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}/"
+    public_endpoint  => "${ks_keystone_public_proto}://${ks_keystone_public_host}:${ks_keystone_public_port}/",
+    validate_service => true,
   }
 
   keystone_config {
