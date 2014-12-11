@@ -35,15 +35,50 @@
 #  (optional) Disable TSO on Neutron interfaces
 #  Defaults to true
 #
+# [*ha_enabled*]
+#   (optional) Enable HA for L3 agent or not.
+#   Defaults to false
+#
+# [*ha_vrrp_auth_type*]
+#   (optional) VRRP authentication type. Can be AH or PASS.
+#   Defaults to "PASS"
+#
+# [*ha_vrrp_auth_password*]
+#   (optional) VRRP authentication password. Required if ha_enabled = true.
+#   Defaults to undef
+#
+# [*allow_automatic_l3agent_failover*]
+#   (optional) Automatically reschedule routers from offline L3 agents to online
+#   L3 agents.
+#   Defaults to 'False'
+#
+# [*agent_mode*]
+#   (optional) The working mode for the agent.
+#   'legacy': default behavior (without DVR)
+#   'dvr': enable DVR for an L3 agent running on compute node (DVR in production)
+#   'dvr_snat': enable DVR with centralized SNAT support (DVR for single-host, for testing only)
+#   Right now, DVR is not compatible with ha_enabled
+#   Defaults to 'legacy'
+#
 class cloud::network::l3(
   $external_int     = 'eth1',
   $ext_provider_net = false,
   $debug            = true,
   $manage_tso       = true,
+  $ha_enabled                       = false,
+  $ha_vrrp_auth_type                = 'PASS',
+  $ha_vrrp_auth_password            = undef,
+  $allow_automatic_l3agent_failover = false,
+  $agent_mode                       = 'legacy',
+
 ) {
 
   include 'cloud::network'
   include 'cloud::network::vswitch'
+
+  if $ha_enabled and $agent_mode != 'legacy' {
+    fail ('ha_enabled requires agent_mode to be set to legacy')
+  }
 
   if ! $ext_provider_net {
     vs_bridge{'br-ex':
@@ -60,7 +95,12 @@ class cloud::network::l3(
 
   class { 'neutron::agents::l3':
     debug                   => $debug,
-    external_network_bridge => $external_network_bridge_real
+    external_network_bridge => $external_network_bridge_real,
+    ha_enabled                       => $ha_enabled,
+    ha_vrrp_auth_type                => $ha_vrrp_auth_type,
+    ha_vrrp_auth_password            => $ha_vrrp_auth_password,
+    allow_automatic_l3agent_failover => $allow_automatic_l3agent_failover,
+    agent_mode                       => $agent_mode,
   }
 
   class { 'neutron::agents::metering':
