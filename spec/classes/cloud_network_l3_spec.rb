@@ -35,7 +35,8 @@ describe 'cloud::network::l3' do
 
     let :params do
       { :debug        => true,
-        :external_int => 'eth1' }
+        :external_int => 'eth1',
+        :allow_automatic_l3agent_failover => false }
     end
 
     it 'configure neutron common' do
@@ -62,7 +63,8 @@ describe 'cloud::network::l3' do
     it 'configure neutron l3' do
       is_expected.to contain_class('neutron::agents::l3').with(
           :debug                   => true,
-          :external_network_bridge => 'br-ex'
+          :external_network_bridge => 'br-ex',
+          :allow_automatic_l3agent_failover => params[:allow_automatic_l3agent_failover]
       )
     end
     it 'configure br-ex bridge' do
@@ -126,6 +128,60 @@ describe 'cloud::network::l3' do
       end
       it 'do not start TSO script' do
         is_expected.not_to contain_exec('start-tso-script')
+      end
+    end
+
+    context 'when configuring L3 HA' do
+      before :each do
+        params.merge!(:ha_enabled            => true,
+                      :ha_vrrp_auth_type     => 'PASS',
+                      :ha_vrrp_auth_password => 'test')
+      end
+      it 'should configure L3 HA' do
+        is_expected.to contain_class('neutron::agents::l3').with(
+          :ha_enabled            => true,
+          :ha_vrrp_auth_type     => 'PASS',
+          :ha_vrrp_auth_password => 'test'
+        )
+      end
+    end
+
+    context 'when not configuring L3 HA' do
+      it 'should not configure L3 HA' do
+        is_expected.to contain_class('neutron::agents::l3').with(
+          :ha_enabled            => false,
+        )
+      end
+    end
+
+    context 'when enabling DVR' do
+      before :each do
+        params.merge!(:agent_mode => 'dvr')
+      end
+      it 'should enable DVR' do
+        is_expected.to contain_class('neutron::agents::l3').with(
+          :agent_mode            => 'dvr',
+        )
+      end
+    end
+
+    context 'when not enabling DVR' do
+      it 'should not enable DVR' do
+        is_expected.to contain_class('neutron::agents::l3').with(
+          :agent_mode            => 'legacy',
+        )
+      end
+    end
+
+    context 'with L3 HA and DVR' do
+      before :each do
+        params.merge!(:agent_mode => 'dvr',
+                      :ha_enabled => true)
+      end
+      it 'should fail' do
+        expect {
+          should compile
+        }.to raise_error(Puppet::Error, /ha_enabled requires agent_mode to be set to legacy/)
       end
     end
   end
