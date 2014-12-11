@@ -23,6 +23,14 @@
 #   (optional) Hostname or IP to bind Nova spicehtmlproxy service.
 #   Defaults to '127.0.0.1'
 #
+# [*console*]
+#   (optional) Nova's console type (spice or novnc)
+#   Defaults to 'spice'
+#
+# [*novnc_port*]
+#   (optional) TCP port to bind Nova novnc service.
+#   Defaults to '6080'
+#
 # [*spice_port*]
 #   (optional) TCP port to bind Nova spicehtmlproxy service.
 #   Defaults to '6082'
@@ -34,29 +42,46 @@
 #
 class cloud::compute::consoleproxy(
   $api_eth           = '127.0.0.1',
+  $console           = 'spice',
+  $novnc_port        = '6080',
   $spice_port        = '6082',
   $firewall_settings = {},
 ){
 
   include 'cloud::compute'
 
-  class { 'nova::spicehtml5proxy':
+  case $console {
+    'spice': {
+      $port  = $spice_port
+      $proxy = 'spicehtml5proxy'
+    }
+    'novnc': {
+      $port  = $novnc_port
+      $proxy = 'vncproxy'
+    }
+    default: {
+      fail("Unsupported console type ${console}")
+    }
+  }
+
+  class { "nova::${proxy}":
     enabled => true,
-    host    => $api_eth
+    host    => $api_eth,
+    port    => $port
   }
 
   if $::cloud::manage_firewall {
-    cloud::firewall::rule{ '100 allow spice access':
-      port   => $spice_port,
+    cloud::firewall::rule{ "100 allow ${console} access":
+      port   => $port,
       extras => $firewall_settings,
     }
   }
 
-  @@haproxy::balancermember{"${::fqdn}-compute_spice":
-    listening_service => 'spice_cluster',
+  @@haproxy::balancermember{"${::fqdn}-compute_${console}":
+    listening_service => "${console}_cluster",
     server_names      => $::hostname,
     ipaddresses       => $api_eth,
-    ports             => $spice_port,
+    ports             => $port,
     options           => 'check inter 2000 rise 2 fall 5'
   }
 }

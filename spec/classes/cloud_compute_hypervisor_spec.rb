@@ -71,8 +71,8 @@ describe 'cloud::compute::hypervisor' do
         :nova_ssh_private_key                 => 'secrete',
         :nova_ssh_public_key                  => 'public',
         :ks_nova_public_proto                 => 'http',
-        :ks_spice_public_proto                => 'https',
-        :ks_spice_public_host                 => '10.0.0.2',
+        :ks_console_public_proto              => 'https',
+        :ks_console_public_host               => '10.0.0.2',
         :vm_rbd                               => false,
         :volume_rbd                           => false,
         :nova_shell                           => false,
@@ -233,6 +233,26 @@ describe 'cloud::compute::hypervisor' do
       is_expected.to contain_nova_config('libvirt/inject_partition').with('value' => '-2')
       is_expected.to contain_nova_config('libvirt/live_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST')
       is_expected.to contain_nova_config('libvirt/block_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC')
+    end
+
+    context 'witch novnc console' do
+      before :each do
+        params.merge!(
+          :console    => 'novnc',
+          :novnc_port => '6080' )
+      end
+      it 'configure nova-compute' do
+        is_expected.to contain_class('nova::compute').with(
+            :enabled                       => true,
+            :vnc_enabled                   => true,
+            :vncserver_proxyclient_address => '7.0.0.1',
+            :vncproxy_host                 => '10.0.0.2',
+            :vncproxy_protocol             => 'https',
+            :vncproxy_port                 => '6080',
+            :virtio_nic                    => false,
+            :neutron_enabled               => true
+          )
+      end
     end
 
     context 'with dbus on Ubuntu' do

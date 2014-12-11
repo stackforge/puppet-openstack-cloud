@@ -48,6 +48,14 @@
 #   you must provide the entire ssh privatekey in this parameter.
 #   Defaults to undef
 #
+# [*console*]
+#   (optional) Nova's console type (spice or novnc)
+#   Defaults to 'spice'
+#
+# [*novnc_port*]
+#   (optional) TCP port to connect to Nova vncproxy service.
+#   Defaults to '6080'
+#
 # [*spice_port*]
 #   (optional) TCP port to connect to Nova spicehtmlproxy service.
 #   Defaults to '6082'
@@ -106,12 +114,12 @@
 #   Need to be a valid shell path.
 #   Defaults to false
 #
-# [*ks_spice_public_proto*]
-#   (optional) Protocol used to connect to Spice service.
+# [*ks_console_public_proto*]
+#   (optional) Protocol used to connect to console service.
 #   Defaults to false (use nova_public_proto)
 #
-# [*ks_spice_public_host*]
-#   (optional) Hostname or IP used to connect to Spice service.
+# [*ks_console_public_host*]
+#   (optional) Hostname or IP used to connect to console service.
 #   Defaults to false (use nova_public_host)
 #
 # [*firewall_settings*]
@@ -126,7 +134,11 @@ class cloud::compute::hypervisor(
   $ks_nova_public_host        = '127.0.0.1',
   $nova_ssh_private_key       = undef,
   $nova_ssh_public_key        = undef,
-  $spice_port                 = 6082,
+  $console                    = 'spice',
+  $novnc_port                 = '6080',
+  $spice_port                 = '6082',
+  $ks_console_public_proto    = 'http',
+  $ks_console_public_host     = '127.0.0.1',
   $cinder_rbd_user            = 'cinder',
   $nova_rbd_pool              = 'vms',
   $nova_rbd_secret_uuid       = undef,
@@ -140,8 +152,6 @@ class cloud::compute::hypervisor(
   $nfs_device                 = false,
   $nfs_options                = 'defaults',
   $filesystem_store_datadir   = '/var/lib/nova/instances',
-  $ks_spice_public_proto      = 'http',
-  $ks_spice_public_host       = '127.0.0.1',
 ) inherits cloud::params {
 
   include 'cloud::compute'
@@ -226,21 +236,39 @@ Host *
     })
   }
 
-  class { 'nova::compute':
-    enabled         => true,
-    vnc_enabled     => false,
-    #TODO(EmilienM) Bug #1259545 currently WIP:
-    virtio_nic      => false,
-    neutron_enabled => true
-  }
+  case $console {
+    'spice': {
+      class { 'nova::compute':
+        enabled         => true,
+        vnc_enabled     => false,
+        virtio_nic      => false,
+        neutron_enabled => true
+      }
 
-  class { 'nova::compute::spice':
-    server_listen              => '0.0.0.0',
-    server_proxyclient_address => $server_proxyclient_address,
-    proxy_host                 => $ks_spice_public_host,
-    proxy_protocol             => $ks_spice_public_proto,
-    proxy_port                 => $spice_port
+      class { 'nova::compute::spice':
+        server_listen              => '0.0.0.0',
+        server_proxyclient_address => $server_proxyclient_address,
+        proxy_host                 => $ks_console_public_host,
+        proxy_protocol             => $ks_console_public_proto,
+        proxy_port                 => $spice_port
 
+      }
+    }
+    'novnc': {
+      class { 'nova::compute':
+        enabled                       => true,
+        vnc_enabled                   => true,
+        vncserver_proxyclient_address => $server_proxyclient_address,
+        vncproxy_host                 => $ks_console_public_host,
+        vncproxy_protocol             => $ks_console_public_proto,
+        vncproxy_port                 => $novnc_port,
+        virtio_nic                    => false,
+        neutron_enabled               => true
+      }
+    }
+    default: {
+      fail("upported console type ${console}")
+    }
   }
 
   if $::osfamily == 'RedHat' {

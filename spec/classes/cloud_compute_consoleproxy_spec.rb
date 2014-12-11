@@ -90,8 +90,24 @@ describe 'cloud::compute::consoleproxy' do
     it 'configure nova-spicehtml5proxy' do
       is_expected.to contain_class('nova::spicehtml5proxy').with(
         :enabled => true,
-        :host    => '10.0.0.1'
+        :host    => '10.0.0.1',
+        :port    => '6082'
       )
+    end
+
+    context 'with novnc console' do
+      before :each do
+        params.merge!(
+          :console    => 'novnc',
+          :novnc_port => '6080' )
+      end
+      it 'configure nova-vncproxy' do
+        is_expected.to contain_class('nova::vncproxy').with(
+            :enabled => true,
+            :host    => '10.0.0.1',
+            :port    => '6080'
+        )
+      end
     end
 
     context 'with default firewall enabled' do

@@ -155,6 +155,13 @@
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure.
+#   Defaults to true
+#
+# [*novnc*]
+#   (optional) Enable or not novnc binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
 #   Defaults to false
 #
 # [*metadata_api*]
@@ -277,6 +284,11 @@
 #   service configuration block.
 #   Defaults to []
 #
+# [*novnc_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
 # [*horizon_bind_options*]
 #   (optional) A hash of options that are inserted into the HAproxy listening
 #   service configuration block.
@@ -369,6 +381,10 @@
 #   (optional) TCP port to connect to Nova spicehtmlproxy service.
 #   Defaults to '6082'
 #
+# [*novnc_port*]
+#   (optional) TCP port to connect to Nova vncproxy service.
+#   Defaults to '6080'
+#
 # [*rabbitmq_port*]
 #   (optional) Port of RabbitMQ service.
 #   Defaults to '5672'
@@ -420,6 +436,7 @@ class cloud::loadbalancer(
   $horizon_ssl                      = false,
   $rabbitmq                         = false,
   $spice                            = true,
+  $novnc                            = false,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
@@ -446,6 +463,7 @@ class cloud::loadbalancer(
   $trove_bind_options               = [],
   $swift_bind_options               = [],
   $spice_bind_options               = [],
+  $novnc_bind_options               = [],
   $horizon_bind_options             = [],
   $horizon_ssl_bind_options         = [],
   $rabbitmq_bind_options            = [],
@@ -469,6 +487,7 @@ class cloud::loadbalancer(
   $horizon_port                     = 80,
   $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
+  $novnc_port                       = 6080,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -618,6 +637,19 @@ class cloud::loadbalancer(
       'timeout client' => '120m',
     },
     bind_options      => $spice_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'novnc_cluster':
+    ip                => $novnc,
+    port              => $novnc_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
+    bind_options      => $novnc_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'rabbitmq_cluster':
