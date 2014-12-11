@@ -85,69 +85,28 @@ class cloud::storage::rbd::pools(
         unless  => "/usr/bin/rados lspools | grep -sq ${cinder_rbd_pool}",
       }
 
-      exec { "create_${cinder_rbd_pool}_user_and_key":
-        # TODO: point PG num with a cluster variable
-        command => "ceph auth get-or-create client.${cinder_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
-        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_rbd_user}$'",
-        require => Exec["create_${cinder_rbd_pool}_pool"];
-      }
-
       # Note(EmilienM): We use the same keyring for Nova and Cinder.
       exec { "create_${nova_rbd_pool}_pool":
         command => "rados mkpool ${nova_rbd_pool}",
         unless  => "/usr/bin/rados lspools | grep -sq ${nova_rbd_pool}",
       }
 
-      if $::ceph_keyring_glance {
-        # NOTE(fc): Puppet needs to run a second time to enter this
-        @@ceph::key { $glance_rbd_user:
-          secret       => $::ceph_keyring_glance,
-          keyring_path => "/etc/ceph/ceph.client.${glance_rbd_user}.keyring"
-        }
-        Ceph::Key <<| title == $glance_rbd_user |>>
+      exec { "create_${cinder_rbd_pool}_user_and_key":
+        # TODO: point PG num with a cluster variable
+        command => "ceph auth get-or-create client.${cinder_rbd_user} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rx pool=${glance_rbd_pool}, allow rwx pool=${cinder_rbd_pool}, allow rwx pool=${nova_rbd_pool}'",
+        unless  => "ceph auth list 2> /dev/null | egrep -sq '^client.${cinder_rbd_user}$'",
+        require => Exec["create_${cinder_rbd_pool}_pool", "create_${nova_rbd_pool}"];
       }
-
-      if $::ceph_keyring_cinder {
-        # NOTE(fc): Puppet needs to run a second time to enter this
-        @@ceph::key { $cinder_rbd_user:
-          secret       => $::ceph_keyring_cinder,
-          keyring_path => "/etc/ceph/ceph.client.${cinder_rbd_user}.keyring"
-        }
-        Ceph::Key <<| title == $cinder_rbd_user |>>
-      }
-
-      $clients = [$glance_rbd_user, $cinder_rbd_user]
-      @@concat::fragment { 'ceph-clients-os':
-        target  => '/etc/ceph/ceph.conf',
-        order   => '95',
-        content => template('cloud/storage/ceph/ceph-client.conf.erb')
-      }
-
-      @@file { '/etc/ceph/secret.xml':
-        content => template('cloud/storage/ceph/secret-compute.xml.erb'),
-        tag     => 'ceph_compute_secret_file',
-      }
-
-      if $::osfamily == 'RedHat' {
-        $libvirt_package_name = 'libvirt'
-      } else {
-        $libvirt_package_name = 'libvirt-bin'
-      }
-
-      @@exec { 'get_or_set_virsh_secret':
-        command => 'virsh secret-define --file /etc/ceph/secret.xml',
-        unless  => "virsh secret-list | tail -n +3 | cut -f1 -d' ' | grep -sq ${ceph_fsid}",
-        tag     => 'ceph_compute_get_secret',
-        require => [Package[$libvirt_package_name],File['/etc/ceph/secret.xml']],
-        notify  => Exec['set_secret_value_virsh'],
-      }
-
-      @@exec { 'set_secret_value_virsh':
-        command     => "virsh secret-set-value --secret ${ceph_fsid} --base64 ${::ceph_keyring_cinder}",
-        tag         => 'ceph_compute_set_secret',
-        refreshonly =>  true,
-      }
-
     } # !empty($::ceph_admin_key)
+
+    class { 'cloud::storage::rbd::clients':
+      glance_rbd_user    => $glance_rbd_user,
+      cinder_rbd_user    => $cinder_rbd_user,
+      cinder_backup_user => $cinder_backup_user
+    }
+
+    class { 'cloud::storage::rbd::libvirt':
+      ceph_fsid => $ceph_fsid
+    }
   } # if setup pools
 } # class
