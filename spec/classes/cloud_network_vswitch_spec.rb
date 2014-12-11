@@ -66,7 +66,23 @@ describe 'cloud::network::vswitch' do
             :enable_tunneling => true,
             :tunnel_types     => ['gre'],
             :bridge_mappings  => ['public:br-pub'],
-            :local_ip         => '10.0.1.1'
+            :local_ip         => '10.0.1.1',
+            :enable_distributed_routing => false
+        )
+      end
+    end
+
+    context 'when running ML2 plugin with OVS driver and distributed routing' do
+      before :each do
+        params.merge!(:enable_distributed_routing => true)
+      end
+      it 'configure neutron vswitch with distributed routing' do
+        is_expected.to contain_class('neutron::agents::ml2::ovs').with(
+            :enable_tunneling           => true,
+            :tunnel_types               => ['gre'],
+            :bridge_mappings            => ['public:br-pub'],
+            :local_ip                   => '10.0.1.1',
+            :enable_distributed_routing => true
         )
       end
     end

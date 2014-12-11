@@ -108,6 +108,15 @@
 #   Supported values: 'ml2', 'n1kv'.
 #   Defaults to 'ml2'
 #
+# [*l3_ha*]
+#   (optional) Enable L3 agent HA
+#   Defaults to false.
+#
+# [*router_distributed*]
+#   (optional) Create distributed tenant routers by default
+#   Right now, DVR is not compatible with l3_ha
+#   Defaults to false
+#
 # [*ks_keystone_admin_port*]
 #   (optional) TCP port to connect to Keystone API from admin network
 #   Defaults to '35357'
@@ -160,24 +169,30 @@ class cloud::network::controller(
   $nova_region_name        = 'RegionOne',
   $manage_ext_network      = false,
   $firewall_settings       = {},
-  $flat_networks              = ['public'],
-  $tenant_network_types       = ['gre'],
-  $type_drivers               = ['gre', 'vlan', 'flat'],
-  $provider_vlan_ranges       = ['physnet1:1000:2999'],
-  $plugin                     = 'ml2',
+  $flat_networks           = ['public'],
+  $tenant_network_types    = ['gre'],
+  $type_drivers            = ['gre', 'vlan', 'flat'],
+  $provider_vlan_ranges    = ['physnet1:1000:2999'],
+  $plugin                  = 'ml2',
+  $l3_ha                   = false,
+  $router_distributed      = false,
   # only needed by cisco n1kv plugin
-  $n1kv_vsm_ip                = '127.0.0.1',
-  $n1kv_vsm_password          = 'secrete',
-  $ks_keystone_admin_port     = 35357,
+  $n1kv_vsm_ip             = '127.0.0.1',
+  $n1kv_vsm_password       = 'secrete',
+  $ks_keystone_admin_port  = 35357,
   # only needed by ml2 plugin
-  $tunnel_id_ranges           = ['1:10000'],
-  $vni_ranges                 = ['1:10000'],
+  $tunnel_id_ranges        = ['1:10000'],
+  $vni_ranges              = ['1:10000'],
 ) {
 
   include 'cloud::network'
 
   $encoded_user = uriescape($neutron_db_user)
   $encoded_password = uriescape($neutron_db_password)
+
+  if $l3_ha and $router_distributed {
+    err 'l3_ha and router_distributed are mutually exclusive, only one of them can be set to true'
+  }
 
   class { 'neutron::server':
     auth_password       => $ks_neutron_password,
@@ -188,6 +203,8 @@ class cloud::network::controller(
     mysql_module        => '2.2',
     api_workers         => $::processorcount,
     agent_down_time     => '60',
+    l3_ha               => $l3_ha,
+    router_distributed  => $router_distributed,
   }
 
   case $plugin {
