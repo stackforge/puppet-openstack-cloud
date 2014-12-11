@@ -46,6 +46,10 @@
 # [*provider_bridge_mappings*]
 #   (optional) List of <physical_network>:<bridge>
 #
+# [*enable_distributed_routing*]
+#   (optional) Enable support for distributed routing on L2 agent.
+#   Defaults to false.
+#
 # [*n1kv_vsm_ip*]
 #   (required) N1KV VSM (Virtual Supervisor Module) VM's IP.
 #   Defaults to 127.0.0.1
@@ -136,26 +140,27 @@
 #
 class cloud::network::vswitch(
   # common
-  $driver                   = 'ml2_ovs',
-  $manage_ext_network       = false,
-  $external_int             = 'eth1',
-  $external_bridge          = 'br-pub',
-  $firewall_settings        = {},
+  $driver                     = 'ml2_ovs',
+  $manage_ext_network         = false,
+  $external_int               = 'eth1',
+  $external_bridge            = 'br-pub',
+  $firewall_settings          = {},
   # common to ml2
-  $tunnel_types             = ['gre'],
-  $tunnel_eth               = '127.0.0.1',
+  $tunnel_types               = ['gre'],
+  $tunnel_eth                 = '127.0.0.1',
   # ml2_ovs
-  $provider_bridge_mappings = ['public:br-pub'],
+  $provider_bridge_mappings   = ['public:br-pub'],
+  $enable_distributed_routing = false,
   # n1kv_vem
-  $n1kv_vsm_ip              = '127.0.0.1',
-  $n1kv_vsm_domain_id       = 1000,
-  $host_mgmt_intf           = 'eth1',
-  $uplink_profile           = {},
-  $vtep_config              = {},
-  $node_type                = 'compute',
-  $vteps_in_same_subnet     = false,
-  $n1kv_source              = '',
-  $n1kv_version             = 'present',
+  $n1kv_vsm_ip                = '127.0.0.1',
+  $n1kv_vsm_domain_id         = 1000,
+  $host_mgmt_intf             = 'eth1',
+  $uplink_profile             = {},
+  $vtep_config                = {},
+  $node_type                  = 'compute',
+  $vteps_in_same_subnet       = false,
+  $n1kv_source                = '',
+  $n1kv_version               = 'present',
 ) {
 
   include 'cloud::network'
@@ -163,12 +168,13 @@ class cloud::network::vswitch(
   case $driver {
     'ml2_ovs': {
       class { 'neutron::agents::ml2::ovs':
-        enable_tunneling => true,
-        l2_population    => true,
-        polling_interval => '15',
-        tunnel_types     => $tunnel_types,
-        bridge_mappings  => $provider_bridge_mappings,
-        local_ip         => $tunnel_eth
+        enable_tunneling           => true,
+        l2_population              => true,
+        polling_interval           => '15',
+        tunnel_types               => $tunnel_types,
+        bridge_mappings            => $provider_bridge_mappings,
+        local_ip                   => $tunnel_eth,
+        enable_distributed_routing => $enable_distributed_routing
       }
 
       if $::osfamily == 'RedHat' {
