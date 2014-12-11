@@ -273,6 +273,26 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
+    context 'configure Openstack Nova with novnc' do
+      before do
+        params.merge!(
+          :spice      => false,
+          :novnc      => true,
+          :novnc_port => 6080 )
+      end
+      it { is_expected.to contain_haproxy__listen('novnc_cluster').with(
+        :ipaddress => [params[:vip_public_ip]],
+        :ports     => '6080',
+        :options   => {
+          'mode'           => 'tcp',
+          'balance'        => 'source',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'timeout server' => '120m',
+          'timeout client' => '120m'
+        }
+      )}
+    end
+
     context 'configure OpenStack binding on both public and internal networks' do
       before do
         params.merge!(

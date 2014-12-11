@@ -420,6 +420,7 @@ class cloud::loadbalancer(
   $horizon_ssl                      = false,
   $rabbitmq                         = false,
   $spice                            = true,
+  $novnc                            = false,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
@@ -446,6 +447,7 @@ class cloud::loadbalancer(
   $trove_bind_options               = [],
   $swift_bind_options               = [],
   $spice_bind_options               = [],
+  $novnc_bind_options               = [],
   $horizon_bind_options             = [],
   $horizon_ssl_bind_options         = [],
   $rabbitmq_bind_options            = [],
@@ -469,6 +471,7 @@ class cloud::loadbalancer(
   $horizon_port                     = 80,
   $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
+  $novnc_port                       = 6080,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -618,6 +621,19 @@ class cloud::loadbalancer(
       'timeout client' => '120m',
     },
     bind_options      => $spice_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'novnc_cluster':
+    ip                => $novnc,
+    port              => $novnc_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
+    bind_options      => $novnc_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'rabbitmq_cluster':
