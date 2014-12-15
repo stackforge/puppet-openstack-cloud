@@ -106,8 +106,8 @@ describe 'cloud::image::api' do
       it 'configure Glance with file backend' do
         is_expected.to contain_class('glance::backend::file')
         is_expected.not_to contain_class('glance::backend::rbd')
-        is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/var/lib/glance/images/')
-        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+        is_expected.to contain_glance_api_config('glance_store/filesystem_store_datadir').with('value' => '/var/lib/glance/images/')
+        is_expected.to contain_glance_api_config('glance_store/default_store').with('value' => 'file')
       end
     end
 
@@ -122,8 +122,8 @@ describe 'cloud::image::api' do
       it 'configure Glance with NFS backend' do
         is_expected.to contain_class('glance::backend::file')
         is_expected.not_to contain_class('glance::backend::rbd')
-        is_expected.to contain_glance_api_config('DEFAULT/filesystem_store_datadir').with('value' => '/srv/images/')
-        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'file')
+        is_expected.to contain_glance_api_config('glance_store/filesystem_store_datadir').with('value' => '/srv/images/')
+        is_expected.to contain_glance_api_config('glance_store/default_store').with('value' => 'file')
         is_expected.to contain_mount('/srv/images/').with({
           'ensure'  => 'mounted',
           'fstype'  => 'nfs',
@@ -141,10 +141,10 @@ describe 'cloud::image::api' do
       it 'configure Glance with Glance backend' do
         is_expected.not_to contain_class('glance::backend::file')
         is_expected.not_to contain_class('glance::backend::rbd')
-        is_expected.to contain_glance_api_config('DEFAULT/default_store').with('value' => 'swift')
-        is_expected.to contain_glance_api_config('DEFAULT/swift_store_user').with('value' => 'services:glance')
-        is_expected.to contain_glance_api_config('DEFAULT/swift_store_key').with('value' => 'secrete')
-        is_expected.to contain_glance_api_config('DEFAULT/swift_store_auth_address').with('value' => 'https://10.0.0.1:35357/v2.0/')
+        is_expected.to contain_glance_api_config('glance_store/default_store').with('value' => 'swift')
+        is_expected.to contain_glance_api_config('glance_store/swift_store_user').with('value' => 'services:glance')
+        is_expected.to contain_glance_api_config('glance_store/swift_store_key').with('value' => 'secrete')
+        is_expected.to contain_glance_api_config('glance_store/swift_store_auth_address').with('value' => 'https://10.0.0.1:35357/v2.0/')
         is_expected.to contain_glance_api_config('DEFAULT/swift_store_create_container_on_put').with('value' => true)
       end
     end
