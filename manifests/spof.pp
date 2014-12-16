@@ -66,18 +66,7 @@ class cloud::spof(
     class {'pacemaker::stonith':
       disable => true
     }
-    file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-      source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
-      mode   => '0755',
-      owner  => 'root',
-      group  => 'root',
-    } ->
-    exec {'pcmk_ceilometer_agent_central':
-      command => 'pcs resource create ceilometer-agent-central ocf:heartbeat:ceilometer-agent-central',
-      path    => ['/usr/bin','/usr/sbin','/sbin/','/bin'],
-      user    => 'root',
-      unless  => '/usr/sbin/pcs resource | /bin/grep ceilometer-agent-central | /bin/grep Started'
-    }
+    pacemaker::resource::systemd { 'openstack-ceilometer-central': }
   } else {
 
     class { 'corosync':
