@@ -20,7 +20,7 @@
 # === Parameters:
 #
 # [*server_proxyclient_address*]
-#   (optional) Hostname or IP used to connect to Spice service.
+#   (optional) The IP address of the server running the console proxy client
 #   Defaults to '127.0.0.1'
 #
 # [*libvirt_type*]
@@ -238,37 +238,31 @@ Host *
 
   case $console {
     'spice': {
-      class { 'nova::compute':
-        enabled         => true,
-        vnc_enabled     => false,
-        virtio_nic      => false,
-        neutron_enabled => true
-      }
-
+      $vnc_enabled = false
       class { 'nova::compute::spice':
         server_listen              => '0.0.0.0',
         server_proxyclient_address => $server_proxyclient_address,
         proxy_host                 => $ks_console_public_host,
         proxy_protocol             => $ks_console_public_proto,
-        proxy_port                 => $spice_port
-
+        proxy_port                 => $spice_port,
       }
     }
     'novnc': {
-      class { 'nova::compute':
-        enabled                       => true,
-        vnc_enabled                   => true,
-        vncserver_proxyclient_address => $server_proxyclient_address,
-        vncproxy_host                 => $ks_console_public_host,
-        vncproxy_protocol             => $ks_console_public_proto,
-        vncproxy_port                 => $novnc_port,
-        virtio_nic                    => false,
-        neutron_enabled               => true
-      }
+      $vnc_enabled = true
     }
     default: {
-      fail("upported console type ${console}")
+      fail("unsupported console type ${console}")
     }
+  }
+  class { 'nova::compute':
+    enabled                       => true,
+    vnc_enabled                   => $vnc_enabled,
+    vncserver_proxyclient_address => $server_proxyclient_address,
+    vncproxy_host                 => $ks_console_public_host,
+    vncproxy_protocol             => $ks_console_public_proto,
+    vncproxy_port                 => $novnc_port,
+    virtio_nic                    => false,
+    neutron_enabled               => true
   }
 
   if $::osfamily == 'RedHat' {
