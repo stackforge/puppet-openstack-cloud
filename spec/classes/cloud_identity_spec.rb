@@ -25,6 +25,7 @@ describe 'cloud::identity' do
     let :params do
       { :identity_roles_addons        => ['SwiftOperator', 'ResellerAdmin'],
         :swift_enabled                => true,
+        :cinder_enabled               => true,
         :keystone_db_host             => '10.0.0.1',
         :keystone_db_user             => 'keystone',
         :keystone_db_password         => 'secrete',
@@ -324,6 +325,15 @@ describe 'cloud::identity' do
       it 'should not configure swift endpoints and users' do
         is_expected.not_to contain_class('swift::keystone::auth')
         is_expected.not_to contain_class('swift::keystone::dispersion')
+      end
+    end
+
+    context 'without Cinder' do
+      before :each do
+        params.merge!(:cinder_enabled => false)
+      end
+      it 'should not configure cinder endpoints and users' do
+        is_expected.not_to contain_class('cinder::keystone::auth')
       end
     end
 
