@@ -172,6 +172,51 @@ describe 'cloud::network::controller' do
       end
     end
 
+    context 'with L3 HA' do
+      before :each do
+        params.merge!(:l3_ha => true)
+      end
+      it 'should configure L3 HA' do
+        is_expected.to contain_class('neutron::server').with(
+          :l3_ha => true
+        )
+      end
+    end
+
+    context 'without L3 HA' do
+      it 'should not configure L3 HA' do
+        is_expected.to contain_class('neutron::server').with(
+          :l3_ha => false
+        )
+      end
+    end
+
+    context 'with DVR' do
+      before :each do
+        params.merge!(:router_distributed => true)
+      end
+      it 'should enable distributed routing' do
+        is_expected.to contain_class('neutron::server').with(
+          :router_distributed => true
+        )
+      end
+    end
+
+    context 'without DVR' do
+      it 'should not enable distributed routing' do
+        is_expected.to contain_class('neutron::server').with(
+          :router_distributed => false
+        )
+      end
+    end
+ 
+    context 'with L3 HA and DVR' do
+      before :each do
+        params.merge!(:router_distributed => true,
+                      :l3_ha              => true)
+      end
+      it_raises 'a Puppet::Error', /l3_ha and router_distributed are mutually exclusive, only one of them can be set to true/
+    end
   end
 
   context 'on Debian platforms' do
