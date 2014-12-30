@@ -150,6 +150,12 @@
 #   List of colon-separated id ranges
 #   Defautls to ['1:10000']
 #
+# [*mechanism_drivers*]
+#   (optional) Neutron mechanism drivers to run
+#   List of drivers.
+#   Note: if l3-ha is True, do not include l2population (not compatible in Juno).
+#   Defaults to ['linuxbridge', 'openvswitch','l2population']
+#
 class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
   $neutron_db_user         = 'neutron',
@@ -174,6 +180,7 @@ class cloud::network::controller(
   $type_drivers            = ['gre', 'vlan', 'flat'],
   $provider_vlan_ranges    = ['physnet1:1000:2999'],
   $plugin                  = 'ml2',
+  $mechanism_drivers       = ['linuxbridge', 'openvswitch','l2population'],
   $l3_ha                   = false,
   $router_distributed      = false,
   # only needed by cisco n1kv plugin
@@ -192,6 +199,11 @@ class cloud::network::controller(
 
   if $l3_ha and $router_distributed {
     fail 'l3_ha and router_distributed are mutually exclusive, only one of them can be set to true'
+  }
+
+  validate_array($mechanism_drivers)
+  if $l3_ha and member($mechanism_drivers, 'l2population') {
+    fail 'l3_ha does not work with l2population mechanism driver in Juno.'
   }
 
   class { 'neutron::server':
@@ -217,7 +229,7 @@ class cloud::network::controller(
         tunnel_id_ranges      => $tunnel_id_ranges,
         vni_ranges            => $vni_ranges,
         flat_networks         => $flat_networks,
-        mechanism_drivers     => ['linuxbridge', 'openvswitch','l2population'],
+        mechanism_drivers     => $mechanism_drivers,
         enable_security_group => true
       }
     }
