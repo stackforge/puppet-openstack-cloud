@@ -174,7 +174,8 @@ describe 'cloud::network::controller' do
 
     context 'with L3 HA' do
       before :each do
-        params.merge!(:l3_ha => true)
+        params.merge!(:l3_ha             => true,
+                      :mechanism_drivers => ['openvswitch'])
       end
       it 'should configure L3 HA' do
         is_expected.to contain_class('neutron::server').with(
@@ -216,6 +217,14 @@ describe 'cloud::network::controller' do
                       :l3_ha              => true)
       end
       it_raises 'a Puppet::Error', /l3_ha and router_distributed are mutually exclusive, only one of them can be set to true/
+    end
+
+    context 'with L3 HA and l2population enabled' do
+      before :each do
+        params.merge!(:l3_ha             => true,
+                      :mechanism_drivers => ['openvswitch', 'l2population'])
+      end
+      it_raises 'a Puppet::Error', /l3_ha does not work with l2population mechanism driver in Juno./
     end
   end
 
