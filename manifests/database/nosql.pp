@@ -40,11 +40,17 @@
 #   Should be an hash.
 #   Default to {}
 #
+# [*mode*]
+#   (optional) Mode in which the mongod server is suppose to run.
+#   Authorized values are : configsvr, shardsvr, false
+#   Defaults to false
+#
 class cloud::database::nosql(
   $bind_ip           = '127.0.0.1',
   $nojournal         = false,
   $replset_members   = $::hostname,
   $firewall_settings = {},
+  $mode              = false,
 ) {
 
   # should be an array
@@ -62,23 +68,39 @@ class cloud::database::nosql(
 
   class { 'mongodb::globals':
     manage_package_repo => $manage_package_repo
-  }->
-  class { 'mongodb':
-    bind_ip   => $array_bind_ip,
-    nojournal => $nojournal,
-    replset   => 'ceilometer',
-    logpath   => '/var/log/mongodb/mongod.log',
   }
 
+  $mongodb_default_params = {
+    'bind_ip'   => $array_bind_ip,
+    'nojournal' => $nojournal,
+    'logpath'   => '/var/log/mongodb/mongod.log',
+  }
+
+  case $mode {
+    /configsvr/: {
+      $mongodb_params_real = merge($mongodb_default_params, {'configsvr' => true})
+      $port_real           = 27019
+    }
+    /shardsvr/: {
+      $mongodb_params_real = merge($mongodb_default_params, {'replset'   => 'ceilometer', 'shardsvr' => true})
+      $port_real           = 27018
+    }
+    default : {
+      $mongodb_params_real = merge($mongodb_default_params, {'replset'   => 'ceilometer'})
+      $port_real           = 27017
+    }
+  }
+  ensure_resource('class', 'mongodb', $mongodb_params_real)
+
   exec {'check_mongodb' :
-    command   => "/usr/bin/mongo ${bind_ip}:27017",
+    command   => "/usr/bin/mongo ${bind_ip}:${port_real}",
     logoutput => false,
     tries     => 60,
     try_sleep => 5,
     require   => Service['mongodb'],
   }
 
-  if $replset_members {
+  if ! $mode or $mode == 'shardsvr' {
     mongodb_replset{'ceilometer':
       members => $array_replset_members,
       before  => Anchor['mongodb setup done'],
@@ -91,7 +113,7 @@ class cloud::database::nosql(
 
   if $::cloud::manage_firewall {
     cloud::firewall::rule{ '100 allow mongodb access':
-      port   => '27017',
+      port   => $port_real,
       extras => $firewall_settings,
     }
   }
