@@ -13,55 +13,33 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::database:nosql::mongodb class
+# Unit tests for cloud::database:nosql::mongodb::mongod class
 #
 
 require 'spec_helper'
 
-describe 'cloud::database::nosql::mongodb' do
+describe 'cloud::database::nosql::mongodb::mongod' do
 
   shared_examples_for 'openstack database nosql' do
 
     let :params do
-      { :bind_ip         => '10.0.0.1',
-        :nojournal       => false,
-        :mongodb_version => '2.4.0',
-        :replset_members => ['node1', 'node2', 'node3'] }
+      {
+        :replset => { 'ceilometer' => { 'members' => ['10.0.0.1'] } }
+      }
     end
 
-    it 'configure mongodb server' do
-      is_expected.to contain_class('mongodb::globals').with(
-        :manage_package_repo => platform_params[:manage_package_repo],
-        :version             => '2.4.0',
-      )
-      is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
-      is_expected.to contain_class('mongodb').with(
-        :bind_ip   => ['10.0.0.1'],
-        :nojournal => false,
-        :logpath   => '/var/log/mongodb/mongod.log',
-      )
+    it 'configure mongodb::globals' do
+      is_expected.to contain_class('mongodb::globals')
+    end
+
+    it 'configure mongodb::mongos' do
+      is_expected.to contain_class('mongodb::server')
     end
 
     it 'configure mongodb replicasets' do
-      is_expected.to contain_exec('check_mongodb').with(
-        :command => "/usr/bin/mongo 10.0.0.1:27017",
-        :logoutput => false,
-        :tries => 60,
-        :try_sleep => 5
-      )
       is_expected.to contain_mongodb_replset('ceilometer').with(
-        :members => ['node1', 'node2', 'node3']
+        :members => ['10.0.0.1']
       )
-      is_expected.to contain_anchor('mongodb setup done')
-    end
-
-    context 'without replica set' do
-      before :each do
-        params.merge!( :replset_members => false)
-      end
-      it 'do not configure mongodb replicasets' do
-        is_expected.not_to contain_mongodb_replset('ceilometer')
-      end
     end
 
     context 'with default firewall enabled' do
@@ -69,7 +47,7 @@ describe 'cloud::database::nosql::mongodb' do
         "class { 'cloud': manage_firewall => true }"
       end
       it 'configure mongodb firewall rules' do
-        is_expected.to contain_firewall('100 allow mongodb access').with(
+        is_expected.to contain_firewall('100 allow mongod access').with(
           :port   => '27017',
           :proto  => 'tcp',
           :action => 'accept',
@@ -85,7 +63,7 @@ describe 'cloud::database::nosql::mongodb' do
         params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
       end
       it 'configure mongodb firewall rules with custom parameter' do
-        is_expected.to contain_firewall('100 allow mongodb access').with(
+        is_expected.to contain_firewall('100 allow mongod access').with(
           :port   => '27017',
           :proto  => 'tcp',
           :action => 'accept',
