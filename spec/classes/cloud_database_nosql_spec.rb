@@ -60,6 +60,49 @@ describe 'cloud::database::nosql' do
       end
     end
 
+    context 'with mongodb configured as sharding server' do
+      before :each do
+        params.merge!( :mode => 'shardsvr')
+      end
+      it 'configure mongodb server' do
+        is_expected.to contain_class('mongodb').with(
+          :bind_ip   => ['10.0.0.1'],
+          :nojournal => false,
+          :shardsvr => true,
+          :logpath   => '/var/log/mongodb/mongod.log',
+        )
+      end
+    end
+
+    context 'with mongodb configured as config server' do
+      before :each do
+        params.merge!( :mode => 'configsvr')
+      end
+      it 'configure mongodb server' do
+        is_expected.to contain_class('mongodb').with(
+          :bind_ip   => ['10.0.0.1'],
+          :nojournal => false,
+          :configsvr => true,
+          :logpath   => '/var/log/mongodb/mongod.log',
+        )
+      end
+    end
+
+    context 'with mongos_cfg_server set' do
+      before :each do
+        params.merge!(:mongos_cfg_server => ['cfgsvr1:27019'])
+      end
+
+      it 'configure the mongos process' do
+        is_expected.to contain_clas('mongodb::mongos').with(:configdb => params[:mongos_cfg_server])
+      end
+      it 'configure the shard' do
+        is_expected.to contain_mongodb_shard('ceilometer').with(
+          :member => 'ceilometer/node1:27018'
+        end
+      end
+    end
+
     context 'with default firewall enabled' do
       let :pre_condition do
         "class { 'cloud': manage_firewall => true }"
