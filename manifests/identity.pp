@@ -391,6 +391,10 @@
 #   (optional) Amount of time a token should remain valid (in seconds)
 #   Defaults to '3600' (1 hour)
 #
+# [*cinder_enabled*]
+#   (optional) Enable or not Cinder (Block Storage Service)
+#   Defaults to true
+#
 # [*trove_enabled*]
 #   (optional) Enable or not Trove (Database as a Service)
 #   Experimental feature.
@@ -411,6 +415,7 @@
 #
 class cloud::identity (
   $swift_enabled                = true,
+  $cinder_enabled               = true,
   $trove_enabled                = false,
   $identity_roles_addons        = ['SwiftOperator', 'ResellerAdmin'],
   $keystone_db_host             = '127.0.0.1',
@@ -638,16 +643,18 @@ class cloud::identity (
     password          => $ks_neutron_password
   }
 
-  class { 'cinder::keystone::auth':
-    admin_address     => $ks_cinder_admin_host,
-    internal_address  => $ks_cinder_internal_host,
-    public_address    => $ks_cinder_public_host,
-    port              => $ks_cinder_public_port,
-    public_protocol   => $ks_cinder_public_proto,
-    admin_protocol    => $ks_cinder_admin_proto,
-    internal_protocol => $ks_cinder_internal_proto,
-    region            => $region,
-    password          => $ks_cinder_password
+  if $cinder_enabled {
+    class { 'cinder::keystone::auth':
+      admin_address     => $ks_cinder_admin_host,
+      internal_address  => $ks_cinder_internal_host,
+      public_address    => $ks_cinder_public_host,
+      port              => $ks_cinder_public_port,
+      public_protocol   => $ks_cinder_public_proto,
+      admin_protocol    => $ks_cinder_admin_proto,
+      internal_protocol => $ks_cinder_internal_proto,
+      region            => $region,
+      password          => $ks_cinder_password
+    }
   }
 
   class { 'glance::keystone::auth':
