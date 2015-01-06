@@ -125,6 +125,10 @@ describe 'cloud::compute::api' do
         )
     end
 
+    it 'configure a crontab that move deleted instance rows to another database table' do
+      is_expected.to contain_class('nova::cron::archive_deleted_rows')
+    end
+
     context 'with default firewall enabled' do
       let :pre_condition do
         "class { 'cloud': manage_firewall => true }"

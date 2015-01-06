@@ -97,6 +97,8 @@ class cloud::compute::api(
     }
   }
 
+  include 'nova::cron::archive_deleted_rows'
+
   @@haproxy::balancermember{"${::fqdn}-compute_api_ec2":
     listening_service => 'ec2_api_cluster',
     server_names      => $::hostname,
