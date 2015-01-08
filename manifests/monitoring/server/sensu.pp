@@ -69,6 +69,8 @@ class cloud::monitoring::server::sensu (
   $uchiwa_ip                 = $::ipaddress,
 ) {
 
+  include cloud::params
+
   @@rabbitmq_user { $rabbitmq_user :
     password => $rabbitmq_password,
   }
@@ -85,7 +87,7 @@ class cloud::monitoring::server::sensu (
 
   if size($rabbitmq_user_realized) >= 1 {
 
-    Service['redis-6379'] -> Service['sensu-api'] -> Service['sensu-server'] -> Service['uchiwa']
+    Service["${::cloud::params::redis_service_name}"] -> Service['sensu-api'] -> Service['sensu-server'] -> Service['uchiwa']
     Service['sensu-server'] -> Sensu::Plugin <<| |>>
 
 
