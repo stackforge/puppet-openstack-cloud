@@ -48,6 +48,7 @@ class cloud::params {
       $keepalived_name_is_process = false
       $keepalived_vrrp_script     = 'systemctl status haproxy.service'
       $puppetmaster_package_name  = 'puppet-server'
+      $redis_service_name         = 'redis'
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
@@ -57,6 +58,7 @@ class cloud::params {
       $keepalived_name_is_process = true
       $keepalived_vrrp_script     = undef
       $puppetmaster_package_name  = 'puppetmaster'
+      $redis_service_name         = 'redis-server'
       case $::operatingsystem {
         'Ubuntu': {
           $libvirt_service_name = 'libvirt-bin'
