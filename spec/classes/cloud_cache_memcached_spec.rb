@@ -18,9 +18,9 @@
 
 require 'spec_helper'
 
-describe 'cloud::cache' do
+describe 'cloud::cache::memcached' do
 
-  shared_examples_for 'cache server' do
+  shared_examples_for 'memcached server' do
 
     let :params do
       { :listen_ip => '10.0.0.1' }
@@ -70,7 +70,7 @@ describe 'cloud::cache' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'cache server'
+    it_configures 'memcached server'
   end
 
   context 'on RedHat platforms' do
@@ -78,7 +78,7 @@ describe 'cloud::cache' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'cache server'
+    it_configures 'memcached server'
   end
 
 end

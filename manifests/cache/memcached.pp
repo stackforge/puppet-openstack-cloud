@@ -13,9 +13,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: cloud::cache
+# == Class: cloud::cache::memcached
 #
-# Install a cache server (used by OpenStack services)
+# Install a Memcached server (used by OpenStack services)
 #
 # === Parameters:
 #
@@ -28,7 +28,7 @@
 #   Should be an hash.
 #   Default to {}
 #
-class cloud::cache (
+class cloud::cache::memcached (
   $listen_ip         = '127.0.0.1',
   $firewall_settings = {},
 ){
