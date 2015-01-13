@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Martin Mágr <mmagr@redhat.com>
+Code-Review+2: Yanis Guenane <yanis.guenane@enovance.com>
+Workflow+1: Yanis Guenane <yanis.guenane@enovance.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 13 Jan 2015 16:07:15 +0000
+Reviewed-on: https://review.openstack.org/146495
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/master
