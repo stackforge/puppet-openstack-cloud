@@ -18,9 +18,9 @@
 
 require 'spec_helper'
 
-describe 'cloud::database::nosql' do
+describe 'cloud::database::nosql::mongodb' do
 
-  shared_examples_for 'openstack database nosql' do
+  shared_examples_for 'mongodb database' do
 
     let :params do
       { :bind_ip         => '10.0.0.1',
@@ -101,7 +101,7 @@ describe 'cloud::database::nosql' do
       { :manage_package_repo => true }
     end
 
-    it_configures 'openstack database nosql'
+    it_configures 'mongodb database'
   end
 
   context 'on RedHat platforms' do
@@ -113,7 +113,7 @@ describe 'cloud::database::nosql' do
       { :manage_package_repo => false }
     end
 
-    it_configures 'openstack database nosql'
+    it_configures 'mongodb database'
   end
 
 end

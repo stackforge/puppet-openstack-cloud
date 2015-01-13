@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: cloud::database::nosql
+# == Class: cloud::database::nosql::mongodb
 #
 # Install a nosql server (MongoDB)
 #
@@ -40,7 +40,7 @@
 #   Should be an hash.
 #   Default to {}
 #
-class cloud::database::nosql(
+class cloud::database::nosql::mongodb(
   $bind_ip           = '127.0.0.1',
   $nojournal         = false,
   $replset_members   = $::hostname,
