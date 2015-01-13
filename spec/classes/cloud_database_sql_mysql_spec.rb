@@ -18,9 +18,9 @@
 
 require 'spec_helper'
 
-describe 'cloud::database::sql' do
+describe 'cloud::database::sql::mysql' do
 
-  shared_examples_for 'openstack database sql' do
+  shared_examples_for 'openstack database mysql' do
 
     let :pre_condition do
       "include xinetd"
