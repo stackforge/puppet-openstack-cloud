@@ -181,7 +181,7 @@
 #   because this subject is potentially a troll :-D
 #   Defaults to 'sysv'
 #
-class cloud::database::sql (
+class cloud::database::sql::mysql (
     $api_eth                        = '127.0.0.1',
     $galera_master_name             = 'mgmt001',
     $galera_internal_ips            = ['127.0.0.1'],
