@@ -18,9 +18,9 @@
 
 require 'spec_helper'
 
-describe 'cloud::database::nosql' do
+describe 'cloud::database::nosql::mongodb' do
 
-  shared_examples_for 'openstack database nosql' do
+  shared_examples_for 'mongodb database' do
 
     let :params do
       { :bind_ip         => '10.0.0.1',
