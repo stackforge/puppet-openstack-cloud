@@ -25,14 +25,20 @@
 #   (optional) State of the telemetry central agent service.
 #   Defaults to true
 #
+# [*coordination_url*]
+#   (optional) The url to use for distributed group membership coordination.
+#   Defaults to undef
+#
 class cloud::telemetry::centralagent(
-  $enabled = true,
+  $enabled          = true,
+  $coordination_url = undef,
 ){
 
   include 'cloud::telemetry'
 
   class { 'ceilometer::agent::central':
-    enabled => $enabled,
+    enabled          => $enabled,
+    coordination_url => $coordination_url,
   }
 
 }
