@@ -18,9 +18,9 @@
 
 require 'spec_helper'
 
-describe 'cloud::database::sql' do
+describe 'cloud::database::sql::mysql' do
 
-  shared_examples_for 'openstack database sql' do
+  shared_examples_for 'mysql database' do
 
     let :pre_condition do
       "include xinetd"
@@ -273,7 +273,7 @@ describe 'cloud::database::sql' do
         :wsrep_provider      => '/usr/lib/galera/libgalera_smm.so' }
     end
 
-    it_configures 'openstack database sql'
+    it_configures 'mysql database'
   end
 
   context 'on RedHat platforms' do
@@ -288,7 +288,7 @@ describe 'cloud::database::sql' do
         :wsrep_provider      => '/usr/lib64/galera/libgalera_smm.so' }
     end
 
-    it_configures 'openstack database sql'
+    it_configures 'mysql database'
   end
 
 end
