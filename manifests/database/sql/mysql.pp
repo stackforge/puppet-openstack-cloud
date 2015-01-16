@@ -174,13 +174,6 @@
 #   Should be an hash.
 #   Default to {}
 #
-# ==== Deprecated parameters:
-#
-# [*service_provider*]
-#   Previously used to choose between sysv and systemd, yes suppressed
-#   because this subject is potentially a troll :-D
-#   Defaults to 'sysv'
-#
 class cloud::database::sql::mysql (
     $api_eth                        = '127.0.0.1',
     $galera_master_name             = 'mgmt001',
@@ -220,8 +213,6 @@ class cloud::database::sql::mysql (
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
     $galera_clustercheck_ipaddress  = '127.0.0.1',
     $firewall_settings              = {},
-    # DEPRECATED PARAMETERS
-    $service_provider               = 'sysv',
 ) {
 
   include 'xinetd'
