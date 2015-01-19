@@ -57,6 +57,8 @@ describe 'cloud::image::registry' do
       )
     end
 
+    it { is_expected.to contain_glance_api_config('keystone_authtoken/identity_uri').with_value('https://10.0.0.1:35257') }
+
     it 'checks if Glance DB is populated' do
       is_expected.to contain_exec('glance_db_sync').with(
         :command => 'glance-manage db_sync',
