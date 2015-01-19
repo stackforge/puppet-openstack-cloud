@@ -32,7 +32,7 @@ describe 'cloud::database::nosql::redis' do
       let :pre_condition do
         "class { 'cloud': manage_firewall => true }"
       end
-      it 'configure memcached firewall rules' do
+      it 'configure redis firewall rules' do
         is_expected.to contain_firewall('100 allow redis access').with(
           :port   => '6379',
           :proto  => 'tcp',
@@ -48,7 +48,7 @@ describe 'cloud::database::nosql::redis' do
       before :each do
         params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
       end
-      it 'configure memcached firewall rules with custom parameter' do
+      it 'configure redis firewall rules with custom parameter' do
         is_expected.to contain_firewall('100 allow redis access').with(
           :port   => '6379',
           :proto  => 'tcp',
