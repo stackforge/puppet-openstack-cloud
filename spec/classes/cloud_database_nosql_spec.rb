@@ -29,7 +29,10 @@ describe 'cloud::database::nosql' do
     end
 
     it 'configure mongodb server' do
-      is_expected.to contain_class('mongodb::globals').with( :manage_package_repo => platform_params[:manage_package_repo])
+      is_expected.to contain_class('mongodb::globals').with(
+        :manage_package_repo => platform_params[:manage_package_repo],
+        :service_name        => platform_params[:service_name]
+      )
       is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
       is_expected.to contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
@@ -98,7 +101,8 @@ describe 'cloud::database::nosql' do
     end
 
     let :platform_params do
-      { :manage_package_repo => true }
+      { :manage_package_repo => true,
+        :service_name        => 'mongodb' }
     end
 
     it_configures 'openstack database nosql'
@@ -110,7 +114,8 @@ describe 'cloud::database::nosql' do
     end
 
     let :platform_params do
-      { :manage_package_repo => false }
+      { :manage_package_repo => false,
+        :service_name        => 'mongod' }
     end
 
     it_configures 'openstack database nosql'
