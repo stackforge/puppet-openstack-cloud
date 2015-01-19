@@ -55,13 +55,16 @@ class cloud::database::nosql(
   # so manage_package_repo should be at false regarding to mongodb module
   if $::osfamily == 'RedHat' {
     $manage_package_repo = false
+    $service_name        = 'mongod',
   } else {
   # Debian & Ubuntu are picked from mongodb repo to get recent version
     $manage_package_repo = true
+    $service_name        = 'mongodb',
   }
 
   class { 'mongodb::globals':
-    manage_package_repo => $manage_package_repo
+    manage_package_repo => $manage_package_repo,
+    service_name        => $service_name,
   }->
   class { 'mongodb':
     bind_ip   => $array_bind_ip,
