@@ -112,32 +112,32 @@ describe 'cloud::identity' do
         :debug                        => true,
         :log_facility                 => 'LOG_LOCAL0',
         :use_syslog                   => true,
-        :token_driver                 => 'keystone.token.backends.sql.Token',
+        :token_driver                 => 'keystone.token.persistence.backends.sql.Token',
         :ks_token_expiration          => '3600',
         :api_eth                      => '10.0.0.1' }
     end
 
     it 'configure keystone server' do
       is_expected.to contain_class('keystone').with(
-        :enabled             => true,
-        :admin_token         => 'SECRETE',
-        :compute_port        => '8774',
-        :debug               => true,
-        :verbose             => true,
-        :idle_timeout        => '60',
-        :log_facility        => 'LOG_LOCAL0',
-        :sql_connection      => 'mysql://keystone:secrete@10.0.0.1/keystone?charset=utf8',
-        :token_driver        => 'keystone.token.backends.sql.Token',
-        :token_provider      => 'keystone.token.providers.uuid.Provider',
-        :use_syslog          => true,
-        :bind_host           => '10.0.0.1',
-        :public_port         => '5000',
-        :admin_port          => '35357',
-        :token_expiration    => '3600',
-        :log_dir             => false,
-        :log_file            => false,
-        :admin_endpoint      => 'https://10.0.0.1:35357/',
-        :public_endpoint     => 'https://10.0.0.1:5000/'
+        :enabled               => true,
+        :admin_token           => 'SECRETE',
+        :compute_port          => '8774',
+        :debug                 => true,
+        :verbose               => true,
+        :database_idle_timeout => '60',
+        :log_facility          => 'LOG_LOCAL0',
+        :database_connection   => 'mysql://keystone:secrete@10.0.0.1/keystone?charset=utf8',
+        :token_driver          => 'keystone.token.persistence.backends.sql.Token',
+        :token_provider        => 'keystone.token.providers.uuid.Provider',
+        :use_syslog            => true,
+        :bind_host             => '10.0.0.1',
+        :public_port           => '5000',
+        :admin_port            => '35357',
+        :token_expiration      => '3600',
+        :log_dir               => false,
+        :log_file              => false,
+        :admin_endpoint        => 'https://10.0.0.1:35357/',
+        :public_endpoint       => 'https://10.0.0.1:5000/'
       )
       is_expected.to contain_exec('validate_keystone_connection')
       is_expected.to contain_keystone_config('ec2/driver').with('value' => 'keystone.contrib.ec2.backends.sql.Ec2')
