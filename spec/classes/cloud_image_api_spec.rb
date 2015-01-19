@@ -70,7 +70,8 @@ describe 'cloud::image::api' do
         :use_syslog               => true,
         :pipeline                 => 'keystone',
         :log_dir                  => false,
-        :log_file                 => false
+        :log_file                 => false,
+        :known_stores             => ['rbd'],
       )
     end
 
