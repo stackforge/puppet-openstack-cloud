@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: cloud::database::nosql::redis
+# == Class: cloud::database::nosql::redis::server
 #
 # Install a Redis server (used by OpenStack & monitoring services)
 #
@@ -29,7 +29,7 @@
 #   Should be an hash.
 #   Default to {}
 #
-class cloud::database::nosql::redis(
+class cloud::database::nosql::redis::server(
   $port              = 6379,
   $firewall_settings = {},
 ) {
@@ -37,7 +37,7 @@ class cloud::database::nosql::redis(
   include ::redis
 
   if $::cloud::manage_firewall {
-    cloud::firewall::rule{ '100 allow redis access':
+    cloud::firewall::rule{ '100 allow redis server access':
       port   => $port,
       extras => $firewall_settings,
     }

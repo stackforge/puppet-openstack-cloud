@@ -13,28 +13,28 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::cache::redis
+# Unit tests for cloud::cache::redis::sentinel
 #
 
 require 'spec_helper'
 
-describe 'cloud::database::nosql::redis' do
+describe 'cloud::database::nosql::redis::sentinel' do
 
-  shared_examples_for 'redis server' do
+  shared_examples_for 'redis sentinel' do
 
     let :params do
-      { :port => '6379' }
+      { :port => '26379' }
     end
 
-    it { should create_class('redis') }
+    it { should create_class('redis::sentinel') }
 
     context 'with default firewall enabled' do
       let :pre_condition do
         "class { 'cloud': manage_firewall => true }"
       end
       it 'configure redis firewall rules' do
-        is_expected.to contain_firewall('100 allow redis access').with(
-          :port   => '6379',
+        is_expected.to contain_firewall('100 allow redis sentinel access').with(
+          :port   => '26379',
           :proto  => 'tcp',
           :action => 'accept',
         )
@@ -49,8 +49,8 @@ describe 'cloud::database::nosql::redis' do
         params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
       end
       it 'configure redis firewall rules with custom parameter' do
-        is_expected.to contain_firewall('100 allow redis access').with(
-          :port   => '6379',
+        is_expected.to contain_firewall('100 allow redis sentinel access').with(
+          :port   => '26379',
           :proto  => 'tcp',
           :action => 'accept',
           :limit  => '50/sec',
@@ -65,7 +65,7 @@ describe 'cloud::database::nosql::redis' do
       { :osfamily => 'Debian' }
     end
 
-    it_configures 'redis server'
+    it_configures 'redis sentinel'
   end
 
   context 'on RedHat platforms' do
@@ -73,7 +73,7 @@ describe 'cloud::database::nosql::redis' do
       { :osfamily => 'RedHat' }
     end
 
-    it_configures 'redis server'
+    it_configures 'redis sentinel'
   end
 
 end
