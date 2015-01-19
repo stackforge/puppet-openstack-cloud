@@ -61,7 +61,9 @@ class cloud::database::nosql(
   }
 
   class { 'mongodb::globals':
-    manage_package_repo => $manage_package_repo
+    manage_package_repo => $manage_package_repo,
+    service_name        => $service_name,
+    version             => '2.4.0',
   }->
   class { 'mongodb':
     bind_ip   => $array_bind_ip,

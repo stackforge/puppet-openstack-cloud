@@ -29,7 +29,10 @@ describe 'cloud::database::nosql' do
     end
 
     it 'configure mongodb server' do
-      is_expected.to contain_class('mongodb::globals').with( :manage_package_repo => platform_params[:manage_package_repo])
+      is_expected.to contain_class('mongodb::globals').with(
+        :manage_package_repo => platform_params[:manage_package_repo],
+        :version             => '2.4.0',
+      )
       is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
       is_expected.to contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
