@@ -211,6 +211,7 @@ class cloud::image::api(
   # }
   glance_api_config {
     'DEFAULT/notifier_driver':          value => 'noop';
+    'keystone_authtoken/identity_uri':  value => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:35357";
   }
 
   if ($backend == 'rbd') {

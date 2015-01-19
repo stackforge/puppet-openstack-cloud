@@ -85,6 +85,7 @@ describe 'cloud::image::api' do
     #     )
     # end
     it { is_expected.to contain_glance_api_config('DEFAULT/notifier_driver').with_value('noop') }
+    it { is_expected.to contain_glance_api_config('keystone_authtoken/identity_uri').with_value('https://10.0.0.1:35357') }
 
     it 'configure glance rbd backend' do
       is_expected.to contain_class('glance::backend::rbd').with(

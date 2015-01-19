@@ -131,6 +131,10 @@ class cloud::image::registry(
     log_facility        => $log_facility,
   }
 
+  glance_registry_config {
+    'keystone_authtoken/identity_uri':  value => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:35357";
+  }
+
   exec {'glance_db_sync':
     command => 'glance-manage db_sync',
     user    => 'glance',
