@@ -340,6 +340,10 @@ class cloud::database::sql::mysql (
         owner  => 'mysql'
       }
 
+      Exec {
+        path => '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
+      }
+
       # In Red Hat, the package does not perform the mysql db installation.
       # We need to do this manually.
       # Note: in MariaDB repository, package perform this action in post-install,
