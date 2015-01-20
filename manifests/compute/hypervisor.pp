@@ -301,7 +301,7 @@ Host *
     })
   }
 
-  if $::operatingsystem == 'Ubuntu' {
+  if $::osfamily == 'Debian' {
     service { 'dbus':
       ensure => running,
       enable => true,

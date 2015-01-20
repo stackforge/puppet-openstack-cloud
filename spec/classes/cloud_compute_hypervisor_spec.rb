@@ -255,10 +255,9 @@ describe 'cloud::compute::hypervisor' do
       end
     end
 
-    context 'with dbus on Ubuntu' do
+    context 'with dbus on Debian/Ubuntu' do
       let :facts do
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Ubuntu',
           :vtx             => true,
         }
       end
