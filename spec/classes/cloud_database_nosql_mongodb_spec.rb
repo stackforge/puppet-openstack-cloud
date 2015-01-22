@@ -13,18 +13,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Unit tests for cloud::database:nosql class
+# Unit tests for cloud::database:nosql::mongodb class
 #
 
 require 'spec_helper'
 
-describe 'cloud::database::nosql' do
+describe 'cloud::database::nosql::mongodb' do
 
   shared_examples_for 'openstack database nosql' do
 
     let :params do
       { :bind_ip         => '10.0.0.1',
         :nojournal       => false,
+        :mongodb_version => '2.4.0',
         :replset_members => ['node1', 'node2', 'node3'] }
     end
 
