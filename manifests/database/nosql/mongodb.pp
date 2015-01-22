@@ -13,7 +13,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: cloud::database::nosql
+# == Class: cloud::database::nosql::mongodb
 #
 # Install a nosql server (MongoDB)
 #
@@ -40,11 +40,16 @@
 #   Should be an hash.
 #   Default to {}
 #
-class cloud::database::nosql(
+# [*mongodb_version*]
+#   (optional) Specify MongoDB version
+#   Default to '2.4.0'
+#
+class cloud::database::nosql::mongodb(
   $bind_ip           = '127.0.0.1',
   $nojournal         = false,
   $replset_members   = $::hostname,
   $firewall_settings = {},
+  $mongodb_version   = '2.4.0',
 ) {
 
   # should be an array
@@ -62,7 +67,7 @@ class cloud::database::nosql(
 
   class { 'mongodb::globals':
     manage_package_repo => $manage_package_repo,
-    version             => '2.4.0',
+    version             => $mongodb_version,
   }->
   class { 'mongodb':
     bind_ip   => $array_bind_ip,
