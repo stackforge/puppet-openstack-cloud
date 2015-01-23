@@ -16,68 +16,39 @@
 # Swift tweaking
 #
 class cloud::object::tweaking {
-  file {'/etc/sysctl.d/swift-tuning.conf':
-    content => "
-# disable TIME_WAIT.. wait..
-net.ipv4.tcp_tw_recycle=1
-net.ipv4.tcp_tw_reuse=1
+  kmod::load { 'ip_conntrack': }
 
-# disable syn cookies
-net.ipv4.tcp_syncookies = 0
-
-# double amount of allowed conntrack
-net.ipv4.netfilter.ip_conntrack_max = 524288
-net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait = 2
-net.ipv4.netfilter.ip_conntrack_tcp_timeout_close_wait = 2
-
-net.ipv4.ip_local_port_range = 1024 65000
-
-## 10Gb Tuning
-net.core.netdev_max_backlog = 300000
-net.ipv4.tcp_sack = 0
-
-",
-    owner   => 'root',
-    group   => 'root',
+  $swift_tuning = {
+    'net.ipv4.tcp_tw_recycle'                                => { value => 1 },
+    'net.ipv4.tcp_tw_reuse'                                  => { value => 1 },
+    'net.ipv4.tcp_syncookies'                                => { value => 0 },
+    'net.ipv4.netfilter.ip_conntrack_max'                    => { value => 524288 },
+    'net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait'  => { value => 2 },
+    'net.ipv4.netfilter.ip_conntrack_tcp_timeout_close_wait' => { value => 2 },
+    'net.ipv4.ip_local_port_range'                           => { value => "1024\t65000" },
+    'net.core.netdev_max_backlog'                            => { value => 300000 },
+    'net.ipv4.tcp_sack'                                      => { value => 0 },
   }
 
-  exec{'update-etc-modules-with-ip_conntrack':
-    command => '/bin/echo ip_conntrack >> /etc/modules',
-    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
+  $require = {
+    require => Kmod::Load['ip_conntrack']
   }
 
-  # Load sysctl and module only the first time
-  exec{'load-ip_conntrack':
-    command => '/sbin/modprobe ip_conntrack',
-    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
-    require => File['/etc/sysctl.d/swift-tuning.conf']
-  }
-  exec{'reload-sysctl-swift-tunning':
-    command => '/sbin/sysctl -p /etc/sysctl.d/swift-tuning.conf',
-    unless  => '/bin/grep -qFx "ip_conntrack" /etc/modules',
-    require => File['/etc/sysctl.d/swift-tuning.conf']
-  }
+  create_resources(sysctl::value,$swift_tuning,$require)
 
-  file{'/var/log/swift':
+  file { '/var/log/swift':
     ensure => directory,
     owner  => swift,
     group  => swift,
   }
 
-  file{'/etc/logrotate.d/swift':
-    content => "
-  /var/log/swift/proxy.log /var/log/swift/proxy.error.log /var/log/swift/account-server.log /var/log/swift/account-server.error.log /var/log/swift/container-server.log /var/log/swift/container-server.error.log /var/log/swift/object-server.log /var/log/swift/object-server.error.log
-{
-        rotate 7
-        daily
-        missingok
-        notifempty
-        delaycompress
-        compress
-        postrotate
-        endscript
-}
-"
+  logrotate::rule { 'swift':
+    path          => '/var/log/swift/*.log',
+    rotate        => 7,
+    rotate_every  => 'day',
+    missingok     => true,
+    ifempty       => false,
+    compress      => true,
+    delaycompress => true,
   }
-
 }
