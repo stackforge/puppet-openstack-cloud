@@ -68,6 +68,8 @@ task :spec_prep do
   if !File.exists?(puppetfile_url)
     uri = URI.parse(puppetfile_url)
     puppetfile = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https').request(Net::HTTP::Get.new(uri.request_uri)).body
+  else
+    puppetfile = open(puppetfile_url).read
   end
   File.open('Puppetfile', 'w') { |file| file.write(puppetfile) }
   FileUtils::mkdir_p('spec/fixtures/modules')
