@@ -25,7 +25,7 @@
 #
 # [*console*]
 #   (optional) Nova's console type (spice or novnc)
-#   Defaults to 'spice'
+#   Defaults to 'novnc'
 #
 # [*novnc_port*]
 #   (optional) TCP port to bind Nova novnc service.
@@ -42,7 +42,7 @@
 #
 class cloud::compute::consoleproxy(
   $api_eth           = '127.0.0.1',
-  $console           = 'spice',
+  $console           = 'novnc',
   $novnc_port        = '6080',
   $spice_port        = '6082',
   $firewall_settings = {},

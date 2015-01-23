@@ -44,8 +44,7 @@ describe 'cloud::compute::consoleproxy' do
     end
 
     let :params do
-      { :api_eth    => '10.0.0.1',
-        :spice_port => '6082' }
+      { :api_eth => '10.0.0.1' }
     end
 
     it 'configure nova common' do
@@ -87,25 +86,25 @@ describe 'cloud::compute::consoleproxy' do
       )
     end
 
-    it 'configure nova-spicehtml5proxy' do
-      is_expected.to contain_class('nova::spicehtml5proxy').with(
+    it 'configure nova-vncproxy' do
+      is_expected.to contain_class('nova::vncproxy').with(
         :enabled => true,
         :host    => '10.0.0.1',
-        :port    => '6082'
+        :port    => '6080'
       )
     end
 
-    context 'with novnc console' do
+    context 'with spice console' do
       before :each do
         params.merge!(
-          :console    => 'novnc',
-          :novnc_port => '6080' )
+          :console    => 'spice',
+          :novnc_port => '6082' )
       end
-      it 'configure nova-vncproxy' do
-        is_expected.to contain_class('nova::vncproxy').with(
+      it 'configure nova-spicehtml5proxy' do
+        is_expected.to contain_class('nova::spicehtml5proxy').with(
             :enabled => true,
             :host    => '10.0.0.1',
-            :port    => '6080'
+            :port    => '6082'
         )
       end
     end
@@ -115,8 +114,8 @@ describe 'cloud::compute::consoleproxy' do
         "class { 'cloud': manage_firewall => true }"
       end
       it 'configure spice firewall rules' do
-        is_expected.to contain_firewall('100 allow spice access').with(
-          :port   => '6082',
+        is_expected.to contain_firewall('100 allow novnc access').with(
+          :port   => '6080',
           :proto  => 'tcp',
           :action => 'accept',
         )
@@ -131,8 +130,8 @@ describe 'cloud::compute::consoleproxy' do
         params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
       end
       it 'configure spice firewall rules with custom parameter' do
-        is_expected.to contain_firewall('100 allow spice access').with(
-          :port   => '6082',
+        is_expected.to contain_firewall('100 allow novnc access').with(
+          :port   => '6080',
           :proto  => 'tcp',
           :action => 'accept',
           :limit  => '50/sec',

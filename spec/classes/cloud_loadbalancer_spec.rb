@@ -38,7 +38,8 @@ describe 'cloud::loadbalancer' do
         :keystone_api                      => true,
         :trove_api                         => true,
         :horizon                           => true,
-        :spice                             => true,
+        :spice                             => false,
+        :novnc                             => true,
         :ceilometer_bind_options           => [],
         :cinder_bind_options               => [],
         :ec2_bind_options                  => [],
@@ -258,11 +259,10 @@ describe 'cloud::loadbalancer' do
       )}
     end # configure monitor haproxy listen
 
-    # test backward compatibility
-    context 'configure OpenStack binding on public network only' do
-      it { is_expected.to contain_haproxy__listen('spice_cluster').with(
+    context 'configure Openstack Nova with novnc' do
+      it { is_expected.to contain_haproxy__listen('novnc_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
-        :ports     => '6082',
+        :ports     => '6080',
         :options   => {
           'mode'           => 'tcp',
           'balance'        => 'source',
@@ -273,16 +273,16 @@ describe 'cloud::loadbalancer' do
       )}
     end
 
-    context 'configure Openstack Nova with novnc' do
+    context 'configure OpenStack binding on public network only' do
       before do
         params.merge!(
-          :spice      => false,
-          :novnc      => true,
-          :novnc_port => 6080 )
+          :spice      => true,
+          :novnc      => false,
+          :novnc_port => 6082 )
       end
-      it { is_expected.to contain_haproxy__listen('novnc_cluster').with(
+      it { is_expected.to contain_haproxy__listen('spice_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
-        :ports     => '6080',
+        :ports     => '6082',
         :options   => {
           'mode'           => 'tcp',
           'balance'        => 'source',

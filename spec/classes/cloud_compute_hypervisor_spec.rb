@@ -184,21 +184,15 @@ describe 'cloud::compute::hypervisor' do
 
     it 'configure nova-compute' do
       is_expected.to contain_class('nova::compute').with(
-          :enabled                       => true,
-          :vnc_enabled                   => false,
-          :virtio_nic                    => false,
-          :neutron_enabled               => true
-        )
-    end
-
-    it 'configure spice console' do
-      is_expected.to contain_class('nova::compute::spice').with(
-          :server_listen              => '0.0.0.0',
-          :server_proxyclient_address => '7.0.0.1',
-          :proxy_host                 => '10.0.0.2',
-          :proxy_protocol             => 'https',
-          :proxy_port                 => '6082'
-        )
+        :enabled                       => true,
+        :vnc_enabled                   => true,
+        :vncserver_proxyclient_address => '7.0.0.1',
+        :vncproxy_host                 => '10.0.0.2',
+        :vncproxy_protocol             => 'https',
+        :vncproxy_port                 => '6080',
+        :virtio_nic                    => false,
+        :neutron_enabled               => true
+      )
     end
 
     it 'configure nova compute with neutron' do
@@ -235,23 +229,18 @@ describe 'cloud::compute::hypervisor' do
       is_expected.to contain_nova_config('libvirt/block_migration_flag').with('value' => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC')
     end
 
-    context 'witch novnc console' do
+    context 'witch spice console' do
       before :each do
-        params.merge!(
-          :console    => 'novnc',
-          :novnc_port => '6080' )
+        params.merge!( :console => 'spice' )
       end
-      it 'configure nova-compute' do
-        is_expected.to contain_class('nova::compute').with(
-            :enabled                       => true,
-            :vnc_enabled                   => true,
-            :vncserver_proxyclient_address => '7.0.0.1',
-            :vncproxy_host                 => '10.0.0.2',
-            :vncproxy_protocol             => 'https',
-            :vncproxy_port                 => '6080',
-            :virtio_nic                    => false,
-            :neutron_enabled               => true
-          )
+      it 'configure spice console' do
+        is_expected.to contain_class('nova::compute::spice').with(
+          :server_listen              => '0.0.0.0',
+          :server_proxyclient_address => '7.0.0.1',
+          :proxy_host                 => '10.0.0.2',
+          :proxy_protocol             => 'https',
+          :proxy_port                 => '6082'
+        )
       end
     end
 
