@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 eNovance SAS <licensing@enovance.com>
+# Copyright (C) 2015 eNovance SAS <licensing@enovance.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -13,18 +13,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# == Class: cloud::install::puppetdb
+# == Class: cloud::install::puppetdb::config
 #
-# Configure the puppetdb server
+# Configure the puppetdb connection
 #
-class cloud::install::puppetdb {
+class cloud::install::puppetdb::config {
 
-  exec { 'puppetdb ssl-setup' :
-    unless => 'stat /etc/puppetdb/ssl',
-    path   => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-    before => Class['puppetdb::server'],
-  }
-
-  include ::puppetdb
+  include ::puppetdb::master::config
 
 }
