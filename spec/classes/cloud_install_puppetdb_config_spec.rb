@@ -1,15 +1,14 @@
 require 'spec_helper'
 
-describe 'cloud::install::puppetdb_server' do
+describe 'cloud::install::puppetdb::config' do
 
   shared_examples_for 'puppetdb' do
 
-    it 'install puppetdb' do
-      is_exptected.to contain_class('puppetdb::server')
+    it 'configure puppetdb' do
+      is_expected.to contain_class('puppetdb::master::config')
     end
 
   end
-
 
   context 'on Debian platforms' do
     let :facts do
@@ -23,6 +22,7 @@ describe 'cloud::install::puppetdb_server' do
     let :facts do
       { :osfamily => 'RedHat' }
     end
+
     it_configures 'puppetdb'
   end
 end
