@@ -71,6 +71,7 @@ class cloud::database::nosql::mongodb(
   }->
   class { '::mongodb':
     bind_ip   => $array_bind_ip,
+    port      => '27017',
     nojournal => $nojournal,
     replset   => 'ceilometer',
     logpath   => '/var/log/mongodb/mongod.log',

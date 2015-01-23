@@ -37,6 +37,7 @@ describe 'cloud::database::nosql::mongodb' do
       is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
       is_expected.to contain_class('mongodb').with(
         :bind_ip   => ['10.0.0.1'],
+        :port      => '27017',
         :nojournal => false,
         :logpath   => '/var/log/mongodb/mongod.log',
       )
