@@ -19,12 +19,7 @@
 #
 class cloud::install::puppetdb {
 
-  exec { 'puppetdb ssl-setup' :
-    unless => 'stat /etc/puppetdb/ssl',
-    path   => ['/bin', '/sbin', '/usr/bin', '/usr/sbin'],
-    before => Class['puppetdb::server'],
-  }
-
   include ::puppetdb
+  include ::puppetdb::master::config
 
 }
