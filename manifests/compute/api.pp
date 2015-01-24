@@ -57,6 +57,10 @@
 #   Should be an hash.
 #   Default to {}
 #
+# [*pacemaker_enabled*]
+#   (optional) Manage Nova API with Pacemaker or not.
+#   Default to false
+#
 class cloud::compute::api(
   $ks_keystone_internal_host            = '127.0.0.1',
   $ks_keystone_internal_proto           = 'http',
@@ -67,9 +71,12 @@ class cloud::compute::api(
   $ks_ec2_public_port                   = '8773',
   $ks_metadata_public_port              = '8775',
   $firewall_settings                    = {},
+  $pacemaker_enabled                    = false,
 ){
 
-  include 'cloud::compute'
+  include cloud::compute
+  include cloud::params
+  include nova::params
 
   class { 'nova::api':
     enabled                              => true,
@@ -80,6 +87,14 @@ class cloud::compute::api(
     metadata_listen                      => $api_eth,
     neutron_metadata_proxy_shared_secret => $neutron_metadata_proxy_shared_secret,
     osapi_v3                             => true,
+  }
+
+  if $pacemaker_enabled {
+    cloud::clustering::pacemaker_service { $::nova::params::api_service_name:
+      service_name    => $::nova::params::api_service_name,
+      primitive_class => $::cloud::params::service_provider,
+      requires        => Package[$::nova::params::api_package_name],
+    }
   }
 
   if $::cloud::manage_firewall {
