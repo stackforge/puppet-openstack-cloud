@@ -49,6 +49,7 @@ class cloud::params {
       $keepalived_vrrp_script     = 'systemctl status haproxy.service'
       $puppetmaster_package_name  = 'puppet-server'
       $redis_service_name         = 'redis'
+      $service_provider           = 'systemd'
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
@@ -62,9 +63,11 @@ class cloud::params {
       case $::operatingsystem {
         'Ubuntu': {
           $libvirt_service_name = 'libvirt-bin'
+          $service_provider     = 'upstart'
         }
         default: {
           $libvirt_service_name = 'libvirtd'
+          $service_provider     = 'lsb'
         }
       }
     } # Debian
