@@ -124,23 +124,23 @@ log_statsd_default_sample_rate = 1
     memcache_servers => inline_template(
       '<%= scope.lookupvar("memcache_servers").join(",") %>'),
   }
-  class { 'swift::proxy::proxy-logging': }
-  class { 'swift::proxy::healthcheck': }
+  class { 'swift::proxy::account_quotas': }
+  class { 'swift::proxy::bulk': }
   class { 'swift::proxy::catch_errors': }
+  class { 'swift::proxy::ceilometer': }
+  class { 'swift::proxy::container_quotas': }
+  class { 'swift::proxy::formpost': }
+  class { 'swift::proxy::healthcheck': }
+  class { 'swift::proxy::proxy-logging': }
   class { 'swift::proxy::ratelimit': }
-  #class { 'swift::proxy::account_quotas': }
-  #class { 'swift::proxy::container_quotas': }
-  #class { 'swift::proxy::bulk': }
+  class { 'swift::proxy::slo': }
   class { 'swift::proxy::staticweb': }
-  # TODO: (spredzy) re enable ceilometer middleware after the current bug as been fixed
-  # https://review.openstack.org/#/c/97702
-  #class { 'swift::proxy::ceilometer': }
+  class { 'swift::proxy::tempurl': }
+
   class { 'swift::proxy::keystone':
     operator_roles => ['admin', 'SwiftOperator', 'ResellerAdmin'],
   }
 
-  class { 'swift::proxy::tempurl': }
-  class { 'swift::proxy::formpost': }
   class { 'swift::proxy::authtoken':
     admin_password      => $ks_swift_password,
     auth_host           => $ks_keystone_admin_host,
