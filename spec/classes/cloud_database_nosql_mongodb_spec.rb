@@ -25,14 +25,13 @@ describe 'cloud::database::nosql::mongodb' do
     let :params do
       { :bind_ip         => '10.0.0.1',
         :nojournal       => false,
-        :mongodb_version => '2.4.0',
         :replset_members => ['node1', 'node2', 'node3'] }
     end
 
     it 'configure mongodb server' do
       is_expected.to contain_class('mongodb::globals').with(
         :manage_package_repo => platform_params[:manage_package_repo],
-        :version             => '2.4.0',
+        :version             => facts[:mongodb_version],
       )
       is_expected.to contain_class('mongodb::globals').with_before('Class[Mongodb]')
       is_expected.to contain_class('mongodb').with(
@@ -97,8 +96,9 @@ describe 'cloud::database::nosql::mongodb' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily  => 'Debian',
-        :lsbdistid => 'Debian' }
+      { :osfamily        => 'Debian',
+        :lsbdistid       => 'Debian',
+        :mongodb_version => '2.4.0' }
     end
 
     let :platform_params do
@@ -110,7 +110,8 @@ describe 'cloud::database::nosql::mongodb' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily        => 'RedHat',
+        :mongodb_version => '2.6.5' }
     end
 
     let :platform_params do

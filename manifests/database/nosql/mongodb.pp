@@ -42,14 +42,14 @@
 #
 # [*mongodb_version*]
 #   (optional) Specify MongoDB version
-#   Default to '2.4.0'
+#   Default to $::mongodb_version
 #
 class cloud::database::nosql::mongodb(
   $bind_ip           = '127.0.0.1',
   $nojournal         = false,
   $replset_members   = $::hostname,
   $firewall_settings = {},
-  $mongodb_version   = '2.4.0',
+  $mongodb_version   = $::mongodb_version,
 ) {
 
   # should be an array
