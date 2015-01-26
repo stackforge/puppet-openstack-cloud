@@ -563,12 +563,14 @@ class cloud::loadbalancer(
     }
   }
 
-  file { '/etc/logrotate.d/haproxy':
-    ensure  => file,
-    source  => 'puppet:///modules/cloud/logrotate/haproxy',
-    owner   => root,
-    group   => root,
-    mode    => '0644';
+  logrotate::rule { 'haproxy':
+    path          => '/var/log/haproxy.log',
+    rotate        => 7,
+    rotate_every  => 'day',
+    missingok     => true,
+    ifempty       => false,
+    delaycompress => true,
+    compress      => true,
   }
 
   if $vip_monitor_ip {

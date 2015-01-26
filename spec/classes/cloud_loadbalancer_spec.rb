@@ -195,14 +195,17 @@ describe 'cloud::loadbalancer' do
       end # configure haproxy server
     end # configure keepalived in master
 
-    context 'configure logrotate file' do
-      it { is_expected.to contain_file('/etc/logrotate.d/haproxy').with(
-        :source => 'puppet:///modules/cloud/logrotate/haproxy',
-        :mode   => '0644',
-        :owner  => 'root',
-        :group  => 'root'
+    context 'configure logrotate rule' do
+      it { is_expected.to contain_logrotate__rule('haproxy').with(
+        :path          => '/var/log/haproxy.log',
+        :rotate        => 7,
+        :rotate_every  => 'day',
+        :missingok     => true,
+        :ifempty       => false,
+        :delaycompress => true,
+        :compress      => true
       )}
-    end # configure logrotate file
+    end # configure logrotate rule
 
     context 'configure monitor haproxy listen' do
       it { is_expected.to contain_haproxy__listen('monitor').with(
