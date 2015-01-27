@@ -100,15 +100,9 @@ class cloud::object::controller(
     proxy_local_net_ip => $api_eth,
     port               => $ks_swift_internal_port,
     pipeline           => [
-      #'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
-      'catch_errors', 'healthcheck', 'cache', 'ratelimit',
-      #'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
-      'swift3', 's3token', 'tempurl',
-      'formpost', 'staticweb',
-      # TODO: (spredzy) re enable ceilometer middleware after the current bug as been fixed
-      # https://review.openstack.org/#/c/97702
-      # 'ceilometer',
-      'authtoken', 'keystone',
+      'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
+      'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
+      'formpost', 'staticweb', 'ceilometer', 'authtoken', 'keystone',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
