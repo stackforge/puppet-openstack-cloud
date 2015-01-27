@@ -155,14 +155,14 @@
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure.
-#   Defaults to true
+#   Defaults to false
 #
 # [*novnc*]
 #   (optional) Enable or not novnc binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
 #   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
 #   If set to false, no binding will be configure.
-#   Defaults to false
+#   Defaults to true
 #
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
@@ -435,8 +435,8 @@ class cloud::loadbalancer(
   $horizon                          = true,
   $horizon_ssl                      = false,
   $rabbitmq                         = false,
-  $spice                            = true,
-  $novnc                            = false,
+  $spice                            = false,
+  $novnc                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',

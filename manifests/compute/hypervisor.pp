@@ -50,7 +50,7 @@
 #
 # [*console*]
 #   (optional) Nova's console type (spice or novnc)
-#   Defaults to 'spice'
+#   Defaults to 'novnc'
 #
 # [*novnc_port*]
 #   (optional) TCP port to connect to Nova vncproxy service.
@@ -134,7 +134,7 @@ class cloud::compute::hypervisor(
   $ks_nova_public_host        = '127.0.0.1',
   $nova_ssh_private_key       = undef,
   $nova_ssh_public_key        = undef,
-  $console                    = 'spice',
+  $console                    = 'novnc',
   $novnc_port                 = '6080',
   $spice_port                 = '6082',
   $ks_console_public_proto    = 'http',
