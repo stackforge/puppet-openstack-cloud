@@ -102,7 +102,7 @@ class cloud::object::controller(
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
       'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
-      'formpost', 'staticweb', 'ceilometer', 'authtoken', 'keystone',
+      'formpost', 'ceilometer', 'authtoken', 'keystone', 'staticweb',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
