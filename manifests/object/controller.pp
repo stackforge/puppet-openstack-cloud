@@ -125,7 +125,7 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::container_quotas': }
   class { 'swift::proxy::formpost': }
   class { 'swift::proxy::healthcheck': }
-  class { 'swift::proxy::proxy-logging': }
+  class { 'swift::proxy::proxy_logging': }
   class { 'swift::proxy::ratelimit': }
   class { 'swift::proxy::slo': }
   class { 'swift::proxy::staticweb': }
@@ -157,15 +157,6 @@ cache = swift.cache')
     swift_dir     => '/etc/swift',
     auth_pass     => $ks_swift_dispersion_password,
     endpoint_type => 'internalURL'
-  }
-
-  # Note(sileht): log file should exists to swift proxy to write to
-  # the ceilometer directory
-  file{'/var/log/ceilometer/swift-proxy-server.log':
-    ensure => present,
-    owner  => 'swift',
-    group  => 'swift',
-    notify => Service['swift-proxy']
   }
 
   Swift::Ringsync<<| |>> #~> Service["swift-proxy"]
