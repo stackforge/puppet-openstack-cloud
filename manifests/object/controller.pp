@@ -102,7 +102,7 @@ class cloud::object::controller(
     pipeline           => [
       'catch_errors', 'healthcheck', 'cache', 'bulk', 'ratelimit',
       'swift3', 's3token', 'container_quotas', 'account_quotas', 'tempurl',
-      'formpost', 'ceilometer', 'authtoken', 'keystone', 'staticweb',
+      'formpost', 'authtoken', 'keystone', 'staticweb',
       'proxy-logging', 'proxy-server'],
     account_autocreate => true,
     log_level          => 'DEBUG',
@@ -121,7 +121,6 @@ log_statsd_default_sample_rate = 1
   class { 'swift::proxy::account_quotas': }
   class { 'swift::proxy::bulk': }
   class { 'swift::proxy::catch_errors': }
-  class { 'swift::proxy::ceilometer': }
   class { 'swift::proxy::container_quotas': }
   class { 'swift::proxy::formpost': }
   class { 'swift::proxy::healthcheck': }
