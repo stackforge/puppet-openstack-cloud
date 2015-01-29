@@ -89,7 +89,9 @@ class cloud::selinux (
     }
   }
 
-  selboolean { $booleans : }
+  selboolean { $booleans :
+    persistent => true,
+  }
   selmodule { $modules: }
 
 }

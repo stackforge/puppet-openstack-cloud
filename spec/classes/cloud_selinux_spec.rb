@@ -22,7 +22,7 @@ describe 'cloud::selinux' do
 
   shared_examples_for 'manage selinux' do
 
-    context 'with selinux disabled' do
+    context 'with selinux enforcing' do
       before :each do
         facts.merge!( :selinux_current_mode => 'enforcing' )
       end
@@ -54,7 +54,7 @@ describe 'cloud::selinux' do
 
     end
 
-    context 'with selinux enforcing' do
+    context 'with selinux disabled' do
       before :each do
         facts.merge!( :selinux => 'false' )
       end
