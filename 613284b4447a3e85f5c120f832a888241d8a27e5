@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Sebastien Badia <sebastien.badia@enovance.com>
+Code-Review+2: Yanis Guenane <yanis.guenane@enovance.com>
+Workflow+1: Yanis Guenane <yanis.guenane@enovance.com>
+Submitted-by: Jenkins
+Submitted-at: Thu, 29 Jan 2015 10:28:58 +0000
+Reviewed-on: https://review.openstack.org/151124
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/master
