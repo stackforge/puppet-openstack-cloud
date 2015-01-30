@@ -26,6 +26,7 @@ class cloud::install::puppetdb::server {
     docroot    => '/tmp',
     ssl        => true,
     ssl_cert   => '/etc/ssl/certs/puppetdb.pem',
+    ssl_key    => '/etc/ssl/certs/puppetdb.pem',
     port       => '8081',
     servername => $::fqdn,
     proxy_pass => [
