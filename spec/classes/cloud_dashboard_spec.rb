@@ -38,6 +38,10 @@ describe 'cloud::dashboard' do
         :allowed_hosts              => 'horizon.openstack.org'}
     end
 
+    let :pre_condition do
+        "class { 'apache': default_vhost => false }"
+    end
+
     it 'configure horizon' do
       is_expected.to contain_class('horizon').with(
           :listen_ssl              => false,
@@ -122,7 +126,8 @@ describe 'cloud::dashboard' do
 
     context 'with default firewall enabled' do
       let :pre_condition do
-        "class { 'cloud': manage_firewall => true }"
+        "class { 'apache': default_vhost => false }
+         class { 'cloud': manage_firewall => true }"
       end
       it 'configure horizon firewall rules' do
         is_expected.to contain_firewall('100 allow horizon access').with(
@@ -135,7 +140,8 @@ describe 'cloud::dashboard' do
 
     context 'with custom firewall enabled' do
       let :pre_condition do
-        "class { 'cloud': manage_firewall => true }"
+        "class { 'apache': default_vhost => false }
+         class { 'cloud': manage_firewall => true }"
       end
       before :each do
         params.merge!(:firewall_settings => { 'limit' => '50/sec' } )
