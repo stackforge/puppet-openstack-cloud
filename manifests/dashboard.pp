@@ -147,10 +147,6 @@ class cloud::dashboard(
   }
   $neutron_options_real = merge ($neutron_options, $neutron_extra_options)
 
-  ensure_resource('class', 'apache', {
-    default_vhost => false
-  })
-
   class { 'horizon':
     secret_key              => $secret_key,
     can_set_mount_point     => 'False',
