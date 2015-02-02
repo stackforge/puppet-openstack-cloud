@@ -164,6 +164,27 @@
 #   If set to false, no binding will be configure.
 #   Defaults to true
 #
+# [*elasticsearch*]
+#   (optional) Enable or not ElasticSearch binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
+# [*elasticsearch_internal*]
+#   (optional) Enable or not ElasticSearch internal communication binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
+# [*kibana*]
+#   (optional) Enable or not kibana binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
@@ -304,6 +325,21 @@
 #   service configuration block.
 #   Defaults to []
 #
+# [*elasticsearch_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*elasticsearch_internal_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*kibana_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
 # [*galera_bind_options*]
 #   (optional) A hash of options that are inserted into the HAproxy listening
 #   service configuration block.
@@ -389,6 +425,18 @@
 #   (optional) Port of RabbitMQ service.
 #   Defaults to '5672'
 #
+# [*elasticsearch_port*]
+#   (optional) Port of ElasticSearch service.
+#   Defaults to '9200'
+#
+# [*elasticsearch_internal_port*]
+#   (optional) Port of ElasticSearch internal service.
+#   Defaults to '9300'
+#
+# [*kibana_port*]
+#   (optional) Port of Kibana service.
+#   Defaults to '8300'
+#
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
 #  Should be part of keepalived_public_ips
@@ -417,83 +465,92 @@
 #   Default to {}
 #
 class cloud::loadbalancer(
-  $swift_api                        = true,
-  $ceilometer_api                   = true,
-  $cinder_api                       = true,
-  $glance_api                       = true,
-  $glance_registry                  = true,
-  $neutron_api                      = true,
-  $heat_api                         = true,
-  $heat_cfn_api                     = true,
-  $heat_cloudwatch_api              = true,
-  $nova_api                         = true,
-  $ec2_api                          = true,
-  $metadata_api                     = true,
-  $keystone_api                     = true,
-  $keystone_api_admin               = true,
-  $trove_api                        = true,
-  $horizon                          = true,
-  $horizon_ssl                      = false,
-  $rabbitmq                         = false,
-  $spice                            = false,
-  $novnc                            = true,
-  $haproxy_auth                     = 'admin:changeme',
-  $keepalived_state                 = 'BACKUP',
-  $keepalived_priority              = '50',
-  $keepalived_vrrp_interface        = false,
-  $keepalived_public_interface      = 'eth0',
-  $keepalived_public_ipvs           = ['127.0.0.1'],
-  $keepalived_internal_interface    = 'eth1',
-  $keepalived_internal_ipvs         = false,
-  $keepalived_auth_type             = false,
-  $keepalived_auth_pass             = false,
-  $ceilometer_bind_options          = [],
-  $cinder_bind_options              = [],
-  $ec2_bind_options                 = [],
-  $glance_api_bind_options          = [],
-  $glance_registry_bind_options     = [],
-  $heat_cfn_bind_options            = [],
-  $heat_cloudwatch_bind_options     = [],
-  $heat_api_bind_options            = [],
-  $keystone_bind_options            = [],
-  $keystone_admin_bind_options      = [],
-  $metadata_bind_options            = [],
-  $neutron_bind_options             = [],
-  $nova_bind_options                = [],
-  $trove_bind_options               = [],
-  $swift_bind_options               = [],
-  $spice_bind_options               = [],
-  $novnc_bind_options               = [],
-  $horizon_bind_options             = [],
-  $horizon_ssl_bind_options         = [],
-  $rabbitmq_bind_options            = [],
-  $galera_bind_options              = [],
-  $ks_ceilometer_public_port        = 8777,
-  $ks_cinder_public_port            = 8776,
-  $ks_ec2_public_port               = 8773,
-  $ks_glance_api_public_port        = 9292,
-  $ks_glance_registry_internal_port = 9191,
-  $ks_heat_cfn_public_port          = 8000,
-  $ks_heat_cloudwatch_public_port   = 8003,
-  $ks_heat_public_port              = 8004,
-  $ks_keystone_admin_port           = 35357,
-  $ks_keystone_public_port          = 5000,
-  $ks_metadata_public_port          = 8775,
-  $ks_neutron_public_port           = 9696,
-  $ks_nova_public_port              = 8774,
-  $ks_swift_public_port             = 8080,
-  $ks_trove_public_port             = 8779,
-  $rabbitmq_port                    = 5672,
-  $horizon_port                     = 80,
-  $horizon_ssl_port                 = 443,
-  $spice_port                       = 6082,
-  $novnc_port                       = 6080,
-  $vip_public_ip                    = ['127.0.0.1'],
-  $vip_internal_ip                  = false,
-  $vip_monitor_ip                   = false,
-  $galera_ip                        = ['127.0.0.1'],
-  $galera_slave                     = false,
-  $firewall_settings                = {},
+  $swift_api                           = true,
+  $ceilometer_api                      = true,
+  $cinder_api                          = true,
+  $glance_api                          = true,
+  $glance_registry                     = true,
+  $neutron_api                         = true,
+  $heat_api                            = true,
+  $heat_cfn_api                        = true,
+  $heat_cloudwatch_api                 = true,
+  $nova_api                            = true,
+  $ec2_api                             = true,
+  $metadata_api                        = true,
+  $keystone_api                        = true,
+  $keystone_api_admin                  = true,
+  $trove_api                           = true,
+  $horizon                             = true,
+  $horizon_ssl                         = false,
+  $rabbitmq                            = false,
+  $spice                               = false,
+  $novnc                               = true,
+  $elasticsearch                       = true,
+  $elasticsearch_internal              = true,
+  $kibana                              = true,
+  $haproxy_auth                        = 'admin:changeme',
+  $keepalived_state                    = 'BACKUP',
+  $keepalived_priority                 = '50',
+  $keepalived_vrrp_interface           = false,
+  $keepalived_public_interface         = 'eth0',
+  $keepalived_public_ipvs              = ['127.0.0.1'],
+  $keepalived_internal_interface       = 'eth1',
+  $keepalived_internal_ipvs            = false,
+  $keepalived_auth_type                = false,
+  $keepalived_auth_pass                = false,
+  $ceilometer_bind_options             = [],
+  $cinder_bind_options                 = [],
+  $ec2_bind_options                    = [],
+  $glance_api_bind_options             = [],
+  $glance_registry_bind_options        = [],
+  $heat_cfn_bind_options               = [],
+  $heat_cloudwatch_bind_options        = [],
+  $heat_api_bind_options               = [],
+  $keystone_bind_options               = [],
+  $keystone_admin_bind_options         = [],
+  $metadata_bind_options               = [],
+  $neutron_bind_options                = [],
+  $nova_bind_options                   = [],
+  $trove_bind_options                  = [],
+  $swift_bind_options                  = [],
+  $spice_bind_options                  = [],
+  $novnc_bind_options                  = [],
+  $horizon_bind_options                = [],
+  $horizon_ssl_bind_options            = [],
+  $rabbitmq_bind_options               = [],
+  $galera_bind_options                 = [],
+  $elasticsearch_bind_options          = [],
+  $elasticsearch_internal_bind_options = [],
+  $kibana_bind_options                 = [],
+  $ks_ceilometer_public_port           = 8777,
+  $ks_cinder_public_port               = 8776,
+  $ks_ec2_public_port                  = 8773,
+  $ks_glance_api_public_port           = 9292,
+  $ks_glance_registry_internal_port    = 9191,
+  $ks_heat_cfn_public_port             = 8000,
+  $ks_heat_cloudwatch_public_port      = 8003,
+  $ks_heat_public_port                 = 8004,
+  $ks_keystone_admin_port              = 35357,
+  $ks_keystone_public_port             = 5000,
+  $ks_metadata_public_port             = 8775,
+  $ks_neutron_public_port              = 9696,
+  $ks_nova_public_port                 = 8774,
+  $ks_swift_public_port                = 8080,
+  $ks_trove_public_port                = 8779,
+  $rabbitmq_port                       = 5672,
+  $horizon_port                        = 80,
+  $horizon_ssl_port                    = 443,
+  $spice_port                          = 6082,
+  $novnc_port                          = 6080,
+  $elasticsearch_port                  = 9200,
+  $elasticsearch_internal_port         = 9300,
+  $kibana_port                         = 8300,
+  $vip_public_ip                       = ['127.0.0.1'],
+  $vip_internal_ip                     = false,
+  $vip_monitor_ip                      = false,
+  $galera_ip                           = ['127.0.0.1'],
+  $galera_slave                        = false,
+  $firewall_settings                   = {},
 ){
 
   include cloud::params
@@ -782,6 +839,25 @@ class cloud::loadbalancer(
     httpchk           => 'ssl-hello-chk',
     options           => $horizon_ssl_options,
     bind_options      => $horizon_ssl_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+
+  cloud::loadbalancer::binding { 'elaticsearch':
+    ip                => $elasticsearch,
+    port              => $elasticsearch_port,
+    bind_options      => $elasticsearch_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'elasticsearch_internal':
+    ip                => $elasticsearch_internal,
+    port              => $elasticsearch_internal_port,
+    bind_options      => $elasticsearch_internal_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'kibana':
+    ip                => $kibana,
+    port              => $kibana_port,
+    bind_options      => $kibana_bind_options,
     firewall_settings => $firewall_settings,
   }
 
