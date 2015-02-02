@@ -226,7 +226,6 @@ class cloud::database::sql::mysql (
 
     # OpenStack DB
     class { 'keystone::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'keystone',
       user          => $keystone_db_user,
       password      => $keystone_db_password,
@@ -234,7 +233,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $keystone_db_allowed_hosts,
     }
     class { 'glance::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'glance',
       user          => $glance_db_user,
       password      => $glance_db_password,
@@ -242,7 +240,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $glance_db_allowed_hosts,
     }
     class { 'nova::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'nova',
       user          => $nova_db_user,
       password      => $nova_db_password,
@@ -250,7 +247,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $nova_db_allowed_hosts,
     }
     class { 'cinder::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'cinder',
       user          => $cinder_db_user,
       password      => $cinder_db_password,
@@ -258,7 +254,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $cinder_db_allowed_hosts,
     }
     class { 'neutron::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'neutron',
       user          => $neutron_db_user,
       password      => $neutron_db_password,
@@ -266,7 +261,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $neutron_db_allowed_hosts,
     }
     class { 'heat::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'heat',
       user          => $heat_db_user,
       password      => $heat_db_password,
@@ -274,7 +268,6 @@ class cloud::database::sql::mysql (
       allowed_hosts => $heat_db_allowed_hosts,
     }
     class { 'trove::db::mysql':
-      mysql_module  => '2.2',
       dbname        => 'trove',
       user          => $trove_db_user,
       password      => $trove_db_password,
