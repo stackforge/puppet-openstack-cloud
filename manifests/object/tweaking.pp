@@ -19,15 +19,15 @@ class cloud::object::tweaking {
   kmod::load { 'ip_conntrack': }
 
   $swift_tuning = {
-    'net.ipv4.tcp_tw_recycle'                                => { value => 1 },
-    'net.ipv4.tcp_tw_reuse'                                  => { value => 1 },
-    'net.ipv4.tcp_syncookies'                                => { value => 0 },
-    'net.ipv4.netfilter.ip_conntrack_max'                    => { value => 524288 },
-    'net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait'  => { value => 2 },
-    'net.ipv4.netfilter.ip_conntrack_tcp_timeout_close_wait' => { value => 2 },
-    'net.ipv4.ip_local_port_range'                           => { value => "1024\t65000" },
-    'net.core.netdev_max_backlog'                            => { value => 300000 },
-    'net.ipv4.tcp_sack'                                      => { value => 0 },
+    'net.ipv4.tcp_tw_recycle'                           => { value => 1 },
+    'net.ipv4.tcp_tw_reuse'                             => { value => 1 },
+    'net.ipv4.tcp_syncookies'                           => { value => 0 },
+    'net.netfilter.nf_conntrack_max'                    => { value => 524288 },
+    'net.netfilter.nf_conntrack_tcp_timeout_time_wait'  => { value => 2 },
+    'net.netfilter.nf_conntrack_tcp_timeout_close_wait' => { value => 2 },
+    'net.ipv4.ip_local_port_range'                      => { value => "1024\t65000" },
+    'net.core.netdev_max_backlog'                       => { value => 300000 },
+    'net.ipv4.tcp_sack'                                 => { value => 0 },
   }
 
   $require = {
