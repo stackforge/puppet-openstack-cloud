@@ -542,7 +542,7 @@ class cloud::identity (
     token_provider        => 'keystone.token.providers.uuid.Provider',
     use_syslog            => $use_syslog,
     verbose               => $verbose,
-    bind_host             => $api_eth,
+    public_bind_host      => $api_eth,
     log_dir               => $log_dir,
     log_file              => $log_file,
     public_port           => $ks_keystone_public_port,
@@ -617,7 +617,6 @@ class cloud::identity (
   }
 
   class { 'nova::keystone::auth':
-    cinder            => true,
     admin_address     => $ks_nova_admin_host,
     internal_address  => $ks_nova_internal_host,
     public_address    => $ks_nova_public_host,

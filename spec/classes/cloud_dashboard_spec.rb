@@ -42,10 +42,8 @@ describe 'cloud::dashboard' do
       is_expected.to contain_class('horizon').with(
           :listen_ssl              => false,
           :secret_key              => '/etc/ssl/secret',
-          :can_set_mount_point     => 'False',
           :bind_address            => '10.0.0.1',
           :servername              => 'horizon.openstack.org',
-          :swift                   => true,
           :cache_server_ip         => false,
           :keystone_url            => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug            => true,
@@ -106,10 +104,8 @@ describe 'cloud::dashboard' do
         is_expected.to contain_class('horizon').with(
           :listen_ssl              => false,
           :secret_key              => '/etc/ssl/secret',
-          :can_set_mount_point     => 'False',
           :bind_address            => '10.0.0.1',
           :servername              => 'horizon.openstack.org',
-          :swift                   => true,
           :cache_server_ip         => false,
           :keystone_url            => 'http://keystone.openstack.org:5000/v2.0',
           :django_debug            => true,
