@@ -153,10 +153,8 @@ class cloud::dashboard(
 
   class { 'horizon':
     secret_key              => $secret_key,
-    can_set_mount_point     => 'False',
     servername              => $servername,
     bind_address            => $api_eth,
-    swift                   => true,
     keystone_url            => $keystone_url,
     cache_server_ip         => false,
     django_debug            => $debug,

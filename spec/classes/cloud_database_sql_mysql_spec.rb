@@ -111,7 +111,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure keystone database' do
         is_expected.to contain_class('keystone::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'keystone',
             :user          => 'keystone',
             :password      => 'secrete',
@@ -121,7 +120,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure glance database' do
         is_expected.to contain_class('glance::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'glance',
             :user          => 'glance',
             :password      => 'secrete',
@@ -131,7 +129,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure nova database' do
         is_expected.to contain_class('nova::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'nova',
             :user          => 'nova',
             :password      => 'secrete',
@@ -141,7 +138,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure cinder database' do
         is_expected.to contain_class('cinder::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'cinder',
             :user          => 'cinder',
             :password      => 'secrete',
@@ -151,7 +147,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure neutron database' do
         is_expected.to contain_class('neutron::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'neutron',
             :user          => 'neutron',
             :password      => 'secrete',
@@ -161,7 +156,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure heat database' do
         is_expected.to contain_class('heat::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'heat',
             :user          => 'heat',
             :password      => 'secrete',
@@ -171,7 +165,6 @@ describe 'cloud::database::sql::mysql' do
 
       it 'configure trove database' do
         is_expected.to contain_class('trove::db::mysql').with(
-            :mysql_module  => '2.2',
             :dbname        => 'trove',
             :user          => 'trove',
             :password      => 'secrete',
