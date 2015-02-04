@@ -199,6 +199,20 @@
 #   If set to false, no binding will be configure.
 #   Defaults to false
 #
+# [*sensu_dashboard*]
+#   (optional) Enable or not sensu_dashboard binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
+# [*sensu_api*]
+#   (optional) Enable or not sensu_api binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
 # [*keystone_api_admin*]
 #   (optional) Enable or not Keystone admin binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
@@ -328,6 +342,16 @@
 #   service configuration block.
 #   Defaults to []
 #
+# [*sensu_dashboard_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*sensu_api_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
 # [*galera_bind_options*]
 #   (optional) A hash of options that are inserted into the HAproxy listening
 #   service configuration block.
@@ -420,6 +444,13 @@
 # [*kibana_port*]
 #   (optional) Port of Kibana service.
 #   Defaults to '8300'
+# [*sensu_dashboard_port*]
+#   (optional) Port of Sensu Dashboard service.
+#   Defaults to '3000'
+#
+# [*sensu_api_port*]
+#   (optional) Port of Sensu API service.
+#   Defaults to '4567'
 #
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
@@ -471,6 +502,8 @@ class cloud::loadbalancer(
   $novnc                            = true,
   $elasticsearch                    = true,
   $kibana                           = true,
+  $sensu_dashboard                  = true,
+  $sensu_api                        = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
@@ -504,6 +537,8 @@ class cloud::loadbalancer(
   $galera_bind_options              = [],
   $elasticsearch_bind_options       = [],
   $kibana_bind_options              = [],
+  $sensu_dashboard_bind_options     = [],
+  $sensu_api_bind_options           = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
@@ -526,6 +561,8 @@ class cloud::loadbalancer(
   $novnc_port                       = 6080,
   $elasticsearch_port               = 9200,
   $kibana_port                      = 8300,
+  $sensu_dashboard_port             = 3000,
+  $sensu_api_port                   = 4567,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -662,6 +699,18 @@ class cloud::loadbalancer(
     ip                => $metadata_api,
     port              => $ks_metadata_public_port,
     bind_options      => $metadata_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'sensu_dashboard':
+    ip                => $sensu_dashboard,
+    port              => $sensu_dashboard_port,
+    bind_options      => $sensu_dashboard_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'sensu_api':
+    ip                => $sensu_api,
+    port              => $sensu_api_port,
+    bind_options      => $sensu_api_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'spice_cluster':
