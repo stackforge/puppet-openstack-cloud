@@ -131,7 +131,6 @@ describe 'cloud::loadbalancer' do
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
           'notify_master'        => "#{platform_params[:start_haproxy_service]}",
-          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end
     end
@@ -167,7 +166,6 @@ describe 'cloud::loadbalancer' do
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
           'notify_master'        => "#{platform_params[:start_haproxy_service]}",
-          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end # configure vrrp_instance with BACKUP state
       it 'configure haproxy server without service managed' do
@@ -188,7 +186,6 @@ describe 'cloud::loadbalancer' do
           'auth_type'            => 'PASS',
           'auth_pass'            => 'secret',
           'notify_master'        => "#{platform_params[:start_haproxy_service]}",
-          'notify_backup'        => "#{platform_params[:stop_haproxy_service]}",
         })
       end
       it 'configure haproxy server with service managed' do
@@ -620,7 +617,6 @@ describe 'cloud::loadbalancer' do
     let :platform_params do
       { :auth_url                   => 'dashboard',
         :start_haproxy_service      => '"/usr/bin/systemctl start haproxy"',
-        :stop_haproxy_service       => '"/usr/bin/systemctl stop haproxy"',
         :keepalived_name_is_process => 'false',
         :keepalived_vrrp_script     => 'systemctl status haproxy.service',
       }
