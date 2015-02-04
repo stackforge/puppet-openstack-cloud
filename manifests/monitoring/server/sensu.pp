@@ -44,6 +44,11 @@
 #       }
 #     }
 #
+# [*manage_rabbitmq_resources*]
+#   (optionnal) A boolean that determines if the RabbitMQ resources should be exported
+#   from this node
+#   Defaults to 'true'
+#
 # [*rabbitmq_user*]
 #   (optionnal) Rabbitmq user
 #   Defaults to 'sensu'
@@ -56,31 +61,56 @@
 #   (optionnal) Rabbitmq vhost
 #   Defaults to '/sensu'
 #
+# [*sensu_api_ip*]
+#   (optionnal) IP address to bind the sensu_api to
+#   Defaults to '%{::ipaddress}'
+#
+# [*sensu_api_port*]
+#   (optionnal) Port to bind the sensu_api to
+#   Defaults to '4567'
+#
 # [*uchiwa_ip*]
 #   (optionnal) IP address to bind uchiwa to
 #   Defaults to '%{::ipaddress}'
+#
+# [*uchiwa_port*]
+#   (optionnal) Port to bind uchiwa to
+#   Defaults to '3000'
+#
+# [*firewall_settings*]
+#   (optional) Allow to add custom parameters to firewall rules
+#   Should be an hash.
+#   Default to {}
+#
 class cloud::monitoring::server::sensu (
   $checks                    = {},
   $handlers                  = {},
   $plugins                   = {},
+  $manage_rabbitmq_resources = true,
   $rabbitmq_user             = 'sensu',
   $rabbitmq_password         = 'rabbitpassword',
   $rabbitmq_vhost            = '/sensu',
+  $sensu_api_ip              = $::ipaddress,
+  $sensu_api_port            = '4567',
   $uchiwa_ip                 = $::ipaddress,
+  $uchiwa_port               = '3000',
+  $firewall_settings         = {},
 ) {
 
   include cloud::params
 
-  @@rabbitmq_user { $rabbitmq_user :
-    password => $rabbitmq_password,
-  }
-  @@rabbitmq_vhost { $rabbitmq_vhost :
-    ensure  => present,
-  }
-  @@rabbitmq_user_permissions { "${rabbitmq_user}@${rabbitmq_vhost}" :
-    configure_permission => '.*',
-    read_permission      => '.*',
-    write_permission     => '.*',
+  if $manage_rabbitmq_resources {
+    @@rabbitmq_user { $rabbitmq_user :
+      password => $rabbitmq_password,
+    }
+    @@rabbitmq_vhost { $rabbitmq_vhost :
+      ensure  => present,
+    }
+    @@rabbitmq_user_permissions { "${rabbitmq_user}@${rabbitmq_vhost}" :
+      configure_permission => '.*',
+      read_permission      => '.*',
+      write_permission     => '.*',
+    }
   }
 
   $rabbitmq_user_realized = query_nodes("Rabbitmq_user['${rabbitmq_user}']")
@@ -100,6 +130,35 @@ class cloud::monitoring::server::sensu (
     include ::uchiwa
     uchiwa::api { 'OpenStack' :
       host => $uchiwa_ip,
+      port => $uchiwa_port,
+    }
+
+    if $::cloud::manage_firewall {
+      cloud::firewall::rule{ '100 allow sensu_dashboard access':
+        port   => $uchiwa_port,
+        extras => $firewall_settings,
+      }
+
+      cloud::firewall::rule{ '100 allow sensu_api access':
+        port   => $sensu_api_port,
+        extras => $firewall_settings,
+      }
+    }
+
+    @@haproxy::balancermember{"${::fqdn}-sensu_dashboard":
+      listening_service => 'sensu_dashoard',
+      server_names      => $::hostname,
+      ipaddresses       => $uchiwa_ip,
+      ports             => $uchiwa_port,
+      options           => 'check inter 2000 rise 2 fall 5'
+    }
+
+    @@haproxy::balancermember{"${::fqdn}-sensu_api":
+      listening_service => 'sensu_api',
+      server_names      => $::hostname,
+      ipaddresses       => $sensu_api_ip,
+      ports             => $sensu_api_port,
+      options           => 'check inter 2000 rise 2 fall 5'
     }
   }
 
