@@ -131,6 +131,7 @@ describe 'cloud::identity' do
         :token_provider        => 'keystone.token.providers.uuid.Provider',
         :use_syslog            => true,
         :public_bind_host      => '10.0.0.1',
+        :admin_bind_host       => '10.0.0.1',
         :public_port           => '5000',
         :admin_port            => '35357',
         :token_expiration      => '3600',

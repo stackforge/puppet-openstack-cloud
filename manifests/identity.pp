@@ -543,6 +543,7 @@ class cloud::identity (
     use_syslog            => $use_syslog,
     verbose               => $verbose,
     public_bind_host      => $api_eth,
+    admin_bind_host       => $api_eth,
     log_dir               => $log_dir,
     log_file              => $log_file,
     public_port           => $ks_keystone_public_port,
