@@ -42,6 +42,7 @@ describe 'cloud::messaging' do
           :node_ip_address          => params[:rabbitmq_ip],
           :erlang_cookie            => params[:erlang_cookie],
           :port                     => '5672',
+          :package_provider         => platform_params[:package_provider],
         )
     end
 
@@ -96,12 +97,21 @@ describe 'cloud::messaging' do
       { :osfamily => 'Debian' }
     end
 
+    let :platform_params do
+      { :package_provider => 'apt' }
+    end
+
     it_configures 'openstack messaging'
   end
 
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+
+    let :platform_params do
+      { :package_provider => 'yum' }
     end
 
     let :params do

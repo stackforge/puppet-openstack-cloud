@@ -75,6 +75,7 @@ class cloud::messaging(
 
   # Packaging issue: https://bugzilla.redhat.com/show_bug.cgi?id=1033305
   if $::osfamily == 'RedHat' {
+    $package_provider = 'yum'
     file {'/usr/sbin/rabbitmq-plugins':
       ensure => link,
       target => '/usr/lib/rabbitmq/bin/rabbitmq-plugins'
@@ -84,6 +85,9 @@ class cloud::messaging(
       ensure => link,
       target => '/usr/lib/rabbitmq/bin/rabbitmq-env'
     }
+  }
+  else {
+    $package_provider  = $rabbitmq::params::package_provider
   }
 
   class { 'rabbitmq':
@@ -95,6 +99,7 @@ class cloud::messaging(
     node_ip_address          => $rabbitmq_ip,
     port                     => $rabbitmq_port,
     erlang_cookie            => $erlang_cookie,
+    package_provider         => $package_provider,
   }
 
   rabbitmq_vhost { '/':
