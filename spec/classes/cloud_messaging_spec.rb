@@ -96,12 +96,22 @@ describe 'cloud::messaging' do
       { :osfamily => 'Debian' }
     end
 
+    let :platform_params do
+      { :package_provider => 'apt' }
+    end
+
+
     it_configures 'openstack messaging'
   end
 
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat' }
+    end
+
+
+    let :platform_params do
+      { :package_provider => 'yum' }
     end
 
     let :params do
