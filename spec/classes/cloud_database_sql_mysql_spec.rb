@@ -211,7 +211,7 @@ describe 'cloud::database::sql::mysql' do
           :action => 'accept',
         )
         is_expected.to contain_firewall('100 allow mysqlchk access').with(
-          :port   => '9200',
+          :port   => '8200',
           :proto  => 'tcp',
           :action => 'accept',
         )
@@ -238,7 +238,7 @@ describe 'cloud::database::sql::mysql' do
           :limit  => '50/sec',
         )
         is_expected.to contain_firewall('100 allow mysqlchk access').with(
-          :port   => '9200',
+          :port   => '8200',
           :proto  => 'tcp',
           :action => 'accept',
           :limit  => '50/sec',
