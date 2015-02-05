@@ -40,6 +40,7 @@ describe 'cloud::messaging' do
           :cluster_node_type        => params[:cluster_node_type],
           :node_ip_address          => params[:rabbitmq_ip],
           :port                     => '5672',
+          :package_provider         => 'apt',
         )
     end
 
