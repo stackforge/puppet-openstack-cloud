@@ -1,14 +1,9 @@
 source 'https://rubygems.org'
 
 group :development, :test do
-  gem 'puppetlabs_spec_helper', :require => false
-  gem 'puppet-lint'
-  gem 'puppet-lint-param-docs', '1.1.0'
+  gem 'puppetlabs_spec_helper'
+  gem 'puppet-lint-param-docs'
   gem 'metadata-json-lint'
-  gem 'rake', '10.1.1'
-  gem 'puppet-syntax'
-  gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git'
-  gem 'rspec'
   gem 'json'
   gem 'webmock'
   gem 'r10k'
