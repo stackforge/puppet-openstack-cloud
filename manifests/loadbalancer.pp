@@ -535,7 +535,6 @@ class cloud::loadbalancer(
     auth_type     => $keepalived_auth_type,
     auth_pass     => $keepalived_auth_pass,
     notify_master => $::cloud::params::start_haproxy_service,
-    notify_backup => $::cloud::params::stop_haproxy_service,
   }
 
 
@@ -558,7 +557,6 @@ class cloud::loadbalancer(
         auth_type     => $keepalived_auth_type,
         auth_pass     => $keepalived_auth_pass,
         notify_master => $::cloud::params::start_haproxy_service,
-        notify_backup => $::cloud::params::stop_haproxy_service,
       }
     }
   }
