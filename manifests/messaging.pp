@@ -45,12 +45,18 @@
 #   (optional) Port of RabbitMQ service.
 #   Defaults to '5672'
 #
+# [*erlang_cookie*]
+#   (required) Erlang cookie to use.
+#   When running a cluster, this value should be the same for all
+#   the nodes.
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
 #   Default to {}
 #
 class cloud::messaging(
+  $erlang_cookie,
   $cluster_node_type = 'disc',
   $rabbit_names      = $::hostname,
   $rabbit_password   = 'rabbitpassword',
@@ -88,6 +94,7 @@ class cloud::messaging(
     cluster_node_type        => $cluster_node_type,
     node_ip_address          => $rabbitmq_ip,
     port                     => $rabbitmq_port,
+    erlang_cookie            => $erlang_cookie,
   }
 
   rabbitmq_vhost { '/':
