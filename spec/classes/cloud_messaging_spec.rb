@@ -27,6 +27,7 @@ describe 'cloud::messaging' do
         :cluster_node_type => 'disc',
         :rabbit_names      => ['foo','boo','zoo'],
         :rabbit_password   => 'secrete',
+        :erlang_cookie     => 'MY_COOKIE',
         :rabbitmq_ip       => '10.0.0.1',
       }
     end
@@ -39,6 +40,7 @@ describe 'cloud::messaging' do
           :wipe_db_on_cookie_change => true,
           :cluster_node_type        => params[:cluster_node_type],
           :node_ip_address          => params[:rabbitmq_ip],
+          :erlang_cookie            => params|:erlang_cookie],
           :port                     => '5672',
         )
     end
