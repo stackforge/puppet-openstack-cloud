@@ -208,7 +208,7 @@ describe 'cloud::loadbalancer' do
     context 'configure monitor haproxy listen' do
       it { is_expected.to contain_haproxy__listen('monitor').with(
         :ipaddress => params[:vip_public_ip],
-        :ports     => '9300'
+        :ports     => '10300'
       )}
     end # configure monitor haproxy listen
 
@@ -218,7 +218,7 @@ describe 'cloud::loadbalancer' do
       end
       it { is_expected.to contain_haproxy__listen('monitor').with(
         :ipaddress => ['192.168.0.1'],
-        :ports     => '9300'
+        :ports     => '10300'
       )}
     end # configure monitor haproxy listen
 
@@ -539,7 +539,7 @@ describe 'cloud::loadbalancer' do
           :action => 'accept',
         )
         is_expected.to contain_firewall('100 allow haproxy monitor access').with(
-          :port   => '9300',
+          :port   => '10300',
           :proto  => 'tcp',
           :action => 'accept',
         )
@@ -574,7 +574,7 @@ describe 'cloud::loadbalancer' do
           :limit  => '50/sec',
         )
         is_expected.to contain_firewall('100 allow haproxy monitor access').with(
-          :port   => '9300',
+          :port   => '10300',
           :proto  => 'tcp',
           :action => 'accept',
           :limit  => '50/sec',

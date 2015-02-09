@@ -617,7 +617,7 @@ class cloud::loadbalancer(
 
   haproxy::listen { 'monitor':
     ipaddress => $vip_monitor_ip_real,
-    ports     => '9300',
+    ports     => '10300',
     options   => {
       'mode'        => 'http',
       'monitor-uri' => '/status',
@@ -887,7 +887,7 @@ class cloud::loadbalancer(
       extras => $firewall_settings,
     }
     cloud::firewall::rule{ '100 allow haproxy monitor access':
-      port   => '9300',
+      port   => '10300',
       extras => $firewall_settings,
     }
     cloud::firewall::rule{ '100 allow keepalived access':
