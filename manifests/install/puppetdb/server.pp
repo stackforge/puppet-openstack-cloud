@@ -35,7 +35,7 @@ class cloud::install::puppetdb::server {
         'url'  => 'http://localhost:8080/'
       }
     ],
-    require    => Class['puppetdb'],
+    require    => Class['::puppetdb'],
   }
 
 }
