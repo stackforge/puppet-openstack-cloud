@@ -19,27 +19,27 @@
 #
 # === Parameters:
 #
-#  [*rhn_registration*]
-#   (optional) The RedHat network authentication token
-#   Defaults to undef
+# [*rhn_registration*]
+#  (optional) The RedHat network authentication token
+#  Defaults to undef
 #
-#  [*root_password*]
-#   (optional) Unix root password
-#   Defaults to 'root'
+# [*root_password*]
+#  (optional) Unix root password
+#  Defaults to 'root'
 #
-#  [*dns_ips*]
-#   (optional) Hostname or IP of the Domain Name Server (dns) used
-#   Should by an array.
-#   Defaults to google public dns ['8.8.8.8', '8.8.4.4']
+# [*dns_ips*]
+#  (optional) Hostname or IP of the Domain Name Server (dns) used
+#  Should by an array.
+#  Defaults to google public dns ['8.8.8.8', '8.8.4.4']
 #
-#  [*site_domain*]
-#   (optional) Domain name (used for search and domain fields
-#   of resolv.conf configuration file
-#   Defaults to 'mydomain'
+# [*site_domain*]
+#  (optional) Domain name (used for search and domain fields
+#  of resolv.conf configuration file
+#  Defaults to 'mydomain'
 #
-#  [*motd_title*]
-#   (optional) A string used in the top of the server's motd
-#   Defaults to 'eNovance IT Operations'
+# [*motd_title*]
+#  (optional) A string used in the top of the server's motd
+#  Defaults to 'eNovance IT Operations'
 #
 # [*selinux_mode*]
 #   (optional) SELinux mode the system should be in

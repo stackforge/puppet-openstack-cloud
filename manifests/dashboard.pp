@@ -51,19 +51,19 @@
 #
 # [*keystone_proto*]
 #   (optional) Protocol (http or https) of keystone endpoint.
-#   Defaults to 'http'
+#   Defaults to 'http'
 #
 # [*keystone_host*]
 #   (optional) IP / Host of keystone endpoint.
-#   Defaults '127.0.0.1'
+#   Defaults '127.0.0.1'
 #
 # [*keystone_port*]
 #   (optional) TCP port of keystone endpoint.
-#   Defaults to '5000'
+#   Defaults to '5000'
 #
 # [*debug*]
 #   (optional) Enable debug or not.
-#   Defaults to true
+#   Defaults to true
 #
 # [*horizon_cert*]
 #   (required with listen_ssl) Certificate to use for SSL support.

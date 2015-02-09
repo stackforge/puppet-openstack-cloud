@@ -13,7 +13,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+# == Class: cloud::compute::scheduler
+#
 # Compute Scheduler node
+#
+# === Parameters:
 #
 # [*scheduler_default_filters*]
 #   (optional) A comma separated list of filters to be used by default
