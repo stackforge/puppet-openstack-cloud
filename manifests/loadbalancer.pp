@@ -164,6 +164,20 @@
 #   If set to false, no binding will be configure.
 #   Defaults to true
 #
+# [*elasticsearch*]
+#   (optional) Enable or not ElasticSearch binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
+# [*kibana*]
+#   (optional) Enable or not kibana binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
@@ -304,6 +318,16 @@
 #   service configuration block.
 #   Defaults to []
 #
+# [*elasticsearch_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
+# [*kibana_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
 # [*galera_bind_options*]
 #   (optional) A hash of options that are inserted into the HAproxy listening
 #   service configuration block.
@@ -389,6 +413,14 @@
 #   (optional) Port of RabbitMQ service.
 #   Defaults to '5672'
 #
+# [*elasticsearch_port*]
+#   (optional) Port of ElasticSearch service.
+#   Defaults to '9200'
+#
+# [*kibana_port*]
+#   (optional) Port of Kibana service.
+#   Defaults to '8300'
+#
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
 #  Should be part of keepalived_public_ips
@@ -437,6 +469,8 @@ class cloud::loadbalancer(
   $rabbitmq                         = false,
   $spice                            = false,
   $novnc                            = true,
+  $elasticsearch                    = true,
+  $kibana                           = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
@@ -468,6 +502,8 @@ class cloud::loadbalancer(
   $horizon_ssl_bind_options         = [],
   $rabbitmq_bind_options            = [],
   $galera_bind_options              = [],
+  $elasticsearch_bind_options       = [],
+  $kibana_bind_options              = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
@@ -488,6 +524,8 @@ class cloud::loadbalancer(
   $horizon_ssl_port                 = 443,
   $spice_port                       = 6082,
   $novnc_port                       = 6080,
+  $elasticsearch_port               = 9200,
+  $kibana_port                      = 8300,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -780,6 +818,19 @@ class cloud::loadbalancer(
     httpchk           => 'ssl-hello-chk',
     options           => $horizon_ssl_options,
     bind_options      => $horizon_ssl_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+
+  cloud::loadbalancer::binding { 'elasticsearch':
+    ip                => $elasticsearch,
+    port              => $elasticsearch_port,
+    bind_options      => $elasticsearch_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+  cloud::loadbalancer::binding { 'kibana':
+    ip                => $kibana,
+    port              => $kibana_port,
+    bind_options      => $kibana_bind_options,
     firewall_settings => $firewall_settings,
   }
 
