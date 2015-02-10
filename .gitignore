@@ -1,9 +1,9 @@
-*.swp
-spec/fixtures/modules/*
-spec/fixtures/manifests/site.pp
+pkg/
 Gemfile.lock
-.vendor
-doc/
-.yardoc
-.librarian/
-.tmp/
+vendor/
+spec/fixtures/
+.vagrant/
+.bundle/
+coverage/
+.idea/
+*.iml
