@@ -1,5 +1,4 @@
 ##2014-10-24 - Features release 2.2.0
-###Summary
 * Sensu as first implementation of monitoring system
 * Glance now supports NFS image storage backend
 * Cinder now supports EMC VNX & iSCSI volume backends
