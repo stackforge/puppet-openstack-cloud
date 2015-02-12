@@ -19,6 +19,10 @@
 #
 # === Parameters:
 #
+# [*bind_ip*]
+#   (optional) Address on which Redis is listening on
+#   Defaults to '127.0.0.1'
+#
 # [*port*]
 #   (optional) Port where Redis is binded.
 #   Used for firewall purpose.
@@ -30,11 +34,20 @@
 #   Default to {}
 #
 class cloud::database::nosql::redis::server(
+  $bind_ip           = '127.0.0.1',
   $port              = 6379,
   $firewall_settings = {},
 ) {
 
   include ::redis
+
+  @@haproxy::balancermember{"${::fqdn}-redis":
+    listening_service => 'redis_cluster',
+    server_names      => $::hostname,
+    ipaddresses       => $bind_ip,
+    ports             => $port,
+    options           => 'check inter 2000 rise 2 fall 5'
+  }
 
   if $::cloud::manage_firewall {
     cloud::firewall::rule{ '100 allow redis server access':
