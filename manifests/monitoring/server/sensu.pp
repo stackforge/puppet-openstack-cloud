@@ -146,7 +146,7 @@ class cloud::monitoring::server::sensu (
     }
 
     @@haproxy::balancermember{"${::fqdn}-sensu_dashboard":
-      listening_service => 'sensu_dashoard',
+      listening_service => 'sensu_dashboard',
       server_names      => $::hostname,
       ipaddresses       => $uchiwa_ip,
       ports             => $uchiwa_port,
