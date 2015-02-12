@@ -28,6 +28,13 @@ describe 'cloud::database::nosql::redis::sentinel' do
 
     it { should create_class('redis::sentinel') }
 
+    it { should contain_file('/bin/redis-notifications.sh').with(
+      :ensure  => 'present',
+      :owner   => 'root',
+      :group   => 'root',
+      :mode    => '0750',
+    ) }
+
     context 'with default firewall enabled' do
       let :pre_condition do
         "class { 'cloud': manage_firewall => true }"
