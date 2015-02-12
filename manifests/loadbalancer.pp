@@ -178,6 +178,13 @@
 #   If set to false, no binding will be configure.
 #   Defaults to true
 #
+# [*redis*]
+#   (optional) Enable or not redis binding.
+#   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
+#   If set to ['10.0.0.1'], only IP in the array (or in the string) will be configured in the pool. They must be part of keepalived_ip options.
+#   If set to false, no binding will be configure.
+#   Defaults to true
+#
 # [*metadata_api*]
 #   (optional) Enable or not Metadata public binding.
 #   If true, both public and internal will attempt to be created except if vip_internal_ip is set to false.
@@ -352,6 +359,11 @@
 #   service configuration block.
 #   Defaults to []
 #
+# [*redis_bind_options*]
+#   (optional) A hash of options that are inserted into the HAproxy listening
+#   service configuration block.
+#   Defaults to []
+#
 # [*galera_bind_options*]
 #   (optional) A hash of options that are inserted into the HAproxy listening
 #   service configuration block.
@@ -452,6 +464,10 @@
 #   (optional) Port of Sensu API service.
 #   Defaults to '4567'
 #
+# [*redis_port*]
+#   (optional) Port of redis service.
+#   Defaults to '6379'
+#
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
 #  Should be part of keepalived_public_ips
@@ -504,6 +520,7 @@ class cloud::loadbalancer(
   $kibana                           = true,
   $sensu_dashboard                  = true,
   $sensu_api                        = true,
+  $redis                            = true,
   $haproxy_auth                     = 'admin:changeme',
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
@@ -539,6 +556,7 @@ class cloud::loadbalancer(
   $kibana_bind_options              = [],
   $sensu_dashboard_bind_options     = [],
   $sensu_api_bind_options           = [],
+  $redis_bind_options               = [],
   $ks_ceilometer_public_port        = 8777,
   $ks_cinder_public_port            = 8776,
   $ks_ec2_public_port               = 8773,
@@ -563,6 +581,7 @@ class cloud::loadbalancer(
   $kibana_port                      = 8300,
   $sensu_dashboard_port             = 3000,
   $sensu_api_port                   = 4567,
+  $redis_port                       = 6379,
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -880,6 +899,19 @@ class cloud::loadbalancer(
     ip                => $kibana,
     port              => $kibana_port,
     bind_options      => $kibana_bind_options,
+    firewall_settings => $firewall_settings,
+  }
+
+  cloud::loadbalancer::binding { 'redis_cluster':
+    ip                => $redis,
+    port              => $redis_port,
+    options           => {
+      'mode'      => 'tcp',
+      'balance'   => 'first',
+      'option'    => ['tcp-check',],
+      'tcp-check' => ['send info\ replication\r\n','expect string role:master'],
+    },
+    bind_options      => $redis_bind_options,
     firewall_settings => $firewall_settings,
   }
 
