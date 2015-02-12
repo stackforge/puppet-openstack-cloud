@@ -102,11 +102,11 @@ class cloud::messaging(
     package_provider         => $package_provider,
   }
 
-  rabbitmq_vhost { '/':
+  rabbitmq_vhost { ['/', '/sensu']:
     provider => 'rabbitmqctl',
     require  => Class['rabbitmq'],
   }
-  rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat','trove']:
+  rabbitmq_user { ['nova','glance','neutron','cinder','ceilometer','heat','trove', 'sensu']:
     admin    => true,
     password => $rabbit_password,
     provider => 'rabbitmqctl',
@@ -120,6 +120,7 @@ class cloud::messaging(
     'ceilometer@/',
     'heat@/',
     'trove@/',
+    'sensu@/sensu',
   ]:
     configure_permission => '.*',
     write_permission     => '.*',
