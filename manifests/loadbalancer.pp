@@ -210,6 +210,10 @@
 #  (optional) The HTTP sytle basic credentials (using login:password form)
 #  Defaults to 'admin:changeme'
 #
+# [*haproxy_options*]
+#  (optional) The haproxy global options
+#  Defaults to {}
+#
 # [*keepalived_state*]
 #  (optional) TODO
 #  Defaults to 'BACKUP'
@@ -472,6 +476,7 @@ class cloud::loadbalancer(
   $elasticsearch                    = true,
   $kibana                           = true,
   $haproxy_auth                     = 'admin:changeme',
+  $haproxy_options                  = {},
   $keepalived_state                 = 'BACKUP',
   $keepalived_priority              = '50',
   $keepalived_vrrp_interface        = false,
@@ -553,10 +558,24 @@ class cloud::loadbalancer(
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
+  # TODO : Use global_options in puppetlabs-haproxy as merge in params.pp
+  $haproxy_default_options = {
+    'log'     => "${::ipaddress} local0",
+    'chroot'  => '/var/lib/haproxy',
+    'pidfile' => '/var/run/haproxy.pid',
+    'maxconn' => '4000',
+    'user'    => 'haproxy',
+    'group'   => 'haproxy',
+    'daemon'  => '',
+    'stats'   => 'socket /var/lib/haproxy/stats',
+    'nbproc'  => $::processorcount
+  }
+  $haproxy_global_options = merge($haproxy_default_options,$haproxy_options)
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
   class { 'haproxy':
-    service_manage => true
+    service_manage => true,
+    global_options => $haproxy_global_options
   }
 
   keepalived::vrrp_script { 'haproxy':
