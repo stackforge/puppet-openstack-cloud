@@ -553,10 +553,23 @@ class cloud::loadbalancer(
     fail('galera_ip should be part of keepalived_public_ipvs or keepalived_internal_ipvs.')
   }
 
+  # TODO : Use global_options in puppetlabs-haproxy as merge in params.pp
+  $global_options = {
+    'log'     => "${::ipaddress} local0",
+    'chroot'  => '/var/lib/haproxy',
+    'pidfile' => '/var/run/haproxy.pid',
+    'maxconn' => '4000',
+    'user'    => 'haproxy',
+    'group'   => 'haproxy',
+    'daemon'  => '',
+    'stats'   => 'socket /var/lib/haproxy/stats',
+    'nbproc'  => $::processorcount
+  }
   # Ensure Keepalived is started before HAproxy to avoid binding errors.
   class { 'keepalived': } ->
   class { 'haproxy':
-    service_manage => true
+    service_manage => true,
+    global_options => $global_options
   }
 
   keepalived::vrrp_script { 'haproxy':
