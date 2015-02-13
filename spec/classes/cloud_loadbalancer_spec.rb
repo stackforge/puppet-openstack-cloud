@@ -110,6 +110,31 @@ describe 'cloud::loadbalancer' do
       is_expected.not_to contain_keepalived__instance('2')
     end
 
+    context 'with 4 processors' do
+      before :each do
+        facts.merge!(
+          :processorcount => '4',
+          :ipaddress      => '10.10.0.1'
+        )
+      end
+      it 'configure haproxy server' do
+        is_expected.to contain_class('haproxy').with(
+          :service_manage => true,
+          :global_options => {
+            'log'     => '10.10.0.1 local0',
+            'chroot'  => '/var/lib/haproxy',
+            'pidfile' => '/var/run/haproxy.pid',
+            'maxconn' => '4000',
+            'user'    => 'haproxy',
+            'group'   => 'haproxy',
+            'daemon'  => '',
+            'stats'   => 'socket /var/lib/haproxy/stats',
+            'nbproc'  => '4'
+          }
+        )
+      end
+    end # configure haproxy server
+
     context 'configure an internal VIP with the same VIP as public network' do
       before do
         params.merge!(:keepalived_internal_ipvs => ['10.0.0.1', '10.0.0.2'])
