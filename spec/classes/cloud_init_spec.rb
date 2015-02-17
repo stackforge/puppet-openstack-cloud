@@ -39,6 +39,28 @@ describe 'cloud' do
     end
 
     it {is_expected.to contain_class('ntp')}
+    it {is_expected.to contain_class('limits')}
+
+    context 'with explicit limits enabled' do
+      before :each do
+        params.merge!( :limits => {
+                         'username_nofile' => {
+                           'ensure'     => 'present',
+                           'user'       => 'username',
+                           'limit_type' => 'nofile',
+                           'hard'       => '16384'
+                         }
+                      })
+      end
+
+      it { is_expected.to contain_limits__limits('username_nofile').with(
+        :ensure     => 'present',
+        :user       => 'username',
+        :limit_type => 'nofile',
+        :hard       => '16384',
+     ) }
+
+    end
 
     it {is_expected.to contain_file('/etc/motd').with(
       {:ensure => 'file'}.merge(file_defaults)
