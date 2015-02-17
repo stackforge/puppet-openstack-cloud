@@ -39,6 +39,7 @@ describe 'cloud' do
     end
 
     it {is_expected.to contain_class('ntp')}
+    it {is_expected.to contain_class('limits')}
 
     it {is_expected.to contain_file('/etc/motd').with(
       {:ensure => 'file'}.merge(file_defaults)
