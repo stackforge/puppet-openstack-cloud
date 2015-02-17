@@ -1,0 +1,4 @@
+[Service]
+<% @mysql_systemd_limit_settings.each do |key, value| -%>
+<%= key -%>=<%= value %>
+<% end -%>

@@ -169,6 +169,11 @@
 #   (optional) The name or ip address of host running monitoring database (clustercheck)
 #   Defaults to '127.0.0.1'
 #
+# [*mysql_systemd_limit_settings*]
+#   (optional) An hash of Limit value to pass to MariaDB unit file
+#   Defaults to {}
+#   Example : { 'LimitNOFILE' => 'infinity', 'LimitNPROC' => 4 }
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -212,6 +217,7 @@ class cloud::database::sql::mysql (
     $galera_clustercheck_dbuser     = 'clustercheckdbuser',
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
     $galera_clustercheck_ipaddress  = '127.0.0.1',
+    $mysql_systemd_limit_settings   = {},
     $firewall_settings              = {},
 ) {
 
@@ -396,7 +402,7 @@ class cloud::database::sql::mysql (
     before  => Package[$mysql_server_package_name],
   }
 
-  if($::osfamily == 'Debian'){
+  if $::osfamily == 'Debian' {
     # The startup time can be longer than the default 30s so we take
     # care of it there.  Until this bug is not resolved
     # https://mariadb.atlassian.net/browse/MDEV-5540, we have to do it
@@ -407,6 +413,18 @@ class cloud::database::sql::mysql (
       after   => '^CONF=',
       require => Package[$mysql_server_package_name],
       notify  => Service['mysqld'],
+    }
+  } elsif $::osfamily == 'RedHat' and $::operatingsystemrelease >= 7 {
+    file { "/etc/systemd/system/${::mysql_service_name}.d" :
+      ensure => directory,
+    }
+    file { "/etc/systemd/system/${::mysql_service_name}.d/limits.conf" :
+      content => template('cloud/database/systemd-limits.conf.erb'),
+      owner   => 'root',
+      mode    => '0755',
+      group   => 'root',
+      notify  => Service['mysqld'],
+      before  => Package[$mysql_server_package_name],
     }
   }
 
