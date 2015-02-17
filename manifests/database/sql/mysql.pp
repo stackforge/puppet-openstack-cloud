@@ -169,6 +169,15 @@
 #   (optional) The name or ip address of host running monitoring database (clustercheck)
 #   Defaults to '127.0.0.1'
 #
+# [*open_files_limit*]
+#   (optional) An integer that specifies the open_files_limit for MySQL
+#   Defaults to 65535
+#
+# [*mysql_systemd_limit_settings*]
+#   (optional) An hash of Limit value to pass to MariaDB unit file
+#   Defaults to {}
+#   Example : { 'LimitNOFILE' => 'infinity', 'LimitNPROC' => 4 }
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -212,10 +221,20 @@ class cloud::database::sql::mysql (
     $galera_clustercheck_dbuser     = 'clustercheckdbuser',
     $galera_clustercheck_dbpassword = 'clustercheckpassword',
     $galera_clustercheck_ipaddress  = '127.0.0.1',
+    $open_files_limit               = 65535,
+    $mysql_systemd_limit_settings   = {},
     $firewall_settings              = {},
 ) {
 
   include 'xinetd'
+
+  if $mysql_systemd_limit_settings['LimitNOFILE'] {
+    $open_files_limit_real = $mysql_systemd_limit_settings['LimitNOFILE']
+    $mysql_systemd_limit_settings_real = $mysql_systemd_limit_settings
+  } else {
+    $open_files_limit_real = $open_files_limit
+    $mysql_systemd_limit_settings_real = merge($mysql_systemd_limit_settings, { 'LimitNOFILE' => $open_files_limit})
+  }
 
   $gcomm_definition = inline_template('<%= @galera_internal_ips.join(",") + "?pc.wait_prim=no" -%>')
 
@@ -344,6 +363,24 @@ class cloud::database::sql::mysql (
         require => [Package[$mysql_server_package_name], File[$mysql_server_config_file]]
       }
 
+      if $::operatingsystemrelease >= 7 {
+        file { "/etc/systemd/system/${mysql_service_name}.service.d" :
+          ensure => directory,
+        }
+        file { "/etc/systemd/system/${mysql_service_name}.service.d/limits.conf" :
+          content => template('cloud/database/systemd-limits.conf.erb'),
+          owner   => 'root',
+          mode    => '0755',
+          group   => 'root',
+          notify  => [Service['mysqld'], Exec['mariadb-sysctl-daemon-reload']],
+        }
+        exec { 'mariadb-sysctl-daemon-reload' :
+          command     => '/usr/bin/systemctl daemon-reload',
+          refreshonly => true,
+          notify      => Service['mysqld'],
+        }
+      }
+
     } # RedHat
     'Debian': {
       # Specific to Debian / Ubuntu
@@ -396,7 +433,7 @@ class cloud::database::sql::mysql (
     before  => Package[$mysql_server_package_name],
   }
 
-  if($::osfamily == 'Debian'){
+  if $::osfamily == 'Debian' {
     # The startup time can be longer than the default 30s so we take
     # care of it there.  Until this bug is not resolved
     # https://mariadb.atlassian.net/browse/MDEV-5540, we have to do it
