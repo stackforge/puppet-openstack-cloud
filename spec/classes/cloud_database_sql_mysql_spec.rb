@@ -94,6 +94,28 @@ describe 'cloud::database::sql::mysql' do
 
     end # configure mysqlchk http replication
 
+    context 'configure override of systemd defaults' do
+      before :each do
+        facts.merge!( :hostname => 'os-ci-test1',
+                      :osfamily => 'RedHat',
+                      :operatingsystemrelease => 7 )
+      end
+      before :each do
+        params.merge!(:mysql_systemd_limit_settings => { 'LimitNOFILE' => 666 })
+      end
+
+      it { is_expected.to contain_file('/etc/systemd/system/mysql-bootstrap.service.d/limits.conf').with_content(/[Service]/) }
+      it { is_expected.to contain_file('/etc/systemd/system/mysql-bootstrap.service.d/limits.conf').with_content(/LimitNOFILE=666/) }
+    end
+
+    context 'configure open_file_limits' do
+      before :each do
+        params.merge!(:open_file_limits => 666)
+      end
+
+      it { is_expected.to contain_file('/etc/my.cnf').with_content(/open_file_limits = 666/) }
+    end
+
     context 'configure databases on the galera master server' do
 
       before :each do
@@ -271,7 +293,8 @@ describe 'cloud::database::sql::mysql' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      { :osfamily => 'RedHat',
+        :operatingsystemrelease => 7 }
     end
 
     let :platform_params do
