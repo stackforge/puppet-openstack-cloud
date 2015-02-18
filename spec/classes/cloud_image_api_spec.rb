@@ -71,7 +71,7 @@ describe 'cloud::image::api' do
         :pipeline                 => 'keystone',
         :log_dir                  => false,
         :log_file                 => false,
-        :known_stores             => ['rbd'],
+        :known_stores             => ['rbd','http'],
       )
     end
 

@@ -106,9 +106,9 @@
 #
 # [*known_stores*]
 #   (optionnal) Tell to Glance API which backends can be used
-#   Can be 'rbd', 'file', or and 'swift'.
+#   Can be 'rbd', 'http', 'file', or and 'swift'.
 #   Should be an array.
-#   Defaults to ['rbd']
+#   Defaults to ['rbd', 'http']
 #
 # [*filesystem_store_datadir*]
 #   (optional) Full path of data directory to store the images.
@@ -157,7 +157,7 @@ class cloud::image::api(
   $log_facility                      = 'LOG_LOCAL0',
   $use_syslog                        = true,
   $backend                           = 'rbd',
-  $known_stores                      = ['rbd'],
+  $known_stores                      = ['rbd', 'http'],
   $filesystem_store_datadir          = '/var/lib/glance/images/',
   $nfs_device                        = false,
   $nfs_options                       = 'defaults',
