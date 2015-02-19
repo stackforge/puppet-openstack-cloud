@@ -136,6 +136,10 @@ This node is under the control of Puppet ${::puppetversion}.
     domain      => $site_domain
   }
 
+  # Sudo
+  include ::sudo
+  include ::sudo::configs
+
   # NTP
   include ::ntp
 
