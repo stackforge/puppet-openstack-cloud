@@ -30,7 +30,6 @@
 #   (optional) Do not use in a manifest. It is used to iterate
 #   through the list of services to be colocated with $service.
 #   Defaults to '0'
-
 define cloud::clustering::pacemaker_colocation(
   $service        = $name,
   $colocated_with = [],

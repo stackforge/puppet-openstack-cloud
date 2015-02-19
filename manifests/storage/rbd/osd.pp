@@ -36,7 +36,6 @@
 #   Should be an hash.
 #   Default to {}
 #
-
 class cloud::storage::rbd::osd (
   $public_address    = '127.0.0.1',
   $cluster_address   = '127.0.0.1',

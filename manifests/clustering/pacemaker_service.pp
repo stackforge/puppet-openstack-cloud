@@ -70,8 +70,6 @@
 #    start_after        => ["openstack-keystone"],
 #    requires           => Package['openstack-glance'],
 #  }
-
-
 define cloud::clustering::pacemaker_service (
   $service_name       = $name,
   $primitive_class    = 'systemd',
