@@ -38,6 +38,8 @@ describe 'cloud' do
       }
     end
 
+    it {is_expected.to contain_class('sudo')}
+    it {is_expected.to contain_class('sudo::configs')}
     it {is_expected.to contain_class('ntp')}
 
     it {is_expected.to contain_file('/etc/motd').with(
