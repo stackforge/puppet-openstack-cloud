@@ -58,7 +58,7 @@ namespace :module do
   end
 end
 
-puppetfile_url = ENV['PUPPETFILE'] || 'https://raw.githubusercontent.com/redhat-openstack/openstack-puppet-modules/enovance/Puppetfile'
+puppetfile_url = ENV['PUPPETFILE'] || 'https://raw.githubusercontent.com/redhat-openstack/openstack-puppet-modules/enovance-J.1.0.0/Puppetfile'
 
 Rake::Task[:spec_prep].clear
 desc 'Create the fixtures directory'
