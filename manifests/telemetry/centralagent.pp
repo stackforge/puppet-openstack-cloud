@@ -16,29 +16,11 @@
 #
 # == Class: cloud::telemetry::centralagent
 #
-# Telemetry Central Agent node (should be run once)
-# Could be managed by spof node as Active / Passive.
+# Telemetry Central Agent node
 #
-# === Parameters:
-#
-# [*enabled*]
-#   (optional) State of the telemetry central agent service.
-#   Defaults to true
-#
-# [*coordination_url*]
-#   (optional) The url to use for distributed group membership coordination.
-#   Defaults to undef
-#
-class cloud::telemetry::centralagent(
-  $enabled          = true,
-  $coordination_url = undef,
-){
+class cloud::telemetry::centralagent{
 
   include 'cloud::telemetry'
-
-  class { 'ceilometer::agent::central':
-    enabled          => $enabled,
-    coordination_url => $coordination_url,
-  }
+  include 'ceilometer::agent::central'
 
 }

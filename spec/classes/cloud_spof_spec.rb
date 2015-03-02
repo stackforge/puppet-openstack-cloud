@@ -41,19 +41,6 @@ describe 'cloud::spof' do
           :bind_address      => '10.0.0.1',
           :multicast_address => '239.1.1.2',
         )
-        is_expected.to contain_file('/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central').with(
-          :source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
-          :mode   => '0755',
-          :owner  => 'root',
-          :group  => 'root'
-        )
-        is_expected.to contain_class('cloud::telemetry::centralagent').with(:enabled => false)
-        is_expected.to contain_exec('cleanup_ceilometer_agent_central').with(
-          :command => 'crm resource cleanup ceilometer-agent-central',
-          :path    => ['/usr/sbin', '/bin'],
-          :user    => 'root',
-          :unless  => 'crm resource show ceilometer-agent-central | grep Started'
-        )
       end
     end
 
@@ -73,8 +60,6 @@ describe 'cloud::spof' do
           :settle_try_sleep => 5,
           :manage_fw        => false,
           :cluster_members  => 'srv1 srv2 srv3')
-        is_expected.to contain_pcmk_resource('openstack-ceilometer-central')
-        is_expected.to contain_class('cloud::telemetry::centralagent').with(:enabled => false)
       end
     end
 
