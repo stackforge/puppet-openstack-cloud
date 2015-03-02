@@ -38,35 +38,8 @@ describe 'cloud::telemetry::centralagent' do
         debug                      => true }"
     end
 
-    let :params do
-      { :enabled          => 'true',
-        :coordination_url => 'http://coordination' }
-    end
-
-    it 'configure ceilometer common' do
-      is_expected.to contain_class('ceilometer').with(
-          :verbose                 => true,
-          :debug                   => true,
-          :rabbit_userid           => 'ceilometer',
-          :rabbit_hosts            => ['10.0.0.1'],
-          :rabbit_password         => 'secrete',
-          :metering_secret         => 'secrete',
-          :use_syslog              => true,
-          :log_facility            => 'LOG_LOCAL0',
-          :log_dir                 => false
-        )
-      is_expected.to contain_class('ceilometer::agent::auth').with(
-          :auth_password => 'secrete',
-          :auth_url      => 'http://10.0.0.1:5000/v2.0',
-          :auth_region   => 'MyRegion',
-        )
-    end
-
     it 'configure ceilometer central agent' do
-      is_expected.to contain_class('ceilometer::agent::central').with({
-        'enabled'         => 'true',
-        'coordination_url'=> 'http://coordination',
-      })
+      is_expected.to contain_class('ceilometer::agent::central')
     end
 
   end

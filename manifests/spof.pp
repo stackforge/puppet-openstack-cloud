@@ -66,7 +66,6 @@ class cloud::spof(
     class {'pacemaker::stonith':
       disable => true
     }
-    pacemaker::resource::systemd { 'openstack-ceilometer-central': }
   } else {
 
     class { 'corosync':
@@ -88,40 +87,6 @@ class cloud::spof(
       'pe-input-series-max':      value => 1000;
       'cluster-recheck-interval': value => '5min';
     } ->
-    file { '/usr/lib/ocf/resource.d/heartbeat/ceilometer-agent-central':
-      source => 'puppet:///modules/cloud/heartbeat/ceilometer-agent-central',
-      mode   => '0755',
-      owner  => 'root',
-      group  => 'root',
-    } ->
-    cs_primitive { 'ceilometer-agent-central':
-      primitive_class => 'ocf',
-      primitive_type  => 'ceilometer-agent-central',
-      provided_by     => 'heartbeat',
-      operations      => {
-        'monitor' => {
-          interval => '10s',
-          timeout  => '30s'
-        },
-        'start'   => {
-          interval => '0',
-          timeout  => '30s',
-          on-fail  => 'restart'
-        }
-      }
-    } ->
-    exec { 'cleanup_ceilometer_agent_central':
-      command => 'crm resource cleanup ceilometer-agent-central',
-      unless  => 'crm resource show ceilometer-agent-central | grep Started',
-      user    => 'root',
-      path    => ['/usr/sbin', '/bin'],
-    }
-  }
-
-
-  # Run OpenStack SPOF service and disable them since they will be managed by Corosync.
-  class { 'cloud::telemetry::centralagent':
-    enabled => false,
   }
 
   if $::cloud::manage_firewall {
