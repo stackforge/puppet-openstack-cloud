@@ -20,7 +20,7 @@ max_heap_table_size             = 128M
 query_cache_type                = 0
 myisam_recover                  = BACKUP
 key_buffer_size                 = 16M
-open_files_limit                = 65535
+open_files_limit                = <%= @open_files_limit_real %>
 table_open_cache                = 1024
 table_definition_cache          = 500
 myisam_sort_buffer_size         = 512M
@@ -37,7 +37,7 @@ innodb_flush_log_at_trx_commit  = 1
 innodb_lock_wait_timeout        = 50
 innodb_thread_concurrency       = 48
 innodb_file_per_table           = 1
-innodb_open_files               = 65535
+innodb_open_files               = <%= @open_files_limit_real %>
 innodb_io_capacity              = 1000
 innodb_file_format              = Barracuda
 innodb_file_format_max          = Barracuda
