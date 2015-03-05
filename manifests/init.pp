@@ -62,6 +62,19 @@
 #   Example: ['module1', 'module2']
 #   Note: Those module should be in the $directory path
 #
+# [*limits*]
+#   (optional) Set of limits to set in /etc/security/limits.d/
+#   Defaults {}
+#   Example:
+#     {
+#       'mysql_nofile' => {
+#          'ensure'     => 'present',
+#          'user'       => 'mysql',
+#          'limit_type' => 'nofile',
+#          'both'       => '16384',
+#       },
+#     }
+#
 # [*manage_firewall*]
 #  (optional) Completely enable or disable firewall settings
 #  (false means disabled, and true means enabled)
@@ -96,6 +109,7 @@ class cloud(
   $selinux_directory    = '/usr/share/selinux',
   $selinux_booleans     = [],
   $selinux_modules      = [],
+  $limits               = {},
   $manage_firewall      = false,
   $firewall_rules       = {},
   $purge_firewall_rules = false,
@@ -142,6 +156,10 @@ This node is under the control of Puppet ${::puppetversion}.
 
   # NTP
   include ::ntp
+
+  # Security Limits
+  include ::limits
+  create_resources('limits::limits', $limits)
 
   # SELinux
   if $::osfamily == 'RedHat' {
