@@ -75,6 +75,19 @@
 #       },
 #     }
 #
+# [*sysctl*]
+#   (optional) Set of sysctl values to set.
+#   Defaults {}
+#   Example:
+#     {
+#       'net.ipv4.ip_forward' => {
+#          'value' => '1',
+#       },
+#       'net.ipv6.conf.all.forwarding => {
+#          'value' => '1',
+#       },
+#     }
+#
 # [*manage_firewall*]
 #  (optional) Completely enable or disable firewall settings
 #  (false means disabled, and true means enabled)
@@ -110,6 +123,7 @@ class cloud(
   $selinux_booleans     = [],
   $selinux_modules      = [],
   $limits               = {},
+  $sysctl               = {},
   $manage_firewall      = false,
   $firewall_rules       = {},
   $purge_firewall_rules = false,
@@ -160,6 +174,9 @@ This node is under the control of Puppet ${::puppetversion}.
   # Security Limits
   include ::limits
   create_resources('limits::limits', $limits)
+
+  # sysctl values
+  include ::sysctl::value
 
   # SELinux
   if $::osfamily == 'RedHat' {
