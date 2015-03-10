@@ -99,9 +99,9 @@ describe 'cloud::loadbalancer' do
     end # configure keepalived server
 
     it 'configure sysctl to allow HAproxy to bind to a non-local IP address' do
-      is_expected.to contain_exec('exec_sysctl_net.ipv4.ip_nonlocal_bind').with_command(
-        'sysctl -w net.ipv4.ip_nonlocal_bind=1'
-      )
+      is_expected.to contain_sysctl__value('net.ipv4.ip_nonlocal_bind').with({
+        :value => 1,
+      })
     end
 
     it 'do not configure an internal VRRP instance by default' do
