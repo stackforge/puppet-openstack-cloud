@@ -77,11 +77,11 @@ class cloud::selinux (
     case $mode {
       /^(disabled|permissive)$/: {
         if $current_mode == 'enforcing' {
-          exec { 'setenforce 0': }
+          exec { '/usr/sbin/setenforce 0': }
         }
       }
       'enforcing': {
-        exec { 'setenforce 1': }
+        exec { '/usr/sbin/setenforce 1': }
       }
       default: {
         fail('You must specify a mode (enforcing, permissive, or disabled)')

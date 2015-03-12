@@ -358,12 +358,12 @@ class cloud::database::sql::mysql (
       # but MariaDB is not packaged for Red Hat / CentOS 7 in MariaDB repository.
       exec { 'bootstrap-mysql':
         command => '/usr/bin/mysql_install_db --rpm --user=mysql',
-        unless  => 'test -d /var/lib/mysql/mysql',
+        unless  => '/usr/bin/test -d /var/lib/mysql/mysql',
         before  => Service['mysqld'],
         require => [Package[$mysql_server_package_name], File[$mysql_server_config_file]]
       }
 
-      if $::operatingsystemrelease >= 7 {
+      if $::operatingsystemmajrelease >= 7 {
         file { "/etc/systemd/system/${mysql_service_name}.service.d" :
           ensure => directory,
         }
