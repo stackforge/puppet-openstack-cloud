@@ -123,7 +123,7 @@ Utilization of this module can come in many forms.  It was designed to be capabl
 
 Need a feature? Found a bug? Let us know!
 
-We are extremely interested in growing a community of OpenStack experts and users around these modules so they can serve as an example of consolidated best practices of how to deploy openstack.
+We are extremely interested in growing a community of OpenStack experts and users around these modules so they can serve as an example of consolidated best practices of how to deploy OpenStack.
 
 The best way to get help with this set of modules is to email the group associated with this project:
 
