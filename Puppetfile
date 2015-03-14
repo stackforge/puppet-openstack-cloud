@@ -159,7 +159,7 @@ mod 'pacemaker',
   :ref => '56bbb3580bb7fa62bf57c2ed7a30b938e42b8cc3'
 mod 'partial',
   :git => 'git://github.com/enovance/puppet-partial.git',
-  :ref => 'd249cda70a050466275388baebcfb50d72f42704'
+  :ref => '8c70577ffce05773b5c2ce4f5925e019f7c1c3a7'
 mod 'postgresql',
   :git => 'git://github.com/enovance/puppetlabs-postgresql.git',
   :ref => '0b483a2796e77d670e326a01fce57465d2c08774'
