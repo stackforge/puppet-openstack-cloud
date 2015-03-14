@@ -144,7 +144,7 @@ Issues should be opened here:
 
 ## Contributors
 
-* https://github.com/enovance/puppet-openstack-cloud/graphs/contributors
+* http://stackalytics.com/?project_type=stackforge&module=puppet-openstack-cloud&release=all&metric=commits
 
 ## Release Notes
 
