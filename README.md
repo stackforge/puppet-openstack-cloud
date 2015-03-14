@@ -34,21 +34,29 @@ The [puppet-openstack-cloud](https://wiki.openstack.org/wiki/Puppet-openstack/pu
 Cinder, Glance and Nova can use Ceph as backend storage, using [puppet-ceph](https://github.com/enovance/puppet-ceph).
 
 Only KVM and QEMU are supported as hypervisors, for now.
+
 Neutron use ML2 plugin with GRE and Open-vSwitch drivers.
+
 Cinder has multi-backend support:
+
 * RBD (default)
 * NetAPP
 * iSCSI
 * EMC VNX direct
 * NFS
+
 Glance supports different backends:
+
 * RBD (default)
 * file
 * NFS (mount a NFS share by using file backend)
 * Swift
+
 Neutron supports:
+
 * ML2 plugin with OVS agent (GRE + VXLAN supported)
 * Cisco plugin with N1KV agent (non-ML2)
+
 Trove support is now experimental.
 
 [Puppet Modules](http://docs.puppetlabs.com/learning/modules1.html#modules) are a collection of related contents that can be used to model the configuration of a discrete service.
