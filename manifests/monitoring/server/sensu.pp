@@ -47,7 +47,7 @@
 # [*manage_sensu_plugins*]
 #   (optionnal) A boolean that determines if the Sensu plugins resources should be exported
 #   from this node
-#   Defaults to 'true'
+#   Defaults to 'false'
 #
 # [*sensu_api_ip*]
 #   (optionnal) IP address to bind the sensu_api to
@@ -74,7 +74,7 @@ class cloud::monitoring::server::sensu (
   $checks                    = {},
   $handlers                  = {},
   $plugins                   = {},
-  $manage_sensu_plugins      = true,
+  $manage_sensu_plugins      = false,
   $sensu_api_ip              = $::ipaddress,
   $sensu_api_port            = '4568',
   $uchiwa_ip                 = $::ipaddress,
