@@ -41,7 +41,7 @@
 #   Defaults to '127.0.0.1'
 #
 # [*servername*]
-#   (optional) DNS name used to connect to Openstack Dashboard.
+#   (optional) DNS name used to connect to OpenStack Dashboard.
 #   Default value fqdn.
 #
 # [*listen_ssl*]

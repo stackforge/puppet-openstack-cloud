@@ -259,7 +259,7 @@ describe 'cloud::loadbalancer' do
       )}
     end # configure monitor haproxy listen
 
-    context 'configure Openstack Nova with novnc' do
+    context 'configure OpenStack Nova with novnc' do
       it { is_expected.to contain_haproxy__listen('novnc_cluster').with(
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '6080',

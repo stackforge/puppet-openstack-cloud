@@ -2,7 +2,7 @@
   "name": "eNovance-cloud",
   "version": "2.2.0",
   "author": "eNovance",
-  "summary": "eNovance Openstack Module",
+  "summary": "eNovance OpenStack Module",
   "license": "Apache-2.0",
   "source": "https://github.com/stackforge/puppet-openstack-cloud",
   "project_page": "https://wiki.openstack.org/wiki/Puppet-openstack/puppet-openstack-cloud",
@@ -17,7 +17,7 @@
     {"name": "pe","version_requirement": "3.x"},
     {"name": "puppet","version_requirement": "3.x"}
   ],
-  "description": "Puppet module that pulls together all the individual components of Openstack, resulting is a complete and functional stack",
+  "description": "Puppet module that pulls together all the individual components of OpenStack, resulting is a complete and functional stack",
   "dependencies": [
     {"name":"stackforge/glance","version_requirement":">=5.0.0 <6.0.0"},
     {"name":"stackforge/horizon","version_requirement":">=5.0.0 <6.0.0"},
