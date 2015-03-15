@@ -15,8 +15,7 @@
 #
 # == Class: cloud::network::metadata
 #
-# Network Metadata node (need to be run once)
-# Could be managed by spof_node manifest
+# Network Metadata node
 #
 # === Parameters:
 #
