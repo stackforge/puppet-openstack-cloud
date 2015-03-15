@@ -84,8 +84,7 @@ class cloud::monitoring::server::sensu (
 
   include cloud::params
 
-  Service['sensu-api'] -> Service['uchiwa']
-  Service['sensu-server'] -> Service['uchiwa']
+  Service['sensu-server'] -> Service['sensu-api'] -> Service['uchiwa']
   Service['sensu-server'] -> Sensu::Plugin <<| |>>
 
   include cloud::monitoring::agent::sensu
