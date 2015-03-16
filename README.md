@@ -139,7 +139,7 @@ The best way to get help with this set of modules is to email the group associat
 
 Issues should be opened here:
 
-  https://github.com/enovance/puppet-openstack-cloud/issues
+  https://bugs.launchpad.net/puppet-openstack-cloud/+filebug
 
 
 ## Contributors
@@ -148,4 +148,4 @@ Issues should be opened here:
 
 ## Release Notes
 
-See [CHANGELOG](https://github.com/enovance/puppet-openstack-cloud/blob/master/CHANGELOG.md) file.
+See [CHANGELOG](https://github.com/stackforge/puppet-openstack-cloud/blob/master/CHANGELOG.md) file.
