@@ -15,8 +15,7 @@
 #
 # == Class: cloud::orchestration::engine
 #
-# Orchestration engine node (should be run once)
-# Could be managed by spof node as Active / Passive.
+# Orchestration engine node
 #
 # === Parameters:
 #
