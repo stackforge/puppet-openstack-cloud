@@ -1,0 +1,10 @@
+Verified+2: Jenkins
+Code-Review+2: Emilien Macchi <emilien@redhat.com>
+Code-Review+2: Martin Mágr <mmagr@redhat.com>
+Workflow+1: Martin Mágr <mmagr@redhat.com>
+Code-Review+1: Javier Peña <jpena@redhat.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 17 Mar 2015 13:02:29 +0000
+Reviewed-on: https://review.openstack.org/149827
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/master
