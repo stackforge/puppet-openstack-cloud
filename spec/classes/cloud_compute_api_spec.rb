@@ -121,12 +121,32 @@ describe 'cloud::compute::api' do
           :api_bind_address                     => '127.0.0.1',
           :metadata_listen                      => '127.0.0.1',
           :neutron_metadata_proxy_shared_secret => 'metadatapassword',
-          :osapi_v3                             => true
+          :osapi_v3                             => true,
+          :manage_service                       => true,
         )
     end
 
     it 'configure a crontab that move deleted instance rows to another database table' do
       is_expected.to contain_class('nova::cron::archive_deleted_rows')
+    end
+
+    context 'when pacemaker manages nova-api' do
+      before :each do
+        params.merge!( :pacemaker_enabled => true )
+      end
+      it 'configure nova-api without managing the service' do
+        is_expected.to contain_class('nova::api').with(
+            :manage_service => true,
+          )
+      end
+      it 'should create a Pacemaker service for nova-api' do
+        should contain_openstack_extras__pacemaker__service(platform_params[:api_service_name]).with(
+          {
+            'ensure'          => :present,
+            'primitive_class' => platform_params[:service_provider],
+          }
+        )
+      end
     end
 
     context 'with default firewall enabled' do
@@ -185,7 +205,14 @@ describe 'cloud::compute::api' do
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      { :osfamily        => 'Debian',
+        :operatingsystem => 'Debian' }
+    end
+
+    let :platform_params do
+      { :service_provider => 'lsb',
+        :api_service_name => 'nova-api',
+      }
     end
 
     it_configures 'openstack compute api'
@@ -195,6 +222,13 @@ describe 'cloud::compute::api' do
     let :facts do
       { :osfamily => 'RedHat' }
     end
+
+    let :platform_params do
+      { :service_provider => 'systemd',
+        :api_service_name => 'openstack-nova-api',
+      }
+    end
+
     it_configures 'openstack compute api'
   end
 
