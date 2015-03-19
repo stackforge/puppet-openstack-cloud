@@ -57,7 +57,7 @@ mod 'trove',
 # Dependency
 mod 'apache',
   :git => 'git://github.com/enovance/puppetlabs-apache.git',
-  :ref => '173967ab8dd21a93d6f2b47ff2641d0092f729b1'
+  :ref => 'e4ec6d4985fdb23e26c809e0d5786823d0689f90'
 mod 'apt',
   :git => 'git://github.com/enovance/puppetlabs-apt.git',
   :ref => '9b001af8775c7231ea2656b7eb43d6141b536f49'
