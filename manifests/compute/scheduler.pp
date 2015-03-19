@@ -23,8 +23,23 @@
 #   (optional) A comma separated list of filters to be used by default
 #   Defaults to false
 #
+# [*ram_allocation_ratio*]
+#   (optional) Virtual ram to physical ram allocation ratio.
+#   Defaults to '1.5' (floating point value)
+#
+# [*cpu_allocation_ratio*]
+#   (optional) Virtual CPU to physical CPU allocation ratio.
+#   Defaults to '16.0' (floating point value)
+#
+# [*disk_allocation_ratio*]
+#   (optional) Virtual disk to physical disk allocation ratio.
+#   Defaults to '1.0' (floating point value)
+#
 class cloud::compute::scheduler(
-  $scheduler_default_filters = false
+  $scheduler_default_filters = false,
+  $ram_allocation_ratio      = '1.5',
+  $cpu_allocation_ratio      = '16.0',
+  $disk_allocation_ratio     = '1.0'
 ){
 
   include 'cloud::compute'
@@ -35,6 +50,9 @@ class cloud::compute::scheduler(
 
   class { 'nova::scheduler::filter':
     scheduler_default_filters => $scheduler_default_filters,
+    ram_allocation_ratio      => $ram_allocation_ratio,
+    cpu_allocation_ratio      => $cpu_allocation_ratio,
+    disk_allocation_ratio     => $disk_allocation_ratio
   }
 
 }
