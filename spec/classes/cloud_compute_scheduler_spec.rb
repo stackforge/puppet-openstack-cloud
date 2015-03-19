@@ -45,7 +45,10 @@ describe 'cloud::compute::scheduler' do
 
     let :params do
       {
-        :scheduler_default_filters => false
+        :scheduler_default_filters => false,
+        :ram_allocation_ratio => '1.5',
+        :cpu_allocation_ratio => '16.0',
+        :disk_allocation_ratio => '1.0'
       }
     end
 
@@ -96,12 +99,15 @@ describe 'cloud::compute::scheduler' do
     context 'openstack compute scheduler with nova-scheduler filters' do
       before do
         params.merge!(
-          :scheduler_default_filters => ['RamFilter', 'ComputeFilter']
+          :scheduler_default_filters => ['RamFilter', 'CoreFilter', 'DiskFilter', 'ComputeFilter']
         )
       end
-      it { is_expected.to contain_nova_config('DEFAULT/scheduler_default_filters').with(
-        'value' => "RamFilter,ComputeFilter"
-      )}
+      it {
+      is_expected.to contain_nova_config('DEFAULT/scheduler_default_filters').with('value' => "RamFilter,CoreFilter,DiskFilter,ComputeFilter")
+      is_expected.to contain_nova_config('DEFAULT/ram_allocation_ratio').with_value('1.5')
+      is_expected.to contain_nova_config('DEFAULT/cpu_allocation_ratio').with_value('16.0')
+      is_expected.to contain_nova_config('DEFAULT/disk_allocation_ratio').with_value('1.0')
+      }
     end
 
   end
