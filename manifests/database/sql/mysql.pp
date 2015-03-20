@@ -346,10 +346,11 @@ class cloud::database::sql::mysql (
       $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
 
       file { $dirs:
-        ensure => directory,
-        mode   => '0750',
-        before => Service['mysqld'],
-        owner  => 'mysql'
+        ensure  => directory,
+        mode    => '0750',
+        before  => Service['mysqld'],
+        owner   => 'mysql',
+        require => Package[$mysql_server_package_name]
       }
 
       # In Red Hat, the package does not perform the mysql db installation.
