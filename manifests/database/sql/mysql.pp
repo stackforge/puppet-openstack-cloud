@@ -363,7 +363,7 @@ class cloud::database::sql::mysql (
         require => [Package[$mysql_server_package_name], File[$mysql_server_config_file]]
       }
 
-      if $::operatingsystemrelease >= 7 {
+      if $::operatingsystemmajrelease >= 7 {
         file { "/etc/systemd/system/${mysql_service_name}.service.d" :
           ensure => directory,
         }
