@@ -295,24 +295,10 @@ class cloud::database::sql::mysql (
     }
 
     # Monitoring DB
-    mysql_database { 'monitoring':
-      ensure  => 'present',
-      charset => 'utf8',
-      collate => 'utf8_unicode_ci',
-      require => File['/root/.my.cnf']
-    }
-    mysql_user { "${galera_clustercheck_dbuser}@localhost":
-      ensure        => 'present',
-      # can not change password in clustercheck script
+    ::openstacklib::db::mysql { 'monitoring':
+      user          => $galera_clustercheck_dbuser,
       password_hash => mysql_password($galera_clustercheck_dbpassword),
-      require       => File['/root/.my.cnf']
-    }
-    mysql_grant { "${galera_clustercheck_dbuser}@localhost/monitoring":
-      ensure     => 'present',
-      options    => ['GRANT'],
-      privileges => ['ALL'],
-      table      => 'monitoring.*',
-      user       => "${galera_clustercheck_dbuser}@localhost",
+      allowed_hosts => ['127.0.0.1']
     }
 
     Database_user<<| |>>
