@@ -225,3 +225,6 @@ mod 'openstack_extras',
 mod 'staging',
   :git => 'git://github.com/enovance/puppet-staging.git',
   :ref => 'bc434a71e19aae54223d57c274e2e1a7f9546d5e'
+mod 'motd',
+  :git => 'git://github.com/puppetlabs/puppetlabs-motd.git',
+  :tag => '1.2.0'

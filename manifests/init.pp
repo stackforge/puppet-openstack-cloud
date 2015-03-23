@@ -137,25 +137,8 @@ class cloud(
     fail("OS family unsuppored yet (${::osfamily}), module puppet-openstack-cloud only support RedHat or Debian")
   }
 
-  # motd
-  file
-  {
-    '/etc/motd':
-      ensure  => file,
-      mode    => '0644',
-      content => "
-############################################################################
-# ${motd_title} #
-############################################################################
-#                                                                          #
-#                         *** RESTRICTED ACCESS ***                        #
-#  Only the authorized users may access this system.                       #
-#  Any attempted unauthorized access or any action affecting this computer #
-#  system is punishable by the law of local country.                       #
-#                                                                          #
-############################################################################
-This node is under the control of Puppet ${::puppetversion}.
-";
+  class { 'motd':
+    template => 'cloud/motd/motd.erb'
   }
 
   # DNS
