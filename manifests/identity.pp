@@ -709,6 +709,22 @@ class cloud::identity (
   # Purge expored tokens every days at midnight
   class { 'keystone::cron::token_flush': }
 
+  case $::osfamily {
+    'RedHat': {
+      $mysql_client_package_name = 'mariadb'
+    }
+    'Debian': {
+      $mysql_client_package_name = 'mariadb-client'
+    }
+    default: {
+      err "${::osfamily} not supported yet"
+    }
+  }
+
+  package { $mysql_client_package_name:
+    ensure => "installed"
+  }
+
   # Note(EmilienM):
   # We check if DB tables are created, if not we populate Keystone DB.
   # It's a hack to fit with our setup where we run MySQL/Galera
@@ -719,7 +735,8 @@ class cloud::identity (
     command => 'keystone-manage db_sync',
     path    => '/usr/bin',
     user    => 'keystone',
-    unless  => "/usr/bin/mysql keystone -h ${keystone_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables"
+    unless  => "/usr/bin/mysql keystone -h ${keystone_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables",
+    require => Package[$mysql_client_package_name]
   }
 
   if $::cloud::manage_firewall {
