@@ -159,7 +159,7 @@
 #
 # [*galera_clustercheck_dbuser*]
 #   (optional) The MySQL username for Galera cluster check (using monitoring database)
-#   Defaults to 'clustercheckdbuser'
+#   Defaults to 'clustercheck'
 #
 # [*galera_clustercheck_dbpassword*]
 #   (optional) The MySQL password for Galera cluster check
@@ -218,7 +218,7 @@ class cloud::database::sql::mysql (
     $trove_db_allowed_hosts          = ['127.0.0.1'],
     $mysql_root_password             = 'rootpassword',
     $mysql_sys_maint_password        = 'sys_maint',
-    $galera_clustercheck_dbuser      = 'clustercheckdbuser',
+    $galera_clustercheck_dbuser      = 'clustercheck',
     $galera_clustercheck_dbpassword  = 'clustercheckpassword',
     $galera_clustercheck_ipaddress   = '127.0.0.1',
     $open_files_limit                = 65535,

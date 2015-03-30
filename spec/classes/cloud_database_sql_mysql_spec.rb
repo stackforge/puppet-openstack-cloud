@@ -62,7 +62,7 @@ describe 'cloud::database::sql::mysql' do
         :trove_db_allowed_hosts         => ['10.0.0.1','10.0.0.2','10.0.0.3'],
         :mysql_root_password            => 'secrete',
         :mysql_sys_maint_password       => 'sys',
-        :galera_clustercheck_dbuser     => 'clustercheckuser',
+        :galera_clustercheck_dbuser     => 'clustercheck',
         :galera_clustercheck_dbpassword => 'clustercheckpassword!',
         :galera_clustercheck_ipaddress  => '10.0.0.1'
       }
