@@ -42,6 +42,16 @@
 #   Should be an array.
 #   Defaults to false (disabled)
 #
+# [*keepalived_public_id*]
+#   (optional) used for the keepalived public virtual_router_id.
+#   Should be numeric.
+#   Defaults to '1'
+#
+# [*keepalived_internal_id*]
+#   (optional) used for the keepalived internal virtual_router_id.
+#   Should be numeric.
+#   Defaults to '2'
+#
 # [*keepalived_auth_type*]
 #   (optional) Authentication method.
 #   Supported methods are simple Passwd (PASS) or IPSEC AH (AH).
@@ -527,8 +537,10 @@ class cloud::loadbalancer(
   $keepalived_vrrp_interface        = false,
   $keepalived_public_interface      = 'eth0',
   $keepalived_public_ipvs           = ['127.0.0.1'],
+  $keepalived_public_id             = '1',
   $keepalived_internal_interface    = 'eth1',
   $keepalived_internal_ipvs         = false,
+  $keepalived_internal_id           = '2',
   $keepalived_auth_type             = false,
   $keepalived_auth_pass             = false,
   $ceilometer_bind_options          = [],
@@ -620,7 +632,7 @@ class cloud::loadbalancer(
     script          => $::cloud::params::keepalived_vrrp_script,
   }
 
-  keepalived::instance { '1':
+  keepalived::instance { $keepalived_public_id:
     interface     => $keepalived_vrrp_interface_real,
     virtual_ips   => unique(split(join(flatten([$keepalived_public_ipvs, ['']]), " dev ${keepalived_public_interface},"), ',')),
     state         => $keepalived_state,
@@ -642,7 +654,7 @@ class cloud::loadbalancer(
       } else {
         $keepalived_vrrp_interface_internal = $keepalived_vrrp_interface
       }
-      keepalived::instance { '2':
+      keepalived::instance { $keepalived_internal_id:
         interface     => $keepalived_vrrp_interface_internal,
         virtual_ips   => unique(split(join(flatten([$keepalived_internal_ipvs, ['']]), " dev ${keepalived_internal_interface},"), ',')),
         state         => $keepalived_state,
