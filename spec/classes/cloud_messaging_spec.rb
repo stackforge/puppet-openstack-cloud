@@ -90,6 +90,22 @@ describe 'cloud::messaging' do
         )
       end
     end
+
+    context 'with HAproxy binding' do
+      before :each do
+        params.merge!( :haproxy_binding => true)
+      end
+
+      it 'configure ha-all rabbitmq_policy' do
+       is_expected.to contain_rabbit_policy('ha-all').with(
+         :pattern    => '^ha\.',
+         :definition => {
+           'ha-mode' => 'all'
+         },
+       )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

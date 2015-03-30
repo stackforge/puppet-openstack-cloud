@@ -140,6 +140,13 @@ class cloud::messaging(
   }
 
   if $haproxy_binding {
+    rabbitmq_policy { 'ha-all':
+      pattern    => '^ha\.',
+      definition => {
+        'ha-mode' => 'all'
+      },
+    }
+
     @@haproxy::balancermember{"${::fqdn}-rabbitmq":
       listening_service => 'rabbitmq_cluster',
       server_names      => $::hostname,
