@@ -29,6 +29,7 @@ describe 'cloud::messaging' do
         :rabbit_password   => 'secrete',
         :erlang_cookie     => 'MY_COOKIE',
         :rabbitmq_ip       => '10.0.0.1',
+        :haproxy_binding   => false,
       }
     end
 
@@ -90,6 +91,43 @@ describe 'cloud::messaging' do
         )
       end
     end
+
+    context 'with HAproxy binding and HA policy to exactly' do
+      before :each do
+        params.merge!(
+          :haproxy_binding => true,
+          :cluster_count   => 3,
+        )
+      end
+
+      it 'configure ha-exactly rabbitmq_policy' do
+       is_expected.to contain_rabbitmq_policy('ha-exactly-3@/').with(
+         :pattern    => '^(?!amq\.).*',
+         :definition => {
+           'ha-mode'   => 'exactly',
+           'ha-params' => 3,
+         },
+       )
+      end
+    end
+
+    context 'with HAproxy binding and HA policy to all' do
+      before :each do
+        params.merge!(
+          :haproxy_binding => true,
+        )
+      end
+
+      it 'configure ha-exactly rabbitmq_policy' do
+       is_expected.to contain_rabbitmq_policy('ha-all@/').with(
+         :pattern    => '^(?!amq\.).*',
+         :definition => {
+           'ha-mode'   => 'all',
+         },
+       )
+      end
+    end
+
   end
 
   context 'on Debian platforms' do
