@@ -32,6 +32,17 @@
 #   Could be set to 'disk' or 'ram'.
 #   Defaults to 'disc'
 #
+# [*cluster_count*]
+#   (optional) Queue is mirrored to count nodes in the cluster.
+#   If there are less than count nodes in the cluster, the queue
+#   is mirrored to all nodes. If there are more than count nodes
+#   in the cluster, and a node containing a mirror goes down,
+#   then a new mirror will be created on another node.
+#   If a value is set, RabbitMQ policy will be 'exactly'.
+#   Otherwise, undef will set the policy to 'all' by default.
+#   To enable this feature, you need 'haproxy_binding' to true.
+#   Defaults to undef
+#
 # [*haproxy_binding*]
 #   (optional) Enable or not HAproxy binding for load-balancing.
 #   Defaults to false
@@ -58,6 +69,7 @@
 class cloud::messaging(
   $erlang_cookie,
   $cluster_node_type = 'disc',
+  $cluster_count     = undef,
   $rabbit_names      = $::hostname,
   $rabbit_password   = 'rabbitpassword',
   $haproxy_binding   = false,
@@ -140,6 +152,24 @@ class cloud::messaging(
   }
 
   if $haproxy_binding {
+
+    if $cluster_count {
+      $policy_name = "ha-exactly-${cluster_count}@/"
+      $definition = {
+        'ha-mode'   => 'exactly',
+        'ha-params' => $cluster_count,
+      }
+    } else {
+      $policy_name = 'ha-all@/'
+      $definition = {
+        'ha-mode' => 'all',
+      }
+    }
+    rabbitmq_policy { $policy_name:
+      pattern    => '^(?!amq\.).*',
+      definition => $definition,
+    }
+
     @@haproxy::balancermember{"${::fqdn}-rabbitmq":
       listening_service => 'rabbitmq_cluster',
       server_names      => $::hostname,
