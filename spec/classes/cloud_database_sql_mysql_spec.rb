@@ -98,7 +98,7 @@ describe 'cloud::database::sql::mysql' do
       before :each do
         facts.merge!( :hostname => 'os-ci-test1',
                       :osfamily => 'RedHat',
-                      :operatingsystemrelease => 7 )
+                      :operatingsystemmajrelease => 7 )
       end
       before :each do
         params.merge!(:mysql_systemd_override_settings => { 'LimitNOFILE' => 666 })
@@ -113,7 +113,7 @@ describe 'cloud::database::sql::mysql' do
       before :each do
         facts.merge!( :hostname => 'os-ci-test1',
                       :osfamily => 'RedHat',
-                      :operatingsystemrelease => 7 )
+                      :operatingsystemmajrelease => 7 )
       end
       before :each do
         params.merge!(:open_files_limit => 666)
@@ -300,7 +300,7 @@ describe 'cloud::database::sql::mysql' do
   context 'on RedHat platforms' do
     let :facts do
       { :osfamily => 'RedHat',
-        :operatingsystemrelease => 7 }
+        :operatingsystemmajrelease => 7 }
     end
 
     let :platform_params do
