@@ -172,7 +172,7 @@ mod 'puppetdbquery',
 # TODO(emilienM) https://tickets.puppetlabs.com/browse/PDB-1223
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
-  :ref => 'b1bd3cf9052fe78c47f66b500418c84d130cdead'
+  :ref => '7d3a3a1859d344c4e49d4c257c4ea0b9b0460c33'
 mod 'redis',
   :git => 'git://github.com/arioch/puppet-redis.git',
   :ref => '51e35cc9a743dd8f992effae25d92e18aafe8b46'
