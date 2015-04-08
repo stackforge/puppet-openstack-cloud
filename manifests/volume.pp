@@ -32,6 +32,10 @@
 #   (optional) Cinder database password
 #   Defaults to 'cinderpassword'
 #
+# [*cinder_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+#
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
 #   Defaults to ['127.0.0.1:5672']
@@ -68,6 +72,7 @@ class cloud::volume(
   $cinder_db_host             = '127.0.0.1',
   $cinder_db_user             = 'cinder',
   $cinder_db_password         = 'cinderpassword',
+  $cinder_db_idle_timeout     = 5000,
   $rabbit_hosts               = ['127.0.0.1:5672'],
   $rabbit_password            = 'rabbitpassword',
   $verbose                    = true,
@@ -96,7 +101,8 @@ class cloud::volume(
 
 
   class { 'cinder':
-    sql_connection            => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
+    database_connection       => "mysql://${encoded_user}:${encoded_password}@${cinder_db_host}/cinder?charset=utf8",
+    database_idle_timeout     => $cinder_db_idle_timeout,
     mysql_module              => '2.2',
     rabbit_userid             => 'cinder',
     rabbit_hosts              => $rabbit_hosts,

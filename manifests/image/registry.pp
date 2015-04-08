@@ -31,6 +31,10 @@
 #   (optional) Password to connect to glance database
 #   Defaults to 'glancepassword'
 #
+# [*glance_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults 5000
+#
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Defaults to '127.0.0.1'
@@ -80,6 +84,7 @@ class cloud::image::registry(
   $glance_db_host                   = '127.0.0.1',
   $glance_db_user                   = 'glance',
   $glance_db_password               = 'glancepassword',
+  $glance_db_idle_timeout           = 5000,
   $ks_keystone_internal_host        = '127.0.0.1',
   $ks_keystone_internal_proto       = 'http',
   $ks_glance_internal_host          = '127.0.0.1',
@@ -114,21 +119,22 @@ class cloud::image::registry(
   $encoded_glance_password = uriescape($glance_db_password)
 
   class { 'glance::registry':
-    database_connection => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
-    mysql_module        => '2.2',
-    verbose             => $verbose,
-    debug               => $debug,
-    auth_host           => $ks_keystone_internal_host,
-    auth_protocol       => $ks_keystone_internal_proto,
-    keystone_password   => $ks_glance_password,
-    keystone_tenant     => 'services',
-    keystone_user       => 'glance',
-    bind_host           => $api_eth,
-    log_dir             => $log_dir,
-    log_file            => $log_file_registry,
-    bind_port           => $ks_glance_registry_internal_port,
-    use_syslog          => $use_syslog,
-    log_facility        => $log_facility,
+    database_connection   => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    database_idle_timeout => $glance_db_idle_timeout,
+    mysql_module          => '2.2',
+    verbose               => $verbose,
+    debug                 => $debug,
+    auth_host             => $ks_keystone_internal_host,
+    auth_protocol         => $ks_keystone_internal_proto,
+    keystone_password     => $ks_glance_password,
+    keystone_tenant       => 'services',
+    keystone_user         => 'glance',
+    bind_host             => $api_eth,
+    log_dir               => $log_dir,
+    log_file              => $log_file_registry,
+    bind_port             => $ks_glance_registry_internal_port,
+    use_syslog            => $use_syslog,
+    log_facility          => $log_facility,
   }
 
   glance_registry_config {

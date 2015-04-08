@@ -31,6 +31,10 @@
 #   (optional) Password to connect to glance database
 #   Defaults to 'glancepassword'
 #
+# [*glance_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+
 # [*ks_keystone_internal_host*]
 #   (optional) Internal Hostname or IP to connect to Keystone API
 #   Defaults to '127.0.0.1'
@@ -139,6 +143,7 @@ class cloud::image::api(
   $glance_db_host                    = '127.0.0.1',
   $glance_db_user                    = 'glance',
   $glance_db_password                = 'glancepassword',
+  $glance_db_idle_timeout            = 5000,
   $ks_keystone_internal_host         = '127.0.0.1',
   $ks_keystone_internal_proto        = 'http',
   $ks_glance_internal_host           = '127.0.0.1',
@@ -187,6 +192,7 @@ class cloud::image::api(
 
   class { 'glance::api':
     database_connection      => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    database_idle_timeout    => $glance_db_idle_timeout,
     mysql_module             => '2.2',
     registry_host            => $openstack_vip,
     registry_port            => $ks_glance_registry_internal_port,

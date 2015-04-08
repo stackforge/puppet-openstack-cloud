@@ -27,6 +27,7 @@ describe 'cloud::volume::storage' do
         cinder_db_host             => '10.0.0.1',
         cinder_db_user             => 'cinder',
         cinder_db_password         => 'secret',
+        cinder_db_idle_timeout     => 5000,
         rabbit_hosts               => ['10.0.0.1'],
         rabbit_password            => 'secret',
         verbose                    => true,
@@ -104,15 +105,17 @@ describe 'cloud::volume::storage' do
 
     it 'configure cinder common' do
       is_expected.to contain_class('cinder').with(
-          :verbose                   => true,
-          :debug                     => true,
+          :database_connection       => 'mysql://cinder:secret@10.0.0.1/cinder?charset=utf8',
+          :database_idle_timeout     => '5000',
           :rabbit_userid             => 'cinder',
           :rabbit_hosts              => ['10.0.0.1'],
           :rabbit_password           => 'secret',
           :rabbit_virtual_host       => '/',
+          :verbose                   => true,
+          :debug                     => true,
           :log_facility              => 'LOG_LOCAL0',
-          :use_syslog                => true,
           :log_dir                   => false,
+          :use_syslog                => true,
           :storage_availability_zone => 'nova'
         )
 

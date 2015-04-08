@@ -65,35 +65,36 @@ describe 'cloud::compute::hypervisor' do
     end
 
     let :params do
-      { :libvirt_type                         => 'kvm',
-        :server_proxyclient_address           => '7.0.0.1',
-        :spice_port                           => '6082',
-        :nova_ssh_private_key                 => 'secrete',
-        :nova_ssh_public_key                  => 'public',
-        :ks_nova_public_proto                 => 'http',
-        :ks_console_public_proto              => 'https',
-        :ks_console_public_host               => '10.0.0.2',
-        :vm_rbd                               => false,
-        :volume_rbd                           => false,
-        :nova_shell                           => false,
-        :ks_nova_public_host                  => '10.0.0.1' }
+      { :libvirt_type               => 'kvm',
+        :server_proxyclient_address => '7.0.0.1',
+        :spice_port                 => '6082',
+        :nova_ssh_private_key       => 'secrete',
+        :nova_ssh_public_key        => 'public',
+        :ks_nova_public_proto       => 'http',
+        :ks_console_public_proto    => 'https',
+        :ks_console_public_host     => '10.0.0.2',
+        :vm_rbd                     => false,
+        :volume_rbd                 => false,
+        :nova_shell                 => false,
+        :ks_nova_public_host        => '10.0.0.1' }
     end
 
     it 'configure nova common' do
       is_expected.to contain_class('nova').with(
-          :verbose                 => true,
-          :debug                   => true,
-          :use_syslog              => true,
-          :log_facility            => 'LOG_LOCAL0',
-          :rabbit_userid           => 'nova',
-          :rabbit_hosts            => ['10.0.0.1'],
-          :rabbit_password         => 'secrete',
-          :rabbit_virtual_host     => '/',
-          :memcached_servers       => ['10.0.0.1','10.0.0.2'],
-          :database_connection     => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
-          :glance_api_servers      => 'http://10.0.0.1:9292',
-          :log_dir                 => false,
-          :nova_shell              => '/bin/bash'
+          :verbose               => true,
+          :debug                 => true,
+          :use_syslog            => true,
+          :log_facility          => 'LOG_LOCAL0',
+          :rabbit_userid         => 'nova',
+          :rabbit_hosts          => ['10.0.0.1'],
+          :rabbit_password       => 'secrete',
+          :rabbit_virtual_host   => '/',
+          :memcached_servers     => ['10.0.0.1','10.0.0.2'],
+          :database_connection   => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
+          :database_idle_timeout => '5000',
+          :glance_api_servers    => 'http://10.0.0.1:9292',
+          :log_dir               => false,
+          :nova_shell            => '/bin/bash'
         )
       is_expected.to contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
