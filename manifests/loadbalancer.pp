@@ -478,6 +478,13 @@
 #   (optional) Port of redis service.
 #   Defaults to '6379'
 #
+# [*galera_timeout*]
+#   (optional) Timeout for galera connections
+#   Defaults to '90m'.
+#   Note: when changing this parameter you should also change the
+#         *_db_idle_timeout for all services to be a little less
+#         than this timeout.
+#
 # [*vip_public_ip*]
 #  (optional) Array or string for public VIP
 #  Should be part of keepalived_public_ips
@@ -594,6 +601,7 @@ class cloud::loadbalancer(
   $sensu_dashboard_port             = 3000,
   $sensu_api_port                   = 4568,
   $redis_port                       = 6379,
+  $galera_timeout                   = '90m',
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
   $vip_monitor_ip                   = false,
@@ -945,8 +953,8 @@ class cloud::loadbalancer(
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
-      'timeout client' => '400s',
-      'timeout server' => '400s',
+      'timeout client' => $galera_timeout,
+      'timeout server' => $galera_timeout,
     },
     bind_options => $galera_bind_options,
   }
@@ -968,8 +976,8 @@ class cloud::loadbalancer(
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
         'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
-        'timeout client' => '400s',
-        'timeout server' => '400s',
+        'timeout client' => $galera_timeout,
+        'timeout server' => $galera_timeout,
       },
       bind_options => $galera_bind_options,
     }

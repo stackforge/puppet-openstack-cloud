@@ -29,6 +29,10 @@
 #   (optional) Password that will be used for the neutron db user.
 #   Defaults to 'neutronpassword'
 #
+# [*neutron_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+#
 # [*ks_neutron_password*]
 #   (optional) Password used by Neutron to connect to Keystone API
 #   Defaults to 'neutronpassword'
@@ -56,7 +60,6 @@
 # [*ks_admin_tenant*]
 #   (optional) Admin tenant name in Keystone
 #   Defaults to 'admin'
-#
 #
 # [*nova_url*]
 #   (optional) URL for connection to nova (Only supports one nova region
@@ -160,6 +163,7 @@ class cloud::network::controller(
   $neutron_db_host         = '127.0.0.1',
   $neutron_db_user         = 'neutron',
   $neutron_db_password     = 'neutronpassword',
+  $neutron_db_idle_timeout = 5000,
   $ks_neutron_password     = 'neutronpassword',
   $ks_keystone_admin_host  = '127.0.0.1',
   $ks_keystone_admin_proto = 'http',
@@ -207,16 +211,17 @@ class cloud::network::controller(
   }
 
   class { 'neutron::server':
-    auth_password       => $ks_neutron_password,
-    auth_host           => $ks_keystone_admin_host,
-    auth_protocol       => $ks_keystone_admin_proto,
-    auth_port           => $ks_keystone_public_port,
-    database_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    mysql_module        => '2.2',
-    api_workers         => $::processorcount,
-    agent_down_time     => '60',
-    l3_ha               => $l3_ha,
-    router_distributed  => $router_distributed,
+    auth_password         => $ks_neutron_password,
+    auth_host             => $ks_keystone_admin_host,
+    auth_protocol         => $ks_keystone_admin_proto,
+    auth_port             => $ks_keystone_public_port,
+    database_connection   => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    database_idle_timeout => $neutron_db_idle_timeout,
+    mysql_module          => '2.2',
+    api_workers           => $::processorcount,
+    agent_down_time       => '60',
+    l3_ha                 => $l3_ha,
+    router_distributed    => $router_distributed,
   }
 
   case $plugin {

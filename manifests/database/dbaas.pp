@@ -31,6 +31,10 @@
 #   (optional) Password to connect to trove database
 #   Defaults to 'trovepassword'
 #
+# [*trove_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+#
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
 #   Defaults to ['127.0.0.1:5672']
@@ -55,6 +59,7 @@ class cloud::database::dbaas(
   $trove_db_host                = '127.0.0.1',
   $trove_db_user                = 'trove',
   $trove_db_password            = 'trovepassword',
+  $trove_db_idle_timeout        = 5000,
   $rabbit_hosts                 = ['127.0.0.1:5672'],
   $rabbit_password              = 'rabbitpassword',
   $nova_admin_username          = 'trove',
@@ -67,6 +72,7 @@ class cloud::database::dbaas(
 
   class { 'trove':
     database_connection          => "mysql://${encoded_user}:${encoded_password}@${trove_db_host}/trove?charset=utf8",
+    database_idle_timeout        => $trove_db_idle_timeout,
     mysql_module                 => '2.2',
     rabbit_hosts                 => $rabbit_hosts,
     rabbit_password              => $rabbit_password,
