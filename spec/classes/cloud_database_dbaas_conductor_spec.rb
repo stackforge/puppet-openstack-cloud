@@ -53,6 +53,7 @@ describe 'cloud::database::dbaas::conductor' do
           :nova_proxy_admin_user        => 'trove',
           :nova_proxy_admin_tenant_name => 'services',
           :database_connection          => 'mysql://trove:secrete@10.0.0.1/trove?charset=utf8',
+          :database_idle_timeout        => '5000',
         )
     end
 
