@@ -84,13 +84,14 @@ describe 'cloud::network::controller' do
 
     it 'configure neutron server' do
       is_expected.to contain_class('neutron::server').with(
-          :auth_password       => 'secrete',
-          :auth_host           => '10.0.0.1',
-          :auth_port           => '5000',
-          :auth_protocol       => 'https',
-          :database_connection => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
-          :api_workers         => '2',
-          :agent_down_time     => '60'
+          :auth_password         => 'secrete',
+          :auth_host             => '10.0.0.1',
+          :auth_port             => '5000',
+          :auth_protocol         => 'https',
+          :database_connection   => 'mysql://neutron:secrete@10.0.0.1/neutron?charset=utf8',
+          :database_idle_timeout => '5000',
+          :api_workers           => '2',
+          :agent_down_time       => '60'
         )
     end
 
@@ -210,7 +211,7 @@ describe 'cloud::network::controller' do
         )
       end
     end
- 
+
     context 'with L3 HA and DVR' do
       before :each do
         params.merge!(:router_distributed => true,

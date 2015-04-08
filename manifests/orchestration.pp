@@ -67,6 +67,10 @@
 #   (optional) Password to connect to heat database
 #   Defaults to 'heatpassword'
 #
+# [*heat_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+#
 # [*rabbit_hosts*]
 #   (optional) List of RabbitMQ servers. Should be an array.
 #   Defaults to ['127.0.0.1:5672']
@@ -108,6 +112,7 @@ class cloud::orchestration(
   $heat_db_host               = '127.0.0.1',
   $heat_db_user               = 'heat',
   $heat_db_password           = 'heatpassword',
+  $heat_db_idle_timeout       = 5000,
   $rabbit_hosts               = ['127.0.0.1:5672'],
   $rabbit_password            = 'rabbitpassword',
   $verbose                    = true,
@@ -134,22 +139,23 @@ class cloud::orchestration(
   $encoded_password = uriescape($heat_db_password)
 
   class { 'heat':
-    keystone_host     => $ks_keystone_admin_host,
-    keystone_port     => $ks_keystone_admin_port,
-    keystone_protocol => $ks_keystone_admin_proto,
-    keystone_password => $ks_heat_password,
-    auth_uri          => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
-    keystone_ec2_uri  => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0/ec2tokens",
-    sql_connection    => "mysql://${encoded_user}:${encoded_password}@${heat_db_host}/heat?charset=utf8",
-    mysql_module      => '2.2',
-    rabbit_hosts      => $rabbit_hosts,
-    rabbit_password   => $rabbit_password,
-    rabbit_userid     => 'heat',
-    verbose           => $verbose,
-    debug             => $debug,
-    log_facility      => $log_facility,
-    use_syslog        => $use_syslog,
-    log_dir           => $log_dir,
+    keystone_host         => $ks_keystone_admin_host,
+    keystone_port         => $ks_keystone_admin_port,
+    keystone_protocol     => $ks_keystone_admin_proto,
+    keystone_password     => $ks_heat_password,
+    auth_uri              => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0",
+    keystone_ec2_uri      => "${ks_keystone_internal_proto}://${ks_keystone_internal_host}:${ks_keystone_internal_port}/v2.0/ec2tokens",
+    database_connection   => "mysql://${encoded_user}:${encoded_password}@${heat_db_host}/heat?charset=utf8",
+    database_idle_timeout => $heat_db_idle_timeout,
+    mysql_module          => '2.2',
+    rabbit_hosts          => $rabbit_hosts,
+    rabbit_password       => $rabbit_password,
+    rabbit_userid         => 'heat',
+    verbose               => $verbose,
+    debug                 => $debug,
+    log_facility          => $log_facility,
+    use_syslog            => $use_syslog,
+    log_dir               => $log_dir,
   }
 
   # Note(EmilienM):
