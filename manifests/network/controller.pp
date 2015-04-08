@@ -207,16 +207,17 @@ class cloud::network::controller(
   }
 
   class { 'neutron::server':
-    auth_password       => $ks_neutron_password,
-    auth_host           => $ks_keystone_admin_host,
-    auth_protocol       => $ks_keystone_admin_proto,
-    auth_port           => $ks_keystone_public_port,
-    database_connection => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
-    mysql_module        => '2.2',
-    api_workers         => $::processorcount,
-    agent_down_time     => '60',
-    l3_ha               => $l3_ha,
-    router_distributed  => $router_distributed,
+    auth_password         => $ks_neutron_password,
+    auth_host             => $ks_keystone_admin_host,
+    auth_protocol         => $ks_keystone_admin_proto,
+    auth_port             => $ks_keystone_public_port,
+    database_connection   => "mysql://${encoded_user}:${encoded_password}@${neutron_db_host}/neutron?charset=utf8",
+    database_idle_timeout => 5000,
+    mysql_module          => '2.2',
+    api_workers           => $::processorcount,
+    agent_down_time       => '60',
+    l3_ha                 => $l3_ha,
+    router_distributed    => $router_distributed,
   }
 
   case $plugin {

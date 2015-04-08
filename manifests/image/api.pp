@@ -187,6 +187,7 @@ class cloud::image::api(
 
   class { 'glance::api':
     database_connection      => "mysql://${encoded_glance_user}:${encoded_glance_password}@${glance_db_host}/glance?charset=utf8",
+    database_idle_timeout    => 5000,
     mysql_module             => '2.2',
     registry_host            => $openstack_vip,
     registry_port            => $ks_glance_registry_internal_port,

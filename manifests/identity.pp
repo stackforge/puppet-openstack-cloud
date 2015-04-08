@@ -536,7 +536,7 @@ class cloud::identity (
     admin_token           => $ks_admin_token,
     compute_port          => $ks_nova_public_port,
     debug                 => $debug,
-    database_idle_timeout => 60,
+    database_idle_timeout => 5000,
     log_facility          => $log_facility,
     database_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone?charset=utf8",
     token_provider        => 'keystone.token.providers.uuid.Provider',
