@@ -35,6 +35,10 @@
 #   (optional) Password to connect to keystone database
 #   Defaults to 'keystonepassword'
 #
+# [*keystone_db_idle_timeout*]
+#   (optional) Timeout before idle SQL connections are reaped.
+#   Defaults to 5000
+#
 # [*memcache_servers*]
 #   (optionnal) Memcached servers used by Keystone. Should be an array.
 #   Defaults to ['127.0.0.1:11211']
@@ -421,6 +425,7 @@ class cloud::identity (
   $keystone_db_host             = '127.0.0.1',
   $keystone_db_user             = 'keystone',
   $keystone_db_password         = 'keystonepassword',
+  $keystone_db_idle_timeout     = 5000,
   $memcache_servers             = ['127.0.0.1:11211'],
   $ks_admin_email               = 'no-reply@keystone.openstack',
   $ks_admin_password            = 'adminpassword',
@@ -536,7 +541,7 @@ class cloud::identity (
     admin_token           => $ks_admin_token,
     compute_port          => $ks_nova_public_port,
     debug                 => $debug,
-    database_idle_timeout => 60,
+    database_idle_timeout => $keystone_db_idle_timeout,
     log_facility          => $log_facility,
     database_connection   => "mysql://${encoded_user}:${encoded_password}@${keystone_db_host}/keystone?charset=utf8",
     token_provider        => 'keystone.token.providers.uuid.Provider',

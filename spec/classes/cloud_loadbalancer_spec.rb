@@ -233,8 +233,8 @@ describe 'cloud::loadbalancer' do
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
-          'timeout client' => '400s',
-          'timeout server' => '400s'
+          'timeout client' => '90m',
+          'timeout server' => '90m'
         }
       )}
     end # configure monitor haproxy listen
@@ -255,8 +255,8 @@ describe 'cloud::loadbalancer' do
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
-          'timeout client' => '400s',
-          'timeout server' => '400s'
+          'timeout client' => '90m',
+          'timeout server' => '90m'
         }
       )}
     end # configure monitor haproxy listen

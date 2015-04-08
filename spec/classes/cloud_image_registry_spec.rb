@@ -41,6 +41,7 @@ describe 'cloud::image::registry' do
     it 'configure glance-registry' do
       is_expected.to contain_class('glance::registry').with(
         :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
+        :database_idle_timeout => '5000',
         :keystone_password     => 'secrete',
         :keystone_tenant       => 'services',
         :keystone_user         => 'glance',
