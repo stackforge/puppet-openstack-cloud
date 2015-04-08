@@ -337,7 +337,7 @@ class cloud::database::sql::mysql (
       $mysql_server_config_file = '/etc/my.cnf'
       $mysql_init_file = '/usr/lib/systemd/system/mysql-bootstrap.service'
 
-      if $::hostname == $galera_master_name {
+      if $::hostname == $galera_master_name and !$::galera_bootstrapped {
         $mysql_service_name = 'mysql-bootstrap'
       } else {
         $mysql_service_name = 'mariadb'
