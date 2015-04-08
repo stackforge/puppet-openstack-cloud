@@ -32,7 +32,7 @@ Group=mysql
 ExecStartPre=/usr/libexec/mariadb-prepare-db-dir %n
 # Note: we set --basedir to prevent probes that might trigger SELinux alarms,
 # per bug #547485
-ExecStart=/usr/bin/mysqld_safe --wsrep-new-cluster --basedir=/usr
+ExecStart=/usr/bin/mysqld_safe <%= @wsrep_new_cluster %> --basedir=/usr
 ExecStartPost=/usr/libexec/mariadb-wait-ready $MAINPID
 
 # Give a reasonable amount of time for the server to start up/shut down
