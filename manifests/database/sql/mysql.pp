@@ -364,6 +364,13 @@ class cloud::database::sql::mysql (
       }
 
       if $::operatingsystemmajrelease >= 7 {
+
+        if !$::galera_bootstrapped {
+          $wsrep_new_cluster = '--wsrep-new-cluster'
+        } else {
+          $wsrep_new_cluster = ''
+        }
+
         file { "/etc/systemd/system/${mysql_service_name}.service.d" :
           ensure => directory,
         }
