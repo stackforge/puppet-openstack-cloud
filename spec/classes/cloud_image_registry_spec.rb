@@ -40,20 +40,21 @@ describe 'cloud::image::registry' do
 
     it 'configure glance-registry' do
       is_expected.to contain_class('glance::registry').with(
-        :database_connection   => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
-        :keystone_password     => 'secrete',
-        :keystone_tenant       => 'services',
-        :keystone_user         => 'glance',
-        :verbose               => true,
-        :debug                 => true,
-        :auth_host             => '10.0.0.1',
-        :auth_protocol         => 'https',
-        :log_facility          => 'LOG_LOCAL0',
-        :bind_host             => '10.0.0.1',
-        :bind_port             => '9191',
-        :use_syslog            => true,
-        :log_dir               => false,
-        :log_file              => false
+        :database_connection  => 'mysql://glance:secrete@10.0.0.1/glance?charset=utf8',
+        :datbase_idle_timeout => '5000',
+        :keystone_password    => 'secrete',
+        :keystone_tenant      => 'services',
+        :keystone_user        => 'glance',
+        :verbose              => true,
+        :debug                => true,
+        :auth_host            => '10.0.0.1',
+        :auth_protocol        => 'https',
+        :log_facility         => 'LOG_LOCAL0',
+        :bind_host            => '10.0.0.1',
+        :bind_port            => '9191',
+        :use_syslog           => true,
+        :log_dir              => false,
+        :log_file             => false
       )
     end
 
