@@ -343,6 +343,13 @@ class cloud::database::sql::mysql (
         $mysql_service_name = 'mariadb'
       }
 
+      if !$::galera_bootstrapped {
+        $wsrep_new_cluster = '--wsrep-new-cluster'
+      }
+      else {
+        $wsrep_new_cluster = ''
+      }
+
       $dirs = [ '/var/run/mysqld', '/var/log/mysql' ]
 
       file { $dirs:
