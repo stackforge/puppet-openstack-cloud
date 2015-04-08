@@ -339,6 +339,11 @@ class cloud::database::sql::mysql (
 
       if $::hostname == $galera_master_name {
         $mysql_service_name = 'mysql-bootstrap'
+        if !str2bool($::galera_bootstrapped) {
+          $wsrep_new_cluster = '--wsrep-new-cluster'
+        } else {
+          $wsrep_new_cluster = ''
+        }
       } else {
         $mysql_service_name = 'mariadb'
       }
@@ -424,12 +429,17 @@ class cloud::database::sql::mysql (
   # To check that the mysqld support the options you can :
   # strings `which mysqld` | grep wsrep-new-cluster
   # TODO: to be remove as soon as the API 25 is packaged, ie galera 3 ...
+  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease >= 7 {
+    $mysql_service_notify = Exec['mariadb-sysctl-daemon-reload']
+  } else {
+    $mysql_service_notify = Service['mysqld']
+  }
   file { $mysql_init_file :
     content => template("cloud/database/etc_initd_mysql_${::osfamily}"),
     owner   => 'root',
     mode    => '0755',
     group   => 'root',
-    notify  => Service['mysqld'],
+    notify  => $mysql_service_notify,
     before  => Package[$mysql_server_package_name],
   }
 
