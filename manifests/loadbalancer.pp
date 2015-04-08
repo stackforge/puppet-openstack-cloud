@@ -945,8 +945,8 @@ class cloud::loadbalancer(
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
-      'timeout client' => '400s',
-      'timeout server' => '400s',
+      'timeout client' => '90m',
+      'timeout server' => '90m',
     },
     bind_options => $galera_bind_options,
   }
@@ -968,8 +968,8 @@ class cloud::loadbalancer(
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
         'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
-        'timeout client' => '400s',
-        'timeout server' => '400s',
+        'timeout client' => '90m',
+        'timeout server' => '90m',
       },
       bind_options => $galera_bind_options,
     }

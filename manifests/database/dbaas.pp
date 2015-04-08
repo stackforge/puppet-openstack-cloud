@@ -67,6 +67,7 @@ class cloud::database::dbaas(
 
   class { 'trove':
     database_connection          => "mysql://${encoded_user}:${encoded_password}@${trove_db_host}/trove?charset=utf8",
+    database_idle_timeout        => 5000,
     mysql_module                 => '2.2',
     rabbit_hosts                 => $rabbit_hosts,
     rabbit_password              => $rabbit_password,

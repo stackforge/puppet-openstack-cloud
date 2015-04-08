@@ -543,7 +543,7 @@ class cloud::database::sql::mysql (
     ipaddresses       => $api_eth,
     ports             => '3306',
     options           =>
-      inline_template('check inter 2000 rise 2 fall 5 port 8200 <% if @hostname != @galera_master_name -%>backup<% end %>')
+      inline_template('check inter 2000 rise 2 fall 5 port 8200 <% if @hostname != @galera_master_name -%>backup<% end %> on-marked-down shutdown-sessions')
   }
 
   @@haproxy::balancermember{"${::fqdn}-readonly":
@@ -552,6 +552,6 @@ class cloud::database::sql::mysql (
     ipaddresses       => $api_eth,
     ports             => '3306',
     options           =>
-      inline_template('check inter 2000 rise 2 fall 5 port 8200 <% if @hostname == @galera_master_name -%>backup<% end %>')
+      inline_template('check inter 2000 rise 2 fall 5 port 8200 <% if @hostname == @galera_master_name -%>backup<% end %> on-marked-down shutdown-sessions')
   }
 }

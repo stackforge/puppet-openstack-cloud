@@ -146,19 +146,20 @@ class cloud::compute(
   $encoded_password = uriescape($nova_db_password)
 
   class { 'nova':
-    database_connection => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
-    mysql_module        => '2.2',
-    rabbit_userid       => 'nova',
-    rabbit_hosts        => $rabbit_hosts,
-    rabbit_password     => $rabbit_password,
-    glance_api_servers  => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${glance_api_port}",
-    memcached_servers   => $memcache_servers,
-    verbose             => $verbose,
-    debug               => $debug,
-    log_dir             => $log_dir,
-    log_facility        => $log_facility,
-    use_syslog          => $use_syslog,
-    nova_shell          => '/bin/bash',
+    database_connection   => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
+    database_idle_timeout => 5000,
+    mysql_module          => '2.2',
+    rabbit_userid         => 'nova',
+    rabbit_hosts          => $rabbit_hosts,
+    rabbit_password       => $rabbit_password,
+    glance_api_servers    => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${glance_api_port}",
+    memcached_servers     => $memcache_servers,
+    verbose               => $verbose,
+    debug                 => $debug,
+    log_dir               => $log_dir,
+    log_facility          => $log_facility,
+    use_syslog            => $use_syslog,
+    nova_shell            => '/bin/bash',
   }
 
   if $nova_db_use_slave {
