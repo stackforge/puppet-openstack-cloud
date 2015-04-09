@@ -206,6 +206,14 @@ class cloud::network::controller(
     fail 'l3_ha does not work with l2population mechanism driver in Juno.'
   }
 
+  # When bootstrapping neutron-server, we can have a race condition where if
+  # neutron-server is run *before* db_sync, it will create some tables and
+  # db_sync will fail to run because alembic_version table is missing.
+  # The workaround here is to run neutron-server only if db_sync has run at least
+  # one time.
+  # Note that if you run Puppet in parallel on neutron-server nodes, db_sync
+  # be run multiple times but since db_sync is idempotent, it should not be a problem.
+  Anchor['neutron_db_sync done'] -> Service['neutron-server']
   class { 'neutron::server':
     auth_password       => $ks_neutron_password,
     auth_host           => $ks_keystone_admin_host,
@@ -286,7 +294,10 @@ class cloud::network::controller(
     user    => 'neutron',
     unless  => "/usr/bin/mysql neutron -h ${neutron_db_host} -u ${encoded_user} -p${encoded_password} -e \"show tables\" | /bin/grep Tables",
     require => 'Neutron_config[DEFAULT/service_plugins]',
-    notify  => Service['neutron-server']
+    notify  => Service['neutron-server'],
+  }
+  anchor {'neutron_db_sync done':
+    require => Exec['neutron_db_sync'],
   }
 
   if $::cloud::manage_firewall {
