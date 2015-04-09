@@ -404,10 +404,11 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8774',
         :options   => {
-          'mode'           => 'http',
-          'option'         => ['tcpka','forwardfor','tcplog','httpchk'],
-          'http-check'     => 'expect ! rstatus ^5',
-          'balance'        => 'roundrobin',
+          'mode'           => 'tcp',
+          'balance'        => 'source',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'timeout server' => '120m',
+          'timeout client' => '120m'
         },
         :bind_options => ['ssl', 'crt']
       )}
@@ -423,10 +424,11 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8776',
         :options   => {
-          'mode'           => 'http',
-          'option'         => ['tcpka','forwardfor','tcplog', 'httpchk'],
-          'http-check'     => 'expect ! rstatus ^5',
-          'balance'        => 'roundrobin',
+          'mode'           => 'tcp',
+          'balance'        => 'source',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'timeout server' => '120m',
+          'timeout client' => '120m'
         },
         :bind_options => ['something not secure']
       )}
@@ -499,11 +501,12 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8004',
         :options   => {
+          'mode'           => 'tcp',
           'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }',
-          'mode'           => 'http',
-          'option'         => ['tcpka','forwardfor','tcplog', 'httpchk'],
-          'http-check'     => 'expect ! rstatus ^5',
-          'balance'        => 'roundrobin'
+          'balance'        => 'source',
+          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'timeout server' => '120m',
+          'timeout client' => '120m'
         },
         :bind_options => ['ssl', 'crt']
       )}
@@ -519,6 +522,8 @@ describe 'cloud::loadbalancer' do
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'timeout server' => '120m',
+          'timeout client' => '120m',
         }
       )}
     end
