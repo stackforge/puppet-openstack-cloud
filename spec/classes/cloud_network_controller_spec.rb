@@ -92,6 +92,7 @@ describe 'cloud::network::controller' do
           :api_workers         => '2',
           :agent_down_time     => '60'
         )
+      is_expected.to contain_anchor('neutron_db_sync done').with_before('Class[Neutron::Server]')
     end
 
     it 'configure neutron server notifications to nova' do
@@ -113,6 +114,7 @@ describe 'cloud::network::controller' do
         :require => 'Neutron_config[DEFAULT/service_plugins]',
         :notify  => 'Service[neutron-server]'
       )
+      is_expected.to contain_anchor('neutron_db_sync done')
     end
 
     it 'should not configure provider external network' do
