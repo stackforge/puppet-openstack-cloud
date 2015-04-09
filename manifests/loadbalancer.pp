@@ -698,12 +698,26 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'keystone_api_cluster':
     ip                => $keystone_api,
     port              => $ks_keystone_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $keystone_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'keystone_api_admin_cluster':
     ip                => $keystone_api_admin,
     port              => $ks_keystone_admin_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $keystone_admin_bind_options,
     firewall_settings => $firewall_settings,
   }
@@ -717,18 +731,39 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'nova_api_cluster':
     ip                => $nova_api,
     port              => $ks_nova_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $nova_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'ec2_api_cluster':
     ip                => $ec2_api,
     port              => $ks_ec2_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $ec2_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'metadata_api_cluster':
     ip                => $metadata_api,
     port              => $ks_metadata_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $metadata_bind_options,
     firewall_settings => $firewall_settings,
   }
@@ -791,6 +826,13 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'trove_api_cluster':
     ip                => $trove_api,
     port              => $ks_trove_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $trove_bind_options,
     firewall_settings => $firewall_settings,
   }
@@ -810,24 +852,52 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'glance_registry_cluster':
     ip                => $glance_registry,
     port              => $ks_glance_registry_internal_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $glance_registry_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'neutron_api_cluster':
     ip                => $neutron_api,
     port              => $ks_neutron_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $neutron_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'cinder_api_cluster':
     ip                => $cinder_api,
     port              => $ks_cinder_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $cinder_bind_options,
     firewall_settings => $firewall_settings,
   }
   cloud::loadbalancer::binding { 'ceilometer_api_cluster':
     ip                => $ceilometer_api,
     port              => $ks_ceilometer_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $ceilometer_bind_options,
     firewall_settings => $firewall_settings,
   }
@@ -840,6 +910,13 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'heat_api_cluster':
     ip                => $heat_api,
     port              => $ks_heat_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $heat_api_bind_options,
     options           => $heat_api_options,
     firewall_settings => $firewall_settings,
@@ -853,6 +930,13 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'heat_cfn_api_cluster':
     ip                => $heat_cfn_api,
     port              => $ks_heat_cfn_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $heat_cfn_bind_options,
     options           => $heat_cfn_options,
     firewall_settings => $firewall_settings,
@@ -866,6 +950,13 @@ class cloud::loadbalancer(
   cloud::loadbalancer::binding { 'heat_cloudwatch_api_cluster':
     ip                => $heat_cloudwatch_api,
     port              => $ks_heat_cloudwatch_public_port,
+    options           => {
+      'mode'           => 'tcp',
+      'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+      'balance'        => 'source',
+      'timeout server' => '120m',
+      'timeout client' => '120m',
+    },
     bind_options      => $heat_cloudwatch_bind_options,
     options           => $heat_cloudwatch_options,
     firewall_settings => $firewall_settings,
