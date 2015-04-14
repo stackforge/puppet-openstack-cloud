@@ -39,6 +39,10 @@ describe 'cloud::object::storage' do
         'storage_local_net_ip' => '127.0.0.1',
       })
 
+      is_expected.to contain_class('cloud::object::tweaking').with({
+        'net.ipv4.ip_local_port_range' => '"10000\t65000"'
+      })
+
       is_expected.to contain_swift__storage__server('6000').with({
         'type'                   => 'object',
         'config_file_path'       => 'object-server.conf',
