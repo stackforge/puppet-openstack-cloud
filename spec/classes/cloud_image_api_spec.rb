@@ -125,6 +125,12 @@ describe 'cloud::image::api' do
       it 'configure Glance with NFS backend' do
         is_expected.to contain_class('glance::backend::file')
         is_expected.not_to contain_class('glance::backend::rbd')
+        is_expected.to contain_file('/srv/images/').with(
+          'ensure' => 'directory',
+          'owner'  => 'glance',
+          'group'  => 'glance',
+          'mode'   => '0755'
+        )
         is_expected.to contain_glance_api_config('glance_store/filesystem_store_datadir').with('value' => '/srv/images/')
         is_expected.to contain_glance_api_config('glance_store/default_store').with('value' => 'file')
         is_expected.to contain_mount('/srv/images/').with({
