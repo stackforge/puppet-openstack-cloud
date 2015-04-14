@@ -260,6 +260,12 @@ class cloud::image::api(
     # We mount the NFS share in filesystem_store_datadir to fake the
     # backend.
     if $nfs_device {
+      file { $filesystem_store_datadir:
+        ensure => 'directory',
+        owner  => 'glance',
+        group  => 'glance',
+        mode   => '0755'
+      } ->
       class { 'glance::backend::file':
         filesystem_store_datadir => $filesystem_store_datadir
       }
@@ -272,7 +278,7 @@ class cloud::image::api(
         }
       }
       ensure_resource('class', 'nfs', {})
-      create_resources('types::mount', $nfs_mount)
+      create_resources('types::mount', $nfs_mount, {require => File[$filesystem_store_datadir]})
     } else {
       fail('When running NFS backend, you need to provide nfs_device parameter.')
     }

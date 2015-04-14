@@ -170,6 +170,12 @@ class cloud::compute::hypervisor(
       # We mount the NFS share in filesystem_store_datadir to fake the
       # backend.
       if $nfs_device {
+        file { $filesystem_store_datadir:
+          ensure => 'directory',
+          owner  => 'nova',
+          group  => 'nova',
+          mode   => '0755'
+        }
         nova_config { 'DEFAULT/instances_path': value => $filesystem_store_datadir; }
         $nfs_mount = {
           "${filesystem_store_datadir}" => {
@@ -180,7 +186,7 @@ class cloud::compute::hypervisor(
           }
         }
         ensure_resource('class', 'nfs', {})
-        create_resources('types::mount', $nfs_mount)
+        create_resources('types::mount', $nfs_mount, {require => File[$filesystem_store_datadir]})
 
         # Not using /var/lib/nova/instances may cause side effects.
         if $filesystem_store_datadir != '/var/lib/nova/instances' {

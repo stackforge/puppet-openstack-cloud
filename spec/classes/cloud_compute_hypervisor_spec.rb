@@ -424,6 +424,12 @@ describe 'cloud::compute::hypervisor' do
           :nfs_options => 'noacl,fsid=123' )
       end
       it 'configure nova instances path and NFS mount' do
+        is_expected.to contain_file('/var/lib/nova/instances').with(
+          'ensure' => 'directory',
+          'owner'  => 'nova',
+          'group'  => 'nova',
+          'mode'   => '0755'
+        )
         is_expected.to contain_nova_config('DEFAULT/instances_path').with('value' => '/var/lib/nova/instances')
         is_expected.to contain_mount('/var/lib/nova/instances').with({
           'ensure'  => 'mounted',
