@@ -30,6 +30,4 @@ class cloud::object(
     swift_hash_suffix => $swift_hash_suffix,
   }
 
-  class {'cloud::object::tweaking': }
-
 }
