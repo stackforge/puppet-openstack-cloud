@@ -22,7 +22,7 @@ class cloud::object::tweaking {
     'net.ipv4.tcp_tw_recycle'                           => { value => 1 },
     'net.ipv4.tcp_tw_reuse'                             => { value => 1 },
     'net.ipv4.tcp_syncookies'                           => { value => 0 },
-    'net.ipv4.ip_local_port_range'                      => { value => "1024\t65000" },
+    'net.ipv4.ip_local_port_range'                      => { value => "10000\t65000" },
     'net.core.netdev_max_backlog'                       => { value => 300000 },
     'net.ipv4.tcp_sack'                                 => { value => 0 },
   }
