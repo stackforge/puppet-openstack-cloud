@@ -111,6 +111,11 @@
 #   (optional) File with the list of available NFS shares
 #   Defaults to ''
 #
+# [*nfs_mount_options*]
+#   (optional) Mount options passed to the nfs client. See section
+#   of the nfs man page for details.
+#   Defaults to undef
+
 define cloud::volume::backend::netapp (
   $netapp_login,
   $netapp_password,
@@ -128,6 +133,7 @@ define cloud::volume::backend::netapp (
   $thres_avl_size_perc_start    = '20',
   $thres_avl_size_perc_stop     = '60',
   $nfs_shares_config            = '',
+  $nfs_mount_options		        = undef,
 ) {
 
 
@@ -147,6 +153,7 @@ define cloud::volume::backend::netapp (
     thres_avl_size_perc_start => $thres_avl_size_perc_start,
     thres_avl_size_perc_stop  => $thres_avl_size_perc_stop,
     nfs_shares_config         => $nfs_shares_config,
+    nfs_mount_options         => $nfs_mount_options,
   }
 
   @cinder::type { $volume_backend_name:
