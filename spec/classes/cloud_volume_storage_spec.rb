@@ -94,6 +94,7 @@ describe 'cloud::volume::storage' do
               'nfs_shares_config'    => '/etc/cinder/shares.conf',
               'nfs_used_ratio'       => '0.6',
               'nfs_oversub_ratio'    => '1.0'
+	      'nfs_mount_options'    => undef,
             }
           }
         },
@@ -238,6 +239,7 @@ describe 'cloud::volume::storage' do
         is_expected.to contain_cinder_config('freenas/nfs_shares_config').with_value('/etc/cinder/shares.conf')
         is_expected.to contain_cinder_config('freenas/nfs_used_ratio').with_value('0.6')
         is_expected.to contain_cinder_config('freenas/nfs_oversub_ratio').with_value('1.0')
+        is_expected.to contain_cinder_config('freenas/nfs_mount_options').with_value(undef)
         is_expected.to contain_cinder__type('freenas').with(
           :set_key   => 'volume_backend_name',
           :set_value => 'freenas',
