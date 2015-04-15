@@ -18,40 +18,40 @@ forge 'http://forge.puppetlabs.com'
 
 # OpenStack projects
 mod 'openstacklib',
-  :git => 'git://github.com/enovance/puppet-openstacklib.git',
+  :git => 'git://github.com/stackforge/puppet-openstacklib.git',
   :ref => '999f7849a3e0653f46f7336ee0fa9c2e38630b7b'
 mod 'ceilometer',
-  :git => 'git://github.com/enovance/puppet-ceilometer.git',
+  :git => 'git://github.com/stackforge/puppet-ceilometer.git',
   :ref => 'c5c7f4a6a7afd4b9c558e17e5a755e836e182dbe'
 mod 'cinder',
-  :git => 'git://github.com/enovance/puppet-cinder.git',
+  :git => 'git://github.com/stackforge/puppet-cinder.git',
   :ref => 'bde992600a63a3debba4b06a27d7cde9119f23ed'
 mod 'glance',
-  :git => 'git://github.com/enovance/puppet-glance.git',
+  :git => 'git://github.com/stackforge/puppet-glance.git',
   :ref => '9fb3db4a693b6839c2caa45df4cd37f9c21451de'
 mod 'heat',
-  :git => 'git://github.com/enovance/puppet-heat.git',
+  :git => 'git://github.com/stackforge/puppet-heat.git',
   :ref => '46b45265cc2cc3da6d45a89097357a976f045948'
 mod 'horizon',
-  :git => 'git://github.com/enovance/puppet-horizon.git',
+  :git => 'git://github.com/stackforge/puppet-horizon.git',
   :ref => '72e83fa859c4224fcf7772654bdc7464a0bbedde'
 mod 'keystone',
-  :git => 'git://github.com/enovance/puppet-keystone.git',
+  :git => 'git://github.com/stackforge/puppet-keystone.git',
   :ref => '9b540464869ecf20a012ba15ebde2aaa6b99be09'
 mod 'neutron',
-  :git => 'git://github.com/enovance/puppet-neutron.git',
+  :git => 'git://github.com/stackforge/puppet-neutron.git',
   :ref => '5500e4c0b2bce10ebc91a9685309cf854db2d2dc'
 mod 'nova',
-  :git => 'git://github.com/enovance/puppet-nova.git',
+  :git => 'git://github.com/stackforge/puppet-nova.git',
   :ref => '2a5c1eac6b34ea29bbd3e28d7ee56839f10d83d9'
 mod 'swift',
-  :git => 'git://github.com/enovance/puppet-swift.git',
+  :git => 'git://github.com/stackforge/puppet-swift.git',
   :ref => '9a8e28d4ad91b9d638dc2e1e2f4e037ac2831864'
 mod 'tempest',
-  :git => 'git://github.com/enovance/puppet-tempest.git',
+  :git => 'git://github.com/stackforge/puppet-tempest.git',
   :ref => 'f5e87cad5de119bd483006f06efcd22a34d8bdc4'
 mod 'trove',
-  :git => 'git://github.com/enovance/puppet-trove.git',
+  :git => 'git://github.com/stackforge/puppet-trove.git',
   :ref => '9e5b82fcdacc07b0f1028cb2928292f8d68ae075'
 
 # Dependency
@@ -65,7 +65,7 @@ mod 'boolean',
   :git => 'git://github.com/enovance/puppet-boolean.git',
   :ref => '157011a4eaa27f1202a9d94335ee4876b26d377e'
 mod 'ceph',
-  :git => 'git://github.com/enovance/puppet-ceph.git',
+  :git => 'git://github.com/stackforge/puppet-ceph.git',
   :ref => '3b58acf9fdf567bf40d17b3c803c940f1ddc70d1'
 #FIXME
 mod 'cloud',
@@ -211,7 +211,7 @@ mod 'uchiwa',
   :git => 'git://github.com/enovance/yelp-uchiwa.git',
   :ref =>  '8eafd8167ff7d4f1cd696e4d098e3e1497c28279'
 mod 'vswitch',
-  :git => 'git://github.com/enovance/puppet-vswitch.git',
+  :git => 'git://github.com/stackforge/puppet-vswitch.git',
   :ref => '49dbaff15e8f017dbe365ebf08eb505472b695a1'
 mod 'wget',
   :git => 'git://github.com/enovance/puppet-wget.git',
@@ -220,7 +220,7 @@ mod 'xinetd',
   :git => 'git://github.com/enovance/puppetlabs-xinetd.git',
   :ref => '0740f5343b54523d9ed27f65c05f6c9f045f022b'
 mod 'openstack_extras',
-  :git => 'git://github.com/enovance/puppet-openstack_extras.git',
+  :git => 'git://github.com/stackforge/puppet-openstack_extras.git',
   :ref => '537ed9e3750178fcfffa3ae476727cb1f4e65fb9'
 mod 'staging',
   :git => 'git://github.com/enovance/puppet-staging.git',
