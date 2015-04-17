@@ -75,6 +75,8 @@ class cloud::object::storage(
 
   include 'cloud::object'
 
+  include 'cloud::object::tweaking'
+
   class { 'swift::storage':
     storage_local_net_ip => $storage_eth,
   }
