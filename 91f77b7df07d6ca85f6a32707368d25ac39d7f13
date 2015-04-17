@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Dimitri Savineau <dimitri.savineau@enovance.com>
+Workflow+1: Dimitri Savineau <dimitri.savineau@enovance.com>
+Submitted-by: Jenkins
+Submitted-at: Fri, 17 Apr 2015 19:17:33 +0000
+Reviewed-on: https://review.openstack.org/174991
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/J.1.1.0
