@@ -169,11 +169,9 @@ mod 'puppetdb',
 mod 'puppetdbquery',
   :git => 'git://github.com/enovance/puppet-puppetdbquery.git',
   :ref =>  '89194917744f929bb600c31d7d6f822b529f5f03'
-# TODO(EmilienM) come back o upstream after
-# https://github.com/puppetlabs/puppetlabs-rabbitmq/pull/306
 mod 'rabbitmq',
   :git => 'git://github.com/enovance/puppetlabs-rabbitmq.git',
-  :ref => '77a79e46f0de3ae10869ccf1b5873fe0bc67e8eb'
+  :ref => '2c3fd7ea004272257b8efaa098cd2ea18b2b7751'
 mod 'redis',
   :git => 'git://github.com/arioch/puppet-redis.git',
   :ref => '51e35cc9a743dd8f992effae25d92e18aafe8b46'
