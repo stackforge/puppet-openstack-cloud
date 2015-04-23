@@ -384,6 +384,11 @@ describe 'cloud::compute::hypervisor' do
           :command => 'usermod -a -G cephkeyring nova',
           :unless  => 'groups nova | grep cephkeyring'
         )
+        is_expected.to contain_file('/etc/ceph/ceph.client.cinder.keyring').with({
+          'owner'  => 'root',
+          'group'  => 'cephkeyring',
+          'mode'   => '0440',
+        })
       end
 
       it 'configure libvirt driver' do
