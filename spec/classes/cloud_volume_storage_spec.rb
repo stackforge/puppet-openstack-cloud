@@ -157,6 +157,11 @@ describe 'cloud::volume::storage' do
           :path    => ['/usr/sbin', '/usr/bin', '/bin', '/sbin'],
           :unless  => 'groups cinder | grep cephkeyring'
         )
+	is_expected.to contain_file('/etc/ceph/ceph.client.cinder.keyring').with({
+          'owner'  => 'root',
+          'group'  => 'cephkeyring',
+          'mode'   => '0440',
+        })
       end
     end
 
