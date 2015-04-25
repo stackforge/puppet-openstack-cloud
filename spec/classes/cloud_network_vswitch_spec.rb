@@ -133,7 +133,7 @@ describe 'cloud::network::vswitch' do
       before :each do
         params.merge!(:driver => 'Something')
       end
-      it { should compile.and_raise_error(/Something plugin is not supported./) }
+      it_raises 'a Puppet::Error', /Something plugin is not supported./
     end
 
     context 'with default firewall enabled' do
