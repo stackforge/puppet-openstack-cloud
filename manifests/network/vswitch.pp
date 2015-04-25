@@ -215,7 +215,7 @@ class cloud::network::vswitch(
     }
 
     default: {
-      err "${driver} driver is not supported."
+      fail("${driver} driver is not supported.")
     }
   }
 
