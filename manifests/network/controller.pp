@@ -254,7 +254,7 @@ class cloud::network::controller(
     }
 
     default: {
-      err "${plugin} plugin is not supported."
+      fail("${plugin} plugin is not supported.")
     }
   }
 
