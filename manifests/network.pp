@@ -89,7 +89,7 @@ class cloud::network(
       $core_plugin = 'neutron.plugins.cisco.network_plugin.PluginV2'
     }
     default: {
-      err "${plugin} plugin is not supported."
+      fail("${plugin} plugin is not supported.")
     }
   }
 
