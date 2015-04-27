@@ -54,7 +54,8 @@ describe 'cloud::volume::storage' do
             'premium' => {
               'netapp_server_hostname' => 'netapp-server.host',
               'netapp_login'           => 'joe',
-              'netapp_password'        => 'secret'
+              'netapp_password'        => 'secret',
+	      'nfs_mount_options'      => 'rw,proto=tcp,sec=sys',
             }
           },
           'iscsi' => {
@@ -171,6 +172,7 @@ describe 'cloud::volume::storage' do
         is_expected.to contain_cinder_config('premium/netapp_login').with_value('joe')
         is_expected.to contain_cinder_config('premium/netapp_password').with_value('secret')
         is_expected.to contain_cinder_config('premium/netapp_server_hostname').with_value('netapp-server.host')
+        is_expected.to contain_cinder_config('premium/nfs_mount_options').with_value('rw,proto=tcp,sec=sys')
         is_expected.to contain_cinder__type('premium').with(
           :set_key   => 'volume_backend_name',
           :set_value => 'premium',
