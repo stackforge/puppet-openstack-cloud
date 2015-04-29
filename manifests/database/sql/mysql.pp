@@ -298,7 +298,7 @@ class cloud::database::sql::mysql (
     mysql_database { 'monitoring':
       ensure  => 'present',
       charset => 'utf8',
-      collate => 'utf8_unicode_ci',
+      collate => 'utf8_general_ci',
       require => File['/root/.my.cnf']
     }
     mysql_user { "${galera_clustercheck_dbuser}@localhost":
