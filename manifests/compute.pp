@@ -150,27 +150,30 @@ class cloud::compute(
   $encoded_user     = uriescape($nova_db_user)
   $encoded_password = uriescape($nova_db_password)
 
-  class { 'nova':
-    database_connection   => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
-    database_idle_timeout => $nova_db_idle_timeout,
-    mysql_module          => '2.2',
-    rabbit_userid         => 'nova',
-    rabbit_hosts          => $rabbit_hosts,
-    rabbit_password       => $rabbit_password,
-    glance_api_servers    => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${glance_api_port}",
-    memcached_servers     => $memcache_servers,
-    verbose               => $verbose,
-    debug                 => $debug,
-    log_dir               => $log_dir,
-    log_facility          => $log_facility,
-    use_syslog            => $use_syslog,
-    nova_shell            => '/bin/bash',
+  if $nova_db_use_slave {
+    $slave_connection_url = "mysql://${encoded_user}:${encoded_password}@${nova_db_host}:3307/nova?charset=utf8"
+  } else {
+    $slave_connection_url = false
   }
 
-  if $nova_db_use_slave {
-    nova_config {'database/slave_connection': value => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}:3307/nova?charset=utf8" }
-  } else {
-    nova_config {'database/slave_connection': ensure => absent }
+  class { 'nova::db':
+    database_connection   => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
+    slave_connection      => $slave_connection_url,
+    database_idle_timeout => $nova_db_idle_timeout,
+  }
+
+  class { 'nova':
+    rabbit_userid      => 'nova',
+    rabbit_hosts       => $rabbit_hosts,
+    rabbit_password    => $rabbit_password,
+    glance_api_servers => "${ks_glance_internal_proto}://${ks_glance_internal_host}:${glance_api_port}",
+    memcached_servers  => $memcache_servers,
+    verbose            => $verbose,
+    debug              => $debug,
+    log_dir            => $log_dir,
+    log_facility       => $log_facility,
+    use_syslog         => $use_syslog,
+    nova_shell         => '/bin/bash',
   }
 
   class { 'nova::network::neutron':
