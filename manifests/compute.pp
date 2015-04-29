@@ -150,6 +150,12 @@ class cloud::compute(
   $encoded_user     = uriescape($nova_db_user)
   $encoded_password = uriescape($nova_db_password)
 
+  if $nova_db_use_slave {
+    $slave_connection_url = "mysql://${encoded_user}:${encoded_password}@${nova_db_host}:3307/nova?charset=utf8"
+  } else {
+    $slave_connection_url = false
+  }
+
   class { 'nova':
     database_connection   => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}/nova?charset=utf8",
     database_idle_timeout => $nova_db_idle_timeout,
@@ -165,12 +171,7 @@ class cloud::compute(
     log_facility          => $log_facility,
     use_syslog            => $use_syslog,
     nova_shell            => '/bin/bash',
-  }
-
-  if $nova_db_use_slave {
-    nova_config {'database/slave_connection': value => "mysql://${encoded_user}:${encoded_password}@${nova_db_host}:3307/nova?charset=utf8" }
-  } else {
-    nova_config {'database/slave_connection': ensure => absent }
+    slave_connection      => $slave_connection_url,
   }
 
   class { 'nova::network::neutron':
