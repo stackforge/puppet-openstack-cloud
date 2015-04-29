@@ -382,18 +382,18 @@ Host *
   }
 
   class { 'nova::compute::libvirt':
-    libvirt_type            => $libvirt_type,
+    libvirt_type             => $libvirt_type,
     # Needed to support migration but we still use Spice:
-    vncserver_listen        => '0.0.0.0',
-    migration_support       => true,
-    libvirt_disk_cachemodes => $libvirt_disk_cachemodes_real,
-    libvirt_service_name    => $::cloud::params::libvirt_service_name,
+    vncserver_listen         => '0.0.0.0',
+    migration_support        => true,
+    libvirt_disk_cachemodes  => $libvirt_disk_cachemodes_real,
+    libvirt_service_name     => $::cloud::params::libvirt_service_name,
+    libvirt_inject_key       => false,
+    libvirt_inject_partition => '-2',
   }
 
   # Extra config for nova-compute
   nova_config {
-    'libvirt/inject_key':            value => false;
-    'libvirt/inject_partition':      value => '-2';
     'libvirt/live_migration_flag':   value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
     'libvirt/block_migration_flag':  value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_NON_SHARED_INC';
   }

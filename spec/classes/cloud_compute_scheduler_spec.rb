@@ -60,10 +60,12 @@ describe 'cloud::compute::scheduler' do
           :rabbit_password       => 'secrete',
           :rabbit_virtual_host   => '/',
           :memcached_servers     => ['10.0.0.1','10.0.0.2'],
-          :database_connection   => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
-          :database_idle_timeout => '5000',
           :glance_api_servers    => 'http://10.0.0.1:9292',
           :log_dir               => false
+        )
+      is_expected.to contain_class('nova::db').with(
+          :database_connection   => 'mysql://nova:secrete@10.0.0.1/nova?charset=utf8',
+          :database_idle_timeout => '5000',
         )
       is_expected.to contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
       is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
