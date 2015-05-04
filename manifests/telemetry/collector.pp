@@ -46,7 +46,7 @@ class cloud::telemetry::collector(
   class { 'ceilometer::db':
     database_connection => $db_conn,
     sync_db             => true,
-    require             => Mongodb_conn_validator['mongodb'],
+    require             => Anchor['mongodb setup done'],
   }
   class { 'ceilometer::collector': }
 

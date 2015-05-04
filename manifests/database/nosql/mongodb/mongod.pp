@@ -59,6 +59,9 @@ class cloud::database::nosql::mongodb::mongod(
         extras => $firewall_settings,
       }
     }
+    anchor {'mongodb setup done' :
+      require => Mongodb_conn_validator['mongodb'],
+    }
   }
 
 }
