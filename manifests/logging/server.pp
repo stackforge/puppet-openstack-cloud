@@ -40,7 +40,13 @@ class cloud::logging::server(
   include ::kibana3
   include cloud::database::nosql::elasticsearch
   include cloud::logging::agent
-  elasticsearch::instance {'fluentd' : }
+
+  # Elasticsearch 1.4 ships with a security setting that prevents Kibana from connecting.
+  # We need to allow http cors in fluentd instance.
+  $config_hash = { 'http.cors.enabled' => true }
+  elasticsearch::instance {'fluentd' :
+    config => $config_hash,
+  }
 
   @@haproxy::balancermember{"${::fqdn}-kibana":
     listening_service => 'kibana',
