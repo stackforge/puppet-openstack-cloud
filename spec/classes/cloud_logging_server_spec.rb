@@ -39,7 +39,9 @@ describe 'cloud::logging::server' do
     end
 
     it 'configure an elasticsearch instance' do
-      is_expected.to contain_elasticsearch__instance('fluentd')
+      is_expected.to contain_elasticsearch__instance('fluentd').with(
+        :config => { 'http.cors.enabled' => true },
+      )
     end
 
     context 'with default firewall enabled' do
