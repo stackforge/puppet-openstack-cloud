@@ -87,6 +87,28 @@ describe 'cloud::network::vswitch' do
       end
     end
 
+    context 'when running ML2 plugin with OVS driver and without tunelling' do
+      before :each do
+        params.merge!(:enable_tunneling => false)
+      end
+      it 'configure neutron vswitch without tunneling' do
+        is_expected.to contain_class('neutron::agents::ml2::ovs').with(
+            :enable_tunneling => false,
+        )
+      end
+    end
+
+    context 'when running ML2 plugin with OVS driver and without l2 population' do
+      before :each do
+        params.merge!(:l2_population => false)
+      end
+      it 'configure neutron vswitch without l2 population' do
+        is_expected.to contain_class('neutron::agents::ml2::ovs').with(
+            :l2_population => false,
+        )
+      end
+    end
+
     context 'when running Cisco N1KV plugin with VEM driver' do
       before do
        facts.merge!( :osfamily => 'RedHat' )
