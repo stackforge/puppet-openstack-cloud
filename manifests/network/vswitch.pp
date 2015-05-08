@@ -133,6 +133,17 @@
 #   (optional) N1000 KV Domain ID (does nothing?)
 #   Defaults to 1000
 #
+# [*enable_tunneling*]
+#   (optional) Enable or not tunneling.
+#   Should be disable if using VLAN but enabled if using GRE or VXLAN.
+#   Defailts to true
+#
+# [*l2_population*]
+#   (optional) Enable or not L2 population.
+#   If enabled, should be part of mechanism_drivers in cloud::network::controller.
+#   Should be disabled if running L3 HA with VRRP in Juno.
+#   Defaults to true
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -148,6 +159,8 @@ class cloud::network::vswitch(
   # common to ml2
   $tunnel_types               = ['gre'],
   $tunnel_eth                 = '127.0.0.1',
+  $enable_tunneling           = true,
+  $l2_population              = true,
   # ml2_ovs
   $provider_bridge_mappings   = ['public:br-pub'],
   $enable_distributed_routing = false,
@@ -168,8 +181,8 @@ class cloud::network::vswitch(
   case $driver {
     'ml2_ovs': {
       class { 'neutron::agents::ml2::ovs':
-        enable_tunneling           => true,
-        l2_population              => true,
+        enable_tunneling           => $enable_tunneling,
+        l2_population              => $l2_population,
         polling_interval           => '15',
         tunnel_types               => $tunnel_types,
         bridge_mappings            => $provider_bridge_mappings,
@@ -184,7 +197,7 @@ class cloud::network::vswitch(
 
     'ml2_lb': {
       class { 'neutron::agents::ml2::linuxbridge':
-        l2_population    => true,
+        l2_population    => $l2_population,
         polling_interval => '15',
         tunnel_types     => $tunnel_types,
         local_ip         => $tunnel_eth
