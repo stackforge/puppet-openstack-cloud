@@ -1,0 +1,9 @@
+Code-Review+2: Emilien Macchi <emilien@redhat.com>
+Code-Review+2: Yanis Guenane <yanis.guenane@enovance.com>
+Workflow+1: Yanis Guenane <yanis.guenane@enovance.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 11 May 2015 15:25:45 +0000
+Reviewed-on: https://review.openstack.org/155907
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/master
