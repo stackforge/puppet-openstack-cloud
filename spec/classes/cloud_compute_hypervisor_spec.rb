@@ -175,15 +175,6 @@ describe 'cloud::compute::hypervisor' do
         )
     end
 
-    it 'checks if Nova DB is populated' do
-      is_expected.to contain_exec('nova_db_sync').with(
-        :command => 'nova-manage db sync',
-        :path    => '/usr/bin',
-        :user    => 'nova',
-        :unless  => '/usr/bin/mysql nova -h 10.0.0.1 -u nova -psecrete -e "show tables" | /bin/grep Tables'
-      )
-    end
-
     it 'configure nova-compute' do
       is_expected.to contain_class('nova::compute').with(
         :enabled                       => true,

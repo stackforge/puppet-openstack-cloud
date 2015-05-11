@@ -106,15 +106,6 @@ describe 'cloud::compute::api' do
         )
     end
 
-    it 'checks if Nova DB is populated' do
-      is_expected.to contain_exec('nova_db_sync').with(
-        :command => 'nova-manage db sync',
-        :user    => 'nova',
-        :path    => '/usr/bin',
-        :unless  => '/usr/bin/mysql nova -h 10.0.0.1 -u nova -psecrete -e "show tables" | /bin/grep Tables'
-      )
-    end
-
     it 'configure nova-api' do
       is_expected.to contain_class('nova::api').with(
           :enabled                              => true,
