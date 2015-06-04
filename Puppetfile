@@ -224,3 +224,6 @@ mod 'openstack_extras',
 mod 'staging',
   :git => 'git://github.com/enovance/puppet-staging.git',
   :ref => 'bc434a71e19aae54223d57c274e2e1a7f9546d5e'
+mod 'zookeeper',
+  :git => 'git://github.com/enovance/puppet-zookeeper-1.git',
+  :ref => '582f0bf6a400b958bfb9ab119e4b6c62a556e7d2'
