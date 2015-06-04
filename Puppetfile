@@ -74,6 +74,9 @@ mod 'cloud',
 mod 'common',
   :git => 'git://github.com/enovance/puppet-module-common.git',
   :ref => '2d0606fce1078222dd483e731ec32807f5b4ca53'
+mod 'cassandra',
+  :git => 'git://github.com/enovance/cassandra.git',
+  :ref => '124f472128d178f52e2233d6aa8a0f1285f73c49'
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => 'ab06c2b8c09d9da82b53a62a5389427720519cd5'
