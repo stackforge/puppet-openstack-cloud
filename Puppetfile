@@ -77,6 +77,9 @@ mod 'common',
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => 'ab06c2b8c09d9da82b53a62a5389427720519cd5'
+mod 'contrail',
+  :git => 'git://github.com/enovance/puppet-contrail.git',
+  :ref => 'fe9108b26856325fb2bc75a991d3c70e25dc3a83'
 mod 'corosync',
   :git => 'git://github.com/enovance/puppetlabs-corosync.git',
   :ref => '7bbdcd8c57beab6ba24b06ef5aaee2462f8d3d24'
