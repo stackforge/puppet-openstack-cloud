@@ -626,6 +626,7 @@ class cloud::loadbalancer(
 ){
 
   include cloud::params
+  include cloud::network::contrail::haproxy
 
   $common_tcp_options = {
     'mode'           => 'tcp',

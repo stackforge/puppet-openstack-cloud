@@ -80,6 +80,9 @@ mod 'cassandra',
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => 'ab06c2b8c09d9da82b53a62a5389427720519cd5'
+mod 'contrail',
+  :git => 'git://github.com/enovance/puppet-contrail.git',
+  :ref => 'd3a2d6c8043c1886f499f44b9f8a0c4e75b76608'
 mod 'corosync',
   :git => 'git://github.com/enovance/puppetlabs-corosync.git',
   :ref => '7bbdcd8c57beab6ba24b06ef5aaee2462f8d3d24'
