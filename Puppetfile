@@ -40,7 +40,7 @@ mod 'keystone',
   :ref => '4b2623d4ec41957b0274d8a457e3019fdf1e342b'
 mod 'neutron',
   :git => 'git://github.com/enovance/puppet-neutron.git',
-  :ref => 'd5628a9ca16140e3c08c98d56feecaf56e898f35'
+  :ref => '183541d3890cd212db5a581470bdf98c21c40ad7'
 mod 'nova',
   :git => 'git://github.com/enovance/puppet-nova.git',
   :ref => 'cc1a2a348a7953298c75881a5c4afafeb3d0a4e4'
@@ -80,6 +80,9 @@ mod 'cassandra',
 mod 'concat',
   :git => 'git://github.com/enovance/puppet-concat.git',
   :ref => 'ab06c2b8c09d9da82b53a62a5389427720519cd5'
+mod 'contrail',
+  :git => 'git://github.com/enovance/puppet-contrail.git',
+  :ref => 'd3a2d6c8043c1886f499f44b9f8a0c4e75b76608'
 mod 'corosync',
   :git => 'git://github.com/enovance/puppetlabs-corosync.git',
   :ref => '7bbdcd8c57beab6ba24b06ef5aaee2462f8d3d24'
