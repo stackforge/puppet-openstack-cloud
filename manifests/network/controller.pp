@@ -108,7 +108,7 @@
 #
 # [*plugin*]
 #   (optional) Neutron plugin name
-#   Supported values: 'ml2', 'n1kv'.
+#   Supported values: 'ml2', 'n1kv', 'opencontrail'.
 #   Defaults to 'ml2'
 #
 # [*l3_ha*]
@@ -123,6 +123,18 @@
 # [*ks_keystone_admin_port*]
 #   (optional) TCP port to connect to Keystone API from admin network
 #   Defaults to '35357'
+#
+# [*ks_keystone_admin_user*]
+#   (optional) Admin user to connect to Keystone API
+#   Defaults to 'admin'
+#
+# [*ks_keystone_admin_password*]
+#   (optional) Password for admin user to connect to Keystone API
+#   Defaults to 'password'
+#
+# [*ks_keystone_admin_token*]
+#   (optional) Token to connect to Keystone API as admin user
+#   Defaults to undef
 #
 # [*provider_vlan_ranges*]
 #   (optionnal) VLAN range for provider networks
@@ -151,7 +163,25 @@
 # [*vni_ranges*]
 #   (optional) VxLan Network ID range. used by the ml2 plugin
 #   List of colon-separated id ranges
-#   Defautls to ['1:10000']
+#   Defaults to ['1:10000']
+#
+# [*contrail_api_server_ip*]
+#   (optional) IP address of the Contrail API
+#   Defaults to 127.0.0.1
+#
+# [*contrail_api_server_port*]
+#   (optional) Port of the Contrail API
+#   Defaults to 8082
+#
+# [*contrail_multi_tenancy*]
+#   (optional) Should Contrail support multi tenancy
+#   Boolean.
+#   Defaults to true
+#
+# [*contrail_extensions*]
+#   (optional) Array of extensions enabled for Contrail
+#   Array of extensions
+#   Defaults to ['']
 #
 # [*mechanism_drivers*]
 #   (optional) Neutron mechanism drivers to run
@@ -160,43 +190,52 @@
 #   Defaults to ['linuxbridge', 'openvswitch','l2population']
 #
 class cloud::network::controller(
-  $neutron_db_host         = '127.0.0.1',
-  $neutron_db_user         = 'neutron',
-  $neutron_db_password     = 'neutronpassword',
-  $neutron_db_idle_timeout = 5000,
-  $ks_neutron_password     = 'neutronpassword',
-  $ks_keystone_admin_host  = '127.0.0.1',
-  $ks_keystone_admin_proto = 'http',
-  $ks_keystone_public_port = 5000,
-  $ks_neutron_public_port  = 9696,
-  $api_eth                 = '127.0.0.1',
-  $ks_admin_tenant         = 'admin',
-  $nova_url                = 'http://127.0.0.1:8774/v2',
-  $nova_admin_auth_url     = 'http://127.0.0.1:5000/v2.0',
-  $nova_admin_username     = 'nova',
-  $nova_admin_tenant_name  = 'services',
-  $nova_admin_password     = 'novapassword',
-  $nova_region_name        = 'RegionOne',
-  $manage_ext_network      = false,
-  $firewall_settings       = {},
-  $flat_networks           = ['public'],
-  $tenant_network_types    = ['gre'],
-  $type_drivers            = ['gre', 'vlan', 'flat'],
-  $provider_vlan_ranges    = ['physnet1:1000:2999'],
-  $plugin                  = 'ml2',
-  $mechanism_drivers       = ['linuxbridge', 'openvswitch','l2population'],
-  $l3_ha                   = false,
-  $router_distributed      = false,
+  $neutron_db_host               = '127.0.0.1',
+  $neutron_db_user               = 'neutron',
+  $neutron_db_password           = 'neutronpassword',
+  $neutron_db_idle_timeout       = 5000,
+  $ks_neutron_password           = 'neutronpassword',
+  $ks_keystone_admin_host        = '127.0.0.1',
+  $ks_keystone_admin_proto       = 'http',
+  $ks_keystone_admin_port        = 35357,
+  $ks_keystone_admin_user        = 'admin',
+  $ks_admin_tenant               = 'admin',
+  $ks_keystone_admin_password    = 'password',
+  $ks_keystone_admin_token       = undef,
+  $ks_keystone_public_port       = 5000,
+  $ks_neutron_public_port        = 9696,
+  $api_eth                       = '127.0.0.1',
+  $nova_url                      = 'http://127.0.0.1:8774/v2',
+  $nova_admin_auth_url           = 'http://127.0.0.1:5000/v2.0',
+  $nova_admin_username           = 'nova',
+  $nova_admin_tenant_name        = 'services',
+  $nova_admin_password           = 'novapassword',
+  $nova_region_name              = 'RegionOne',
+  $manage_ext_network            = false,
+  $firewall_settings             = {},
+  $flat_networks                 = ['public'],
+  $tenant_network_types          = ['gre'],
+  $type_drivers                  = ['gre', 'vlan', 'flat'],
+  $provider_vlan_ranges          = ['physnet1:1000:2999'],
+  $plugin                        = 'ml2',
+  $mechanism_drivers             = ['linuxbridge', 'openvswitch','l2population'],
+  $l3_ha                         = false,
+  $router_distributed            = false,
   # only needed by cisco n1kv plugin
-  $n1kv_vsm_ip             = '127.0.0.1',
-  $n1kv_vsm_password       = 'secrete',
-  $ks_keystone_admin_port  = 35357,
+  $n1kv_vsm_ip                   = '127.0.0.1',
+  $n1kv_vsm_password             = 'secrete',
   # only needed by ml2 plugin
-  $tunnel_id_ranges        = ['1:10000'],
-  $vni_ranges              = ['1:10000'],
+  $tunnel_id_ranges              = ['1:10000'],
+  $vni_ranges                    = ['1:10000'],
+  # only needed by opencontrail plugin
+  $contrail_api_server_ip        = '127.0.0.1',
+  $contrail_api_server_port      = '8082',
+  $contrail_multi_tenancy        = true,
+  $contrail_extensions           = [''],
 ) {
 
   include 'cloud::network'
+  include ::neutron::quota
 
   $encoded_user = uriescape($neutron_db_user)
   $encoded_password = uriescape($neutron_db_password)
@@ -255,6 +294,21 @@ class cloud::network::controller(
         "N1KV:${n1kv_vsm_ip}/password":  value  => $n1kv_vsm_password;
         # TODO (EmilienM) not sure about this one:
         'database/connection':           value => "mysql://${neutron_db_user}:${neutron_db_password}@${neutron_db_host}/neutron";
+      }
+    }
+
+    'opencontrail': {
+      $core_plugin = 'neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2'
+      class { 'neutron::plugins::opencontrail':
+        api_server_ip              => $contrail_api_server_ip ,
+        api_server_port            => $contrail_api_server_port,
+        multi_tenancy              => $contrail_multi_tenancy,
+        contrail_extensions        => $contrail_extensions,
+        keystone_auth_url          => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0/",
+        keystone_admin_user        => $ks_keystone_admin_user,
+        keystone_admin_tenant_name => $ks_admin_tenant,
+        keystone_admin_password    => $ks_keystone_admin_password,
+        keystone_admin_token       => $ks_keystone_admin_token,
       }
     }
 
