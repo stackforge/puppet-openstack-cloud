@@ -53,8 +53,13 @@
 #
 # [*plugin*]
 #   (optional) Neutron plugin name
-#   Supported values: 'ml2', 'n1kv'.
+#   Supported values: 'ml2', 'n1kv', 'opencontrail'.
 #   Defaults to 'ml2'
+#
+# [*service_plugins*]
+#   (optional) List of service plugin entrypoints to be loaded from the neutron
+#   service_plugins namespace
+#   Defaults to ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin']
 #
 class cloud::network(
   $verbose                    = true,
@@ -66,6 +71,7 @@ class cloud::network(
   $log_facility               = 'LOG_LOCAL0',
   $dhcp_lease_duration        = '120',
   $plugin                     = 'ml2',
+  $service_plugins            = ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
 ) {
 
   # Disable twice logging if syslog is enabled
@@ -88,6 +94,9 @@ class cloud::network(
     'n1kv': {
       $core_plugin = 'neutron.plugins.cisco.network_plugin.PluginV2'
     }
+    'opencontrail': {
+      $core_plugin = 'neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2'
+    }
     default: {
       fail("${plugin} plugin is not supported.")
     }
@@ -106,7 +115,7 @@ class cloud::network(
     use_syslog              => $use_syslog,
     dhcp_agents_per_network => '2',
     core_plugin             => $core_plugin,
-    service_plugins         => ['neutron.services.loadbalancer.plugin.LoadBalancerPlugin','neutron.services.metering.metering_plugin.MeteringPlugin','neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'],
+    service_plugins         => $service_plugins,
     log_dir                 => $log_dir,
     dhcp_lease_duration     => $dhcp_lease_duration,
     report_interval         => '30',
