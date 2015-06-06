@@ -76,18 +76,15 @@ class cloud::network::metadata(
   include 'cloud::network::vswitch'
 
   class { 'neutron::agents::metadata':
-    enabled          => $enabled,
-    shared_secret    => $neutron_metadata_proxy_shared_secret,
-    debug            => $debug,
-    metadata_ip      => $nova_metadata_server,
-    auth_url         => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
-    auth_password    => $ks_neutron_password,
-    auth_region      => $auth_region,
-    metadata_workers => $::processorcount
-  }
-
-  neutron_metadata_agent_config {
-    'DEFAULT/nova_metadata_protocol': value => $ks_nova_internal_proto;
+    enabled           => $enabled,
+    shared_secret     => $neutron_metadata_proxy_shared_secret,
+    debug             => $debug,
+    metadata_ip       => $nova_metadata_server,
+    auth_url          => "${ks_keystone_admin_proto}://${ks_keystone_admin_host}:${ks_keystone_admin_port}/v2.0",
+    auth_password     => $ks_neutron_password,
+    auth_region       => $auth_region,
+    metadata_workers  => $::processorcount,
+    metadata_protocol => $ks_nova_internal_proto,
   }
 
 }
