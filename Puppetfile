@@ -113,6 +113,9 @@ mod 'haproxy',
 mod 'inifile',
   :git => 'git://github.com/enovance/puppetlabs-inifile.git',
   :ref => 'ae23a4db97d2815ec305d0529912685f07746d3c'
+mod 'kafka',
+  :git => 'git://github.com/enovance/puppet-kafka.git',
+  :ref => '2946b80ecf3689db1e1beeb96b78cb5029b65d2b'
 mod 'keepalived',
   :git => 'git://github.com/enovance/puppet-module-keepalived.git',
   :ref => 'eb345b6d3b25106cbe166028f2b8dd9974a10230'
