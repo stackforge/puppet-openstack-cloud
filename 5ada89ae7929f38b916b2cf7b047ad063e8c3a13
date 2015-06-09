@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Code-Review+2: Emilien Macchi <emilien@redhat.com>
+Workflow+1: Emilien Macchi <emilien@redhat.com>
+Submitted-by: Jenkins
+Submitted-at: Tue, 09 Jun 2015 14:13:54 +0000
+Reviewed-on: https://review.openstack.org/189024
+Project: stackforge/puppet-openstack-cloud
+Branch: refs/heads/master
