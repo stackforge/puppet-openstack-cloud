@@ -489,6 +489,10 @@
 #         *_db_idle_timeout for all services to be a little less
 #         than this timeout.
 #
+# [*galera_connections*]
+#   (optional) An integer that specifies the maxconn for MySQL
+#   Defaults to '4096'
+#
 # [*api_timeout*]
 #   (optional) Timeout for API services connections
 #   Defaults to '90m'.
@@ -611,6 +615,7 @@ class cloud::loadbalancer(
   $sensu_api_port                   = 4568,
   $redis_port                       = 6379,
   $galera_timeout                   = '90m',
+  $galera_connections               = '4096',
   $api_timeout                      = '90m',
   $vip_public_ip                    = ['127.0.0.1'],
   $vip_internal_ip                  = false,
@@ -978,7 +983,7 @@ class cloud::loadbalancer(
     ipaddress    => $galera_ip,
     ports        => 3306,
     options      => {
-      'maxconn'        => '1000',
+      'maxconn'        => $galera_connections,
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
@@ -1001,7 +1006,7 @@ class cloud::loadbalancer(
       ipaddress    => $galera_ip,
       ports        => 3307,
       options      => {
-        'maxconn'        => '1000',
+        'maxconn'        => $galera_connections,
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
         'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000

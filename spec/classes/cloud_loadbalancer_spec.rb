@@ -73,6 +73,7 @@ describe 'cloud::loadbalancer' do
         :vip_public_ip                     => '10.0.0.1',
         :galera_ip                         => '10.0.0.2',
         :galera_slave                      => false,
+        :galera_connections                => '4096',
         :horizon_ssl                       => false,
         :horizon_ssl_port                  => false,
         :ks_ceilometer_public_port         => '8777',
@@ -254,7 +255,7 @@ describe 'cloud::loadbalancer' do
         :ipaddress => params[:galera_ip],
         :ports     => '3306',
         :options   => {
-          'maxconn'        => '1000',
+          'maxconn'        => params[:galera_connections],
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
@@ -276,7 +277,7 @@ describe 'cloud::loadbalancer' do
         :ipaddress => params[:galera_ip],
         :ports     => '3307',
         :options   => {
-          'maxconn'        => '1000',
+          'maxconn'        => params[:galera_connections],
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
