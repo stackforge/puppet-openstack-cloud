@@ -978,7 +978,7 @@ class cloud::loadbalancer(
     ipaddress    => $galera_ip,
     ports        => 3306,
     options      => {
-      'maxconn'        => '1000',
+      'maxconn'        => $::cloud::database::sql::mysql::max_connections,
       'mode'           => 'tcp',
       'balance'        => 'roundrobin',
       'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000
@@ -1001,7 +1001,7 @@ class cloud::loadbalancer(
       ipaddress    => $galera_ip,
       ports        => 3307,
       options      => {
-        'maxconn'        => '1000',
+        'maxconn'        => $::cloud::database::sql::mysql::max_connections,
         'mode'           => 'tcp',
         'balance'        => 'roundrobin',
         'option'         => ['tcpka', 'tcplog', 'httpchk'], #httpchk mandatory expect 200 on port 9000

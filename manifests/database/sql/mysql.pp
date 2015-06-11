@@ -173,6 +173,10 @@
 #   (optional) An integer that specifies the open_files_limit for MySQL
 #   Defaults to 65535
 #
+# [*max_connections*]
+#   (optional) An integer that specifies the max_connections for MySQL
+#   Defaults to 4096
+#
 # [*mysql_systemd_override_settings*]
 #   (optional) An hash of setting to override for MariaDB unit file.
 #   Defaults to {}
@@ -222,6 +226,7 @@ class cloud::database::sql::mysql (
     $galera_clustercheck_dbpassword  = 'clustercheckpassword',
     $galera_clustercheck_ipaddress   = '127.0.0.1',
     $open_files_limit                = 65535,
+    $max_connections                 = 4096,
     $mysql_systemd_override_settings = {},
     $firewall_settings               = {},
 ) {

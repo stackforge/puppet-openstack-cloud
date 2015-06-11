@@ -122,6 +122,18 @@ describe 'cloud::database::sql::mysql' do
       it { is_expected.to contain_file('/etc/my.cnf').with_content(/open_files_limit                = 666/) }
     end
 
+    context 'configure max_connections' do
+      before :each do
+        facts.merge!( :hostname => 'os-ci-test1',
+                      :osfamily => 'RedHat',
+                      :operatingsystemmajrelease => 7 )
+      end
+      before :each do
+        params.merge!(:max_connections => 2048)
+      end
+      it { is_expected.to contain_file('/etc/my.cnf').with_content(/max_connections                 = 2048/) }
+    end
+
     context 'configure databases on the galera master server' do
 
       before :each do

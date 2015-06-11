@@ -250,11 +250,14 @@ describe 'cloud::loadbalancer' do
     end # configure monitor haproxy listen
 
     context 'configure galera haproxy listen' do
+      let :pre_condition do
+        "class { 'cloud::database::sql::mysql': max_connections => 4096 }"
+      end
       it { is_expected.to contain_haproxy__listen('galera_cluster').with(
         :ipaddress => params[:galera_ip],
         :ports     => '3306',
         :options   => {
-          'maxconn'        => '1000',
+          'maxconn'        => 4096,
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
@@ -269,6 +272,9 @@ describe 'cloud::loadbalancer' do
     end # configure monitor haproxy listen
 
     context 'configure galera slave haproxy listen' do
+      let :pre_condition do
+        "class { 'cloud::database::sql::mysql': max_connections => 4096 }"
+      end
       before do
         params.merge!( :galera_slave => true )
       end
@@ -276,7 +282,7 @@ describe 'cloud::loadbalancer' do
         :ipaddress => params[:galera_ip],
         :ports     => '3307',
         :options   => {
-          'maxconn'        => '1000',
+          'maxconn'        => 4096,
           'mode'           => 'tcp',
           'balance'        => 'roundrobin',
           'option'         => ['tcpka','tcplog','httpchk'],
