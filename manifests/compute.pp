@@ -185,7 +185,6 @@ class cloud::compute(
 
   nova_config {
     'DEFAULT/resume_guests_state_on_host_boot': value => true;
-    'DEFAULT/default_availability_zone':        value => $availability_zone;
     'DEFAULT/servicegroup_driver':              value => 'mc';
     'DEFAULT/glance_num_retries':               value => '10';
     'DEFAULT/cinder_catalog_info':              value => "volume:cinder:${cinder_endpoint_type}";
