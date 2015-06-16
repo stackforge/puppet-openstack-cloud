@@ -268,7 +268,8 @@ Host *
     vncproxy_protocol             => $ks_console_public_proto,
     vncproxy_port                 => $novnc_port,
     virtio_nic                    => false,
-    neutron_enabled               => true
+    neutron_enabled               => true,
+    default_availability_zone     => $::cloud::compute::availability_zone,
   }
 
   if $::osfamily == 'RedHat' {
