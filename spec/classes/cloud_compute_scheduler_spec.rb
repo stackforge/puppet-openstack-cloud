@@ -68,7 +68,6 @@ describe 'cloud::compute::scheduler' do
           :database_idle_timeout => '5000',
         )
       is_expected.to contain_nova_config('DEFAULT/resume_guests_state_on_host_boot').with('value' => true)
-      is_expected.to contain_nova_config('DEFAULT/default_availability_zone').with('value' => 'MyZone')
       is_expected.to contain_nova_config('DEFAULT/servicegroup_driver').with_value('mc')
       is_expected.to contain_nova_config('DEFAULT/glance_num_retries').with_value('10')
     end
