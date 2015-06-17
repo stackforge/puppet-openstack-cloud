@@ -81,9 +81,10 @@ describe 'cloud::compute::consoleproxy' do
 
     it 'configure nova-vncproxy' do
       is_expected.to contain_class('nova::vncproxy').with(
-        :enabled => true,
-        :host    => '10.0.0.1',
-        :port    => '6080'
+        :enabled           => true,
+        :host              => '10.0.0.1',
+        :port              => '6080',
+        :vncproxy_protocol => 'http'
       )
     end
 

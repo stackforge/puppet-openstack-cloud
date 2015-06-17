@@ -27,6 +27,10 @@
 #   (optional) Nova's console type (spice or novnc)
 #   Defaults to 'novnc'
 #
+# [*protocol*]
+#   (optional) Nova's console protocol.
+#   Defaults to 'http'
+#
 # [*novnc_port*]
 #   (optional) TCP port to bind Nova novnc service.
 #   Defaults to '6080'
@@ -43,6 +47,7 @@
 class cloud::compute::consoleproxy(
   $api_eth           = '127.0.0.1',
   $console           = 'novnc',
+  $protocol          = 'http',
   $novnc_port        = '6080',
   $spice_port        = '6082',
   $firewall_settings = {},
@@ -52,22 +57,25 @@ class cloud::compute::consoleproxy(
 
   case $console {
     'spice': {
-      $port  = $spice_port
-      $proxy = 'spicehtml5proxy'
+      $port = $spice_port
+      class { 'nova::spicehtml5proxy':
+        enabled => true,
+        host    => $api_eth,
+        port    => $port
+      }
     }
     'novnc': {
-      $port  = $novnc_port
-      $proxy = 'vncproxy'
+      $port = $novnc_port
+      class { 'nova::vncproxy':
+        enabled           => true,
+        host              => $api_eth,
+        port              => $port,
+        vncproxy_protocol => $protocol
+      }
     }
     default: {
       fail("Unsupported console type ${console}")
     }
-  }
-
-  class { "nova::${proxy}":
-    enabled => true,
-    host    => $api_eth,
-    port    => $port
   }
 
   if $::cloud::manage_firewall {
