@@ -527,12 +527,13 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8004',
         :options   => {
-          'mode'           => 'tcp',
-          'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }',
+          'mode'           => 'http',
           'balance'        => 'source',
-          'option'         => ['tcpka', 'tcplog', 'forwardfor'],
+          'option'         => ['tcpka', 'forwardfor', 'tcplog', 'httpchk'],
+          'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }',
           'timeout server' => '90m',
-          'timeout client' => '90m'
+          'timeout client' => '90m',
+          'http-check'     => 'expect ! rstatus ^5',
         },
         :bind_options => ['ssl', 'crt']
       )}
