@@ -527,7 +527,7 @@ describe 'cloud::loadbalancer' do
         :ipaddress => [params[:vip_public_ip]],
         :ports     => '8004',
         :options   => {
-          'mode'           => 'tcp',
+          'mode'           => 'http',
           'reqadd'         => 'X-Forwarded-Proto:\ https if { ssl_fc }',
           'balance'        => 'source',
           'option'         => ['tcpka', 'tcplog', 'forwardfor'],
