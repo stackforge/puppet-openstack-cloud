@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 group :development, :test do
   gem 'puppetlabs_spec_helper'
-  gem 'puppet-lint-param-docs'
+  gem 'puppet-lint-param-docs', '1.1.0'
   gem 'metadata-json-lint'
   gem 'json'
   gem 'webmock'
