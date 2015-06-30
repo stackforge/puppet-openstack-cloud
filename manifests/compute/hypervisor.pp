@@ -122,6 +122,10 @@
 #   (optional) Hostname or IP used to connect to console service.
 #   Defaults to false (use nova_public_host)
 #
+# [*include_vswitch*]
+#   (optional) Should the class cloud::network::vswitch should be included.
+#   Defaults to true
+#
 # [*firewall_settings*]
 #   (optional) Allow to add custom parameters to firewall rules
 #   Should be an hash.
@@ -147,6 +151,7 @@ class cloud::compute::hypervisor(
   $manage_tso                 = true,
   $nova_shell                 = false,
   $firewall_settings          = {},
+  $include_vswitch            = true,
   # when using NFS storage backend
   $nfs_enabled                = false,
   $nfs_device                 = false,
@@ -158,7 +163,10 @@ class cloud::compute::hypervisor(
   include 'cloud::params'
   include 'cloud::telemetry'
   include 'cloud::network'
-  include 'cloud::network::vswitch'
+
+  if $include_vswitch {
+    include 'cloud::network::vswitch'
+  }
 
   if $libvirt_type == 'kvm' and ! $::vtx {
     fail('libvirt_type is set to KVM and VTX seems to be disabled on this node.')
