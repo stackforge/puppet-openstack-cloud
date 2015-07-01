@@ -48,7 +48,6 @@ class cloud::network::contrail::webui (
   $http_port         = 8080,
   $https_port        = 8143,
   $firewall_settings = {},
-  $firewall_settings = {},
 ){
 
   include ::contrail::webui
