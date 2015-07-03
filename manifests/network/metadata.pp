@@ -84,7 +84,10 @@ class cloud::network::metadata(
     auth_password     => $ks_neutron_password,
     auth_region       => $auth_region,
     metadata_workers  => $::processorcount,
-    metadata_protocol => $ks_nova_internal_proto,
+  }
+
+  neutron_metadata_agent_config {
+    'DEFAULT/nova_metadata_protocol': value => $ks_nova_internal_proto;
   }
 
 }
